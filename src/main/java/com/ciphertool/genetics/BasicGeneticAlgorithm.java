@@ -72,10 +72,16 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		int initialPopulationSize = this.population.size();
 
-		int survivorIndex = (int) (initialPopulationSize * survivalRate);
+		long survivorIndex = Math.round((initialPopulationSize * (1 - survivalRate)));
+		log.debug(survivorIndex + " individuals to be removed from population of size "
+				+ this.population.size() + " and survival rate of " + survivalRate + ".");
 
-		for (int i = survivorIndex; i < initialPopulationSize; i++) {
-			individuals.remove(survivorIndex);
+		for (int i = 0; i < survivorIndex; i++) {
+			/*
+			 * We must remove the first element every time, since the List is
+			 * sorted in ascending order.
+			 */
+			individuals.remove(0);
 		}
 	}
 
