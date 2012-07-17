@@ -1,6 +1,11 @@
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.algorithms;
 
 import org.springframework.beans.factory.annotation.Required;
+
+import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
@@ -12,8 +17,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions
 	 * 
-	 * @see com.ciphertool.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.zodiacengine.genetic.Chromosome,
-	 *      com.ciphertool.zodiacengine.genetic.Chromosome)
+	 * @see com.ciphertool.genetics.algorithms.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome,
+	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
 	 */
 	@Override
 	public Chromosome crossover(Chromosome parentA, Chromosome parentB) {

@@ -1,4 +1,6 @@
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.algorithms;
+
+import com.ciphertool.genetics.entities.Chromosome;
 
 public interface CrossoverAlgorithm {
 

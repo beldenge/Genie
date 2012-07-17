@@ -6,6 +6,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.util.ChromosomeGenerator;
+import com.ciphertool.genetics.util.FitnessEvaluator;
+
 public class Population {
 	private Logger log = Logger.getLogger(getClass());
 	private ChromosomeGenerator chromosomeGenerator;

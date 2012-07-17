@@ -1,4 +1,4 @@
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.entities;
 
 import java.util.List;
 

@@ -1,11 +1,11 @@
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.entities;
 
 import java.util.List;
 
 public interface Chromosome extends Cloneable {
-	/**
-	 * @return
-	 */
+
+	public List<? extends Sequence> getSequences();
+
 	public List<Gene> getGenes();
 
 	/**

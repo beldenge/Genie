@@ -1,7 +1,12 @@
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.algorithms;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	@SuppressWarnings("unused")
@@ -13,8 +18,8 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * This crossover algorithm does a liberal amount of changes since it
 	 * replaces genes regardless of their begin and end sequence positions
 	 * 
-	 * @see com.ciphertool.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.zodiacengine.genetic.Chromosome,
-	 *      com.ciphertool.zodiacengine.genetic.Chromosome)
+	 * @see com.ciphertool.genetics.algorithms.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome,
+	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
 	 */
 	@Override
 	public Chromosome crossover(Chromosome parentA, Chromosome parentB) {

@@ -1,10 +1,15 @@
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.algorithms;
 
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
+
+import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.util.FitnessComparator;
+import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
