@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface Chromosome extends Cloneable {
 
-	public List<? extends Sequence> getSequences();
-
 	public List<Gene> getGenes();
 
 	/**
