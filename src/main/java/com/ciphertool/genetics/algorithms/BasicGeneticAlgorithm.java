@@ -1,5 +1,6 @@
 package com.ciphertool.genetics.algorithms;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Double mutationRate;
 	private Double crossoverRate;
 	private Integer maxGenerations;
+	private Integer finalSurvivorCount;
 	private Population population;
 	private CrossoverAlgorithm crossoverAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
@@ -34,7 +36,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * ()
 	 */
 	@Override
-	public Chromosome iterateUntilTermination() {
+	public List<Chromosome> iterateUntilTermination() {
 		if (this.population == null) {
 			log.info("Attempted to start algorithm with a null population.  Spawning population of size "
 					+ populationSize + ".");
@@ -66,7 +68,18 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / (i - 1))
 				+ "ms.");
 
-		return population.getBestFitIndividual();
+		List<Chromosome> individuals = this.population.getIndividuals();
+		Collections.sort(individuals, fitnessComparator);
+
+		List<Chromosome> bestFitIndividuals = new ArrayList<Chromosome>();
+		int chromosomeIndex = (individuals.size() - finalSurvivorCount);
+
+		for (int finalSurvivorIndex = ((chromosomeIndex < 0) ? 0 : chromosomeIndex); finalSurvivorIndex < individuals
+				.size(); finalSurvivorIndex++) {
+			bestFitIndividuals.add(individuals.get(finalSurvivorIndex));
+		}
+
+		return bestFitIndividuals;
 	}
 
 	@Override
@@ -261,5 +274,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setFitnessComparator(FitnessComparator fitnessComparator) {
 		this.fitnessComparator = fitnessComparator;
+	}
+
+	/**
+	 * @param finalSurvivorCount
+	 *            the finalSurvivorCount to set
+	 */
+	@Required
+	public void setFinalSurvivorCount(Integer finalSurvivorCount) {
+		this.finalSurvivorCount = finalSurvivorCount;
 	}
 }

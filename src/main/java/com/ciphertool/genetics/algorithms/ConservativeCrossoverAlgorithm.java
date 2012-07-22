@@ -45,16 +45,12 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			if (childSequencePosition == parentSequencePosition) {
 				if (child.getGenes().get(childGeneIndex).size() == parentB.getGenes().get(
 						parentGeneIndex).size()) {
-					geneCopy = child.getGenes().get(childGeneIndex);
+					geneCopy = child.getGenes().get(childGeneIndex).clone();
 
 					originalFitness = child.getFitness();
 
-					/*
-					 * TODO: Does this actually change anything, since the
-					 * Plaintext characters for the Solution are not updated?
-					 */
-					child.getGenes().set(childGeneIndex,
-							parentB.getGenes().get(parentGeneIndex).clone());
+					child.replaceGene(childGeneIndex, parentB.getGenes().get(parentGeneIndex)
+							.clone());
 
 					fitnessEvaluator.evaluate(child);
 
@@ -63,7 +59,7 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 					 * fitness
 					 */
 					if (child.getFitness() <= originalFitness) {
-						child.getGenes().set(childGeneIndex, geneCopy);
+						child.replaceGene(childGeneIndex, geneCopy);
 					}
 				}
 
