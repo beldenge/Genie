@@ -56,6 +56,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			mutate();
 
+			/*
+			 * Doing the select first could potentially improve performance by a
+			 * ratio of up to (1 - survivalRate).
+			 */
 			select();
 
 			population.populateIndividuals(populationSize);
@@ -99,7 +103,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * We must remove the first element every time, since the List is
 			 * sorted in ascending order.
 			 */
-			individuals.remove(0);
+			this.population.removeIndividual(individuals.get(0));
 		}
 	}
 

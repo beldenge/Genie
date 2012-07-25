@@ -2,9 +2,13 @@ package com.ciphertool.genetics;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.util.ChromosomeGenerator;
@@ -16,6 +20,7 @@ public class Population {
 	private List<Chromosome> individuals;
 	private FitnessEvaluator fitnessEvaluator;
 	private long totalFitness;
+	private TaskExecutor taskExecutor;
 
 	public Population() {
 	}
@@ -36,14 +41,71 @@ public class Population {
 		log.debug("Added " + individualsAdded + " individuals to the population.");
 	}
 
-	public long evaluateFitness() {
-		this.totalFitness = 0;
+	private class EvaluatorTask implements Callable<Integer> {
 
-		for (Chromosome individual : individuals) {
-			this.totalFitness += fitnessEvaluator.evaluate(individual);
+		private Chromosome chromosome;
+
+		public EvaluatorTask(Chromosome chromosome) {
+			this.chromosome = chromosome;
 		}
 
-		return this.totalFitness;
+		@Override
+		public Integer call() throws Exception {
+			return fitnessEvaluator.evaluate(this.chromosome);
+		}
+	}
+
+	public void evaluateAllFitness() {
+		List<FutureTask<Integer>> futureTasks = new ArrayList<FutureTask<Integer>>();
+		FutureTask<Integer> futureTask = null;
+
+		for (Chromosome individual : individuals) {
+			futureTask = new FutureTask<Integer>(new EvaluatorTask(individual));
+			futureTasks.add(futureTask);
+			this.taskExecutor.execute(futureTask);
+		}
+
+		for (FutureTask<Integer> future : futureTasks) {
+			try {
+				/*
+				 * TODO it may be more efficient to keep a list of all the
+				 * futures that are finished by calling the isDone() method,
+				 * since get() blocks.
+				 */
+				future.get();
+			} catch (InterruptedException ie) {
+				log.error("Caught InterruptedException while waiting for EvaluatorTask ", ie);
+			} catch (ExecutionException ee) {
+				log.error("Caught ExecutionException while waiting for EvaluatorTask ", ee);
+			}
+		}
+	}
+
+	public Chromosome evaluateFitness() {
+		this.evaluateAllFitness();
+
+		this.totalFitness = 0;
+
+		Chromosome bestFitIndividual = null;
+
+		for (Chromosome individual : individuals) {
+			this.totalFitness += individual.getFitness();
+
+			if (bestFitIndividual == null
+					|| individual.getFitness() > bestFitIndividual.getFitness()) {
+				bestFitIndividual = individual;
+			}
+		}
+
+		Double averageFitness = Double.valueOf(this.totalFitness)
+				/ Double.valueOf(individuals.size());
+
+		log.info("Population of size " + individuals.size() + " has an average fitness of "
+				+ String.format("%1$,.2f", averageFitness));
+
+		log.info("Best fitness in population is " + bestFitIndividual.getFitness());
+
+		return bestFitIndividual;
 	}
 
 	/**
@@ -57,18 +119,7 @@ public class Population {
 		 * Evaluate fitness once more for safety so that we are guaranteed to
 		 * have updated fitness values.
 		 */
-		this.evaluateFitness();
-
-		Chromosome bestFitIndividual = null;
-
-		for (Chromosome individual : individuals) {
-			if (bestFitIndividual == null
-					|| individual.getFitness() > bestFitIndividual.getFitness()) {
-				bestFitIndividual = individual;
-			}
-		}
-
-		return bestFitIndividual;
+		return this.evaluateFitness();
 	}
 
 	/*
@@ -149,5 +200,14 @@ public class Population {
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
+	}
+
+	/**
+	 * @param taskExecutor
+	 *            the taskExecutor to set
+	 */
+	@Required
+	public void setTaskExecutor(TaskExecutor taskExecutor) {
+		this.taskExecutor = taskExecutor;
 	}
 }
