@@ -130,7 +130,13 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		int momIndex = -1;
 		int dadIndex = -1;
 
-		for (int i = 0; i < crossoverRate; i++) {
+		int initialPopulationSize = this.population.size();
+
+		long pairsToCrossover = Math.round((initialPopulationSize * crossoverRate) / 2);
+
+		log.debug("Pairs to crossover: " + pairsToCrossover);
+
+		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.spinIndexRouletteWheel();
 			mom = this.population.getIndividuals().get(momIndex);
 
@@ -174,7 +180,13 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	public void mutate() {
 		int mutantIndex = -1;
 
-		for (int i = 0; i < mutationRate; i++) {
+		int initialPopulationSize = this.population.size();
+
+		long mutations = Math.round((initialPopulationSize * mutationRate));
+
+		log.debug("Mutations to perform: " + mutations);
+
+		for (int i = 0; i < mutations; i++) {
 			/*
 			 * Mutate a gene within a Chromosome
 			 */
@@ -233,6 +245,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
+	 * This is a percentage chance that individuals will be selected for
+	 * mutation.
+	 * 
 	 * @param mutationRate
 	 *            the mutationRate to set
 	 */
@@ -242,6 +257,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
+	 * This is a percentage of the population to be selected for crossover in
+	 * pairs.
+	 * 
 	 * @param crossoverRate
 	 *            the crossoverRate to set
 	 */
@@ -278,6 +296,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
+	 * This is the percentage of individuals that survive each generation.
+	 * 
 	 * @param survivalRate
 	 *            the survivalRate to set
 	 */
