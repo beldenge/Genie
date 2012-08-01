@@ -52,16 +52,16 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			log.info("Starting generation " + i);
 
+			/*
+			 * Doing the select first improves performance by a ratio of up to
+			 * (1 - survivalRate). It makes more sense as well since only
+			 * survivors can reproduce.
+			 */
+			select();
+
 			crossover();
 
 			mutate();
-
-			/*
-			 * Doing the select first could potentially improve performance by a
-			 * ratio of up to (1 - survivalRate). It might make more sense as
-			 * well since only survivors can reproduce.
-			 */
-			select();
 
 			population.populateIndividuals(populationSize);
 
