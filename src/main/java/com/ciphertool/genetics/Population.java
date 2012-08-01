@@ -209,7 +209,6 @@ public class Population {
 
 		this.totalFitness -= this.individuals.get(indexToRemove).getFitness();
 
-		Chromosome chromosomeToRemove = individuals.get(indexToRemove);
 		this.individuals.remove(indexToRemove);
 	}
 
