@@ -124,9 +124,9 @@ public class Population {
 
 	/*
 	 * This method depends on the totalFitness and individuals' fitness being
-	 * accurately maintained.
+	 * accurately maintained. Returns the actual Chromosome chosen.
 	 */
-	public Chromosome spinRouletteWheel() {
+	public Chromosome spinObjectRouletteWheel() {
 		long randomIndex = (int) (Math.random() * totalFitness);
 
 		Chromosome chosenIndividual = null;
@@ -153,6 +153,39 @@ public class Population {
 		return chosenIndividual;
 	}
 
+	/*
+	 * This method depends on the totalFitness and individuals' fitness being
+	 * accurately maintained. Returns the index of the Chromosome chosen.
+	 */
+	public int spinIndexRouletteWheel() {
+		long randomIndex = (int) (Math.random() * totalFitness);
+
+		int winningIndex = -1;
+		Chromosome nextIndividual = null;
+
+		for (int i = 0; i < individuals.size(); i++) {
+			nextIndividual = individuals.get(i);
+			if (nextIndividual.getFitness() == null) {
+				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
+						+ nextIndividual);
+			}
+
+			randomIndex -= nextIndividual.getFitness();
+
+			/*
+			 * If we have subtracted everything from randomIndex, then the ball
+			 * has stopped rolling.
+			 */
+			if (randomIndex <= 0) {
+				winningIndex = i;
+
+				break;
+			}
+		}
+
+		return winningIndex;
+	}
+
 	/**
 	 * @return the individuals
 	 */
@@ -161,12 +194,36 @@ public class Population {
 	}
 
 	/**
+	 * Removes an individual from the population based on its index. This is
+	 * much more efficient than removing by equality.
+	 * 
 	 * @param individual
 	 */
+	public void removeIndividual(int indexToRemove) {
+		if (indexToRemove < 0 || indexToRemove > this.individuals.size() - 1) {
+			log.error("Tried to remove individual by invalid index " + indexToRemove
+					+ " from population of size " + this.size() + ".  Returning.");
+
+			return;
+		}
+
+		this.totalFitness -= this.individuals.get(indexToRemove).getFitness();
+
+		Chromosome chromosomeToRemove = individuals.get(indexToRemove);
+		this.individuals.remove(indexToRemove);
+	}
+
 	public void removeIndividual(Chromosome individual) {
-		this.individuals.remove(individual);
+		if (!this.individuals.contains(individual)) {
+			log.error("Tried to remove individual from population but the individual already doesn't exist.  Returning."
+					+ individual);
+
+			return;
+		}
 
 		this.totalFitness -= individual.getFitness();
+
+		this.individuals.remove(individual);
 	}
 
 	/**

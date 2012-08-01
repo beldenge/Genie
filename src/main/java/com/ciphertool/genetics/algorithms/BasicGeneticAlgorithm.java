@@ -58,7 +58,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			/*
 			 * Doing the select first could potentially improve performance by a
-			 * ratio of up to (1 - survivalRate).
+			 * ratio of up to (1 - survivalRate). It might make more sense as
+			 * well since only survivors can reproduce.
 			 */
 			select();
 
@@ -103,7 +104,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * We must remove the first element every time, since the List is
 			 * sorted in ascending order.
 			 */
-			this.population.removeIndividual(individuals.get(0));
+			this.population.removeIndividual(0);
 		}
 	}
 
@@ -126,31 +127,42 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		Chromosome dad = null;
 		Chromosome child1 = null;
 		Chromosome child2 = null;
+		int momIndex = -1;
+		int dadIndex = -1;
 
 		for (int i = 0; i < crossoverRate; i++) {
-			mom = this.population.spinRouletteWheel();
+			momIndex = this.population.spinIndexRouletteWheel();
+			mom = this.population.getIndividuals().get(momIndex);
 
 			/*
 			 * Keep retrying until we find a different Chromosome.
 			 */
 			do {
-				dad = this.population.spinRouletteWheel();
+				dadIndex = this.population.spinIndexRouletteWheel();
+				dad = this.population.getIndividuals().get(dadIndex);
 			} while (mom == dad);
 
 			child1 = crossoverAlgorithm.crossover(mom, dad);
 
 			child2 = crossoverAlgorithm.crossover(dad, mom);
+
+			/*
+			 * Remove the parents from the population and add the children since
+			 * they are guaranteed to be at least as fit as their parents
+			 */
+			this.population.removeIndividual(momIndex);
+			if (dadIndex > momIndex) {
+				/*
+				 * We have to decrease the index for dad since it was shifted
+				 * left after mom was removed.
+				 */
+				dadIndex--;
+			}
+			this.population.removeIndividual(dadIndex);
+
+			this.population.addIndividual(child1);
+			this.population.addIndividual(child2);
 		}
-
-		/*
-		 * Remove the parents from the populationa and add the children since
-		 * they are guaranteed to be at least as fit as their parents
-		 */
-		this.population.removeIndividual(mom);
-		this.population.removeIndividual(dad);
-
-		this.population.addIndividual(child1);
-		this.population.addIndividual(child2);
 	}
 
 	/*
@@ -160,11 +172,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void mutate() {
+		int mutantIndex = -1;
+
 		for (int i = 0; i < mutationRate; i++) {
 			/*
 			 * Mutate a gene within a Chromosome
 			 */
-			Chromosome original = this.population.spinRouletteWheel();
+			mutantIndex = this.population.spinIndexRouletteWheel();
+			Chromosome original = this.population.getIndividuals().get(mutantIndex);
 
 			Chromosome mutation = original.clone();
 
@@ -173,7 +188,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			fitnessEvaluator.evaluate(mutation);
 
 			if (mutation.getFitness() > original.getFitness()) {
-				this.population.removeIndividual(original);
+				this.population.removeIndividual(mutantIndex);
 				this.population.addIndividual(mutation);
 			}
 		}
