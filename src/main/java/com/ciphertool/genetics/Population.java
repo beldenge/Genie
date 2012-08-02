@@ -41,6 +41,9 @@ public class Population {
 		log.debug("Added " + individualsAdded + " individuals to the population.");
 	}
 
+	/**
+	 * A concurrent task for evaluating the fitness of a Chromosome.
+	 */
 	private class EvaluatorTask implements Callable<Integer> {
 
 		private Chromosome chromosome;
@@ -55,6 +58,9 @@ public class Population {
 		}
 	}
 
+	/**
+	 * This method executes all the fitness evaluations concurrently.
+	 */
 	public void evaluateAllFitness() {
 		List<FutureTask<Integer>> futureTasks = new ArrayList<FutureTask<Integer>>();
 		FutureTask<Integer> futureTask = null;
@@ -67,11 +73,6 @@ public class Population {
 
 		for (FutureTask<Integer> future : futureTasks) {
 			try {
-				/*
-				 * TODO it may be more efficient to keep a list of all the
-				 * futures that are finished by calling the isDone() method,
-				 * since get() blocks.
-				 */
 				future.get();
 			} catch (InterruptedException ie) {
 				log.error("Caught InterruptedException while waiting for EvaluatorTask ", ie);

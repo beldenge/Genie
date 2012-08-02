@@ -17,11 +17,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Integer populationSize;
 	private Double survivalRate;
 	private Double mutationRate;
-	private Double crossoverRate;
+	protected Double crossoverRate;
 	private Integer maxGenerations;
 	private Integer finalSurvivorCount;
-	private Population population;
-	private CrossoverAlgorithm crossoverAlgorithm;
+	protected Population population;
+	protected CrossoverAlgorithm crossoverAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
 
@@ -109,7 +109,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/*
-	 * Roulette Wheel Selection
+	 * Crossover algorithm utilizing Roulette Wheel Selection
 	 * 
 	 * (non-Javadoc)
 	 * 
