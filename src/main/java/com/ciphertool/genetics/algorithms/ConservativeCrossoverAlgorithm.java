@@ -9,6 +9,10 @@ import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
+	/*
+	 * geneListDao is required by other crossover algorithms, so this is just
+	 * for spring bean consistency.
+	 */
 	@SuppressWarnings("unused")
 	private GeneListDao geneListDao;
 
@@ -60,6 +64,12 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 					 */
 					if (child.getFitness() <= originalFitness) {
 						child.replaceGene(childGeneIndex, geneCopy);
+
+						/*
+						 * Reset the fitness to what it was before the
+						 * replacement.
+						 */
+						fitnessEvaluator.evaluate(child);
 					}
 				}
 

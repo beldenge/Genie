@@ -62,6 +62,11 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 				while (child.getGenes().size() > genesBefore) {
 					child.removeGene(child.getGenes().size() - 1);
 				}
+
+				/*
+				 * Reset the fitness to what it was before the replacement.
+				 */
+				fitnessEvaluator.evaluate(child);
 			}
 
 			childGeneIndex++;
