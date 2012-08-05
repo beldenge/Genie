@@ -25,17 +25,46 @@ public class Population {
 	public Population() {
 	}
 
+	/**
+	 * A concurrent task for adding a brand new Chromosome to the population.
+	 */
+	private class GeneratorTask implements Callable<Chromosome> {
+
+		public GeneratorTask() {
+		}
+
+		@Override
+		public Chromosome call() throws Exception {
+			return chromosomeGenerator.generateChromosome();
+		}
+	}
+
 	public void populateIndividuals(Integer numIndividuals) {
 		if (this.individuals == null) {
 			this.individuals = new ArrayList<Chromosome>();
 		}
 
+		List<FutureTask<Chromosome>> futureTasks = new ArrayList<FutureTask<Chromosome>>();
+		FutureTask<Chromosome> futureTask = null;
+
 		int individualsAdded = 0;
-
 		for (int i = this.individuals.size(); i < numIndividuals; i++) {
-			this.individuals.add((Chromosome) chromosomeGenerator.generateChromosome());
+			futureTask = new FutureTask<Chromosome>(new GeneratorTask());
+			futureTasks.add(futureTask);
 
-			individualsAdded++;
+			this.taskExecutor.execute(futureTask);
+		}
+
+		for (FutureTask<Chromosome> future : futureTasks) {
+			try {
+				this.individuals.add(future.get());
+
+				individualsAdded++;
+			} catch (InterruptedException ie) {
+				log.error("Caught InterruptedException while waiting for GeneratorTask ", ie);
+			} catch (ExecutionException ee) {
+				log.error("Caught ExecutionException while waiting for GeneratorTask ", ee);
+			}
 		}
 
 		log.debug("Added " + individualsAdded + " individuals to the population.");
