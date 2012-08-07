@@ -33,7 +33,7 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 		int childGeneIndex = 0;
 		int parentGeneIndex = 0;
 		Gene geneCopy = null;
-		Integer originalFitness = 0;
+		Double originalFitness = 0.0;
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an

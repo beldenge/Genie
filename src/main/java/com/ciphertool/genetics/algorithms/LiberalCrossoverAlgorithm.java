@@ -28,7 +28,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		int genesBefore = 0;
 		int childGeneIndex = 0;
 		Gene geneCopy = null;
-		Integer originalFitness = 0;
+		Double originalFitness = 0.0;
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an

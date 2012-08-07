@@ -19,7 +19,7 @@ public class Population {
 	private ChromosomeGenerator chromosomeGenerator;
 	private List<Chromosome> individuals;
 	private FitnessEvaluator fitnessEvaluator;
-	private long totalFitness;
+	private Double totalFitness;
 	private TaskExecutor taskExecutor;
 
 	public Population() {
@@ -73,7 +73,7 @@ public class Population {
 	/**
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
-	private class EvaluatorTask implements Callable<Integer> {
+	private class EvaluatorTask implements Callable<Double> {
 
 		private Chromosome chromosome;
 
@@ -82,7 +82,7 @@ public class Population {
 		}
 
 		@Override
-		public Integer call() throws Exception {
+		public Double call() throws Exception {
 			return fitnessEvaluator.evaluate(this.chromosome);
 		}
 	}
@@ -91,16 +91,16 @@ public class Population {
 	 * This method executes all the fitness evaluations concurrently.
 	 */
 	public void evaluateAllFitness() {
-		List<FutureTask<Integer>> futureTasks = new ArrayList<FutureTask<Integer>>();
-		FutureTask<Integer> futureTask = null;
+		List<FutureTask<Double>> futureTasks = new ArrayList<FutureTask<Double>>();
+		FutureTask<Double> futureTask = null;
 
 		for (Chromosome individual : individuals) {
-			futureTask = new FutureTask<Integer>(new EvaluatorTask(individual));
+			futureTask = new FutureTask<Double>(new EvaluatorTask(individual));
 			futureTasks.add(futureTask);
 			this.taskExecutor.execute(futureTask);
 		}
 
-		for (FutureTask<Integer> future : futureTasks) {
+		for (FutureTask<Double> future : futureTasks) {
 			try {
 				future.get();
 			} catch (InterruptedException ie) {
@@ -114,7 +114,7 @@ public class Population {
 	public Chromosome evaluateFitness() {
 		this.evaluateAllFitness();
 
-		this.totalFitness = 0;
+		this.totalFitness = 0.0;
 
 		Chromosome bestFitIndividual = null;
 
@@ -133,7 +133,8 @@ public class Population {
 		log.info("Population of size " + individuals.size() + " has an average fitness of "
 				+ String.format("%1$,.2f", averageFitness));
 
-		log.info("Best fitness in population is " + bestFitIndividual.getFitness());
+		log.info("Best fitness in population is "
+				+ String.format("%1$,.2f", bestFitIndividual.getFitness()));
 
 		return bestFitIndividual;
 	}

@@ -49,12 +49,12 @@ public interface Chromosome extends Cloneable {
 	/**
 	 * @return
 	 */
-	public Integer getFitness();
+	public Double getFitness();
 
 	/**
 	 * @param fitness
 	 */
-	public void setFitness(Integer fitness);
+	public void setFitness(Double fitness);
 
 	/*
 	 * Returns the size as the number of gene sequences

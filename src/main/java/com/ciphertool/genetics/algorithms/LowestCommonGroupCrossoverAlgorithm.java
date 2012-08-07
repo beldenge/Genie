@@ -40,7 +40,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 		int parentEndGeneIndex = 0;
 		int insertCount = 0;
 		int geneOffset = 0;
-		Integer originalFitness = 0;
+		Double originalFitness = 0.0;
 		List<Gene> childGeneCopies;
 
 		childSequencePosition += child.getGenes().get(childBeginGeneIndex).size();
