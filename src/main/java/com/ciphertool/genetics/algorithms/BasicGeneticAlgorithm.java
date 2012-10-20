@@ -36,7 +36,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * ()
 	 */
 	@Override
-	public List<Chromosome> iterateUntilTermination() {
+	public void iterateUntilTermination() {
 		if (this.population == null) {
 			log.info("Attempted to start algorithm with a null population.  Spawning population of size "
 					+ populationSize + ".");
@@ -72,7 +72,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		}
 		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / (i - 1))
 				+ "ms.");
+	}
 
+	@Override
+	public List<Chromosome> getBestFitIndividuals() {
 		List<Chromosome> individuals = this.population.getIndividuals();
 		Collections.sort(individuals, fitnessComparator);
 

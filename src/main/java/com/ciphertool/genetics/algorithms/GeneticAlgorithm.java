@@ -7,7 +7,9 @@ import com.ciphertool.genetics.entities.Chromosome;
 
 public interface GeneticAlgorithm {
 
-	public List<Chromosome> iterateUntilTermination();
+	public void iterateUntilTermination();
+
+	public List<Chromosome> getBestFitIndividuals();
 
 	public void spawnInitialPopulation();
 
