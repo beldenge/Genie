@@ -73,7 +73,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			log.info("Generation " + i + " finished in "
 					+ (System.currentTimeMillis() - generationStart) + "ms.");
-		} while (!stopRequested && i <= maxGenerations);
+		} while (!stopRequested && i < maxGenerations);
 
 		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / i)
 				+ "ms.");
