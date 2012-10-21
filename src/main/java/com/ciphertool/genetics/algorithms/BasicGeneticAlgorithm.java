@@ -24,6 +24,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	protected CrossoverAlgorithm crossoverAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
+	private boolean stopRequested;
 
 	public BasicGeneticAlgorithm() {
 	}
@@ -37,6 +38,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void iterateUntilTermination() {
+		stopRequested = false;
+
 		if (this.population == null) {
 			log.info("Attempted to start algorithm with a null population.  Spawning population of size "
 					+ populationSize + ".");
@@ -46,8 +49,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		long genesis = System.currentTimeMillis();
 		long generationStart = 0;
-		int i;
-		for (i = 1; i <= maxGenerations; i++) {
+		int i = 0;
+		do {
+			i++;
 			generationStart = System.currentTimeMillis();
 
 			log.info("Starting generation " + i);
@@ -69,8 +73,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			log.info("Generation " + i + " finished in "
 					+ (System.currentTimeMillis() - generationStart) + "ms.");
-		}
-		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / (i - 1))
+		} while (!stopRequested && i <= maxGenerations);
+
+		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / i)
 				+ "ms.");
 	}
 
@@ -221,6 +226,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.populateIndividuals(populationSize);
 
 		this.population.evaluateFitness();
+	}
+
+	@Override
+	public void requestStop() {
+		this.stopRequested = true;
 	}
 
 	/**

@@ -20,4 +20,6 @@ public interface GeneticAlgorithm {
 	public Population getPopulation();
 
 	public void select();
+
+	public void requestStop();
 }
