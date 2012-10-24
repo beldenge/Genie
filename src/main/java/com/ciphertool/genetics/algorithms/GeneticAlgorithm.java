@@ -41,4 +41,58 @@ public interface GeneticAlgorithm {
 	public void select();
 
 	public void requestStop();
+
+	/**
+	 * @param populationSize
+	 *            the population size
+	 * @param numGenerations
+	 *            the number of generations to iterate. A negative number is
+	 *            interpreted as infinity.
+	 * @param survivalRate
+	 *            the percentage of individuals that survive each generation.
+	 * @param mutationRate
+	 *            This is a percentage chance that individuals will be selected
+	 *            for mutation.
+	 * @param crossoverRate
+	 *            This is a percentage of the population to be selected for
+	 *            crossover in pairs.
+	 */
+	public void setParameters(int populationSize, int numGenerations, double survivalRate,
+			double mutationRate, double crossoverRate);
+
+	/**
+	 * @param populationSize
+	 *            the population size
+	 */
+	public void setPopulationSize(int populationSize);
+
+	/**
+	 * @param numGenerations
+	 *            the number of generations to iterate. A negative number is
+	 *            interpreted as infinity.
+	 */
+	public void setNumGenerations(int numGenerations);
+
+	/**
+	 * @param survivalRate
+	 *            the percentage of individuals that survive each generation.
+	 */
+	/**
+	 * @param survivalRate
+	 */
+	public void setSurvivalRate(double survivalRate);
+
+	/**
+	 * @param mutationRate
+	 *            This is a percentage chance that individuals will be selected
+	 *            for mutation.
+	 */
+	public void setMutationRate(double mutationRate);
+
+	/**
+	 * @param crossoverRate
+	 *            This is a percentage of the population to be selected for
+	 *            crossover in pairs.
+	 */
+	public void setCrossoverRate(double crossoverRate);
 }

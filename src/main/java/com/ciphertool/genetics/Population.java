@@ -244,6 +244,14 @@ public class Population {
 	}
 
 	/**
+	 * @param individuals
+	 *            the individuals to set
+	 */
+	public void setIndividuals(List<Chromosome> individuals) {
+		this.individuals = individuals;
+	}
+
+	/**
 	 * Removes an individual from the population based on its index. This is
 	 * much more efficient than removing by equality.
 	 * 

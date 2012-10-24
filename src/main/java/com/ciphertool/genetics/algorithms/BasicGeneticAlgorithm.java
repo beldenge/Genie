@@ -57,6 +57,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void iterateUntilTermination() {
+		List<String> validationErrors = validateParameters();
+		if (validationErrors.size() > 0) {
+			log.warn("Unable to execute genetic algorithm because one or more of the required parameters are missing.  The fields that failed validation are "
+					+ validationErrors);
+
+			return;
+		}
+
 		stopRequested = false;
 
 		if (this.population == null) {
@@ -92,10 +100,36 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			log.info("Generation " + i + " finished in "
 					+ (System.currentTimeMillis() - generationStart) + "ms.");
-		} while (!stopRequested && i < maxGenerations);
+		} while (!stopRequested && (maxGenerations < 0 || i < maxGenerations));
 
 		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / i)
 				+ "ms.");
+	}
+
+	private List<String> validateParameters() {
+		List<String> validationErrors = new ArrayList<String>();
+
+		if (this.populationSize == 0) {
+			validationErrors.add("populationSize");
+		}
+
+		if (this.maxGenerations == 0) {
+			validationErrors.add("maxGenerations");
+		}
+
+		if (this.survivalRate == 0) {
+			validationErrors.add("survivalRate");
+		}
+
+		if (this.mutationRate == 0) {
+			validationErrors.add("mutationRate");
+		}
+
+		if (this.crossoverRate == 0) {
+			validationErrors.add("crossoverRate");
+		}
+
+		return validationErrors;
 	}
 
 	@Override
@@ -242,6 +276,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void spawnInitialPopulation() {
+		this.population.setIndividuals(new ArrayList<Chromosome>());
+
 		this.population.populateIndividuals(populationSize);
 
 		this.population.evaluateFitness();
@@ -269,47 +305,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
-	 * @param populationSize
-	 */
-	@Required
-	public void setPopulationSize(Integer populationSize) {
-		this.populationSize = populationSize;
-	}
-
-	/**
-	 * This is a percentage chance that individuals will be selected for
-	 * mutation.
-	 * 
-	 * @param mutationRate
-	 *            the mutationRate to set
-	 */
-	@Required
-	public void setMutationRate(Double mutationRate) {
-		this.mutationRate = mutationRate;
-	}
-
-	/**
-	 * This is a percentage of the population to be selected for crossover in
-	 * pairs.
-	 * 
-	 * @param crossoverRate
-	 *            the crossoverRate to set
-	 */
-	@Required
-	public void setCrossoverRate(Double crossoverRate) {
-		this.crossoverRate = crossoverRate;
-	}
-
-	/**
-	 * @param maxGenerations
-	 *            the maxGenerations to set
-	 */
-	@Required
-	public void setMaxGenerations(Integer maxGenerations) {
-		this.maxGenerations = maxGenerations;
-	}
-
-	/**
 	 * @param crossoverAlgorithm
 	 *            the crossoverAlgorithm to set
 	 */
@@ -328,17 +323,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
-	 * This is the percentage of individuals that survive each generation.
-	 * 
-	 * @param survivalRate
-	 *            the survivalRate to set
-	 */
-	@Required
-	public void setSurvivalRate(Double survivalRate) {
-		this.survivalRate = survivalRate;
-	}
-
-	/**
 	 * @param fitnessComparator
 	 *            the fitnessComparator to set
 	 */
@@ -354,5 +338,79 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setFinalSurvivorCount(Integer finalSurvivorCount) {
 		this.finalSurvivorCount = finalSurvivorCount;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setParameters(int,
+	 * int, double, double, double)
+	 */
+	@Override
+	public void setParameters(int populationSize, int numGenerations, double survivalRate,
+			double mutationRate, double crossoverRate) {
+		this.populationSize = populationSize;
+		this.maxGenerations = numGenerations;
+		this.survivalRate = survivalRate;
+		this.mutationRate = mutationRate;
+		this.crossoverRate = crossoverRate;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setPopulationSize
+	 * (int)
+	 */
+	@Override
+	public void setPopulationSize(int populationSize) {
+		this.populationSize = populationSize;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setNumGenerations
+	 * (int)
+	 */
+	@Override
+	public void setNumGenerations(int numGenerations) {
+		this.maxGenerations = numGenerations;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setSurvivalRate(int)
+	 */
+	@Override
+	public void setSurvivalRate(double survivalRate) {
+		this.survivalRate = survivalRate;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setMutationRate(int)
+	 */
+	@Override
+	public void setMutationRate(double mutationRate) {
+		this.mutationRate = mutationRate;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setCrossoverRate(int)
+	 */
+	@Override
+	public void setCrossoverRate(double crossoverRate) {
+		this.crossoverRate = crossoverRate;
 	}
 }
