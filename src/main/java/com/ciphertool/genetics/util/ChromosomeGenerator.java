@@ -23,4 +23,13 @@ import com.ciphertool.genetics.entities.Chromosome;
 
 public interface ChromosomeGenerator {
 	public Chromosome generateChromosome();
+
+	/**
+	 * The source structure for which this genetic algorithm should generate
+	 * chromosomes.
+	 * 
+	 * @param obj
+	 *            the Object
+	 */
+	public void setGeneticStructure(Object obj);
 }

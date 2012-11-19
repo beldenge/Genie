@@ -299,6 +299,14 @@ public class Population {
 	}
 
 	/**
+	 * @param obj
+	 *            the Object to set
+	 */
+	public void setGeneticStructure(Object obj) {
+		this.chromosomeGenerator.setGeneticStructure(obj);
+	}
+
+	/**
 	 * @param chromosomeGenerator
 	 *            the chromosomeGenerator to set
 	 */

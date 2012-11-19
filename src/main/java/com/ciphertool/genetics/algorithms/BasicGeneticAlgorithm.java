@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.util.FitnessComparator;
@@ -33,11 +34,7 @@ import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
-	private Integer populationSize;
-	private Double survivalRate;
-	private Double mutationRate;
-	protected Double crossoverRate;
-	private Integer maxGenerations;
+	protected GeneticAlgorithmStrategy strategy;
 	private Integer finalSurvivorCount;
 	protected Population population;
 	protected CrossoverAlgorithm crossoverAlgorithm;
@@ -69,7 +66,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		if (this.population == null) {
 			log.info("Attempted to start algorithm with a null population.  Spawning population of size "
-					+ populationSize + ".");
+					+ strategy.getPopulationSize() + ".");
 
 			this.spawnInitialPopulation();
 		}
@@ -94,13 +91,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			mutate();
 
-			population.populateIndividuals(populationSize);
+			population.populateIndividuals(strategy.getPopulationSize());
 
 			population.evaluateFitness();
 
 			log.info("Generation " + i + " finished in "
 					+ (System.currentTimeMillis() - generationStart) + "ms.");
-		} while (!stopRequested && (maxGenerations < 0 || i < maxGenerations));
+		} while (!stopRequested
+				&& (strategy.getMaxGenerations() < 0 || i < strategy.getMaxGenerations()));
 
 		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / i)
 				+ "ms.");
@@ -109,23 +107,27 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private List<String> validateParameters() {
 		List<String> validationErrors = new ArrayList<String>();
 
-		if (this.populationSize == 0) {
+		if (strategy.getGeneticStructure() == null) {
+			validationErrors.add("geneticStructure");
+		}
+
+		if (strategy.getPopulationSize() == 0) {
 			validationErrors.add("populationSize");
 		}
 
-		if (this.maxGenerations == 0) {
+		if (strategy.getMaxGenerations() == 0) {
 			validationErrors.add("maxGenerations");
 		}
 
-		if (this.survivalRate == 0) {
+		if (strategy.getSurvivalRate() == 0) {
 			validationErrors.add("survivalRate");
 		}
 
-		if (this.mutationRate == 0) {
+		if (strategy.getMutationRate() == 0) {
 			validationErrors.add("mutationRate");
 		}
 
-		if (this.crossoverRate == 0) {
+		if (strategy.getCrossoverRate() == 0) {
 			validationErrors.add("crossoverRate");
 		}
 
@@ -156,9 +158,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		int initialPopulationSize = this.population.size();
 
-		long survivorIndex = Math.round((initialPopulationSize * (1 - survivalRate)));
+		long survivorIndex = Math.round((initialPopulationSize * (1 - strategy.getSurvivalRate())));
 		log.debug(survivorIndex + " individuals to be removed from population of size "
-				+ this.population.size() + " and survival rate of " + survivalRate + ".");
+				+ this.population.size() + " and survival rate of " + strategy.getSurvivalRate()
+				+ ".");
 
 		for (int i = 0; i < survivorIndex; i++) {
 			/*
@@ -193,7 +196,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		int initialPopulationSize = this.population.size();
 
-		long pairsToCrossover = Math.round((initialPopulationSize * crossoverRate) / 2);
+		long pairsToCrossover = Math
+				.round((initialPopulationSize * strategy.getCrossoverRate()) / 2);
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
@@ -243,7 +247,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		int initialPopulationSize = this.population.size();
 
-		long mutations = Math.round((initialPopulationSize * mutationRate));
+		long mutations = Math.round((initialPopulationSize * strategy.getMutationRate()));
 
 		log.debug("Mutations to perform: " + mutations);
 
@@ -278,7 +282,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	public void spawnInitialPopulation() {
 		this.population.setIndividuals(new ArrayList<Chromosome>());
 
-		this.population.populateIndividuals(populationSize);
+		this.population.populateIndividuals(strategy.getPopulationSize());
 
 		this.population.evaluateFitness();
 	}
@@ -302,6 +306,13 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setPopulation(Population population) {
 		this.population = population;
+	}
+
+	/**
+	 * @return the strategy
+	 */
+	public GeneticAlgorithmStrategy getStrategy() {
+		return strategy;
 	}
 
 	/**
@@ -348,69 +359,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * int, double, double, double)
 	 */
 	@Override
-	public void setParameters(int populationSize, int numGenerations, double survivalRate,
-			double mutationRate, double crossoverRate) {
-		this.populationSize = populationSize;
-		this.maxGenerations = numGenerations;
-		this.survivalRate = survivalRate;
-		this.mutationRate = mutationRate;
-		this.crossoverRate = crossoverRate;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setPopulationSize
-	 * (int)
-	 */
-	@Override
-	public void setPopulationSize(int populationSize) {
-		this.populationSize = populationSize;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setNumGenerations
-	 * (int)
-	 */
-	@Override
-	public void setNumGenerations(int numGenerations) {
-		this.maxGenerations = numGenerations;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setSurvivalRate(int)
-	 */
-	@Override
-	public void setSurvivalRate(double survivalRate) {
-		this.survivalRate = survivalRate;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setMutationRate(int)
-	 */
-	@Override
-	public void setMutationRate(double mutationRate) {
-		this.mutationRate = mutationRate;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setCrossoverRate(int)
-	 */
-	@Override
-	public void setCrossoverRate(double crossoverRate) {
-		this.crossoverRate = crossoverRate;
+	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
+		this.fitnessEvaluator.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
+		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
+		this.strategy = geneticAlgorithmStrategy;
 	}
 }

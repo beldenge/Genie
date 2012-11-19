@@ -66,7 +66,8 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 	public void crossover() {
 		int initialPopulationSize = this.population.size();
 
-		long pairsToCrossover = Math.round((initialPopulationSize * crossoverRate) / 2);
+		long pairsToCrossover = Math
+				.round((initialPopulationSize * strategy.getCrossoverRate()) / 2);
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 

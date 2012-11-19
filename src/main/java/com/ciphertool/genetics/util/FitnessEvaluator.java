@@ -23,4 +23,13 @@ import com.ciphertool.genetics.entities.Chromosome;
 
 public interface FitnessEvaluator {
 	public Double evaluate(Chromosome chromosome);
+
+	/**
+	 * The source structure against which this genetic algorithm should evaluate
+	 * chromosomes.
+	 * 
+	 * @param obj
+	 *            the Object
+	 */
+	public void setGeneticStructure(Object obj);
 }
