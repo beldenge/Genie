@@ -131,6 +131,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("crossoverRate");
 		}
 
+		if (strategy.getFitnessEvaluator() == null) {
+			validationErrors.add("fitnessEvaluator");
+		}
+
+		if (strategy.getCrossoverAlgorithm() == null) {
+			validationErrors.add("crossoverAlgorithm");
+		}
+
 		return validationErrors;
 	}
 
@@ -360,8 +368,12 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
-		this.fitnessEvaluator.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
+		this.fitnessEvaluator = geneticAlgorithmStrategy.getFitnessEvaluator();
+
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
+		this.population.setFitnessEvaluator(geneticAlgorithmStrategy.getFitnessEvaluator());
+
+		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
 		this.strategy = geneticAlgorithmStrategy;
 	}
 }

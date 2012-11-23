@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.algorithms;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public interface CrossoverAlgorithm {
 
@@ -32,4 +33,10 @@ public interface CrossoverAlgorithm {
 	 * supplied arguments.
 	 */
 	public Chromosome crossover(Chromosome parentA, Chromosome parentB);
+
+	/**
+	 * @param fitnessEvaluator
+	 *            the FitnessEvaluator to set
+	 */
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
 }

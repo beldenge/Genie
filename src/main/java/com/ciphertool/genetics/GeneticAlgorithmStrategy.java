@@ -1,7 +1,6 @@
 package com.ciphertool.genetics;
 
 import com.ciphertool.genetics.algorithms.CrossoverAlgorithm;
-import com.ciphertool.genetics.util.FitnessComparator;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategy {
@@ -9,11 +8,10 @@ public class GeneticAlgorithmStrategy {
 	private Integer populationSize;
 	private Double survivalRate;
 	private Double mutationRate;
-	protected Double crossoverRate;
+	private Double crossoverRate;
 	private Integer maxGenerations;
-	protected CrossoverAlgorithm crossoverAlgorithm;
+	private CrossoverAlgorithm crossoverAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
-	private FitnessComparator fitnessComparator;
 
 	/**
 	 * Default no-args constructor
@@ -36,15 +34,26 @@ public class GeneticAlgorithmStrategy {
 	 *            the mutationRate to set
 	 * @param crossoverRate
 	 *            the crossoverRate to set
+	 * @param fitnessEvaluator
+	 *            the fitnessEvaluator to set
+	 * @param crossoverAlgorithm
+	 *            the crossoverAlgorithm to set
 	 */
 	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize,
-			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate) {
+			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
+			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.maxGenerations = maxGenerations;
 		this.survivalRate = survivalRate;
 		this.mutationRate = mutationRate;
 		this.crossoverRate = crossoverRate;
+
+		this.fitnessEvaluator = fitnessEvaluator;
+		this.fitnessEvaluator.setGeneticStructure(geneticStructure);
+
+		this.crossoverAlgorithm = crossoverAlgorithm;
+		this.crossoverAlgorithm.setFitnessEvaluator(this.fitnessEvaluator);
 	}
 
 	/**
@@ -165,20 +174,5 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
-	}
-
-	/**
-	 * @return the fitnessComparator
-	 */
-	public FitnessComparator getFitnessComparator() {
-		return fitnessComparator;
-	}
-
-	/**
-	 * @param fitnessComparator
-	 *            the fitnessComparator to set
-	 */
-	public void setFitnessComparator(FitnessComparator fitnessComparator) {
-		this.fitnessComparator = fitnessComparator;
 	}
 }
