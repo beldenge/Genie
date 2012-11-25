@@ -1,6 +1,7 @@
 package com.ciphertool.genetics;
 
 import com.ciphertool.genetics.algorithms.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.MutationAlgorithm;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategy {
@@ -12,6 +13,7 @@ public class GeneticAlgorithmStrategy {
 	private Integer maxGenerations;
 	private CrossoverAlgorithm crossoverAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
+	private MutationAlgorithm mutationAlgorithm;
 
 	/**
 	 * Default no-args constructor
@@ -41,7 +43,8 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize,
 			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
-			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm) {
+			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
+			MutationAlgorithm mutationAlgorithm) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.maxGenerations = maxGenerations;
@@ -54,6 +57,8 @@ public class GeneticAlgorithmStrategy {
 
 		this.crossoverAlgorithm = crossoverAlgorithm;
 		this.crossoverAlgorithm.setFitnessEvaluator(this.fitnessEvaluator);
+
+		this.mutationAlgorithm = mutationAlgorithm;
 	}
 
 	/**
@@ -174,5 +179,20 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
+	}
+
+	/**
+	 * @return the mutationAlgorithm
+	 */
+	public MutationAlgorithm getMutationAlgorithm() {
+		return mutationAlgorithm;
+	}
+
+	/**
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 */
+	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+		this.mutationAlgorithm = mutationAlgorithm;
 	}
 }
