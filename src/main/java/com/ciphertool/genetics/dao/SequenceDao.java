@@ -17,18 +17,18 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.entities;
+package com.ciphertool.genetics.dao;
 
-public interface Sequence extends Cloneable {
-	public Integer getSequenceId();
+import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.Sequence;
 
-	public Gene getGene();
-
-	public void setGene(Gene gene);
-
-	public Sequence clone();
-
-	public Object getValue();
-
-	public void setValue(Object obj);
+public interface SequenceDao {
+	/**
+	 * @param gene
+	 *            the Gene containing this Sequence
+	 * @param sequenceIndex
+	 *            the index of the sequence to replace
+	 * @return the new Sequence
+	 */
+	public Sequence findRandomSequence(Gene gene, int sequenceIndex);
 }

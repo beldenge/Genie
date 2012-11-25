@@ -83,16 +83,4 @@ public interface Gene extends Cloneable {
 	 * @param newGene
 	 */
 	public void replaceSequence(int index, Sequence newSequence);
-
-	/**
-	 * Mutates a Sequence at the specified index.
-	 * 
-	 * @param index
-	 */
-	public void mutateSequence(int index);
-
-	/*
-	 * Mutate a random sequence
-	 */
-	public void mutateRandomSequence();
 }

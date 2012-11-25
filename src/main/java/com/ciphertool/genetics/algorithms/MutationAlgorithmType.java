@@ -19,19 +19,21 @@
 
 package com.ciphertool.genetics.algorithms;
 
-public enum CrossoverAlgorithmType {
-	LIBERAL("Liberal", LiberalCrossoverAlgorithm.class,
-			"This will crossover words by index regardless of starting position and end position"),
-	CONSERVATIVE("Conservative", ConservativeCrossoverAlgorithm.class,
-			"This will only crossover words that match on starting position and end position"),
-	LOWEST_COMMON_GROUP("Lowest Common Group", LowestCommonGroupCrossoverAlgorithm.class,
-			"This will crossover groups of words that match on starting position and end position");
+public enum MutationAlgorithmType {
+	LIBERAL("Liberal", LiberalMutationAlgorithm.class,
+			"This will mutate genes by index regardless of starting position and end position"),
+	CONSERVATIVE("Conservative", ConservativeMutationAlgorithm.class,
+			"This will only mutate genes that match on starting position and end position"),
+	LOWEST_COMMON_GROUP("Lowest Common Group", LowestCommonGroupMutationAlgorithm.class,
+			"This will mutate groups of genes that match on starting position and end position"),
+	SINGLE_SEQUENCE("Single Sequence", SingleSequenceMutationAlgorithm.class,
+			"This will mutate a single sequence of a specified gene");
 
 	private String displayName;
-	private Class<? extends CrossoverAlgorithm> type;
+	private Class<? extends MutationAlgorithm> type;
 	private String description;
 
-	CrossoverAlgorithmType(String displayName, Class<? extends CrossoverAlgorithm> type,
+	MutationAlgorithmType(String displayName, Class<? extends MutationAlgorithm> type,
 			String description) {
 		this.displayName = displayName;
 		this.type = type;
@@ -48,7 +50,7 @@ public enum CrossoverAlgorithmType {
 	/**
 	 * @return the types
 	 */
-	public Class<? extends CrossoverAlgorithm> getType() {
+	public Class<? extends MutationAlgorithm> getType() {
 		return type;
 	}
 

@@ -20,29 +20,13 @@
 package com.ciphertool.genetics.algorithms;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.util.FitnessEvaluator;
 
-public interface CrossoverAlgorithm {
-
+public interface MutationAlgorithm {
 	/**
-	 * Performs crossover to a single child by cloning parentA and then
-	 * selectively replacing Genes from parentB if they increase the fitness of
-	 * the Chromosome.
+	 * Performs a genetic mutation of the supplied Chromosome.
 	 * 
-	 * Crossover from parentB to parentA can be achieved simply by reversing the
-	 * supplied arguments.
-	 * 
-	 * @param parentA
-	 *            the first parent
-	 * @param parentB
-	 *            the second parent
-	 * @return the child Chromosome produced from the crossover
+	 * @param chromosome
+	 *            the Chromosome to mutate
 	 */
-	public Chromosome crossover(Chromosome parentA, Chromosome parentB);
-
-	/**
-	 * @param fitnessEvaluator
-	 *            the FitnessEvaluator to set
-	 */
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
+	public void mutateChromosome(Chromosome chromosome);
 }

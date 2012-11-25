@@ -83,16 +83,4 @@ public interface Chromosome extends Cloneable {
 	public Integer targetSize();
 
 	public Chromosome clone();
-
-	/**
-	 * Mutates a Gene at the specified index.
-	 * 
-	 * @param index
-	 */
-	public void mutateGene(int index);
-
-	/*
-	 * Mutates a random Gene
-	 */
-	public void mutateRandomGene();
 }

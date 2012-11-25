@@ -38,6 +38,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Integer finalSurvivorCount;
 	protected Population population;
 	protected CrossoverAlgorithm crossoverAlgorithm;
+	protected MutationAlgorithm mutationAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
 	private boolean stopRequested;
@@ -268,7 +269,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			Chromosome mutation = original.clone();
 
-			mutation.mutateRandomGene();
+			mutationAlgorithm.mutateChromosome(mutation);
 
 			fitnessEvaluator.evaluate(mutation);
 
@@ -330,6 +331,15 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setCrossoverAlgorithm(CrossoverAlgorithm crossoverAlgorithm) {
 		this.crossoverAlgorithm = crossoverAlgorithm;
+	}
+
+	/**
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 */
+	@Required
+	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+		this.mutationAlgorithm = mutationAlgorithm;
 	}
 
 	/**
