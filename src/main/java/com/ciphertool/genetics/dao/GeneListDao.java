@@ -24,4 +24,6 @@ import com.ciphertool.genetics.entities.Gene;
 
 public interface GeneListDao {
 	public Gene findRandomGene(Chromosome chromosome, int beginIndex);
+
+	public Gene findRandomGeneOfLength(Chromosome chromosome, int beginIndex, int length);
 }

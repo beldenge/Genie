@@ -81,7 +81,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 
 		/*
 		 * We first remove all the parent Chromosomes since the children are
-		 * guaranteed to be better fit.
+		 * guaranteed to be at least as fit.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.spinIndexRouletteWheel();

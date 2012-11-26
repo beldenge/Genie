@@ -78,10 +78,11 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 					fitnessEvaluator.evaluate(child);
 
 					/*
-					 * Revert to the original gene if this did not increase
-					 * fitness
+					 * Revert to the original gene if this decreased fitness.
+					 * It's ok to let non-beneficial changes progress, as long
+					 * as they are not detrimental.
 					 */
-					if (child.getFitness() <= originalFitness) {
+					if (child.getFitness() < originalFitness) {
 						child.replaceGene(childGeneIndex, geneCopy);
 
 						/*

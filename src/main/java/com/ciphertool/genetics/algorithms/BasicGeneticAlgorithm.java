@@ -273,7 +273,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			fitnessEvaluator.evaluate(mutation);
 
-			if (mutation.getFitness() > original.getFitness()) {
+			/*
+			 * If this was a positive or neutral change in fitness, then replace
+			 * the existing one with this.
+			 */
+			if (mutation.getFitness() >= original.getFitness()) {
 				this.population.removeIndividual(mutantIndex);
 				this.population.addIndividual(mutation);
 			}

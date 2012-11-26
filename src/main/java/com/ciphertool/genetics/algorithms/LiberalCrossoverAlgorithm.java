@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.util.ChromosomeHelper;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
@@ -32,6 +33,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 	private FitnessEvaluator fitnessEvaluator;
 	private GeneListDao geneListDao;
+	private ChromosomeHelper chromosomeHelper;
 
 	/**
 	 * This crossover algorithm does a liberal amount of changes since it
@@ -73,9 +75,11 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 			fitnessEvaluator.evaluate(child);
 
 			/*
-			 * Revert to the original gene if this did not increase fitness
+			 * Revert to the original gene if this decreased fitness. It's ok to
+			 * let non-beneficial changes progress, as long as they are not
+			 * detrimental.
 			 */
-			if (child.getFitness() <= originalFitness) {
+			if (child.getFitness() < originalFitness) {
 				child.replaceGene(childGeneIndex, geneCopy);
 
 				while (child.getGenes().size() > genesBefore) {
@@ -90,6 +94,12 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 
 			childGeneIndex++;
 		}
+
+		/*
+		 * Trim the Chromosome in case it ends with too many sequences due to
+		 * the nature of this algorithm
+		 */
+		chromosomeHelper.resizeChromosome(child);
 
 		/*
 		 * Child is guaranteed to have at least as good fitness as its parent
@@ -113,5 +123,14 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	@Required
 	public void setGeneListDao(GeneListDao geneListDao) {
 		this.geneListDao = geneListDao;
+	}
+	
+	/**
+	 * @param chromosomeHelper
+	 *            the chromosomeHelper to set
+	 */
+	@Required
+	public void setChromosomeHelper(ChromosomeHelper chromosomeHelper) {
+		this.chromosomeHelper = chromosomeHelper;
 	}
 }

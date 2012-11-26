@@ -24,8 +24,6 @@ public enum MutationAlgorithmType {
 			"This will mutate genes by index regardless of starting position and end position"),
 	CONSERVATIVE("Conservative", ConservativeMutationAlgorithm.class,
 			"This will only mutate genes that match on starting position and end position"),
-	LOWEST_COMMON_GROUP("Lowest Common Group", LowestCommonGroupMutationAlgorithm.class,
-			"This will mutate groups of genes that match on starting position and end position"),
 	SINGLE_SEQUENCE("Single Sequence", SingleSequenceMutationAlgorithm.class,
 			"This will mutate a single sequence of a specified gene");
 
