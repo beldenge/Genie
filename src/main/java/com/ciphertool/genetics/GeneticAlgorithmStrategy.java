@@ -7,6 +7,7 @@ import com.ciphertool.genetics.util.FitnessEvaluator;
 public class GeneticAlgorithmStrategy {
 	private Object geneticStructure;
 	private Integer populationSize;
+	private Integer lifespan;
 	private Double survivalRate;
 	private Double mutationRate;
 	private Double crossoverRate;
@@ -41,12 +42,13 @@ public class GeneticAlgorithmStrategy {
 	 * @param crossoverAlgorithm
 	 *            the crossoverAlgorithm to set
 	 */
-	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize,
+	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
 			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
 			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
 			MutationAlgorithm mutationAlgorithm) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
+		this.lifespan = lifespan;
 		this.maxGenerations = maxGenerations;
 		this.survivalRate = survivalRate;
 		this.mutationRate = mutationRate;
@@ -89,6 +91,21 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setPopulationSize(Integer populationSize) {
 		this.populationSize = populationSize;
+	}
+
+	/**
+	 * @return the lifespan
+	 */
+	public Integer getLifespan() {
+		return lifespan;
+	}
+
+	/**
+	 * @param lifespan
+	 *            the lifespan to set
+	 */
+	public void setLifespan(Integer lifespan) {
+		this.lifespan = lifespan;
 	}
 
 	/**

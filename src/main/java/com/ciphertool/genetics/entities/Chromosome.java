@@ -75,6 +75,19 @@ public interface Chromosome extends Cloneable {
 	 */
 	public void setFitness(Double fitness);
 
+	/**
+	 * @return the age of this individual Chromosome
+	 */
+	public int getAge();
+
+	/**
+	 * @param age
+	 *            the age to set
+	 */
+	public void setAge(int age);
+
+	public void increaseAge();
+
 	/*
 	 * Returns the size as the number of gene sequences
 	 */

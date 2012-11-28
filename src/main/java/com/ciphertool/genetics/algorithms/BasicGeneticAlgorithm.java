@@ -20,7 +20,6 @@
 package com.ciphertool.genetics.algorithms;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -92,6 +91,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			mutate();
 
+			population.increaseAge();
+
 			population.populateIndividuals(strategy.getPopulationSize());
 
 			population.evaluateFitness();
@@ -146,7 +147,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Override
 	public List<Chromosome> getBestFitIndividuals() {
 		List<Chromosome> individuals = this.population.getIndividuals();
-		Collections.sort(individuals, fitnessComparator);
+		this.population.sortIndividuals(fitnessComparator);
 
 		List<Chromosome> bestFitIndividuals = new ArrayList<Chromosome>();
 		int chromosomeIndex = (individuals.size() - finalSurvivorCount);
@@ -161,9 +162,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 	@Override
 	public void select() {
-		List<Chromosome> individuals = this.population.getIndividuals();
-
-		Collections.sort(individuals, fitnessComparator);
+		this.population.sortIndividuals(fitnessComparator);
 
 		int initialPopulationSize = this.population.size();
 
@@ -293,8 +292,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void spawnInitialPopulation() {
-		this.population.setIndividuals(new ArrayList<Chromosome>());
-
 		this.population.populateIndividuals(strategy.getPopulationSize());
 
 		this.population.evaluateFitness();
@@ -386,6 +383,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
 		this.population.setFitnessEvaluator(geneticAlgorithmStrategy.getFitnessEvaluator());
+		this.population.setLifespan(geneticAlgorithmStrategy.getLifespan());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
 

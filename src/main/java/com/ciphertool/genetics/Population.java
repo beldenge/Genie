@@ -20,6 +20,7 @@
 package com.ciphertool.genetics;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -31,15 +32,17 @@ import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.util.ChromosomeGenerator;
+import com.ciphertool.genetics.util.FitnessComparator;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class Population {
 	private Logger log = Logger.getLogger(getClass());
 	private ChromosomeGenerator chromosomeGenerator;
-	private List<Chromosome> individuals;
+	private List<Chromosome> individuals = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
 	private Double totalFitness;
 	private TaskExecutor taskExecutor;
+	private int lifespan;
 
 	public Population() {
 	}
@@ -58,7 +61,7 @@ public class Population {
 		}
 	}
 
-	public void populateIndividuals(Integer numIndividuals) {
+	public void populateIndividuals(Integer maxIndividuals) {
 		if (this.individuals == null) {
 			this.individuals = new ArrayList<Chromosome>();
 		}
@@ -67,7 +70,7 @@ public class Population {
 		FutureTask<Chromosome> futureTask = null;
 
 		int individualsAdded = 0;
-		for (int i = this.individuals.size(); i < numIndividuals; i++) {
+		for (int i = this.individuals.size(); i < maxIndividuals; i++) {
 			futureTask = new FutureTask<Chromosome>(new GeneratorTask());
 			futureTasks.add(futureTask);
 
@@ -158,6 +161,28 @@ public class Population {
 		return bestFitIndividual;
 	}
 
+	public void increaseAge() {
+		List<Chromosome> individualsToRemove = new ArrayList<Chromosome>();
+		for (Chromosome individual : this.individuals) {
+			/*
+			 * A value less than zero represents immortality, so always increase
+			 * the age in that case. Otherwise, only increase the age if this
+			 * individual has more generations to live.
+			 */
+			if (this.lifespan < 0 || individual.getAge() < this.lifespan) {
+				individual.increaseAge();
+			} else {
+				individualsToRemove.add(individual);
+			}
+		}
+
+		/*
+		 * Remove expired individuals outside the loop to avoid concurrent
+		 * modification exceptions.
+		 */
+		this.individuals.removeAll(individualsToRemove);
+	}
+
 	/**
 	 * This method should only really be called at the end of a genetic
 	 * algorithm.
@@ -240,15 +265,7 @@ public class Population {
 	 * @return the individuals
 	 */
 	public List<Chromosome> getIndividuals() {
-		return individuals;
-	}
-
-	/**
-	 * @param individuals
-	 *            the individuals to set
-	 */
-	public void setIndividuals(List<Chromosome> individuals) {
-		this.individuals = individuals;
+		return Collections.unmodifiableList(individuals);
 	}
 
 	/**
@@ -298,6 +315,10 @@ public class Population {
 		return this.individuals.size();
 	}
 
+	public void sortIndividuals(FitnessComparator fitnessComparator) {
+		Collections.sort(individuals, fitnessComparator);
+	}
+
 	/**
 	 * @param obj
 	 *            the Object to set
@@ -331,5 +352,14 @@ public class Population {
 	@Required
 	public void setTaskExecutor(TaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
+	}
+
+	/**
+	 * @param lifespan
+	 *            the lifespan to set
+	 */
+	@Required
+	public void setLifespan(int lifespan) {
+		this.lifespan = lifespan;
 	}
 }
