@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.algorithms;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -27,7 +28,10 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ExecutionStatistics;
+import com.ciphertool.genetics.entities.GenerationStatistics;
 import com.ciphertool.genetics.util.FitnessComparator;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
@@ -41,6 +45,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
 	private boolean stopRequested;
+	private ExecutionStatisticsDao executionStatisticsDao;
 
 	public BasicGeneticAlgorithm() {
 	}
@@ -53,7 +58,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * ()
 	 */
 	@Override
-	public void iterateUntilTermination() {
+	public void evolve() {
 		List<String> validationErrors = validateParameters();
 		if (validationErrors.size() > 0) {
 			log.warn("Unable to execute genetic algorithm because one or more of the required parameters are missing.  The fields that failed validation are "
@@ -71,9 +76,13 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			this.spawnInitialPopulation();
 		}
 
+		Date startDate = new Date();
+		ExecutionStatistics executionStatistics = new ExecutionStatistics(startDate, strategy);
 		long genesis = System.currentTimeMillis();
 		long generationStart = 0;
 		int i = 0;
+		long executionTime = 0;
+		GenerationStatistics generationStatistics = null;
 		do {
 			i++;
 			generationStart = System.currentTimeMillis();
@@ -95,15 +104,23 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			population.populateIndividuals(strategy.getPopulationSize());
 
-			population.evaluateFitness();
+			generationStatistics = new GenerationStatistics(executionStatistics, i);
+			population.evaluateFitness(generationStatistics);
 
-			log.info("Generation " + i + " finished in "
-					+ (System.currentTimeMillis() - generationStart) + "ms.");
+			executionTime = (System.currentTimeMillis() - generationStart);
+			log.info("Generation " + i + " finished in " + executionTime + "ms.");
+			generationStatistics.setExecutionTime(executionTime);
+
+			executionStatistics.addGenerationStatistics(generationStatistics);
 		} while (!stopRequested
 				&& (strategy.getMaxGenerations() < 0 || i < strategy.getMaxGenerations()));
 
 		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / i)
 				+ "ms.");
+
+		Date endDate = new Date();
+		executionStatistics.setEndDateTime(endDate);
+		executionStatisticsDao.insert(executionStatistics);
 	}
 
 	private List<String> validateParameters() {
@@ -294,7 +311,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	public void spawnInitialPopulation() {
 		this.population.populateIndividuals(strategy.getPopulationSize());
 
-		this.population.evaluateFitness();
+		this.population.evaluateFitness(null);
 	}
 
 	@Override
@@ -390,5 +407,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 
 		this.strategy = geneticAlgorithmStrategy;
+	}
+
+	/**
+	 * @param executionStatisticsDao
+	 *            the executionStatisticsDao to set
+	 */
+	@Required
+	public void setExecutionStatisticsDao(ExecutionStatisticsDao executionStatisticsDao) {
+		this.executionStatisticsDao = executionStatisticsDao;
 	}
 }

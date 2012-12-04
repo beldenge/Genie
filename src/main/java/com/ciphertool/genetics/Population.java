@@ -31,6 +31,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.GenerationStatistics;
 import com.ciphertool.genetics.util.ChromosomeGenerator;
 import com.ciphertool.genetics.util.FitnessComparator;
 import com.ciphertool.genetics.util.FitnessEvaluator;
@@ -133,7 +134,7 @@ public class Population {
 		}
 	}
 
-	public Chromosome evaluateFitness() {
+	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) {
 		this.evaluateAllFitness();
 
 		this.totalFitness = 0.0;
@@ -157,6 +158,11 @@ public class Population {
 
 		log.info("Best fitness in population is "
 				+ String.format("%1$,.2f", bestFitIndividual.getFitness()));
+
+		if (generationStatistics != null) {
+			generationStatistics.setAverageFitness(averageFitness);
+			generationStatistics.setBestFitness(bestFitIndividual.getFitness());
+		}
 
 		return bestFitIndividual;
 	}
@@ -194,7 +200,7 @@ public class Population {
 		 * Evaluate fitness once more for safety so that we are guaranteed to
 		 * have updated fitness values.
 		 */
-		return this.evaluateFitness();
+		return this.evaluateFitness(null);
 	}
 
 	/*

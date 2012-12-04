@@ -27,7 +27,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 
 public interface GeneticAlgorithm {
 
-	public void iterateUntilTermination();
+	public void evolve();
 
 	public List<Chromosome> getBestFitIndividuals();
 
