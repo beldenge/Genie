@@ -81,7 +81,8 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 
 		/*
 		 * We first remove all the parent Chromosomes since the children are
-		 * guaranteed to be at least as fit.
+		 * guaranteed to be at least as fit. This also prevents parents from
+		 * reproducing more than one time per generation.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.spinIndexRouletteWheel();
@@ -114,18 +115,28 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			this.taskExecutor.execute(futureTask);
 		}
 
+		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 		/*
 		 * Add the result of each FutureTask to the population since it
 		 * represents a new child Chromosome.
 		 */
 		for (FutureTask<Chromosome> future : futureTasks) {
 			try {
-				this.population.addIndividual(future.get());
+				/*
+				 * Add children after all crossover operations are completed so
+				 * that children are not inadvertently breeding immediately
+				 * after birth.
+				 */
+				childrenToAdd.add(future.get());
 			} catch (InterruptedException ie) {
 				log.error("Caught InterruptedException while waiting for CrossoverTask ", ie);
 			} catch (ExecutionException ee) {
 				log.error("Caught ExecutionException while waiting for CrossoverTask ", ee);
 			}
+		}
+
+		for (Chromosome child : childrenToAdd) {
+			this.population.addIndividual(child);
 		}
 	}
 

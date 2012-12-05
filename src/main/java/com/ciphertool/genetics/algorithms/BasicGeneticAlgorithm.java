@@ -226,6 +226,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
+		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.spinIndexRouletteWheel();
 			mom = this.population.getIndividuals().get(momIndex);
@@ -244,7 +245,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 			/*
 			 * Remove the parents from the population and add the children since
-			 * they are guaranteed to be at least as fit as their parents
+			 * they are guaranteed to be at least as fit as their parents. This
+			 * also prevents parents from reproducing more than one time per
+			 * generation.
 			 */
 			this.population.removeIndividual(momIndex);
 			if (dadIndex > momIndex) {
@@ -256,8 +259,16 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			}
 			this.population.removeIndividual(dadIndex);
 
-			this.population.addIndividual(child1);
-			this.population.addIndividual(child2);
+			/*
+			 * Add children after all crossover operations are completed so that
+			 * children are not inadvertently breeding immediately after birth.
+			 */
+			childrenToAdd.add(child1);
+			childrenToAdd.add(child2);
+		}
+
+		for (Chromosome child : childrenToAdd) {
+			this.population.addIndividual(child);
 		}
 	}
 
