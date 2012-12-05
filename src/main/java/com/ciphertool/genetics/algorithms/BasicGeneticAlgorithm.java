@@ -87,8 +87,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			i++;
 			generationStart = System.currentTimeMillis();
 
-			log.info("Starting generation " + i);
-
 			/*
 			 * Doing the select first improves performance by a ratio of up to
 			 * (1 - survivalRate). It makes more sense as well since only
@@ -108,8 +106,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			population.evaluateFitness(generationStatistics);
 
 			executionTime = (System.currentTimeMillis() - generationStart);
-			log.info("Generation " + i + " finished in " + executionTime + "ms.");
 			generationStatistics.setExecutionTime(executionTime);
+
+			log.info(generationStatistics);
 
 			executionStatistics.addGenerationStatistics(generationStatistics);
 		} while (!stopRequested
@@ -120,7 +119,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		Date endDate = new Date();
 		executionStatistics.setEndDateTime(endDate);
-		executionStatisticsDao.insert(executionStatistics);
+
+		persistStatistics(executionStatistics);
 	}
 
 	private List<String> validateParameters() {
@@ -312,6 +312,18 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.populateIndividuals(strategy.getPopulationSize());
 
 		this.population.evaluateFitness(null);
+	}
+
+	/**
+	 * @param executionStatistics
+	 *            the ExecutionStatistics to persist
+	 */
+	private void persistStatistics(final ExecutionStatistics executionStatistics) {
+		log.info("Persisting statistics to database.");
+		long startInsert = System.currentTimeMillis();
+		executionStatisticsDao.insert(executionStatistics);
+		log.info("Took " + (System.currentTimeMillis() - startInsert)
+				+ "ms to persist statistics to database.");
 	}
 
 	@Override

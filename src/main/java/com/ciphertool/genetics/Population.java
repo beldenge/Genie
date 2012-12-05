@@ -153,11 +153,13 @@ public class Population {
 		Double averageFitness = Double.valueOf(this.totalFitness)
 				/ Double.valueOf(individuals.size());
 
-		log.info("Population of size " + individuals.size() + " has an average fitness of "
-				+ String.format("%1$,.2f", averageFitness));
+		if (log.isDebugEnabled()) {
+			log.debug("Population of size " + individuals.size() + " has an average fitness of "
+					+ String.format("%1$,.2f", averageFitness));
 
-		log.info("Best fitness in population is "
-				+ String.format("%1$,.2f", bestFitIndividual.getFitness()));
+			log.debug("Best fitness in population is "
+					+ String.format("%1$,.2f", bestFitIndividual.getFitness()));
+		}
 
 		if (generationStatistics != null) {
 			generationStatistics.setAverageFitness(averageFitness);

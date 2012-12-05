@@ -14,7 +14,7 @@ public class ExecutionStatisticsDao {
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean insert(ExecutionStatistics executionStatistics) {
 		Session session = sessionFactory.getCurrentSession();
-		session.save(executionStatistics);
+		session.persist(executionStatistics);
 		return true;
 	}
 

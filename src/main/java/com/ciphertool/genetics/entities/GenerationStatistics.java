@@ -219,8 +219,8 @@ public class GenerationStatistics implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "GenerationStatistics [id=" + id + ", executionStatistics=" + executionStatistics
-				+ ", generation=" + generation + ", executionTime=" + executionTime
-				+ ", bestFitness=" + bestFitness + ", averageFitness=" + averageFitness + "]";
+		return "Generation " + generation + " finished in " + executionTime
+				+ "ms with an average fitness of " + String.format("%1$,.2f", averageFitness)
+				+ " and best fitness of " + String.format("%1$,.2f", bestFitness);
 	}
 }
