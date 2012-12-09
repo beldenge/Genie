@@ -41,6 +41,7 @@ public class Population {
 	private ChromosomeGenerator chromosomeGenerator;
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
+	private FitnessComparator fitnessComparator;
 	private Double totalFitness;
 	private TaskExecutor taskExecutor;
 	private int lifespan;
@@ -308,6 +309,12 @@ public class Population {
 		this.individuals.remove(individual);
 	}
 
+	public void clearIndividuals() {
+		this.individuals.clear();
+
+		this.totalFitness = 0.0;
+	}
+
 	/**
 	 * @param individual
 	 */
@@ -323,8 +330,8 @@ public class Population {
 		return this.individuals.size();
 	}
 
-	public void sortIndividuals(FitnessComparator fitnessComparator) {
-		Collections.sort(individuals, fitnessComparator);
+	public void sortIndividuals() {
+		Collections.sort(individuals, this.fitnessComparator);
 	}
 
 	/**
@@ -351,6 +358,15 @@ public class Population {
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
+	}
+
+	/**
+	 * @param fitnessComparator
+	 *            the fitnessComparator to set
+	 */
+	@Required
+	public void setFitnessComparator(FitnessComparator fitnessComparator) {
+		this.fitnessComparator = fitnessComparator;
 	}
 
 	/**

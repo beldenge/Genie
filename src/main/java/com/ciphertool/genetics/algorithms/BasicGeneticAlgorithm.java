@@ -30,11 +30,11 @@ import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.ExecutionStatistics;
 import com.ciphertool.genetics.entities.GenerationStatistics;
-import com.ciphertool.genetics.util.FitnessComparator;
 
 public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
@@ -43,7 +43,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	protected Population population;
 	protected CrossoverAlgorithm crossoverAlgorithm;
 	protected MutationAlgorithm mutationAlgorithm;
-	private FitnessComparator fitnessComparator;
+	protected SelectionAlgorithm selectionAlgorithm;
 	private boolean stopRequested;
 	private ExecutionStatisticsDao executionStatisticsDao;
 
@@ -92,11 +92,23 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * (1 - survivalRate). It makes more sense as well since only
 			 * survivors can reproduce.
 			 */
+			long startSelect = System.currentTimeMillis();
 			select();
+			if (log.isDebugEnabled()) {
+				log.debug("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
+			}
 
+			long startCrossover = System.currentTimeMillis();
 			crossover();
+			if (log.isDebugEnabled()) {
+				log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+			}
 
+			long startMutation = System.currentTimeMillis();
 			mutate();
+			if (log.isDebugEnabled()) {
+				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
+			}
 
 			population.increaseAge();
 
@@ -164,7 +176,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Override
 	public List<Chromosome> getBestFitIndividuals() {
 		List<Chromosome> individuals = this.population.getIndividuals();
-		this.population.sortIndividuals(fitnessComparator);
+		this.population.sortIndividuals();
 
 		List<Chromosome> bestFitIndividuals = new ArrayList<Chromosome>();
 		int chromosomeIndex = (individuals.size() - finalSurvivorCount);
@@ -177,24 +189,13 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		return bestFitIndividuals;
 	}
 
+	/*
+	 * TODO: make this private and use reflection to call it from unit tests
+	 */
 	@Override
 	public void select() {
-		this.population.sortIndividuals(fitnessComparator);
-
-		int initialPopulationSize = this.population.size();
-
-		long survivorIndex = Math.round((initialPopulationSize * (1 - strategy.getSurvivalRate())));
-		log.debug(survivorIndex + " individuals to be removed from population of size "
-				+ this.population.size() + " and survival rate of " + strategy.getSurvivalRate()
-				+ ".");
-
-		for (int i = 0; i < survivorIndex; i++) {
-			/*
-			 * We must remove the first element every time, since the List is
-			 * sorted in ascending order.
-			 */
-			this.population.removeIndividual(0);
-		}
+		selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(), this.strategy
+				.getSurvivalRate());
 	}
 
 	/*
@@ -218,6 +219,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		int momIndex = -1;
 		int dadIndex = -1;
 
+		List<Chromosome> moms = new ArrayList<Chromosome>();
+		List<Chromosome> dads = new ArrayList<Chromosome>();
+
 		int initialPopulationSize = this.population.size();
 
 		long pairsToCrossover = Math
@@ -229,6 +233,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.spinIndexRouletteWheel();
 			mom = this.population.getIndividuals().get(momIndex);
+			moms.add(mom);
 
 			/*
 			 * Keep retrying until we find a different Chromosome.
@@ -236,6 +241,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			do {
 				dadIndex = this.population.spinIndexRouletteWheel();
 				dad = this.population.getIndividuals().get(dadIndex);
+				dads.add(dad);
 			} while (mom == dad);
 
 			children = crossoverAlgorithm.crossover(mom, dad);
@@ -265,6 +271,18 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		for (Chromosome child : childrenToAdd) {
 			this.population.addIndividual(child);
+		}
+
+		/*
+		 * Re-add all the parents since we wanted them removed from the roulette
+		 * pool temporarily, but they shouldn't die off immediately after
+		 * producing children.
+		 */
+		for (Chromosome parent : moms) {
+			this.population.addIndividual(parent);
+		}
+		for (Chromosome parent : dads) {
+			this.population.addIndividual(parent);
 		}
 	}
 
@@ -369,12 +387,12 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
-	 * @param fitnessComparator
-	 *            the fitnessComparator to set
+	 * @param selectionAlgorithm
+	 *            the selectionAlgorithm to set
 	 */
 	@Required
-	public void setFitnessComparator(FitnessComparator fitnessComparator) {
-		this.fitnessComparator = fitnessComparator;
+	public void setSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
+		this.selectionAlgorithm = selectionAlgorithm;
 	}
 
 	/**
@@ -402,6 +420,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
+
+		this.selectionAlgorithm = geneticAlgorithmStrategy.getSelectionAlgorithm();
 
 		this.strategy = geneticAlgorithmStrategy;
 	}

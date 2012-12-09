@@ -99,8 +99,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 
 		/*
 		 * Execute each crossover concurrently. Parents always produce two
-		 * children, so the population should end with the same size as when it
-		 * began the crossovers.
+		 * children.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			mom = moms.get(i);
@@ -133,6 +132,18 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 
 		for (Chromosome child : childrenToAdd) {
 			this.population.addIndividual(child);
+		}
+
+		/*
+		 * Re-add all the parents since we wanted them removed from the roulette
+		 * pool temporarily, but they shouldn't die off immediately after
+		 * producing children.
+		 */
+		for (Chromosome parent : moms) {
+			this.population.addIndividual(parent);
+		}
+		for (Chromosome parent : dads) {
+			this.population.addIndividual(parent);
 		}
 	}
 
