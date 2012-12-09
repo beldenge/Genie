@@ -28,12 +28,13 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.ExecutionStatistics;
 import com.ciphertool.genetics.entities.GenerationStatistics;
 import com.ciphertool.genetics.util.FitnessComparator;
-import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
@@ -42,7 +43,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	protected Population population;
 	protected CrossoverAlgorithm crossoverAlgorithm;
 	protected MutationAlgorithm mutationAlgorithm;
-	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
 	private boolean stopRequested;
 	private ExecutionStatisticsDao executionStatisticsDao;
@@ -214,8 +214,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		Chromosome mom = null;
 		Chromosome dad = null;
-		Chromosome child1 = null;
-		Chromosome child2 = null;
+		List<Chromosome> children = null;
 		int momIndex = -1;
 		int dadIndex = -1;
 
@@ -239,9 +238,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				dad = this.population.getIndividuals().get(dadIndex);
 			} while (mom == dad);
 
-			child1 = crossoverAlgorithm.crossover(mom, dad);
-
-			child2 = crossoverAlgorithm.crossover(dad, mom);
+			children = crossoverAlgorithm.crossover(mom, dad);
 
 			/*
 			 * Remove the parents from the population and add the children since
@@ -263,8 +260,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * Add children after all crossover operations are completed so that
 			 * children are not inadvertently breeding immediately after birth.
 			 */
-			childrenToAdd.add(child1);
-			childrenToAdd.add(child2);
+			childrenToAdd.addAll(children);
 		}
 
 		for (Chromosome child : childrenToAdd) {
@@ -297,17 +293,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			Chromosome mutation = original.clone();
 
 			mutationAlgorithm.mutateChromosome(mutation);
-
-			fitnessEvaluator.evaluate(mutation);
-
-			/*
-			 * If this was a positive or neutral change in fitness, then replace
-			 * the existing one with this.
-			 */
-			if (mutation.getFitness() >= original.getFitness()) {
-				this.population.removeIndividual(mutantIndex);
-				this.population.addIndividual(mutation);
-			}
 		}
 	}
 
@@ -384,15 +369,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
-	@Required
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		this.fitnessEvaluator = fitnessEvaluator;
-	}
-
-	/**
 	 * @param fitnessComparator
 	 *            the fitnessComparator to set
 	 */
@@ -419,8 +395,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
-		this.fitnessEvaluator = geneticAlgorithmStrategy.getFitnessEvaluator();
-
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
 		this.population.setFitnessEvaluator(geneticAlgorithmStrategy.getFitnessEvaluator());
 		this.population.setLifespan(geneticAlgorithmStrategy.getLifespan());

@@ -17,7 +17,7 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms;
+package com.ciphertool.genetics.algorithms.mutation;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -38,13 +38,10 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	/**
 	 * Performs a genetic mutation of a random Gene of the supplied Chromosome
 	 * 
-	 * TODO This should not be public. It is only public to facilitate unit
-	 * testing.
-	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
 	 */
-	public void mutateRandomGene(Chromosome chromosome) {
+	private void mutateRandomGene(Chromosome chromosome) {
 		int randomIndex = (int) (Math.random() * chromosome.getGenes().size());
 
 		mutateGene(chromosome, randomIndex);
@@ -53,15 +50,12 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	/**
 	 * Performs a genetic mutation of a specific Gene of the supplied Chromosome
 	 * 
-	 * TODO This should not be public. It is only public to facilitate unit
-	 * testing.
-	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
 	 * @param index
 	 *            the index of the Gene to mutate
 	 */
-	public void mutateGene(Chromosome chromosome, int index) {
+	private void mutateGene(Chromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
 					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()

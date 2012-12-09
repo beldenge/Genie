@@ -17,16 +17,30 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms;
+package com.ciphertool.genetics.algorithms.crossover;
+
+import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.util.FitnessEvaluator;
 
-public interface MutationAlgorithm {
+public interface CrossoverAlgorithm {
+
 	/**
-	 * Performs a genetic mutation of the supplied Chromosome.
+	 * Performs crossover to a List of children by cloning one or both of the
+	 * parents and then selectively replacing Genes from the other parent.
 	 * 
-	 * @param chromosome
-	 *            the Chromosome to mutate
+	 * @param parentA
+	 *            the first parent
+	 * @param parentB
+	 *            the second parent
+	 * @return the List of children Chromosomes produced from the crossover
 	 */
-	public void mutateChromosome(Chromosome chromosome);
+	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB);
+	
+	/**
+	 * @param fitnessEvaluator
+	 *            the FitnessEvaluator to set
+	 */
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
 }

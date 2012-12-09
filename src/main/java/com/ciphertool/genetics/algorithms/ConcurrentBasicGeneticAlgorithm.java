@@ -39,7 +39,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 	 * A concurrent task for performing a crossover of two parent Chromosomes,
 	 * producing one child Chromosome.
 	 */
-	private class CrossoverTask implements Callable<Chromosome> {
+	private class CrossoverTask implements Callable<List<Chromosome>> {
 
 		private Chromosome mom;
 		private Chromosome dad;
@@ -50,7 +50,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		}
 
 		@Override
-		public Chromosome call() throws Exception {
+		public List<Chromosome> call() throws Exception {
 			return crossoverAlgorithm.crossover(mom, dad);
 		}
 	}
@@ -94,8 +94,8 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			this.population.removeIndividual(dadIndex);
 		}
 
-		List<FutureTask<Chromosome>> futureTasks = new ArrayList<FutureTask<Chromosome>>();
-		FutureTask<Chromosome> futureTask = null;
+		List<FutureTask<List<Chromosome>>> futureTasks = new ArrayList<FutureTask<List<Chromosome>>>();
+		FutureTask<List<Chromosome>> futureTask = null;
 
 		/*
 		 * Execute each crossover concurrently. Parents always produce two
@@ -106,11 +106,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			mom = moms.get(i);
 			dad = dads.get(i);
 
-			futureTask = new FutureTask<Chromosome>(new CrossoverTask(mom, dad));
-			futureTasks.add(futureTask);
-			this.taskExecutor.execute(futureTask);
-
-			futureTask = new FutureTask<Chromosome>(new CrossoverTask(dad, mom));
+			futureTask = new FutureTask<List<Chromosome>>(new CrossoverTask(mom, dad));
 			futureTasks.add(futureTask);
 			this.taskExecutor.execute(futureTask);
 		}
@@ -120,14 +116,14 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		 * Add the result of each FutureTask to the population since it
 		 * represents a new child Chromosome.
 		 */
-		for (FutureTask<Chromosome> future : futureTasks) {
+		for (FutureTask<List<Chromosome>> future : futureTasks) {
 			try {
 				/*
 				 * Add children after all crossover operations are completed so
 				 * that children are not inadvertently breeding immediately
 				 * after birth.
 				 */
-				childrenToAdd.add(future.get());
+				childrenToAdd.addAll(future.get());
 			} catch (InterruptedException ie) {
 				log.error("Caught InterruptedException while waiting for CrossoverTask ", ie);
 			} catch (ExecutionException ee) {

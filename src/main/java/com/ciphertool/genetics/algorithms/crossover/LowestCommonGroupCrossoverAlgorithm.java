@@ -17,7 +17,7 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms;
+package com.ciphertool.genetics.algorithms.crossover;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,23 +31,29 @@ import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
+
 	/*
-	 * geneListDao is required by other crossover algorithms, so this is just
-	 * for spring bean consistency.
+	 * (non-Javadoc)
+	 * 
+	 * @see com.ciphertool.genetics.algorithms.CrossoverAlgorithm#crossover(com.
+	 * ciphertool.genetics.entities.Chromosome,
+	 * com.ciphertool.genetics.entities.Chromosome)
 	 */
-	@SuppressWarnings("unused")
-	private GeneListDao geneListDao;
+	@Override
+	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		List<Chromosome> children = new ArrayList<Chromosome>();
+		children.add(performCrossover(parentA, parentB));
+		children.add(performCrossover(parentB, parentA));
+
+		return children;
+	}
 
 	/**
 	 * This crossover algorithm does a conservative amount of changes since it
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions
-	 * 
-	 * @see com.ciphertool.genetics.algorithms.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome,
-	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
 	 */
-	@Override
-	public Chromosome crossover(Chromosome parentA, Chromosome parentB) {
+	public Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int parentBSize = parentB.getGenes().size();
@@ -206,6 +212,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	 */
 	@Required
 	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+		/*
+		 * geneListDao is required by other crossover algorithms, so this is
+		 * just for spring bean consistency.
+		 */
 	}
 }

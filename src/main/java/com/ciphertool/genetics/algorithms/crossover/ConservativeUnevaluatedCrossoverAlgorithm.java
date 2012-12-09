@@ -17,42 +17,46 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms;
+package com.ciphertool.genetics.algorithms.crossover;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
-public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
-	private FitnessEvaluator fitnessEvaluator;
+public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm {
 	/*
-	 * geneListDao is required by other crossover algorithms, so this is just
-	 * for spring bean consistency.
+	 * (non-Javadoc)
+	 * 
+	 * @see com.ciphertool.genetics.algorithms.CrossoverAlgorithm#crossover(com.
+	 * ciphertool.genetics.entities.Chromosome,
+	 * com.ciphertool.genetics.entities.Chromosome)
 	 */
-	@SuppressWarnings("unused")
-	private GeneListDao geneListDao;
+	@Override
+	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		List<Chromosome> children = new ArrayList<Chromosome>();
+		children.add(performCrossover(parentA, parentB));
+		children.add(performCrossover(parentB, parentA));
+
+		return children;
+	}
 
 	/**
 	 * This crossover algorithm does a conservative amount of changes since it
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions
-	 * 
-	 * @see com.ciphertool.genetics.algorithms.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome,
-	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
 	 */
-	@Override
-	public Chromosome crossover(Chromosome parentA, Chromosome parentB) {
+	public static Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int childSequencePosition = 0;
 		int parentSequencePosition = 0;
 		int childGeneIndex = 0;
 		int parentGeneIndex = 0;
-		Gene geneCopy = null;
-		Double originalFitness = 0.0;
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
@@ -68,29 +72,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			if (childSequencePosition == parentSequencePosition) {
 				if (child.getGenes().get(childGeneIndex).size() == parentB.getGenes().get(
 						parentGeneIndex).size()) {
-					geneCopy = child.getGenes().get(childGeneIndex).clone();
-
-					originalFitness = child.getFitness();
-
 					child.replaceGene(childGeneIndex, parentB.getGenes().get(parentGeneIndex)
 							.clone());
-
-					fitnessEvaluator.evaluate(child);
-
-					/*
-					 * Revert to the original gene if this decreased fitness.
-					 * It's ok to let non-beneficial changes progress, as long
-					 * as they are not detrimental.
-					 */
-					if (child.getFitness() < originalFitness) {
-						child.replaceGene(childGeneIndex, geneCopy);
-
-						/*
-						 * Reset the fitness to what it was before the
-						 * replacement.
-						 */
-						fitnessEvaluator.evaluate(child);
-					}
 				}
 
 				childSequencePosition += child.getGenes().get(childGeneIndex).size();
@@ -119,7 +102,10 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 */
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		this.fitnessEvaluator = fitnessEvaluator;
+		/*
+		 * fitnessEvaluator is required by other crossover algorithms, so this
+		 * is just to satisfy the interface.
+		 */
 	}
 
 	/**
@@ -128,6 +114,9 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 */
 	@Required
 	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+		/*
+		 * geneListDao is required by other crossover algorithms, so this is
+		 * just for spring bean consistency.
+		 */
 	}
 }

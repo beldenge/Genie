@@ -1,7 +1,7 @@
 package com.ciphertool.genetics;
 
-import com.ciphertool.genetics.algorithms.CrossoverAlgorithm;
-import com.ciphertool.genetics.algorithms.MutationAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategy {

@@ -17,7 +17,8 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms;
+package com.ciphertool.genetics.algorithms.mutation;
+
 
 public enum MutationAlgorithmType {
 	LIBERAL("Liberal", LiberalMutationAlgorithm.class,

@@ -17,7 +17,7 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms;
+package com.ciphertool.genetics.algorithms.crossover;
 
 public enum CrossoverAlgorithmType {
 	LIBERAL("Liberal", LiberalCrossoverAlgorithm.class,
@@ -25,7 +25,22 @@ public enum CrossoverAlgorithmType {
 	CONSERVATIVE("Conservative", ConservativeCrossoverAlgorithm.class,
 			"This will only crossover words that match on starting position and end position"),
 	LOWEST_COMMON_GROUP("Lowest Common Group", LowestCommonGroupCrossoverAlgorithm.class,
-			"This will crossover groups of words that match on starting position and end position");
+			"This will crossover groups of words that match on starting position and end position"),
+	LIBERAL_UNEVALUATED(
+			"Liberal Unevaluated",
+			LiberalCrossoverAlgorithm.class,
+			"This will crossover words by index regardless of starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
+	CONSERVATIVE_UNEVALUATED(
+			"Conservative Unevaluated",
+			ConservativeCrossoverAlgorithm.class,
+			"This will only crossover words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
+	LOWEST_COMMON_GROUP_UNEVALUATED(
+			"Lowest Common Group Unevaluated",
+			LowestCommonGroupCrossoverAlgorithm.class,
+			"This will crossover groups of words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
+	CONSERVATIVE_CENTROMERE("Conservative Centromere",
+			ConservativeCentromereCrossoverAlgorithm.class,
+			"This will crossover from a common centromere position determined somewhat randomly");
 
 	private String displayName;
 	private Class<? extends CrossoverAlgorithm> type;
