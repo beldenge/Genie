@@ -323,6 +323,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	@Override
 	public void spawnInitialPopulation() {
+		this.population.clearIndividuals();
+
 		this.population.populateIndividuals(strategy.getPopulationSize());
 
 		this.population.evaluateFitness(null);
