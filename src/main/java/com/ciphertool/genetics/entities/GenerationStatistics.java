@@ -24,6 +24,7 @@ public class GenerationStatistics implements Serializable {
 	private long executionTime;
 	private double bestFitness;
 	private double averageFitness;
+	private Double knownSolutionProximity;
 
 	/**
 	 * Default no-args constructor
@@ -143,6 +144,22 @@ public class GenerationStatistics implements Serializable {
 		this.averageFitness = averageFitness;
 	}
 
+	/**
+	 * @return the knownSolutionProximity
+	 */
+	@Column(name = "known_solution_proximity", nullable = true)
+	public Double getKnownSolutionProximity() {
+		return knownSolutionProximity;
+	}
+
+	/**
+	 * @param knownSolutionProximity
+	 *            the knownSolutionProximity to set
+	 */
+	public void setKnownSolutionProximity(Double knownSolutionProximity) {
+		this.knownSolutionProximity = knownSolutionProximity;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -161,6 +178,8 @@ public class GenerationStatistics implements Serializable {
 				+ ((executionStatistics == null) ? 0 : executionStatistics.hashCode());
 		result = prime * result + (int) (executionTime ^ (executionTime >>> 32));
 		result = prime * result + generation;
+		result = prime * result
+				+ ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -202,6 +221,13 @@ public class GenerationStatistics implements Serializable {
 		if (generation != other.generation) {
 			return false;
 		}
+		if (knownSolutionProximity == null) {
+			if (other.knownSolutionProximity != null) {
+				return false;
+			}
+		} else if (!knownSolutionProximity.equals(other.knownSolutionProximity)) {
+			return false;
+		}
 		if (id == null) {
 			if (other.id != null) {
 				return false;
@@ -219,8 +245,12 @@ public class GenerationStatistics implements Serializable {
 	 */
 	@Override
 	public String toString() {
+		String proximity = (this.knownSolutionProximity == null) ? ""
+				: ", with proximity to known solution of "
+						+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
+
 		return "Generation " + generation + " finished in " + executionTime
 				+ "ms with an average fitness of " + String.format("%1$,.2f", averageFitness)
-				+ " and best fitness of " + String.format("%1$,.2f", bestFitness);
+				+ " and best fitness of " + String.format("%1$,.2f", bestFitness) + proximity;
 	}
 }

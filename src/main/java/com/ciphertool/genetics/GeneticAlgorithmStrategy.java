@@ -17,6 +17,9 @@ public class GeneticAlgorithmStrategy {
 	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm mutationAlgorithm;
 	private SelectionAlgorithm selectionAlgorithm;
+	private FitnessEvaluator knownSolutionFitnessEvaluator;
+	private Boolean compareToKnownSolution;
+	private static final Boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
 
 	/**
 	 * Default no-args constructor
@@ -25,7 +28,7 @@ public class GeneticAlgorithmStrategy {
 	}
 
 	/**
-	 * Full-args constructor
+	 * Most-args constructor
 	 * 
 	 * @param geneticStructure
 	 *            the geneticStructure to set
@@ -65,6 +68,63 @@ public class GeneticAlgorithmStrategy {
 		this.mutationAlgorithm = mutationAlgorithm;
 
 		this.selectionAlgorithm = selectionAlgorithm;
+
+		this.knownSolutionFitnessEvaluator = null;
+		this.compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
+	}
+
+	/**
+	 * Full-args constructor
+	 * 
+	 * @param geneticStructure
+	 *            the geneticStructure to set
+	 * @param populationSize
+	 *            the populationSize to set
+	 * @param maxGenerations
+	 *            the maxGenerations to set
+	 * @param survivalRate
+	 *            the survivalRate to set
+	 * @param mutationRate
+	 *            the mutationRate to set
+	 * @param crossoverRate
+	 *            the crossoverRate to set
+	 * @param fitnessEvaluator
+	 *            the fitnessEvaluator to set
+	 * @param crossoverAlgorithm
+	 *            the crossoverAlgorithm to set
+	 * @param knownSolutionFitnessEvaluator
+	 *            the knownSolutionFitnessEvaluator to set
+	 * @param useKnownSolutionFitnessEvaluator
+	 *            the useKnownSolutionFitnessEvaluator to set
+	 */
+	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
+			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
+			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
+			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
+			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
+		this.geneticStructure = geneticStructure;
+		this.populationSize = populationSize;
+		this.lifespan = lifespan;
+		this.maxGenerations = maxGenerations;
+		this.survivalRate = survivalRate;
+		this.mutationRate = mutationRate;
+		this.crossoverRate = crossoverRate;
+
+		this.fitnessEvaluator = fitnessEvaluator;
+		this.fitnessEvaluator.setGeneticStructure(geneticStructure);
+
+		this.crossoverAlgorithm = crossoverAlgorithm;
+		this.crossoverAlgorithm.setFitnessEvaluator(this.fitnessEvaluator);
+
+		this.mutationAlgorithm = mutationAlgorithm;
+
+		this.selectionAlgorithm = selectionAlgorithm;
+
+		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
+		if (knownSolutionFitnessEvaluator != null) {
+			this.knownSolutionFitnessEvaluator.setGeneticStructure(geneticStructure);
+		}
+		this.compareToKnownSolution = compareToKnownSolution;
 	}
 
 	/**
@@ -230,5 +290,35 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
 		this.selectionAlgorithm = selectionAlgorithm;
+	}
+
+	/**
+	 * @return the knownSolutionFitnessEvaluator
+	 */
+	public FitnessEvaluator getKnownSolutionFitnessEvaluator() {
+		return knownSolutionFitnessEvaluator;
+	}
+
+	/**
+	 * @param knownSolutionFitnessEvaluator
+	 *            the knownSolutionFitnessEvaluator to set
+	 */
+	public void setKnownSolutionFitnessEvaluator(FitnessEvaluator knownSolutionFitnessEvaluator) {
+		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
+	}
+
+	/**
+	 * @return the compareToKnownSolution
+	 */
+	public Boolean getCompareToKnownSolution() {
+		return compareToKnownSolution;
+	}
+
+	/**
+	 * @param compareToKnownSolution
+	 *            the compareToKnownSolution to set
+	 */
+	public void setCompareToKnownSolution(Boolean compareToKnownSolution) {
+		this.compareToKnownSolution = compareToKnownSolution;
 	}
 }

@@ -45,6 +45,9 @@ public class Population {
 	private Double totalFitness;
 	private TaskExecutor taskExecutor;
 	private int lifespan;
+	private FitnessEvaluator knownSolutionFitnessEvaluator;
+	private static final boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
+	private Boolean compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
 
 	public Population() {
 	}
@@ -165,6 +168,15 @@ public class Population {
 		if (generationStatistics != null) {
 			generationStatistics.setAverageFitness(averageFitness);
 			generationStatistics.setBestFitness(bestFitIndividual.getFitness());
+
+			if (this.compareToKnownSolution) {
+				/*
+				 * We have to clone the best fit individual since the knownSolutionFitnessEvaluator sets properties on the Chromosome, and we want it to do that in all other cases.
+				 */
+				Chromosome bestFitClone = bestFitIndividual.clone();
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator
+						.evaluate(bestFitClone));
+			}
 		}
 
 		return bestFitIndividual;
@@ -385,5 +397,26 @@ public class Population {
 	@Required
 	public void setLifespan(int lifespan) {
 		this.lifespan = lifespan;
+	}
+
+	/**
+	 * This is NOT required. We will not always know the solution. In fact, that
+	 * should be the rare case.
+	 * 
+	 * @param knownSolutionFitnessEvaluator
+	 *            the knownSolutionFitnessEvaluator to set
+	 */
+	public void setKnownSolutionFitnessEvaluator(FitnessEvaluator knownSolutionFitnessEvaluator) {
+		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
+	}
+
+	/**
+	 * This is NOT required.
+	 * 
+	 * @param compareToKnownSolution
+	 *            the compareToKnownSolution to set
+	 */
+	public void setCompareToKnownSolution(Boolean compareToKnownSolution) {
+		this.compareToKnownSolution = compareToKnownSolution;
 	}
 }

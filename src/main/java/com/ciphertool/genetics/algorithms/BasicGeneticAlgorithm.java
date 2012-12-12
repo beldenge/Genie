@@ -418,6 +418,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
 		this.population.setFitnessEvaluator(geneticAlgorithmStrategy.getFitnessEvaluator());
 		this.population.setLifespan(geneticAlgorithmStrategy.getLifespan());
+		this.population.setKnownSolutionFitnessEvaluator(geneticAlgorithmStrategy
+				.getKnownSolutionFitnessEvaluator());
+		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy
+				.getCompareToKnownSolution());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
 
