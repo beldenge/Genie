@@ -18,12 +18,30 @@ import org.hibernate.annotations.NaturalId;
 public class GenerationStatistics implements Serializable {
 	private static final long serialVersionUID = 5751129649317222013L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
+
+	@NaturalId
+	@ManyToOne
+	@JoinColumn(name = "execution_id")
 	private ExecutionStatistics executionStatistics;
+
+	@NaturalId
+	@Column(name = "generation")
 	private int generation;
+
+	@Column(name = "execution_time")
 	private long executionTime;
+
+	@Column(name = "best_fitness")
 	private double bestFitness;
+
+	@Column(name = "average_fitness")
 	private double averageFitness;
+
+	@Column(name = "known_solution_proximity", nullable = true)
 	private Double knownSolutionProximity;
 
 	/**
@@ -46,9 +64,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the id
 	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	public Integer getId() {
 		return id;
 	}
@@ -64,9 +79,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the executionStatistics
 	 */
-	@NaturalId
-	@ManyToOne
-	@JoinColumn(name = "execution_id")
 	public ExecutionStatistics getExecutionStatistics() {
 		return executionStatistics;
 	}
@@ -82,8 +94,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the generation
 	 */
-	@NaturalId
-	@Column(name = "generation")
 	public int getGeneration() {
 		return generation;
 	}
@@ -99,7 +109,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the executionTime
 	 */
-	@Column(name = "execution_time")
 	public long getExecutionTime() {
 		return executionTime;
 	}
@@ -115,7 +124,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the bestFitness
 	 */
-	@Column(name = "best_fitness")
 	public double getBestFitness() {
 		return bestFitness;
 	}
@@ -131,7 +139,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the averageFitness
 	 */
-	@Column(name = "average_fitness")
 	public double getAverageFitness() {
 		return averageFitness;
 	}
@@ -147,7 +154,6 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the knownSolutionProximity
 	 */
-	@Column(name = "known_solution_proximity", nullable = true)
 	public Double getKnownSolutionProximity() {
 		return knownSolutionProximity;
 	}

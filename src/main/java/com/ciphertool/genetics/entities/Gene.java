@@ -39,18 +39,19 @@ public interface Gene extends Cloneable {
 	public void setChromosome(Chromosome chromosome);
 
 	/**
-	 * Returns the Chromosome that this Gene is a part of.
-	 * 
-	 * @return
+	 * @return the Chromosome that this Gene is a part of
 	 */
 	public Chromosome getChromosome();
 
+	/**
+	 * @return an unmodifiable List of this Gene's Sequences
+	 */
 	public List<Sequence> getSequences();
 
 	/**
-	 * @param sequences
+	 * Re-initializes the Collection of Sequences.
 	 */
-	public void setSequences(List<Sequence> sequences);
+	public void resetSequences();
 
 	/**
 	 * Adds a Sequence to the end of the Gene.

@@ -23,12 +23,10 @@ import java.util.List;
 
 public interface Chromosome extends Cloneable {
 
-	public List<Gene> getGenes();
-
 	/**
-	 * @param genes
+	 * @return an unmodifiable List of this Chromosome's Genes
 	 */
-	public void setGenes(List<Gene> genes);
+	public List<Gene> getGenes();
 
 	/**
 	 * Adds a Gene to the end of the Chromosome.
@@ -64,6 +62,11 @@ public interface Chromosome extends Cloneable {
 	 * @param newGene
 	 */
 	public void replaceGene(int index, Gene newGene);
+
+	/**
+	 * Re-initializes the Collection of Genes.
+	 */
+	public void resetGenes();
 
 	/**
 	 * @return

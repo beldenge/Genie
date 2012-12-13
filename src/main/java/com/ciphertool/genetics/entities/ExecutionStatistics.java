@@ -2,6 +2,7 @@ package com.ciphertool.genetics.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -28,17 +29,47 @@ import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 public class ExecutionStatistics implements Serializable {
 	private static final long serialVersionUID = 8148209145996293339L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Integer id;
+
+	@NaturalId
+	@Column(name = "start_date")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDateTime;
+
+	@Column(name = "end_date")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDateTime;
+
+	@Column(name = "population_size")
 	private Integer populationSize;
+
+	@Column(name = "lifespan")
 	private Integer lifespan;
+
+	@Column(name = "survival_rate")
 	private Double survivalRate;
+
+	@Column(name = "mutation_rate")
 	private Double mutationRate;
+
+	@Column(name = "crossover_rate")
 	private Double crossoverRate;
+
+	@Column(name = "crossover_algorithm")
+	@Enumerated(EnumType.STRING)
 	private String crossoverAlgorithm;
+
+	@Column(name = "fitness_evaluator")
 	private String fitnessEvaluator;
+
+	@Column(name = "mutation_algorithm")
+	@Enumerated(EnumType.STRING)
 	private String mutationAlgorithm;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "executionStatistics", cascade = CascadeType.ALL)
 	private List<GenerationStatistics> generationStatisticsList = new ArrayList<GenerationStatistics>();
 
 	/**
@@ -62,9 +93,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the id
 	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
 	public Integer getId() {
 		return id;
 	}
@@ -80,9 +108,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the startDateTime
 	 */
-	@NaturalId
-	@Column(name = "start_date")
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getStartDateTime() {
 		return startDateTime;
 	}
@@ -98,8 +123,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the endDateTime
 	 */
-	@Column(name = "end_date")
-	@Temporal(TemporalType.TIMESTAMP)
 	public Date getEndDateTime() {
 		return endDateTime;
 	}
@@ -115,7 +138,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the populationSize
 	 */
-	@Column(name = "population_size")
 	public Integer getPopulationSize() {
 		return populationSize;
 	}
@@ -131,7 +153,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the lifespan
 	 */
-	@Column(name = "lifespan")
 	public Integer getLifespan() {
 		return lifespan;
 	}
@@ -147,7 +168,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the survivalRate
 	 */
-	@Column(name = "survival_rate")
 	public Double getSurvivalRate() {
 		return survivalRate;
 	}
@@ -163,7 +183,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the mutationRate
 	 */
-	@Column(name = "mutation_rate")
 	public Double getMutationRate() {
 		return mutationRate;
 	}
@@ -179,7 +198,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the crossoverRate
 	 */
-	@Column(name = "crossover_rate")
 	public Double getCrossoverRate() {
 		return crossoverRate;
 	}
@@ -195,8 +213,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the crossoverAlgorithm
 	 */
-	@Column(name = "crossover_algorithm")
-	@Enumerated(EnumType.STRING)
 	public String getCrossoverAlgorithm() {
 		return crossoverAlgorithm;
 	}
@@ -212,7 +228,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the fitnessEvaluator
 	 */
-	@Column(name = "fitness_evaluator")
 	public String getFitnessEvaluator() {
 		return fitnessEvaluator;
 	}
@@ -228,8 +243,6 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the mutationAlgorithm
 	 */
-	@Column(name = "mutation_algorithm")
-	@Enumerated(EnumType.STRING)
 	public String getMutationAlgorithm() {
 		return mutationAlgorithm;
 	}
@@ -243,19 +256,10 @@ public class ExecutionStatistics implements Serializable {
 	}
 
 	/**
-	 * @return the generationStatisticsList
+	 * @return an unmodifiable List of GenerationStatistics
 	 */
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "executionStatistics", cascade = CascadeType.ALL)
 	public List<GenerationStatistics> getGenerationStatisticsList() {
-		return generationStatisticsList;
-	}
-
-	/**
-	 * @param generationStatisticsList
-	 *            the generationStatisticsList to set
-	 */
-	public void setGenerationStatisticsList(List<GenerationStatistics> generationStatisticsList) {
-		this.generationStatisticsList = generationStatisticsList;
+		return Collections.unmodifiableList(this.generationStatisticsList);
 	}
 
 	/**
