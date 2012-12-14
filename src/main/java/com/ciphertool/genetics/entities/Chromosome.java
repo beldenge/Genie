@@ -99,4 +99,15 @@ public interface Chromosome extends Cloneable {
 	public Integer targetSize();
 
 	public Chromosome clone();
+
+	/*
+	 * Whether this Chromosome has changed since it was last evaluated.
+	 */
+	public boolean isDirty();
+
+	/**
+	 * @param isDirty
+	 *            the dirtiness value to set
+	 */
+	public void setDirty(boolean isDirty);
 }

@@ -67,10 +67,6 @@ public class Population {
 	}
 
 	public void populateIndividuals(Integer maxIndividuals) {
-		if (this.individuals == null) {
-			this.individuals = new ArrayList<Chromosome>();
-		}
-
 		List<FutureTask<Chromosome>> futureTasks = new ArrayList<FutureTask<Chromosome>>();
 		FutureTask<Chromosome> futureTask = null;
 
@@ -121,11 +117,20 @@ public class Population {
 		List<FutureTask<Double>> futureTasks = new ArrayList<FutureTask<Double>>();
 		FutureTask<Double> futureTask = null;
 
+		int evaluationCount = 0;
 		for (Chromosome individual : individuals) {
-			futureTask = new FutureTask<Double>(new EvaluatorTask(individual));
-			futureTasks.add(futureTask);
-			this.taskExecutor.execute(futureTask);
+			/*
+			 * Only evaluate individuals that have changed since the last
+			 * evaluation.
+			 */
+			if (individual.isDirty()) {
+				evaluationCount++;
+				futureTask = new FutureTask<Double>(new EvaluatorTask(individual));
+				futureTasks.add(futureTask);
+				this.taskExecutor.execute(futureTask);
+			}
 		}
+		log.debug("Evaluations carried out: " + evaluationCount);
 
 		for (FutureTask<Double> future : futureTasks) {
 			try {
@@ -171,7 +176,9 @@ public class Population {
 
 			if (this.compareToKnownSolution) {
 				/*
-				 * We have to clone the best fit individual since the knownSolutionFitnessEvaluator sets properties on the Chromosome, and we want it to do that in all other cases.
+				 * We have to clone the best fit individual since the
+				 * knownSolutionFitnessEvaluator sets properties on the
+				 * Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
 				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator
@@ -201,7 +208,9 @@ public class Population {
 		 * Remove expired individuals outside the loop to avoid concurrent
 		 * modification exceptions.
 		 */
-		this.individuals.removeAll(individualsToRemove);
+		for (Chromosome individualToRemove : individualsToRemove) {
+			this.removeIndividual(individualToRemove);
+		}
 	}
 
 	/**
@@ -333,7 +342,13 @@ public class Population {
 	public void addIndividual(Chromosome individual) {
 		this.individuals.add(individual);
 
-		fitnessEvaluator.evaluate(individual);
+		/*
+		 * Only evaluate this individual if it hasn't been evaluated yet by some
+		 * other process.
+		 */
+		if (individual.isDirty()) {
+			fitnessEvaluator.evaluate(individual);
+		}
 
 		this.totalFitness += individual.getFitness();
 	}

@@ -301,16 +301,33 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		log.debug("Mutations to perform: " + mutations);
 
+		List<Chromosome> mutatedChromosomes = new ArrayList<Chromosome>();
+
 		for (int i = 0; i < mutations; i++) {
-			/*
-			 * Mutate a gene within a Chromosome
-			 */
 			mutantIndex = this.population.spinIndexRouletteWheel();
-			Chromosome original = this.population.getIndividuals().get(mutantIndex);
+			Chromosome mutatedChromosome = this.population.getIndividuals().get(mutantIndex);
 
-			Chromosome mutation = original.clone();
+			/*
+			 * Remove the Chromosome from the population temporarily so that it
+			 * is not re-selected by the next spin of the roulette wheel. Add it
+			 * to a List to be re-added after all mutations are complete.
+			 */
+			this.population.removeIndividual(mutantIndex);
+			mutatedChromosomes.add(mutatedChromosome);
 
-			mutationAlgorithm.mutateChromosome(mutation);
+			/*
+			 * Mutate a gene within the Chromosome. The original Chromosome is
+			 * not cloned. Natural selection will weed this out if it is
+			 * unfavorable.
+			 */
+			mutationAlgorithm.mutateChromosome(mutatedChromosome);
+		}
+
+		/*
+		 * Re-add the original (now mutated) Chromosomes
+		 */
+		for (Chromosome chromosome : mutatedChromosomes) {
+			this.population.addIndividual(chromosome);
 		}
 	}
 
