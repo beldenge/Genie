@@ -39,6 +39,12 @@ public interface GeneticAlgorithm {
 
 	public Population getPopulation();
 
+	/**
+	 * @param population
+	 *            the Population to set
+	 */
+	public void setPopulation(Population population);
+
 	public void select();
 
 	public void requestStop();

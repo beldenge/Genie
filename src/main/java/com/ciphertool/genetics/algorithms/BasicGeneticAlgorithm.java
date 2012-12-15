@@ -389,6 +389,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 *            the population to set
 	 */
 	@Required
+	@Override
 	public void setPopulation(Population population) {
 		this.population = population;
 	}
