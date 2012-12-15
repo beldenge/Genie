@@ -98,7 +98,7 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 						 * Reset the fitness to what it was before the
 						 * replacement.
 						 */
-						fitnessEvaluator.evaluate(child);
+						child.setFitness(originalFitness);
 					}
 				}
 

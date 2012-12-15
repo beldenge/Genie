@@ -110,12 +110,25 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
 			}
 
+			long startAging = System.currentTimeMillis();
 			population.increaseAge();
+			if (log.isDebugEnabled()) {
+				log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
+			}
 
+			long startBreeding = System.currentTimeMillis();
 			population.populateIndividuals(strategy.getPopulationSize());
+			if (log.isDebugEnabled()) {
+				log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
+			}
 
+			long startEvaluation = System.currentTimeMillis();
 			generationStatistics = new GenerationStatistics(executionStatistics, i);
 			population.evaluateFitness(generationStatistics);
+			if (log.isDebugEnabled()) {
+				log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation)
+						+ "ms.");
+			}
 
 			executionTime = (System.currentTimeMillis() - generationStart);
 			generationStatistics.setExecutionTime(executionTime);
