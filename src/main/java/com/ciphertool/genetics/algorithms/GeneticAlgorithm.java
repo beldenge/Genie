@@ -33,6 +33,8 @@ public interface GeneticAlgorithm {
 
 	public void spawnInitialPopulation();
 
+	public void select();
+
 	public void crossover();
 
 	public void mutate();
@@ -44,8 +46,6 @@ public interface GeneticAlgorithm {
 	 *            the Population to set
 	 */
 	public void setPopulation(Population population);
-
-	public void select();
 
 	public void requestStop();
 

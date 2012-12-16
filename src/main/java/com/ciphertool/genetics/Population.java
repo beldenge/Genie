@@ -32,13 +32,13 @@ import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.GenerationStatistics;
-import com.ciphertool.genetics.util.ChromosomeGenerator;
+import com.ciphertool.genetics.util.Breeder;
 import com.ciphertool.genetics.util.FitnessComparator;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class Population {
 	private Logger log = Logger.getLogger(getClass());
-	private ChromosomeGenerator chromosomeGenerator;
+	private Breeder breeder;
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
@@ -62,11 +62,11 @@ public class Population {
 
 		@Override
 		public Chromosome call() throws Exception {
-			return chromosomeGenerator.generateChromosome();
+			return breeder.breed();
 		}
 	}
 
-	public void populateIndividuals(Integer maxIndividuals) {
+	public void breed(Integer maxIndividuals) {
 		List<FutureTask<Chromosome>> futureTasks = new ArrayList<FutureTask<Chromosome>>();
 		FutureTask<Chromosome> futureTask = null;
 
@@ -113,7 +113,7 @@ public class Population {
 	/**
 	 * This method executes all the fitness evaluations concurrently.
 	 */
-	public void evaluateAllFitness() {
+	private void doConcurrentFitnessEvaluations() {
 		List<FutureTask<Double>> futureTasks = new ArrayList<FutureTask<Double>>();
 		FutureTask<Double> futureTask = null;
 
@@ -144,7 +144,7 @@ public class Population {
 	}
 
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) {
-		this.evaluateAllFitness();
+		this.doConcurrentFitnessEvaluations();
 
 		this.totalFitness = 0.0;
 
@@ -366,16 +366,15 @@ public class Population {
 	 *            the Object to set
 	 */
 	public void setGeneticStructure(Object obj) {
-		this.chromosomeGenerator.setGeneticStructure(obj);
+		this.breeder.setGeneticStructure(obj);
 	}
 
 	/**
-	 * @param chromosomeGenerator
-	 *            the chromosomeGenerator to set
+	 * @param breeder
+	 *            the breeder to set
 	 */
-	@Required
-	public void setChromosomeGenerator(ChromosomeGenerator chromosomeGenerator) {
-		this.chromosomeGenerator = chromosomeGenerator;
+	public void setBreeder(Breeder breeder) {
+		this.breeder = breeder;
 	}
 
 	/**

@@ -21,8 +21,8 @@ package com.ciphertool.genetics.util;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-public interface ChromosomeGenerator {
-	public Chromosome generateChromosome();
+public interface Breeder {
+	public Chromosome breed();
 
 	/**
 	 * The source structure for which this genetic algorithm should generate

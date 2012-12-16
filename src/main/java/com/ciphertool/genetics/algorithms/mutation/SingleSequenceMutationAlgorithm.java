@@ -101,10 +101,13 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 		 * Loop just in case the value of the new Sequence is the same as the
 		 * existing value, since that would defeat the purpose of the mutation.
 		 */
+		Sequence oldSequence = gene.getSequences().get(index);
 		Sequence newSequence = null;
+
+		int ciphertextIndex = oldSequence.getSequenceId();
 		do {
-			newSequence = sequenceDao.findRandomSequence(gene, index);
-		} while (gene.getSequences().get(index).getValue().equals(newSequence.getValue()));
+			newSequence = sequenceDao.findRandomSequence(gene, ciphertextIndex);
+		} while (oldSequence.getValue().equals(newSequence.getValue()));
 
 		gene.replaceSequence(index, newSequence);
 	}

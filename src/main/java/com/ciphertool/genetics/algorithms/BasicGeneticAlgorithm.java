@@ -117,7 +117,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			}
 
 			long startBreeding = System.currentTimeMillis();
-			population.populateIndividuals(strategy.getPopulationSize());
+			population.breed(strategy.getPopulationSize());
 			if (log.isDebugEnabled()) {
 				log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
 			}
@@ -355,7 +355,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	public void spawnInitialPopulation() {
 		this.population.clearIndividuals();
 
-		this.population.populateIndividuals(strategy.getPopulationSize());
+		this.population.breed(strategy.getPopulationSize());
 
 		this.population.evaluateFitness(null);
 	}
