@@ -249,31 +249,22 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			moms.add(mom);
 
 			/*
-			 * Keep retrying until we find a different Chromosome.
-			 */
-			do {
-				dadIndex = this.population.spinIndexRouletteWheel();
-				dad = this.population.getIndividuals().get(dadIndex);
-				dads.add(dad);
-			} while (mom == dad);
-
-			children = crossoverAlgorithm.crossover(mom, dad);
-
-			/*
-			 * Remove the parents from the population and add the children since
-			 * they are guaranteed to be at least as fit as their parents. This
-			 * also prevents parents from reproducing more than one time per
-			 * generation.
+			 * Remove mom from the population to prevent parents from
+			 * reproducing more than one time per generation.
 			 */
 			this.population.removeIndividual(momIndex);
-			if (dadIndex > momIndex) {
-				/*
-				 * We have to decrease the index for dad since it was shifted
-				 * left after mom was removed.
-				 */
-				dadIndex--;
-			}
+
+			dadIndex = this.population.spinIndexRouletteWheel();
+			dad = this.population.getIndividuals().get(dadIndex);
+			dads.add(dad);
+
+			/*
+			 * Remove dad from the population to prevent parents from
+			 * reproducing more than one time per generation.
+			 */
 			this.population.removeIndividual(dadIndex);
+
+			children = crossoverAlgorithm.crossover(mom, dad);
 
 			/*
 			 * Add children after all crossover operations are completed so that
