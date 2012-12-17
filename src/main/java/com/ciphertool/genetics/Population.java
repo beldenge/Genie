@@ -190,8 +190,18 @@ public class Population {
 	}
 
 	public void increaseAge() {
-		List<Chromosome> individualsToRemove = new ArrayList<Chromosome>();
-		for (Chromosome individual : this.individuals) {
+		int originalSize = this.individuals.size();
+		Chromosome individual = null;
+
+		/*
+		 * actualIndex is used for removing individuals from this Population
+		 * since the size will decrement each time an individual is removed,
+		 * thus making the loop index incorrect.
+		 */
+		int actualIndex = 0;
+		for (int i = 0; i < originalSize; i++) {
+			individual = this.individuals.get(actualIndex);
+
 			/*
 			 * A value less than zero represents immortality, so always increase
 			 * the age in that case. Otherwise, only increase the age if this
@@ -199,17 +209,15 @@ public class Population {
 			 */
 			if (this.lifespan < 0 || individual.getAge() < this.lifespan) {
 				individual.increaseAge();
+				actualIndex++;
 			} else {
-				individualsToRemove.add(individual);
+				/*
+				 * We have to remove by index in case there is more than one
+				 * Chromosome that is equal, since more than likely the unique
+				 * key will not have been generated from database yet.
+				 */
+				this.removeIndividual(actualIndex);
 			}
-		}
-
-		/*
-		 * Remove expired individuals outside the loop to avoid concurrent
-		 * modification exceptions.
-		 */
-		for (Chromosome individualToRemove : individualsToRemove) {
-			this.removeIndividual(individualToRemove);
 		}
 	}
 
@@ -304,17 +312,17 @@ public class Population {
 	 * 
 	 * @param individual
 	 */
-	public void removeIndividual(int indexToRemove) {
+	public Chromosome removeIndividual(int indexToRemove) {
 		if (indexToRemove < 0 || indexToRemove > this.individuals.size() - 1) {
 			log.error("Tried to remove individual by invalid index " + indexToRemove
 					+ " from population of size " + this.size() + ".  Returning.");
 
-			return;
+			return null;
 		}
 
 		this.totalFitness -= this.individuals.get(indexToRemove).getFitness();
 
-		this.individuals.remove(indexToRemove);
+		return this.individuals.remove(indexToRemove);
 	}
 
 	public void removeIndividual(Chromosome individual) {
@@ -359,6 +367,13 @@ public class Population {
 
 	public void sortIndividuals() {
 		Collections.sort(individuals, this.fitnessComparator);
+	}
+
+	/**
+	 * @return the totalFitness
+	 */
+	public Double getTotalFitness() {
+		return totalFitness;
 	}
 
 	/**

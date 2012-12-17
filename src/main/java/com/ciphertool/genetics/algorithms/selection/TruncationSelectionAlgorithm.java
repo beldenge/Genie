@@ -52,7 +52,9 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 		for (int i = 0; i < survivorIndex; i++) {
 			/*
 			 * We must remove the first element every time, since the List is
-			 * sorted in ascending order.
+			 * sorted in ascending order in terms of fitness, where higher
+			 * fitness value may or may not be preferred depending on the
+			 * comparator used.
 			 */
 			population.removeIndividual(0);
 		}

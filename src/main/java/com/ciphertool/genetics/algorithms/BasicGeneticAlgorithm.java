@@ -203,7 +203,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	/*
-	 * TODO: make this private and use reflection to call it from unit tests
+	 * (non-Javadoc)
+	 * 
+	 * @see com.ciphertool.genetics.algorithms.GeneticAlgorithm#select()
 	 */
 	@Override
 	public void select() {
@@ -237,8 +239,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		int initialPopulationSize = this.population.size();
 
-		long pairsToCrossover = Math
-				.round((initialPopulationSize * strategy.getCrossoverRate()) / 2);
+		/*
+		 * We have to round down to protect against
+		 * ArrayIndexOutOfBoundsException in edge cases
+		 */
+		long pairsToCrossover = (long) ((initialPopulationSize * strategy.getCrossoverRate()) / 2);
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
