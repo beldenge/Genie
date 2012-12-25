@@ -19,6 +19,10 @@ You should have received a copy of the GNU General Public License along with Zod
 	<version>1.0-SNAPSHOT</version>
 	<name>ZodiacGenetics</name>
 	<url>http://www.ciphertool.com</url>
+	<properties>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+	</properties>
 
 	<build>
 		<plugins>
@@ -27,8 +31,25 @@ You should have received a copy of the GNU General Public License along with Zod
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal><!-- to weave all your main classes -->
+							<goal>test-compile</goal><!-- to weave all your test classes -->
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
 				</configuration>
 			</plugin>
 		</plugins>
