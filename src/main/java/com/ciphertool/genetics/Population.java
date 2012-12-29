@@ -221,20 +221,6 @@ public class Population {
 		}
 	}
 
-	/**
-	 * This method should only really be called at the end of a genetic
-	 * algorithm.
-	 * 
-	 * @return
-	 */
-	public Chromosome getBestFitIndividual() {
-		/*
-		 * Evaluate fitness once more for safety so that we are guaranteed to
-		 * have updated fitness values.
-		 */
-		return this.evaluateFitness(null);
-	}
-
 	/*
 	 * This method depends on the totalFitness and individuals' fitness being
 	 * accurately maintained. Returns the actual Chromosome chosen.
@@ -367,6 +353,21 @@ public class Population {
 
 	public void sortIndividuals() {
 		Collections.sort(individuals, this.fitnessComparator);
+	}
+
+	/**
+	 * Prints every Chromosome in this population in ascending order by fitness.
+	 * Note that a lower fitness value can be a better value depending on the
+	 * strategy.
+	 */
+	public void printAscending() {
+		this.sortIndividuals();
+
+		int index = this.size();
+		for (Chromosome individual : this.individuals) {
+			log.info("Chromosome " + index + ": " + individual);
+			index--;
+		}
 	}
 
 	/**

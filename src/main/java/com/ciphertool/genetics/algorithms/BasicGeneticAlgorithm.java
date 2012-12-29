@@ -39,7 +39,6 @@ import com.ciphertool.genetics.entities.GenerationStatistics;
 public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 	protected GeneticAlgorithmStrategy strategy;
-	private Integer finalSurvivorCount;
 	protected Population population;
 	protected CrossoverAlgorithm crossoverAlgorithm;
 	protected MutationAlgorithm mutationAlgorithm;
@@ -184,22 +183,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		}
 
 		return validationErrors;
-	}
-
-	@Override
-	public List<Chromosome> getBestFitIndividuals() {
-		List<Chromosome> individuals = this.population.getIndividuals();
-		this.population.sortIndividuals();
-
-		List<Chromosome> bestFitIndividuals = new ArrayList<Chromosome>();
-		int chromosomeIndex = (individuals.size() - finalSurvivorCount);
-
-		for (int finalSurvivorIndex = ((chromosomeIndex < 0) ? 0 : chromosomeIndex); finalSurvivorIndex < individuals
-				.size(); finalSurvivorIndex++) {
-			bestFitIndividuals.add(individuals.get(finalSurvivorIndex));
-		}
-
-		return bestFitIndividuals;
 	}
 
 	/*
@@ -422,15 +405,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
 		this.selectionAlgorithm = selectionAlgorithm;
-	}
-
-	/**
-	 * @param finalSurvivorCount
-	 *            the finalSurvivorCount to set
-	 */
-	@Required
-	public void setFinalSurvivorCount(Integer finalSurvivorCount) {
-		this.finalSurvivorCount = finalSurvivorCount;
 	}
 
 	/*
