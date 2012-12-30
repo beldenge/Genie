@@ -116,6 +116,9 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			}
 		}
 
+		parentA.increaseNumberOfChildren();
+		parentB.increaseNumberOfChildren();
+
 		/*
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */

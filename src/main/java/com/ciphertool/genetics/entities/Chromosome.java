@@ -91,6 +91,19 @@ public interface Chromosome extends Cloneable {
 
 	public void increaseAge();
 
+	/**
+	 * @return the number of children this Chromosome has procreated
+	 */
+	public int getNumberOfChildren();
+
+	/**
+	 * @param numberOfChildren
+	 *            the numberOfChildren to set
+	 */
+	public void setNumberOfChildren(int numberOfChildren);
+
+	public void increaseNumberOfChildren();
+
 	/*
 	 * Returns the size as the number of gene sequences
 	 */

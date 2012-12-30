@@ -97,6 +97,17 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				log.debug("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
 			}
 
+			/*
+			 * We want to increase age before children are produced in following
+			 * steps so that the children do not age before having a chance to
+			 * do anything.
+			 */
+			long startAging = System.currentTimeMillis();
+			population.increaseAge();
+			if (log.isDebugEnabled()) {
+				log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
+			}
+
 			long startCrossover = System.currentTimeMillis();
 			crossover();
 			if (log.isDebugEnabled()) {
@@ -107,12 +118,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			mutate();
 			if (log.isDebugEnabled()) {
 				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
-			}
-
-			long startAging = System.currentTimeMillis();
-			population.increaseAge();
-			if (log.isDebugEnabled()) {
-				log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
 			}
 
 			long startBreeding = System.currentTimeMillis();

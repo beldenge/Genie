@@ -90,6 +90,9 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 			}
 		}
 
+		parentA.increaseNumberOfChildren();
+		parentB.increaseNumberOfChildren();
+
 		/*
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */

@@ -22,6 +22,7 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
@@ -30,6 +31,8 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm {
+	Logger log = Logger.getLogger(getClass());
+
 	/**
 	 * This crossover algorithm finds all the points where both parent
 	 * Chromosomes can safely be split in half without splitting a Gene, and
@@ -78,6 +81,9 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 		for (int j = parentBeginGeneIndex; j < parentB.getGenes().size(); j++) {
 			child.addGene(parentB.getGenes().get(j).clone());
 		}
+
+		parentA.increaseNumberOfChildren();
+		parentB.increaseNumberOfChildren();
 
 		return child;
 	}

@@ -87,6 +87,9 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 		 */
 		chromosomeHelper.resizeChromosome(child);
 
+		parentA.increaseNumberOfChildren();
+		parentB.increaseNumberOfChildren();
+
 		/*
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */
