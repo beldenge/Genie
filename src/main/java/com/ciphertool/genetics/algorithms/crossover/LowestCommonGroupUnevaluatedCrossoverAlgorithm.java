@@ -22,9 +22,6 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Required;
-
-import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
@@ -78,23 +75,28 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 			 */
 			if (childSequencePosition == parentSequencePosition) {
 				/*
-				 * Remove Genes from cloned child.
+				 * Flip a coin to see whether we replace the group of words
 				 */
-				for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
-					child.removeGene(childBeginGeneIndex);
-				}
+				if (((int) (Math.random() * 2)) == 1) {
+					/*
+					 * Remove Genes from cloned child.
+					 */
+					for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
+						child.removeGene(childBeginGeneIndex);
+					}
 
-				/*
-				 * Insert cloned parent Genes into child. insertCount works as
-				 * an offset so that the Genes are inserted in the correct
-				 * order.
-				 */
-				insertCount = 0;
-				for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
-					child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(j)
-							.clone());
+					/*
+					 * Insert cloned parent Genes into child. insertCount works
+					 * as an offset so that the Genes are inserted in the
+					 * correct order.
+					 */
+					insertCount = 0;
+					for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
+						child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(
+								j).clone());
 
-					insertCount++;
+						insertCount++;
+					}
 				}
 
 				/*
@@ -163,23 +165,11 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	 * @param fitnessEvaluator
 	 *            the fitnessEvaluator to set
 	 */
-	@Required
+	@Override
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		/*
 		 * fitnessEvaluator is required by other crossover algorithms, so this
 		 * is just to satisfy the interface.
-		 */
-	}
-
-	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
-	 */
-	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		/*
-		 * geneListDao is required by other crossover algorithms, so this is
-		 * just for spring bean consistency.
 		 */
 	}
 }

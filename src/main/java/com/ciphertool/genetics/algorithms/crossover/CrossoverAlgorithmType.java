@@ -24,8 +24,10 @@ public enum CrossoverAlgorithmType {
 			"This will crossover words by index regardless of starting position and end position"),
 	CONSERVATIVE("Conservative", ConservativeCrossoverAlgorithm.class,
 			"This will only crossover words that match on starting position and end position"),
-	LOWEST_COMMON_GROUP("Lowest Common Group", LowestCommonGroupCrossoverAlgorithm.class,
-			"This will crossover groups of words that match on starting position and end position"),
+	LOWEST_COMMON_GROUP(
+			"Lowest Common Group",
+			LowestCommonGroupCrossoverAlgorithm.class,
+			"This will crossover groups of words that match on starting position and end position only if it results in a better fit Chromosome."),
 	LIBERAL_UNEVALUATED(
 			"Liberal Unevaluated",
 			LiberalCrossoverAlgorithm.class,
@@ -36,7 +38,7 @@ public enum CrossoverAlgorithmType {
 			"This will only crossover words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
 	LOWEST_COMMON_GROUP_UNEVALUATED(
 			"Lowest Common Group Unevaluated",
-			LowestCommonGroupCrossoverAlgorithm.class,
+			LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 			"This will crossover groups of words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
 	CONSERVATIVE_CENTROMERE("Conservative Centromere",
 			ConservativeCentromereCrossoverAlgorithm.class,

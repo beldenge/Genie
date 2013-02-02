@@ -63,7 +63,7 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		 * Reset the population by clearing it and then adding back all the
 		 * survivors.
 		 * 
-		 * TODO this is a candidate for parellelization
+		 * TODO this is a candidate for parallelization
 		 */
 		population.clearIndividuals();
 		for (Chromosome survivor : survivors) {
