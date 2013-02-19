@@ -97,8 +97,8 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		FutureTask<List<Chromosome>> futureTask = null;
 
 		/*
-		 * Execute each crossover concurrently. Parents always produce two
-		 * children.
+		 * Execute each crossover concurrently. Parents should produce two
+		 * children, but this is not necessarily always guaranteed.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			mom = moms.get(i);

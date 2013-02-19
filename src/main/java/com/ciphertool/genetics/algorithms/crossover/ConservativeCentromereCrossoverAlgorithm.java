@@ -53,8 +53,28 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 				.size()));
 
 		List<Chromosome> children = new ArrayList<Chromosome>();
-		children.add(performCrossover(parentA, parentB, centromere));
-		children.add(performCrossover(parentB, parentA, centromere));
+
+		Chromosome firstChild = performCrossover(parentA, parentB, centromere);
+		// The chromosome will be null if it's identical to one of its parents
+		if (firstChild != null) {
+			children.add(firstChild);
+			parentA.increaseNumberOfChildren();
+			parentB.increaseNumberOfChildren();
+		}
+
+		Chromosome secondChild = performCrossover(parentB, parentA, centromere);
+		// The chromosome will be null if it's identical to one of its parents
+		if (secondChild != null) {
+			if (!secondChild.equals(firstChild)) {
+				/*
+				 * Don't add the second child if it is identical to the other
+				 * child (i.e. twins)
+				 */
+				children.add(secondChild);
+				parentA.increaseNumberOfChildren();
+				parentB.increaseNumberOfChildren();
+			}
+		}
 
 		return children;
 	}
@@ -82,8 +102,10 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 			child.addGene(parentB.getGenes().get(j).clone());
 		}
 
-		parentA.increaseNumberOfChildren();
-		parentB.increaseNumberOfChildren();
+		// Don't return this child if it's identical to one of its parents
+		if (child.equals(parentA) || child.equals(parentB)) {
+			return null;
+		}
 
 		return child;
 	}

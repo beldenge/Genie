@@ -66,14 +66,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			return;
 		}
 
+		long start = System.currentTimeMillis();
+
+		this.spawnInitialPopulation();
+
+		log.info("Took " + (System.currentTimeMillis() - start)
+				+ "ms to spawn initial population of size " + this.population.size());
+
 		stopRequested = false;
-
-		if (this.population == null) {
-			log.info("Attempted to start algorithm with a null population.  Spawning population of size "
-					+ strategy.getPopulationSize() + ".");
-
-			this.spawnInitialPopulation();
-		}
 
 		Date startDate = new Date();
 		ExecutionStatistics executionStatistics = new ExecutionStatistics(startDate, strategy);
@@ -159,11 +159,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("geneticStructure");
 		}
 
-		if (strategy.getPopulationSize() == 0) {
+		if (strategy.getPopulationSize() == null || strategy.getPopulationSize() <= 0) {
 			validationErrors.add("populationSize");
 		}
 
-		if (strategy.getMaxGenerations() == 0) {
+		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
 			validationErrors.add("maxGenerations");
 		}
 
@@ -171,11 +171,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("survivalRate");
 		}
 
-		if (strategy.getMutationRate() == 0) {
+		if (strategy.getMutationRate() == null || strategy.getMutationRate() < 0) {
 			validationErrors.add("mutationRate");
 		}
 
-		if (strategy.getCrossoverRate() == 0) {
+		if (strategy.getCrossoverRate() == null || strategy.getCrossoverRate() < 0) {
 			validationErrors.add("crossoverRate");
 		}
 

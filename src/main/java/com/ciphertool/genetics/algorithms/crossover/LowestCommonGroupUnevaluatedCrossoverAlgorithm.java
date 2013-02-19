@@ -36,8 +36,28 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
 		List<Chromosome> children = new ArrayList<Chromosome>();
-		children.add(performCrossover(parentA, parentB));
-		children.add(performCrossover(parentB, parentA));
+
+		Chromosome firstChild = performCrossover(parentA, parentB);
+		// The chromosome will be null if it's identical to one of its parents
+		if (firstChild != null) {
+			children.add(firstChild);
+			parentA.increaseNumberOfChildren();
+			parentB.increaseNumberOfChildren();
+		}
+
+		Chromosome secondChild = performCrossover(parentB, parentA);
+		// The chromosome will be null if it's identical to one of its parents
+		if (secondChild != null) {
+			if (!secondChild.equals(firstChild)) {
+				/*
+				 * Don't add the second child if it is identical to the other
+				 * child (i.e. twins)
+				 */
+				children.add(secondChild);
+				parentA.increaseNumberOfChildren();
+				parentB.increaseNumberOfChildren();
+			}
+		}
 
 		return children;
 	}
@@ -97,16 +117,19 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 
 						insertCount++;
 					}
-				}
 
-				/*
-				 * Offset child gene indices by the number of Genes inserted
-				 * from parentB, since the number of Genes inserted from parentB
-				 * could be different than the number of Genes removed from
-				 * child. The result can be either positive or negative.
-				 */
-				geneOffset = (parentEndGeneIndex - parentBeginGeneIndex)
-						- (childEndGeneIndex - childBeginGeneIndex);
+					/*
+					 * Offset child gene indices by the number of Genes inserted
+					 * from parentB, since the number of Genes inserted from
+					 * parentB could be different than the number of Genes
+					 * removed from child. The result can be either positive or
+					 * negative.
+					 */
+					geneOffset = (parentEndGeneIndex - parentBeginGeneIndex)
+							- (childEndGeneIndex - childBeginGeneIndex);
+				} else {
+					geneOffset = 0;
+				}
 
 				childEndGeneIndex += geneOffset + 1;
 				parentEndGeneIndex++;
@@ -152,8 +175,10 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 			}
 		}
 
-		parentA.increaseNumberOfChildren();
-		parentB.increaseNumberOfChildren();
+		// Don't return this child if it's identical to one of its parents
+		if (child.equals(parentA) || child.equals(parentB)) {
+			return null;
+		}
 
 		/*
 		 * Child is guaranteed to have at least as good fitness as its parent

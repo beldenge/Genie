@@ -48,8 +48,28 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
 		List<Chromosome> children = new ArrayList<Chromosome>();
-		children.add(performCrossover(parentA, parentB));
-		children.add(performCrossover(parentB, parentA));
+
+		Chromosome firstChild = performCrossover(parentA, parentB);
+		// The chromosome will be null if it's identical to one of its parents
+		if (firstChild != null) {
+			children.add(firstChild);
+			parentA.increaseNumberOfChildren();
+			parentB.increaseNumberOfChildren();
+		}
+
+		Chromosome secondChild = performCrossover(parentB, parentA);
+		// The chromosome will be null if it's identical to one of its parents
+		if (secondChild != null) {
+			if (!secondChild.equals(firstChild)) {
+				/*
+				 * Don't add the second child if it is identical to the other
+				 * child (i.e. twins)
+				 */
+				children.add(secondChild);
+				parentA.increaseNumberOfChildren();
+				parentB.increaseNumberOfChildren();
+			}
+		}
 
 		return children;
 	}
@@ -116,8 +136,10 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		 */
 		chromosomeHelper.resizeChromosome(child);
 
-		parentA.increaseNumberOfChildren();
-		parentB.increaseNumberOfChildren();
+		// Don't return this child if it's identical to one of its parents
+		if (child.equals(parentA) || child.equals(parentB)) {
+			return null;
+		}
 
 		/*
 		 * Child is guaranteed to have at least as good fitness as its parent

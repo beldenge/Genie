@@ -42,7 +42,7 @@ public class Population {
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
-	private Double totalFitness;
+	private Double totalFitness = 0.0;
 	private TaskExecutor taskExecutor;
 	private int lifespan;
 	private FitnessEvaluator knownSolutionFitnessEvaluator;
@@ -219,37 +219,6 @@ public class Population {
 				this.removeIndividual(actualIndex);
 			}
 		}
-	}
-
-	/*
-	 * This method depends on the totalFitness and individuals' fitness being
-	 * accurately maintained. Returns the actual Chromosome chosen.
-	 */
-	public Chromosome spinObjectRouletteWheel() {
-		long randomIndex = (int) (Math.random() * totalFitness);
-
-		Chromosome chosenIndividual = null;
-
-		for (Chromosome individual : individuals) {
-			if (individual.getFitness() == null) {
-				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
-						+ individual);
-			}
-
-			randomIndex -= individual.getFitness();
-
-			/*
-			 * If we have subtracted everything from randomIndex, then the ball
-			 * has stopped rolling.
-			 */
-			if (randomIndex <= 0) {
-				chosenIndividual = individual;
-
-				break;
-			}
-		}
-
-		return chosenIndividual;
 	}
 
 	/*
