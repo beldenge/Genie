@@ -237,7 +237,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 		for (int i = 0; i < pairsToCrossover; i++) {
-			momIndex = this.population.spinIndexRouletteWheel();
+			momIndex = this.population.selectIndex();
 			mom = this.population.getIndividuals().get(momIndex);
 			moms.add(mom);
 
@@ -247,7 +247,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 */
 			this.population.removeIndividual(momIndex);
 
-			dadIndex = this.population.spinIndexRouletteWheel();
+			dadIndex = this.population.selectIndex();
 			dad = this.population.getIndividuals().get(dadIndex);
 			dads.add(dad);
 
@@ -301,7 +301,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		List<Chromosome> mutatedChromosomes = new ArrayList<Chromosome>();
 
 		for (int i = 0; i < mutations; i++) {
-			mutantIndex = this.population.spinIndexRouletteWheel();
+			mutantIndex = this.population.selectIndex();
 			Chromosome mutatedChromosome = this.population.getIndividuals().get(mutantIndex);
 
 			/*

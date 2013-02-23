@@ -3,6 +3,7 @@ package com.ciphertool.genetics;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
+import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategy {
@@ -17,6 +18,7 @@ public class GeneticAlgorithmStrategy {
 	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm mutationAlgorithm;
 	private SelectionAlgorithm selectionAlgorithm;
+	private Selector selector;
 	private FitnessEvaluator knownSolutionFitnessEvaluator;
 	private Boolean compareToKnownSolution;
 	private static final Boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
@@ -46,11 +48,18 @@ public class GeneticAlgorithmStrategy {
 	 *            the fitnessEvaluator to set
 	 * @param crossoverAlgorithm
 	 *            the crossoverAlgorithm to set
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 * @param selectionAlgorithm
+	 *            the selectionAlgorithm to set
+	 * @param selector
+	 *            the selector to set
 	 */
 	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
 			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
 			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm) {
+			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
+			Selector selector) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
@@ -68,6 +77,7 @@ public class GeneticAlgorithmStrategy {
 		this.mutationAlgorithm = mutationAlgorithm;
 
 		this.selectionAlgorithm = selectionAlgorithm;
+		this.selector = selector;
 
 		this.knownSolutionFitnessEvaluator = null;
 		this.compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
@@ -92,6 +102,12 @@ public class GeneticAlgorithmStrategy {
 	 *            the fitnessEvaluator to set
 	 * @param crossoverAlgorithm
 	 *            the crossoverAlgorithm to set
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 * @param selectionAlgorithm
+	 *            the selectionAlgorithm to set
+	 * @param selector
+	 *            the selector to set
 	 * @param knownSolutionFitnessEvaluator
 	 *            the knownSolutionFitnessEvaluator to set
 	 * @param useKnownSolutionFitnessEvaluator
@@ -101,7 +117,8 @@ public class GeneticAlgorithmStrategy {
 			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
 			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
 			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
-			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
+			Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
+			Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
@@ -119,6 +136,7 @@ public class GeneticAlgorithmStrategy {
 		this.mutationAlgorithm = mutationAlgorithm;
 
 		this.selectionAlgorithm = selectionAlgorithm;
+		this.selector = selector;
 
 		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
 		if (knownSolutionFitnessEvaluator != null) {
@@ -290,6 +308,21 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
 		this.selectionAlgorithm = selectionAlgorithm;
+	}
+
+	/**
+	 * @return the selector
+	 */
+	public Selector getSelector() {
+		return selector;
+	}
+
+	/**
+	 * @param selector
+	 *            the selector to set
+	 */
+	public void setSelector(Selector selector) {
+		this.selector = selector;
 	}
 
 	/**

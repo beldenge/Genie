@@ -54,7 +54,7 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		List<Chromosome> survivors = new ArrayList<Chromosome>();
 		int survivorIndex;
 		for (int i = 0; i < numSurvivors; i++) {
-			survivorIndex = population.spinIndexRouletteWheel();
+			survivorIndex = population.selectIndex();
 			survivors.add(population.getIndividuals().get(survivorIndex));
 			population.removeIndividual(survivorIndex);
 		}

@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
+import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.GenerationStatistics;
 import com.ciphertool.genetics.util.Breeder;
@@ -42,6 +43,7 @@ public class Population {
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
+	private Selector selector;
 	private Double totalFitness = 0.0;
 	private TaskExecutor taskExecutor;
 	private int lifespan;
@@ -225,33 +227,8 @@ public class Population {
 	 * This method depends on the totalFitness and individuals' fitness being
 	 * accurately maintained. Returns the index of the Chromosome chosen.
 	 */
-	public int spinIndexRouletteWheel() {
-		long randomIndex = (int) (Math.random() * totalFitness);
-
-		int winningIndex = -1;
-		Chromosome nextIndividual = null;
-
-		for (int i = 0; i < individuals.size(); i++) {
-			nextIndividual = individuals.get(i);
-			if (nextIndividual.getFitness() == null) {
-				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
-						+ nextIndividual);
-			}
-
-			randomIndex -= nextIndividual.getFitness();
-
-			/*
-			 * If we have subtracted everything from randomIndex, then the ball
-			 * has stopped rolling.
-			 */
-			if (randomIndex <= 0) {
-				winningIndex = i;
-
-				break;
-			}
-		}
-
-		return winningIndex;
+	public int selectIndex() {
+		return this.selector.getNextIndex(individuals, totalFitness);
 	}
 
 	/**
@@ -278,19 +255,6 @@ public class Population {
 		this.totalFitness -= this.individuals.get(indexToRemove).getFitness();
 
 		return this.individuals.remove(indexToRemove);
-	}
-
-	public void removeIndividual(Chromosome individual) {
-		if (!this.individuals.contains(individual)) {
-			log.error("Tried to remove individual from population but the individual already doesn't exist.  Returning."
-					+ individual);
-
-			return;
-		}
-
-		this.totalFitness -= individual.getFitness();
-
-		this.individuals.remove(individual);
 	}
 
 	public void clearIndividuals() {
@@ -387,6 +351,15 @@ public class Population {
 	@Required
 	public void setTaskExecutor(TaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
+	}
+
+	/**
+	 * @param selector
+	 *            the selector to set
+	 */
+	@Required
+	public void setSelector(Selector selector) {
+		this.selector = selector;
 	}
 
 	/**

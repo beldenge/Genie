@@ -84,11 +84,11 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		 * reproducing more than one time per generation.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
-			momIndex = this.population.spinIndexRouletteWheel();
+			momIndex = this.population.selectIndex();
 			moms.add(this.population.getIndividuals().get(momIndex));
 			this.population.removeIndividual(momIndex);
 
-			dadIndex = this.population.spinIndexRouletteWheel();
+			dadIndex = this.population.selectIndex();
 			dads.add(this.population.getIndividuals().get(dadIndex));
 			this.population.removeIndividual(dadIndex);
 		}
