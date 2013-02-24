@@ -296,10 +296,10 @@ public class Population {
 	public void printAscending() {
 		this.sortIndividuals();
 
-		int index = this.size();
+		int fitnessIndex = this.size();
 		for (Chromosome individual : this.individuals) {
-			log.info("Chromosome " + index + ": " + individual);
-			index--;
+			log.info("Chromosome " + fitnessIndex + ": " + individual);
+			fitnessIndex--;
 		}
 	}
 

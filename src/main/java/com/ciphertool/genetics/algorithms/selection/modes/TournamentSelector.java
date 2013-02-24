@@ -18,23 +18,53 @@
  */
 package com.ciphertool.genetics.algorithms.selection.modes;
 
+import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.util.DescendingFitnessComparator;
+import com.ciphertool.genetics.util.FitnessComparator;
 
 public class TournamentSelector implements Selector {
+	private Double selectionAccuracy;
+	private static FitnessComparator fitnessComparator = new DescendingFitnessComparator();
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.modes.Selector#chooseNext
+	 * com.ciphertool.genetics.algorithms.selection.modes.Selector#getNextIndex
 	 * (java.util.List, java.lang.Double)
 	 */
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
-		// TODO Auto-generated method stub
-		return 0;
+		Collections.sort(individuals, fitnessComparator);
+
+		for (int i = 0; i < individuals.size(); i++) {
+			if (Math.random() <= selectionAccuracy) {
+				return i;
+			}
+		}
+
+		// return the least fit individual since it won the tournament
+		return individuals.size() - 1;
 	}
 
+	/**
+	 * @param selectionProbability
+	 *            the selectionProbability to set
+	 */
+	@Required
+	public void setSelectionAccuracy(Double selectionAccuracy) {
+		if (selectionAccuracy < 0.0 || selectionAccuracy > 1.0) {
+			throw new IllegalArgumentException(
+					"Tried to set a selectionAccuracy of "
+							+ selectionAccuracy
+							+ ", but TournamentSelector requires a selectionAccuracy between 0.0 and 1.0 inclusive.");
+		}
+
+		this.selectionAccuracy = selectionAccuracy;
+	}
 }

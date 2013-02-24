@@ -22,10 +22,11 @@ package com.ciphertool.genetics.algorithms.selection.modes;
 public enum SelectorType {
 	ROULETTE("Roulette", RouletteSelector.class,
 			"Selects the index of an individual using the roulette wheel method."),
-	TOURNAMENT("Tournament", TournamentSelector.class,
-			"Selects the index of an individual using the tournament method."),
+	RANDOM("Random", RandomSelector.class, "Selects the index of an individual at random."),
 	ALPHA("Alhpa", AlphaSelector.class,
-			"Selects the index of the individual which has the highest fitness in the population.");
+			"Selects the index of the individual which has the highest fitness in the population."),
+	TOURNAMENT("Tournament", TournamentSelector.class,
+			"Selects the index of an individual using the tournament method.");
 
 	private String displayName;
 	private Class<? extends Selector> type;

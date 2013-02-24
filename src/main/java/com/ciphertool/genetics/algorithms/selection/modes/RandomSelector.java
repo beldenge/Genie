@@ -22,7 +22,7 @@ import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-public class AlphaSelector implements Selector {
+public class RandomSelector implements Selector {
 
 	/*
 	 * (non-Javadoc)
@@ -33,21 +33,7 @@ public class AlphaSelector implements Selector {
 	 */
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
-		Chromosome bestFitIndividual = null;
-		Integer bestFitIndex = null;
-
-		Chromosome currentIndividual = null;
-		for (int i = 0; i < individuals.size(); i++) {
-			currentIndividual = individuals.get(i);
-
-			if (bestFitIndex == null
-					|| currentIndividual.getFitness() > bestFitIndividual.getFitness()) {
-				bestFitIndividual = currentIndividual;
-				bestFitIndex = i;
-			}
-		}
-
-		return (bestFitIndex != null) ? bestFitIndex : -1;
+		int randomIndex = (int) (Math.random() * individuals.size());
+		return randomIndex;
 	}
-
 }

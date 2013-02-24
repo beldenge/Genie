@@ -27,7 +27,9 @@ public enum SelectionAlgorithmType {
 	PROBABILISTIC(
 			"Probabilistic",
 			ProbabilisticSelectionAlgorithm.class,
-			"Performs selection by giving each individual a probabilistic chance of survival, weighted by its fitness.");
+			"Performs selection by giving each individual a probabilistic chance of survival, weighted by its fitness."),
+	TOURNAMENT("Tournament", TournamentSelectionAlgorithm.class,
+			"Performs selection by running probabilistic tournaments on small groups of individuals.");
 
 	private String displayName;
 	private Class<? extends SelectionAlgorithm> type;
