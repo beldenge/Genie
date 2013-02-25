@@ -19,6 +19,9 @@
 
 package com.ciphertool.genetics.algorithms.mutation;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -30,10 +33,22 @@ import com.ciphertool.genetics.entities.Sequence;
 public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	private static Logger log = Logger.getLogger(SingleSequenceMutationAlgorithm.class);
 	private SequenceDao sequenceDao;
+	private int maxMutationsPerChromosome;
 
 	@Override
 	public void mutateChromosome(Chromosome chromosome) {
-		mutateRandomGene(chromosome);
+		/*
+		 * Choose a random number of mutations constrained by the configurable
+		 * max and the total number of genes
+		 */
+		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
+				.getGenes().size())) + 1;
+
+		List<Integer> geneIndices = new ArrayList<Integer>();
+		for (int i = 0; i < numMutations; i++) {
+			// Keep track of the mutated indices
+			geneIndices.add(mutateRandomGene(chromosome, geneIndices));
+		}
 	}
 
 	/**
@@ -42,10 +57,17 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param chromosome
 	 *            the Chromosome to mutate
 	 */
-	private void mutateRandomGene(Chromosome chromosome) {
-		int randomIndex = (int) (Math.random() * chromosome.getGenes().size());
+	private int mutateRandomGene(Chromosome chromosome, List<Integer> geneIndices) {
+		int randomIndex;
+
+		// We don't want to reuse an index, so loop until we find a new one
+		do {
+			randomIndex = (int) (Math.random() * chromosome.getGenes().size());
+		} while (geneIndices.contains(randomIndex));
 
 		mutateGene(chromosome, randomIndex);
+
+		return randomIndex;
 	}
 
 	/**
@@ -119,5 +141,14 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	@Required
 	public void setSequenceDao(SequenceDao sequenceDao) {
 		this.sequenceDao = sequenceDao;
+	}
+
+	/**
+	 * @param maxMutationsPerChromosome
+	 *            the maxMutationsPerChromosome to set
+	 */
+	@Required
+	public void setMaxMutationsPerChromosome(int maxMutationsPerChromosome) {
+		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
 }
