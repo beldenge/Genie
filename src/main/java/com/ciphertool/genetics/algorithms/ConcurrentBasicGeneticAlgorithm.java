@@ -63,10 +63,9 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
 	 */
 	@Override
-	public void crossover() {
-		int initialPopulationSize = this.population.size();
-
-		long pairsToCrossover = (long) ((initialPopulationSize * strategy.getCrossoverRate()) / 2);
+	public void crossover(int initialPopulationSize) {
+		long pairsToCrossover = Math.min((long) (initialPopulationSize * strategy
+				.getCrossoverRate()), ((long) (this.population.size() / 2)));
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
@@ -86,11 +85,11 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.selectIndex();
 			moms.add(this.population.getIndividuals().get(momIndex));
-			this.population.removeIndividual(momIndex);
+			this.population.makeIneligibleForReproduction(momIndex);
 
 			dadIndex = this.population.selectIndex();
 			dads.add(this.population.getIndividuals().get(dadIndex));
-			this.population.removeIndividual(dadIndex);
+			this.population.makeIneligibleForReproduction(dadIndex);
 		}
 
 		List<FutureTask<List<Chromosome>>> futureTasks = new ArrayList<FutureTask<List<Chromosome>>>();
@@ -130,19 +129,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		}
 
 		for (Chromosome child : childrenToAdd) {
-			this.population.addIndividual(child);
-		}
-
-		/*
-		 * Re-add all the parents since we wanted them removed from the roulette
-		 * pool temporarily, but they shouldn't die off immediately after
-		 * producing children.
-		 */
-		for (Chromosome parent : moms) {
-			this.population.addIndividual(parent);
-		}
-		for (Chromosome parent : dads) {
-			this.population.addIndividual(parent);
+			this.population.addIndividualAsIneligible(child);
 		}
 	}
 

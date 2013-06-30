@@ -41,6 +41,7 @@ public class Population {
 	private Logger log = Logger.getLogger(getClass());
 	private Breeder breeder;
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
+	private List<Chromosome> ineligibleForReproduction = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
 	private Selector selector;
@@ -92,7 +93,9 @@ public class Population {
 			}
 		}
 
-		log.debug("Added " + individualsAdded + " individuals to the population.");
+		if (log.isDebugEnabled()) {
+			log.debug("Added " + individualsAdded + " individuals to the population.");
+		}
 	}
 
 	/**
@@ -278,6 +281,32 @@ public class Population {
 		}
 
 		this.totalFitness += individual.getFitness();
+	}
+
+	/**
+	 * @param individual
+	 */
+	public void addIndividualAsIneligible(Chromosome individual) {
+		this.ineligibleForReproduction.add(individual);
+	}
+
+	/**
+	 * @param index
+	 */
+	public void makeIneligibleForReproduction(int index) {
+		this.ineligibleForReproduction.add(this.removeIndividual(index));
+	}
+
+	/**
+	 * Resets eligibility for all individuals which are currently ineligible for
+	 * reproduction.
+	 */
+	public void resetEligibility() {
+		for (Chromosome ineligibleIndividual : this.ineligibleForReproduction) {
+			this.addIndividual(ineligibleIndividual);
+		}
+
+		this.ineligibleForReproduction.clear();
 	}
 
 	public int size() {

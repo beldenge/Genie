@@ -22,10 +22,15 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Required;
+
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm {
+	private MutationAlgorithm mutationAlgorithm;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -45,20 +50,6 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 			parentB.increaseNumberOfChildren();
 		}
 
-		Chromosome secondChild = performCrossover(parentB, parentA);
-		// The chromosome will be null if it's identical to one of its parents
-		if (secondChild != null) {
-			if (!secondChild.equals(firstChild)) {
-				/*
-				 * Don't add the second child if it is identical to the other
-				 * child (i.e. twins)
-				 */
-				children.add(secondChild);
-				parentA.increaseNumberOfChildren();
-				parentB.increaseNumberOfChildren();
-			}
-		}
-
 		return children;
 	}
 
@@ -67,7 +58,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions
 	 */
-	public static Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
+	public Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int parentBSize = parentB.getGenes().size();
@@ -175,6 +166,8 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 			}
 		}
 
+		mutationAlgorithm.mutateChromosome(child);
+
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
 			return null;
@@ -196,5 +189,15 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 		 * fitnessEvaluator is required by other crossover algorithms, so this
 		 * is just to satisfy the interface.
 		 */
+	}
+
+	/**
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 */
+	@Override
+	@Required
+	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+		this.mutationAlgorithm = mutationAlgorithm;
 	}
 }

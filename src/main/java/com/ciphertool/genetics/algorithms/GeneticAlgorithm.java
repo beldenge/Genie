@@ -30,9 +30,9 @@ public interface GeneticAlgorithm {
 
 	public void select();
 
-	public void crossover();
+	public void crossover(int populationSizeBeforeReproduction);
 
-	public void mutate();
+	public void mutate(int populationSizeBeforeReproduction);
 
 	public Population getPopulation();
 

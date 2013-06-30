@@ -108,18 +108,28 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
 			}
 
+			int populationSizeBeforeReproduction = this.population.size();
+
 			long startCrossover = System.currentTimeMillis();
-			crossover();
+			crossover(populationSizeBeforeReproduction);
 			if (log.isDebugEnabled()) {
 				log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
 			}
 
 			long startMutation = System.currentTimeMillis();
-			mutate();
+			mutate(populationSizeBeforeReproduction);
 			if (log.isDebugEnabled()) {
 				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
 			}
 
+			population.resetEligibility();
+
+			/*
+			 * Adds new random solutions to the population to fill back to the
+			 * population size. Ultimately, this should not be necessary, but it
+			 * is here as a failsafe in crossover and mutation do not produce
+			 * enough children.
+			 */
 			long startBreeding = System.currentTimeMillis();
 			population.breed(strategy.getPopulationSize());
 			if (log.isDebugEnabled()) {
@@ -209,7 +219,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
 	 */
 	@Override
-	public void crossover() {
+	public void crossover(int initialPopulationSize) {
 		if (this.population.size() < 2) {
 			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
 
@@ -222,16 +232,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		int momIndex = -1;
 		int dadIndex = -1;
 
-		List<Chromosome> moms = new ArrayList<Chromosome>();
-		List<Chromosome> dads = new ArrayList<Chromosome>();
-
-		int initialPopulationSize = this.population.size();
-
 		/*
 		 * We have to round down to protect against
-		 * ArrayIndexOutOfBoundsException in edge cases
+		 * ArrayIndexOutOfBoundsException in edge cases. Also choose the minimum
+		 * between the current population size and the calculated number of
+		 * pairs in case there are not enough eligible individuals.
 		 */
-		long pairsToCrossover = (long) ((initialPopulationSize * strategy.getCrossoverRate()) / 2);
+		long pairsToCrossover = Math.min((long) (initialPopulationSize * strategy
+				.getCrossoverRate()), ((long) (this.population.size() / 2)));
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
@@ -239,23 +247,21 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.selectIndex();
 			mom = this.population.getIndividuals().get(momIndex);
-			moms.add(mom);
 
 			/*
 			 * Remove mom from the population to prevent parents from
 			 * reproducing more than one time per generation.
 			 */
-			this.population.removeIndividual(momIndex);
+			this.population.makeIneligibleForReproduction(momIndex);
 
 			dadIndex = this.population.selectIndex();
 			dad = this.population.getIndividuals().get(dadIndex);
-			dads.add(dad);
 
 			/*
 			 * Remove dad from the population to prevent parents from
 			 * reproducing more than one time per generation.
 			 */
-			this.population.removeIndividual(dadIndex);
+			this.population.makeIneligibleForReproduction(dadIndex);
 
 			children = crossoverAlgorithm.crossover(mom, dad);
 
@@ -267,19 +273,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		}
 
 		for (Chromosome child : childrenToAdd) {
-			this.population.addIndividual(child);
-		}
-
-		/*
-		 * Re-add all the parents since we wanted them removed from the roulette
-		 * pool temporarily, but they shouldn't die off immediately after
-		 * producing children.
-		 */
-		for (Chromosome parent : moms) {
-			this.population.addIndividual(parent);
-		}
-		for (Chromosome parent : dads) {
-			this.population.addIndividual(parent);
+			this.population.addIndividualAsIneligible(child);
 		}
 	}
 
@@ -289,42 +283,41 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#mutate()
 	 */
 	@Override
-	public void mutate() {
+	public void mutate(int initialPopulationSize) {
 		int mutantIndex = -1;
 
-		int initialPopulationSize = this.population.size();
+		long mutations = Math.min(Math.round((initialPopulationSize * strategy.getMutationRate())),
+				this.population.size());
 
-		long mutations = Math.round((initialPopulationSize * strategy.getMutationRate()));
+		log.debug("Chromosomes to mutate: " + mutations);
 
-		log.debug("Mutations to perform: " + mutations);
-
-		List<Chromosome> mutatedChromosomes = new ArrayList<Chromosome>();
+		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		for (int i = 0; i < mutations; i++) {
 			mutantIndex = this.population.selectIndex();
-			Chromosome mutatedChromosome = this.population.getIndividuals().get(mutantIndex);
+			Chromosome chromosomeToMutate = this.population.getIndividuals().get(mutantIndex)
+					.clone();
 
 			/*
 			 * Remove the Chromosome from the population temporarily so that it
 			 * is not re-selected by the next spin of the roulette wheel. Add it
 			 * to a List to be re-added after all mutations are complete.
 			 */
-			this.population.removeIndividual(mutantIndex);
-			mutatedChromosomes.add(mutatedChromosome);
+			this.population.makeIneligibleForReproduction(mutantIndex);
 
 			/*
-			 * Mutate a gene within the Chromosome. The original Chromosome is
-			 * not cloned. Natural selection will weed this out if it is
-			 * unfavorable.
+			 * Mutate a gene within the Chromosome. The original Chromosome has
+			 * been cloned.
 			 */
-			mutationAlgorithm.mutateChromosome(mutatedChromosome);
+			mutationAlgorithm.mutateChromosome(chromosomeToMutate);
+			children.add(chromosomeToMutate);
 		}
 
 		/*
 		 * Re-add the original (now mutated) Chromosomes
 		 */
-		for (Chromosome chromosome : mutatedChromosomes) {
-			this.population.addIndividual(chromosome);
+		for (Chromosome chromosome : children) {
+			this.population.addIndividualAsIneligible(chromosome);
 		}
 	}
 
@@ -430,6 +423,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				.getCompareToKnownSolution());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
+		this.crossoverAlgorithm.setMutationAlgorithm(geneticAlgorithmStrategy
+				.getMutationAlgorithm());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 

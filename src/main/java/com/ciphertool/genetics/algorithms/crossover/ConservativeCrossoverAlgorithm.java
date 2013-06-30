@@ -24,13 +24,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
 public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
+	private MutationAlgorithm mutationAlgorithm;
 
 	/*
 	 * (non-Javadoc)
@@ -49,20 +50,6 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			children.add(firstChild);
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
-		}
-
-		Chromosome secondChild = performCrossover(parentB, parentA);
-		// The chromosome will be null if it's identical to one of its parents
-		if (secondChild != null) {
-			if (!secondChild.equals(firstChild)) {
-				/*
-				 * Don't add the second child if it is identical to the other
-				 * child (i.e. twins)
-				 */
-				children.add(secondChild);
-				parentA.increaseNumberOfChildren();
-				parentB.increaseNumberOfChildren();
-			}
 		}
 
 		return children;
@@ -136,6 +123,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			}
 		}
 
+		mutationAlgorithm.mutateChromosome(child);
+
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
 			return null;
@@ -151,20 +140,19 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * @param fitnessEvaluator
 	 *            the fitnessEvaluator to set
 	 */
+	@Override
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
 	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
 	 */
+	@Override
 	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		/*
-		 * geneListDao is required by other crossover algorithms, so this is
-		 * just for spring bean consistency.
-		 */
+	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+		this.mutationAlgorithm = mutationAlgorithm;
 	}
 }

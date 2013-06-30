@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
@@ -37,6 +38,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
+	private MutationAlgorithm mutationAlgorithm;
 
 	/*
 	 * (non-Javadoc)
@@ -55,20 +57,6 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 			children.add(firstChild);
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
-		}
-
-		Chromosome secondChild = performCrossover(parentB, parentA);
-		// The chromosome will be null if it's identical to one of its parents
-		if (secondChild != null) {
-			if (!secondChild.equals(firstChild)) {
-				/*
-				 * Don't add the second child if it is identical to the other
-				 * child (i.e. twins)
-				 */
-				children.add(secondChild);
-				parentA.increaseNumberOfChildren();
-				parentB.increaseNumberOfChildren();
-			}
 		}
 
 		return children;
@@ -136,6 +124,8 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		 */
 		chromosomeHelper.resizeChromosome(child);
 
+		mutationAlgorithm.mutateChromosome(child);
+
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
 			return null;
@@ -151,6 +141,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * @param fitnessEvaluator
 	 *            the fitnessEvaluator to set
 	 */
+	@Override
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
@@ -172,5 +163,15 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	@Required
 	public void setChromosomeHelper(ChromosomeHelper chromosomeHelper) {
 		this.chromosomeHelper = chromosomeHelper;
+	}
+
+	/**
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 */
+	@Override
+	@Required
+	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+		this.mutationAlgorithm = mutationAlgorithm;
 	}
 }

@@ -21,6 +21,7 @@ package com.ciphertool.genetics.algorithms.crossover;
 
 import java.util.List;
 
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.util.FitnessEvaluator;
 
@@ -37,10 +38,16 @@ public interface CrossoverAlgorithm {
 	 * @return the List of children Chromosomes produced from the crossover
 	 */
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB);
-	
+
 	/**
 	 * @param fitnessEvaluator
 	 *            the FitnessEvaluator to set
 	 */
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
+
+	/**
+	 * @param mutationAlgorithm
+	 *            the mutationAlgorithm to set
+	 */
+	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm);
 }
