@@ -286,6 +286,12 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	public void mutate(int initialPopulationSize) {
 		int mutantIndex = -1;
 
+		/*
+		 * Set the number of mutations to perform to be the lesser of the
+		 * current eligible population size and the total initial population
+		 * size (before any other operations made individuals ineligible for
+		 * reproduction) multiplied by the configured mutation rate.
+		 */
 		long mutations = Math.min(Math.round((initialPopulationSize * strategy.getMutationRate())),
 				this.population.size());
 
