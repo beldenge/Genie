@@ -37,7 +37,7 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 	 * (com.ciphertool.genetics.Population, int, double)
 	 */
 	@Override
-	public void select(Population population, int maxIndividuals, double survivalRate) {
+	public int select(Population population, int maxIndividuals, double survivalRate) {
 		population.sortIndividuals();
 
 		int initialPopulationSize = population.size();
@@ -49,7 +49,8 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 					+ population.size() + " and survival rate of " + survivalRate + ".");
 		}
 
-		for (int i = 0; i < survivorIndex; i++) {
+		int i;
+		for (i = 0; i < survivorIndex; i++) {
 			/*
 			 * We must remove the first element every time, since the List is
 			 * sorted in ascending order in terms of fitness, where higher
@@ -58,5 +59,7 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 			 */
 			population.removeIndividual(0);
 		}
+
+		return i;
 	}
 }

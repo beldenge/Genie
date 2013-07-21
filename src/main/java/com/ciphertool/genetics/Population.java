@@ -69,7 +69,7 @@ public class Population {
 		}
 	}
 
-	public void breed(Integer maxIndividuals) {
+	public int breed(Integer maxIndividuals) {
 		List<FutureTask<Chromosome>> futureTasks = new ArrayList<FutureTask<Chromosome>>();
 		FutureTask<Chromosome> futureTask = null;
 
@@ -96,6 +96,8 @@ public class Population {
 		if (log.isDebugEnabled()) {
 			log.debug("Added " + individualsAdded + " individuals to the population.");
 		}
+
+		return individualsAdded;
 	}
 
 	/**
@@ -194,9 +196,10 @@ public class Population {
 		return bestFitIndividual;
 	}
 
-	public void increaseAge() {
+	public int increaseAge() {
 		int originalSize = this.individuals.size();
 		Chromosome individual = null;
+		int individualsRemoved = 0;
 
 		/*
 		 * actualIndex is used for removing individuals from this Population
@@ -222,8 +225,11 @@ public class Population {
 				 * key will not have been generated from database yet.
 				 */
 				this.removeIndividual(actualIndex);
+				individualsRemoved++;
 			}
 		}
+
+		return individualsRemoved;
 	}
 
 	/*

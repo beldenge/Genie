@@ -84,7 +84,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		GenerationStatistics generationStatistics = null;
 		do {
 			i++;
+			generationStatistics = new GenerationStatistics(executionStatistics, i);
 			generationStart = System.currentTimeMillis();
+
+			int populationSizeBeforeGeneration = this.population.size();
 
 			/*
 			 * Doing the select first improves performance by a ratio of up to
@@ -92,7 +95,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * survivors can reproduce.
 			 */
 			long startSelect = System.currentTimeMillis();
-			select();
+			int totalDeaths = select();
 			if (log.isDebugEnabled()) {
 				log.debug("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
 			}
@@ -103,21 +106,20 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * do anything.
 			 */
 			long startAging = System.currentTimeMillis();
-			population.increaseAge();
+			totalDeaths += population.increaseAge();
+			generationStatistics.setNumberSelectedOut(totalDeaths);
 			if (log.isDebugEnabled()) {
 				log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
 			}
 
-			int populationSizeBeforeReproduction = this.population.size();
-
 			long startCrossover = System.currentTimeMillis();
-			crossover(populationSizeBeforeReproduction);
+			generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
 			if (log.isDebugEnabled()) {
 				log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
 			}
 
 			long startMutation = System.currentTimeMillis();
-			mutate(populationSizeBeforeReproduction);
+			generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
 			if (log.isDebugEnabled()) {
 				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
 			}
@@ -131,14 +133,16 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			 * enough children.
 			 */
 			long startBreeding = System.currentTimeMillis();
-			population.breed(strategy.getPopulationSize());
+			generationStatistics.setNumberRandomlyGenerated(population.breed(strategy
+					.getPopulationSize()));
 			if (log.isDebugEnabled()) {
 				log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
 			}
 
 			long startEvaluation = System.currentTimeMillis();
-			generationStatistics = new GenerationStatistics(executionStatistics, i);
+
 			population.evaluateFitness(generationStatistics);
+
 			if (log.isDebugEnabled()) {
 				log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation)
 						+ "ms.");
@@ -206,9 +210,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * @see com.ciphertool.genetics.algorithms.GeneticAlgorithm#select()
 	 */
 	@Override
-	public void select() {
-		selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(), this.strategy
-				.getSurvivalRate());
+	public int select() {
+		return selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(),
+				this.strategy.getSurvivalRate());
 	}
 
 	/*
@@ -219,11 +223,11 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
 	 */
 	@Override
-	public void crossover(int initialPopulationSize) {
+	public int crossover(int initialPopulationSize) {
 		if (this.population.size() < 2) {
 			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
 
-			return;
+			return 0;
 		}
 
 		Chromosome mom = null;
@@ -275,6 +279,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		for (Chromosome child : childrenToAdd) {
 			this.population.addIndividualAsIneligible(child);
 		}
+
+		return (int) pairsToCrossover;
 	}
 
 	/*
@@ -283,7 +289,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#mutate()
 	 */
 	@Override
-	public void mutate(int initialPopulationSize) {
+	public int mutate(int initialPopulationSize) {
 		int mutantIndex = -1;
 
 		/*
@@ -325,6 +331,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		for (Chromosome chromosome : children) {
 			this.population.addIndividualAsIneligible(chromosome);
 		}
+
+		return (int) mutations;
 	}
 
 	/*

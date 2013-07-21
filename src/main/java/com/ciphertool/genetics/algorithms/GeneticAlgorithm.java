@@ -28,11 +28,11 @@ public interface GeneticAlgorithm {
 
 	public void spawnInitialPopulation();
 
-	public void select();
+	public int select();
 
-	public void crossover(int populationSizeBeforeReproduction);
+	public int crossover(int populationSizeBeforeReproduction);
 
-	public void mutate(int populationSizeBeforeReproduction);
+	public int mutate(int populationSizeBeforeReproduction);
 
 	public Population getPopulation();
 

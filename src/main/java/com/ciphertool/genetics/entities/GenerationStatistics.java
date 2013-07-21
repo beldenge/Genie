@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -43,6 +44,18 @@ public class GenerationStatistics implements Serializable {
 
 	@Column(name = "known_solution_proximity", nullable = true)
 	private Double knownSolutionProximity;
+
+	@Transient
+	private int numberOfMutations;
+
+	@Transient
+	private int numberOfCrossovers;
+
+	@Transient
+	private int numberRandomlyGenerated;
+
+	@Transient
+	private int numberSelectedOut;
 
 	/**
 	 * Default no-args constructor
@@ -166,6 +179,38 @@ public class GenerationStatistics implements Serializable {
 		this.knownSolutionProximity = knownSolutionProximity;
 	}
 
+	/**
+	 * @param numberOfMutations
+	 *            the numberOfMutations to set
+	 */
+	public void setNumberOfMutations(int numberOfMutations) {
+		this.numberOfMutations = numberOfMutations;
+	}
+
+	/**
+	 * @param numberOfCrossovers
+	 *            the numberOfCrossovers to set
+	 */
+	public void setNumberOfCrossovers(int numberOfCrossovers) {
+		this.numberOfCrossovers = numberOfCrossovers;
+	}
+
+	/**
+	 * @param numberRandomlyGenerated
+	 *            the numberRandomlyGenerated to set
+	 */
+	public void setNumberRandomlyGenerated(int numberRandomlyGenerated) {
+		this.numberRandomlyGenerated = numberRandomlyGenerated;
+	}
+
+	/**
+	 * @param numberSelectedOut
+	 *            the numberSelectedOut to set
+	 */
+	public void setNumberSelectedOut(int numberSelectedOut) {
+		this.numberSelectedOut = numberSelectedOut;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -251,12 +296,13 @@ public class GenerationStatistics implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		String proximity = (this.knownSolutionProximity == null) ? ""
-				: ", with proximity to known solution of "
-						+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
+		String proximity = (this.knownSolutionProximity == null) ? "" : ", proximityToKnown="
+				+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
 
-		return "Generation " + generation + " finished in " + executionTime
-				+ "ms with an average fitness of " + String.format("%1$,.2f", averageFitness)
-				+ " and best fitness of " + String.format("%1$,.2f", bestFitness) + proximity;
+		return "[generation=" + generation + ", executionTime=" + executionTime
+				+ ", averageFitness=" + String.format("%1$,.2f", averageFitness) + ", bestFitness="
+				+ String.format("%1$,.2f", bestFitness) + proximity + ", deaths="
+				+ numberSelectedOut + ", crossovers=" + numberOfCrossovers + ", mutations="
+				+ numberOfMutations + ", newSpawns=" + numberRandomlyGenerated + "]";
 	}
 }

@@ -63,7 +63,13 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
 	 */
 	@Override
-	public void crossover(int initialPopulationSize) {
+	public int crossover(int initialPopulationSize) {
+		if (this.population.size() < 2) {
+			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
+
+			return 0;
+		}
+
 		long pairsToCrossover = Math.min((long) (initialPopulationSize * strategy
 				.getCrossoverRate()), ((long) (this.population.size() / 2)));
 
@@ -131,6 +137,8 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		for (Chromosome child : childrenToAdd) {
 			this.population.addIndividualAsIneligible(child);
 		}
+
+		return (int) pairsToCrossover;
 	}
 
 	/**

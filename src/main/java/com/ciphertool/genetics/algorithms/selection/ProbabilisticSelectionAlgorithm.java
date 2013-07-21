@@ -43,15 +43,20 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 	 * (com.ciphertool.genetics.Population, int, double)
 	 */
 	@Override
-	public void select(Population population, int maxIndividuals, double survivalRate) {
+	public int select(Population population, int maxIndividuals, double survivalRate) {
 		int initialPopulationSize = population.size();
 
+		/*
+		 * We must use maxIndividuals instead of the current population size in
+		 * case the current population size is larger than the maximum
+		 * specified.
+		 */
 		long numSurvivors = Math.round(maxIndividuals * survivalRate);
+		int numberRemoved = (int) (initialPopulationSize - numSurvivors);
 
 		if (log.isDebugEnabled()) {
-			log.debug((initialPopulationSize - numSurvivors)
-					+ " individuals to be removed from population of size " + initialPopulationSize
-					+ " and survival rate of " + survivalRate + ".");
+			log.debug(numberRemoved + " individuals to be removed from population of size "
+					+ initialPopulationSize + " and survival rate of " + survivalRate + ".");
 		}
 
 		List<Chromosome> survivors = new ArrayList<Chromosome>();
@@ -73,5 +78,7 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		for (Chromosome survivor : survivors) {
 			population.addIndividual(survivor);
 		}
+
+		return numberRemoved;
 	}
 }
