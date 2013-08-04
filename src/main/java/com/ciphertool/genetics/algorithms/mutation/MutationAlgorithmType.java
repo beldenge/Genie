@@ -19,12 +19,15 @@
 
 package com.ciphertool.genetics.algorithms.mutation;
 
-
 public enum MutationAlgorithmType {
 	LIBERAL("Liberal", LiberalMutationAlgorithm.class,
 			"This will mutate genes by index regardless of starting position and end position"),
-	CONSERVATIVE("Conservative", ConservativeMutationAlgorithm.class,
-			"This will only mutate genes that match on starting position and end position"),
+	CONSERVATIVE(
+			"Conservative",
+			ConservativeMutationAlgorithm.class,
+			"This will mutate genes, only replacing them with genes that match on starting position and end position"),
+	GROUP("Group", GroupMutationAlgorithm.class,
+			"This mutates groups of genes instead of individual genes"),
 	SINGLE_SEQUENCE("Single Sequence", SingleSequenceMutationAlgorithm.class,
 			"This will mutate a single sequence of a specified gene");
 

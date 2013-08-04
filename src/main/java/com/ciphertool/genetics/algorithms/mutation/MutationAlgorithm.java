@@ -29,4 +29,11 @@ public interface MutationAlgorithm {
 	 *            the Chromosome to mutate
 	 */
 	public void mutateChromosome(Chromosome chromosome);
+
+	/**
+	 * @param maxMutationsPerChromosome
+	 *            the maximum number of mutations to perform on the given
+	 *            individual
+	 */
+	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome);
 }

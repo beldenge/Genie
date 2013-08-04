@@ -441,6 +441,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				.getMutationAlgorithm());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
+		this.mutationAlgorithm.setMaxMutationsPerChromosome(geneticAlgorithmStrategy
+				.getMaxMutationsPerIndividual());
 
 		this.selectionAlgorithm = geneticAlgorithmStrategy.getSelectionAlgorithm();
 

@@ -34,10 +34,14 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 	private static Logger log = Logger.getLogger(LiberalMutationAlgorithm.class);
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
-	private int maxMutationsPerChromosome;
+	private Integer maxMutationsPerChromosome;
 
 	@Override
 	public void mutateChromosome(Chromosome chromosome) {
+		if (maxMutationsPerChromosome == null) {
+			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
+		}
+
 		/*
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
@@ -122,12 +126,8 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 		this.chromosomeHelper = chromosomeHelper;
 	}
 
-	/**
-	 * @param maxMutationsPerChromosome
-	 *            the maxMutationsPerChromosome to set
-	 */
-	@Required
-	public void setMaxMutationsPerChromosome(int maxMutationsPerChromosome) {
+	@Override
+	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
 		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
 }

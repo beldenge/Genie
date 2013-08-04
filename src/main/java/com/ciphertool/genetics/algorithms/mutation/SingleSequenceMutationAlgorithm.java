@@ -33,10 +33,14 @@ import com.ciphertool.genetics.entities.Sequence;
 public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	private static Logger log = Logger.getLogger(SingleSequenceMutationAlgorithm.class);
 	private SequenceDao sequenceDao;
-	private int maxMutationsPerChromosome;
+	private Integer maxMutationsPerChromosome;
 
 	@Override
 	public void mutateChromosome(Chromosome chromosome) {
+		if (maxMutationsPerChromosome == null) {
+			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
+		}
+
 		/*
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
@@ -143,12 +147,8 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 		this.sequenceDao = sequenceDao;
 	}
 
-	/**
-	 * @param maxMutationsPerChromosome
-	 *            the maxMutationsPerChromosome to set
-	 */
-	@Required
-	public void setMaxMutationsPerChromosome(int maxMutationsPerChromosome) {
+	@Override
+	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
 		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
 }

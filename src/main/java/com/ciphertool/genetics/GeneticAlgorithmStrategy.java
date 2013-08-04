@@ -12,6 +12,7 @@ public class GeneticAlgorithmStrategy {
 	private Integer lifespan;
 	private Double survivalRate;
 	private Double mutationRate;
+	private Integer maxMutationsPerIndividual;
 	private Double crossoverRate;
 	private Integer maxGenerations;
 	private CrossoverAlgorithm crossoverAlgorithm;
@@ -42,6 +43,8 @@ public class GeneticAlgorithmStrategy {
 	 *            the survivalRate to set
 	 * @param mutationRate
 	 *            the mutationRate to set
+	 * @param maxMutationsPerIndividual
+	 *            the maxMutationsPerIndividual to set
 	 * @param crossoverRate
 	 *            the crossoverRate to set
 	 * @param fitnessEvaluator
@@ -56,16 +59,19 @@ public class GeneticAlgorithmStrategy {
 	 *            the selector to set
 	 */
 	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
-			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
-			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
-			Selector selector) {
+			int maxGenerations, double survivalRate, double mutationRate,
+			int maxMutationsPerIndividual, double crossoverRate, FitnessEvaluator fitnessEvaluator,
+			CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm,
+			SelectionAlgorithm selectionAlgorithm, Selector selector) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
 		this.maxGenerations = maxGenerations;
 		this.survivalRate = survivalRate;
+
 		this.mutationRate = mutationRate;
+		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
+
 		this.crossoverRate = crossoverRate;
 
 		this.fitnessEvaluator = fitnessEvaluator;
@@ -96,6 +102,8 @@ public class GeneticAlgorithmStrategy {
 	 *            the survivalRate to set
 	 * @param mutationRate
 	 *            the mutationRate to set
+	 * @param maxMutationsPerIndividual
+	 *            the maxMutationsPerIndividual to set
 	 * @param crossoverRate
 	 *            the crossoverRate to set
 	 * @param fitnessEvaluator
@@ -114,17 +122,20 @@ public class GeneticAlgorithmStrategy {
 	 *            the useKnownSolutionFitnessEvaluator to set
 	 */
 	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
-			int maxGenerations, double survivalRate, double mutationRate, double crossoverRate,
-			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
-			Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
-			Boolean compareToKnownSolution) {
+			int maxGenerations, double survivalRate, double mutationRate,
+			int maxMutationsPerIndividual, double crossoverRate, FitnessEvaluator fitnessEvaluator,
+			CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm,
+			SelectionAlgorithm selectionAlgorithm, Selector selector,
+			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
 		this.maxGenerations = maxGenerations;
 		this.survivalRate = survivalRate;
+
 		this.mutationRate = mutationRate;
+		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
+
 		this.crossoverRate = crossoverRate;
 
 		this.fitnessEvaluator = fitnessEvaluator;
@@ -232,6 +243,21 @@ public class GeneticAlgorithmStrategy {
 		}
 
 		this.mutationRate = mutationRate;
+	}
+
+	/**
+	 * @return the maxMutationsPerIndividual
+	 */
+	public Integer getMaxMutationsPerIndividual() {
+		return maxMutationsPerIndividual;
+	}
+
+	/**
+	 * @param maxMutationsPerIndividual
+	 *            the maxMutationsPerIndividual to set
+	 */
+	public void setMaxMutationsPerIndividual(Integer maxMutationsPerIndividual) {
+		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
 	}
 
 	/**

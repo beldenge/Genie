@@ -32,10 +32,14 @@ import com.ciphertool.genetics.entities.Gene;
 public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	private static Logger log = Logger.getLogger(ConservativeMutationAlgorithm.class);
 	private GeneListDao geneListDao;
-	private int maxMutationsPerChromosome;
+	private Integer maxMutationsPerChromosome;
 
 	@Override
 	public void mutateChromosome(Chromosome chromosome) {
+		if (maxMutationsPerChromosome == null) {
+			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
+		}
+
 		/*
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
@@ -97,6 +101,15 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 					.getSequenceId(), oldGene.size());
 		} while (chromosome.getGenes().get(index).equals(newGene));
 
+		if (newGene == null) {
+			if (log.isDebugEnabled()) {
+				log.debug("Could not find a gene of length " + oldGene.size()
+						+ ".  Not performing mutation.");
+			}
+
+			return;
+		}
+
 		chromosome.replaceGene(index, newGene);
 	}
 
@@ -109,12 +122,8 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 		this.geneListDao = geneListDao;
 	}
 
-	/**
-	 * @param maxMutationsPerChromosome
-	 *            the maxMutationsPerChromosome to set
-	 */
-	@Required
-	public void setMaxMutationsPerChromosome(int maxMutationsPerChromosome) {
+	@Override
+	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
 		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
 }
