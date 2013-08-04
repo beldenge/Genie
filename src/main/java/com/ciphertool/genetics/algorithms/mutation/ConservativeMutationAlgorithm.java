@@ -34,6 +34,8 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	private GeneListDao geneListDao;
 	private Integer maxMutationsPerChromosome;
 
+	private static final int MAX_FIND_ATTEMPTS = 1000;
+
 	@Override
 	public void mutateChromosome(Chromosome chromosome) {
 		if (maxMutationsPerChromosome == null) {
@@ -60,12 +62,24 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	 * @param chromosome
 	 *            the Chromosome to mutate
 	 */
-	private int mutateRandomGene(Chromosome chromosome, List<Integer> geneIndices) {
+	private Integer mutateRandomGene(Chromosome chromosome, List<Integer> geneIndices) {
 		int randomIndex;
 
 		// We don't want to reuse an index, so loop until we find a new one
+		int attempts = 0;
 		do {
 			randomIndex = (int) (Math.random() * chromosome.getGenes().size());
+
+			attempts++;
+
+			if (attempts >= MAX_FIND_ATTEMPTS) {
+				if (log.isDebugEnabled()) {
+					log.debug("Unable to find a previously unused Gene index after " + attempts
+							+ " attempts.  Returning null.");
+				}
+
+				return null;
+			}
 		} while (geneIndices.contains(randomIndex));
 
 		mutateGene(chromosome, randomIndex);
@@ -96,9 +110,22 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 		 */
 		Gene oldGene = chromosome.getGenes().get(index);
 		Gene newGene = null;
+		int attempts = 0;
 		do {
 			newGene = geneListDao.findRandomGeneOfLength(chromosome, oldGene.getSequences().get(0)
 					.getSequenceId(), oldGene.size());
+
+			attempts++;
+
+			if (attempts >= MAX_FIND_ATTEMPTS) {
+				if (log.isDebugEnabled()) {
+					log.debug("Unable to find a different Gene of length " + oldGene.size()
+							+ " for Gene " + oldGene + " after " + attempts
+							+ " attempts.  Breaking out of the loop.");
+				}
+
+				break;
+			}
 		} while (chromosome.getGenes().get(index).equals(newGene));
 
 		if (newGene == null) {
