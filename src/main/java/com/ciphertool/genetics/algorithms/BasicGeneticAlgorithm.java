@@ -45,125 +45,138 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	protected SelectionAlgorithm selectionAlgorithm;
 	private boolean stopRequested;
 	private ExecutionStatisticsDao executionStatisticsDao;
+	private int generationCount = 0;
+	private ExecutionStatistics executionStatistics;
 
 	public BasicGeneticAlgorithm() {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#iterateUntilTermination
-	 * ()
-	 */
 	@Override
-	public void evolve() {
+	public void evolveAutonomously() {
+		initialize();
+
+		do {
+			proceedWithNextGeneration();
+		} while (!stopRequested
+				&& (strategy.getMaxGenerations() < 0 || generationCount < strategy
+						.getMaxGenerations()));
+
+		finish();
+	}
+
+	@Override
+	public void initialize() {
 		List<String> validationErrors = validateParameters();
 		if (validationErrors.size() > 0) {
-			log.warn("Unable to execute genetic algorithm because one or more of the required parameters are missing.  The fields that failed validation are "
-					+ validationErrors);
-
-			return;
+			throw new IllegalStateException(
+					"Unable to execute genetic algorithm because one or more of the required parameters are missing.  The fields that failed validation are "
+							+ validationErrors);
 		}
 
-		long start = System.currentTimeMillis();
-
 		this.spawnInitialPopulation();
-
-		log.info("Took " + (System.currentTimeMillis() - start)
-				+ "ms to spawn initial population of size " + this.population.size());
 
 		stopRequested = false;
 
 		Date startDate = new Date();
-		ExecutionStatistics executionStatistics = new ExecutionStatistics(startDate, strategy);
-		long genesis = System.currentTimeMillis();
-		long generationStart = 0;
-		int i = 0;
-		long executionTime = 0;
-		GenerationStatistics generationStatistics = null;
-		do {
-			i++;
-			generationStatistics = new GenerationStatistics(executionStatistics, i);
-			generationStart = System.currentTimeMillis();
+		executionStatistics = new ExecutionStatistics(startDate, strategy);
+	}
 
-			int populationSizeBeforeGeneration = this.population.size();
+	@Override
+	public void finish() {
+		long totalExecutionTime = 0;
 
-			/*
-			 * Doing the select first improves performance by a ratio of up to
-			 * (1 - survivalRate). It makes more sense as well since only
-			 * survivors can reproduce.
-			 */
-			long startSelect = System.currentTimeMillis();
-			int totalDeaths = select();
-			if (log.isDebugEnabled()) {
-				log.debug("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
-			}
+		for (GenerationStatistics generationStatistics : executionStatistics
+				.getGenerationStatisticsList()) {
+			totalExecutionTime += generationStatistics.getExecutionTime();
+		}
 
-			/*
-			 * We want to increase age before children are produced in following
-			 * steps so that the children do not age before having a chance to
-			 * do anything.
-			 */
-			long startAging = System.currentTimeMillis();
-			totalDeaths += population.increaseAge();
-			generationStatistics.setNumberSelectedOut(totalDeaths);
-			if (log.isDebugEnabled()) {
-				log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
-			}
-
-			long startCrossover = System.currentTimeMillis();
-			generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
-			if (log.isDebugEnabled()) {
-				log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
-			}
-
-			long startMutation = System.currentTimeMillis();
-			generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
-			if (log.isDebugEnabled()) {
-				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
-			}
-
-			population.resetEligibility();
-
-			/*
-			 * Adds new random solutions to the population to fill back to the
-			 * population size. Ultimately, this should not be necessary, but it
-			 * is here as a failsafe in crossover and mutation do not produce
-			 * enough children.
-			 */
-			long startBreeding = System.currentTimeMillis();
-			generationStatistics.setNumberRandomlyGenerated(population.breed(strategy
-					.getPopulationSize()));
-			if (log.isDebugEnabled()) {
-				log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
-			}
-
-			long startEvaluation = System.currentTimeMillis();
-
-			population.evaluateFitness(generationStatistics);
-
-			if (log.isDebugEnabled()) {
-				log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation)
-						+ "ms.");
-			}
-
-			executionTime = (System.currentTimeMillis() - generationStart);
-			generationStatistics.setExecutionTime(executionTime);
-
-			log.info(generationStatistics);
-
-			executionStatistics.addGenerationStatistics(generationStatistics);
-		} while (!stopRequested
-				&& (strategy.getMaxGenerations() < 0 || i < strategy.getMaxGenerations()));
-
-		log.info("Average generation time is " + ((System.currentTimeMillis() - genesis) / i)
-				+ "ms.");
+		log.info("Average generation time is "
+				+ ((System.currentTimeMillis() - totalExecutionTime) / generationCount) + "ms.");
 
 		Date endDate = new Date();
 		executionStatistics.setEndDateTime(endDate);
 
-		persistStatistics(executionStatistics);
+		persistStatistics();
+
+		// This needs to be reset to null in case the algorithm is re-run
+		executionStatistics = null;
+	}
+
+	@Override
+	public void proceedWithNextGeneration() {
+		generationCount++;
+
+		GenerationStatistics generationStatistics = new GenerationStatistics(executionStatistics,
+				generationCount);
+
+		long generationStart = System.currentTimeMillis();
+
+		int populationSizeBeforeGeneration = this.population.size();
+
+		/*
+		 * Doing the select first improves performance by a ratio of up to (1 -
+		 * survivalRate). It makes more sense as well since only survivors can
+		 * reproduce.
+		 */
+		long startSelect = System.currentTimeMillis();
+		int totalDeaths = select();
+		if (log.isDebugEnabled()) {
+			log.debug("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
+		}
+
+		/*
+		 * We want to increase age before children are produced in following
+		 * steps so that the children do not age before having a chance to do
+		 * anything.
+		 */
+		long startAging = System.currentTimeMillis();
+		totalDeaths += population.increaseAge();
+		generationStatistics.setNumberSelectedOut(totalDeaths);
+		if (log.isDebugEnabled()) {
+			log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
+		}
+
+		long startCrossover = System.currentTimeMillis();
+		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
+		if (log.isDebugEnabled()) {
+			log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+		}
+
+		long startMutation = System.currentTimeMillis();
+		generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
+		if (log.isDebugEnabled()) {
+			log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
+		}
+
+		population.resetEligibility();
+
+		/*
+		 * Adds new random solutions to the population to fill back to the
+		 * population size. Ultimately, this should not be necessary, but it is
+		 * here as a failsafe in crossover and mutation do not produce enough
+		 * children.
+		 */
+		long startBreeding = System.currentTimeMillis();
+		generationStatistics.setNumberRandomlyGenerated(population.breed(strategy
+				.getPopulationSize()));
+		if (log.isDebugEnabled()) {
+			log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
+		}
+
+		long startEvaluation = System.currentTimeMillis();
+
+		population.evaluateFitness(generationStatistics);
+
+		if (log.isDebugEnabled()) {
+			log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
+		}
+
+		long executionTime = (System.currentTimeMillis() - generationStart);
+		generationStatistics.setExecutionTime(executionTime);
+
+		log.info(generationStatistics);
+
+		executionStatistics.addGenerationStatistics(generationStatistics);
 	}
 
 	private List<String> validateParameters() {
@@ -204,24 +217,12 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		return validationErrors;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ciphertool.genetics.algorithms.GeneticAlgorithm#select()
-	 */
 	@Override
 	public int select() {
 		return selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(),
 				this.strategy.getSurvivalRate());
 	}
 
-	/*
-	 * Crossover algorithm utilizing Roulette Wheel Selection
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
-	 */
 	@Override
 	public int crossover(int initialPopulationSize) {
 		if (this.population.size() < 2) {
@@ -283,11 +284,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		return (int) pairsToCrossover;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#mutate()
-	 */
 	@Override
 	public int mutate(int initialPopulationSize) {
 		int mutantIndex = -1;
@@ -335,27 +331,24 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		return (int) mutations;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#spawnInitialPopulation
-	 * ()
-	 */
-	@Override
-	public void spawnInitialPopulation() {
+	private void spawnInitialPopulation() {
+		long start = System.currentTimeMillis();
+
 		this.population.clearIndividuals();
 
 		this.population.breed(strategy.getPopulationSize());
 
 		this.population.evaluateFitness(null);
+
+		log.info("Took " + (System.currentTimeMillis() - start)
+				+ "ms to spawn initial population of size " + this.population.size());
 	}
 
 	/**
 	 * @param executionStatistics
 	 *            the ExecutionStatistics to persist
 	 */
-	private void persistStatistics(final ExecutionStatistics executionStatistics) {
+	private void persistStatistics() {
 		log.info("Persisting statistics to database.");
 		long startInsert = System.currentTimeMillis();
 		executionStatisticsDao.insert(executionStatistics);
@@ -392,40 +385,6 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		return strategy;
 	}
 
-	/**
-	 * @param crossoverAlgorithm
-	 *            the crossoverAlgorithm to set
-	 */
-	@Required
-	public void setCrossoverAlgorithm(CrossoverAlgorithm crossoverAlgorithm) {
-		this.crossoverAlgorithm = crossoverAlgorithm;
-	}
-
-	/**
-	 * @param mutationAlgorithm
-	 *            the mutationAlgorithm to set
-	 */
-	@Required
-	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
-		this.mutationAlgorithm = mutationAlgorithm;
-	}
-
-	/**
-	 * @param selectionAlgorithm
-	 *            the selectionAlgorithm to set
-	 */
-	@Required
-	public void setSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
-		this.selectionAlgorithm = selectionAlgorithm;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.GeneticAlgorithm#setParameters(int,
-	 * int, double, double, double)
-	 */
 	@Override
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());

@@ -24,9 +24,13 @@ import com.ciphertool.genetics.Population;
 
 public interface GeneticAlgorithm {
 
-	public void evolve();
+	public void evolveAutonomously();
 
-	public void spawnInitialPopulation();
+	public void initialize();
+
+	public void finish();
+
+	public void proceedWithNextGeneration();
 
 	public int select();
 
