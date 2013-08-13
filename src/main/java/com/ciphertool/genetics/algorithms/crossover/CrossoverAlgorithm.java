@@ -50,4 +50,10 @@ public interface CrossoverAlgorithm {
 	 *            the mutationAlgorithm to set
 	 */
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm);
+
+	/**
+	 * @param mutateDuringCrossover
+	 *            whether to mutate during crossover
+	 */
+	public void setMutateDuringCrossover(boolean mutateDuringCrossover);
 }

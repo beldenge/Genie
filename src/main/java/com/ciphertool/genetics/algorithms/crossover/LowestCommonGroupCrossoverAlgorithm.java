@@ -32,6 +32,7 @@ import com.ciphertool.genetics.util.FitnessEvaluator;
 public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm mutationAlgorithm;
+	private boolean mutateDuringCrossover;
 
 	/*
 	 * (non-Javadoc)
@@ -198,7 +199,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 			}
 		}
 
-		mutationAlgorithm.mutateChromosome(child);
+		if (mutateDuringCrossover) {
+			mutationAlgorithm.mutateChromosome(child);
+		}
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
@@ -229,5 +232,14 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
+	}
+
+	/**
+	 * @param mutateDuringCrossover
+	 *            the mutateDuringCrossover to set
+	 */
+	@Override
+	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
+		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 }

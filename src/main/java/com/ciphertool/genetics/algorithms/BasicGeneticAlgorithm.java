@@ -73,6 +73,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 							+ validationErrors);
 		}
 
+		this.generationCount = 0;
+
 		this.spawnInitialPopulation();
 
 		stopRequested = false;
@@ -190,8 +192,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("populationSize");
 		}
 
-		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
-			validationErrors.add("maxGenerations");
+		if (strategy.getLifespan() == null) {
+			validationErrors.add("lifespan");
 		}
 
 		if (strategy.getSurvivalRate() == 0) {
@@ -202,16 +204,41 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("mutationRate");
 		}
 
+		if (strategy.getMaxMutationsPerIndividual() == null
+				|| strategy.getMaxMutationsPerIndividual() < 0) {
+			validationErrors.add("maxMutationsPerIndividual");
+		}
+
 		if (strategy.getCrossoverRate() == null || strategy.getCrossoverRate() < 0) {
 			validationErrors.add("crossoverRate");
+		}
+
+		if (strategy.getMutateDuringCrossover() == null) {
+			validationErrors.add("mutateDuringCrossover");
+		}
+
+		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
+			validationErrors.add("maxGenerations");
+		}
+
+		if (strategy.getCrossoverAlgorithm() == null) {
+			validationErrors.add("crossoverAlgorithm");
 		}
 
 		if (strategy.getFitnessEvaluator() == null) {
 			validationErrors.add("fitnessEvaluator");
 		}
 
-		if (strategy.getCrossoverAlgorithm() == null) {
-			validationErrors.add("crossoverAlgorithm");
+		if (strategy.getMutationAlgorithm() == null) {
+			validationErrors.add("mutationAlgorithm");
+		}
+
+		if (strategy.getSelectionAlgorithm() == null) {
+			validationErrors.add("selectionAlgorithm");
+		}
+
+		if (strategy.getSelector() == null) {
+			validationErrors.add("selectorMethod");
 		}
 
 		return validationErrors;
@@ -398,6 +425,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
 		this.crossoverAlgorithm.setMutationAlgorithm(geneticAlgorithmStrategy
 				.getMutationAlgorithm());
+		this.crossoverAlgorithm.setMutateDuringCrossover(geneticAlgorithmStrategy
+				.getMutateDuringCrossover());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 		this.mutationAlgorithm.setMaxMutationsPerChromosome(geneticAlgorithmStrategy

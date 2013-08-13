@@ -37,6 +37,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
 	private MutationAlgorithm mutationAlgorithm;
+	private boolean mutateDuringCrossover;
 
 	/*
 	 * (non-Javadoc)
@@ -95,7 +96,9 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 		 */
 		chromosomeHelper.resizeChromosome(child);
 
-		mutationAlgorithm.mutateChromosome(child);
+		if (mutateDuringCrossover) {
+			mutationAlgorithm.mutateChromosome(child);
+		}
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
@@ -147,5 +150,14 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
+	}
+
+	/**
+	 * @param mutateDuringCrossover
+	 *            the mutateDuringCrossover to set
+	 */
+	@Override
+	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
+		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 }

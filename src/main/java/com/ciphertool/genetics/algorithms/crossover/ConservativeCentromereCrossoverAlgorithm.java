@@ -33,6 +33,7 @@ import com.ciphertool.genetics.util.FitnessEvaluator;
 public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm {
 	Logger log = Logger.getLogger(getClass());
 	private MutationAlgorithm mutationAlgorithm;
+	private boolean mutateDuringCrossover;
 
 	/**
 	 * This crossover algorithm finds all the points where both parent
@@ -88,7 +89,9 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 			child.addGene(parentB.getGenes().get(j).clone());
 		}
 
-		mutationAlgorithm.mutateChromosome(child);
+		if (mutateDuringCrossover) {
+			mutationAlgorithm.mutateChromosome(child);
+		}
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
@@ -204,5 +207,14 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
+	}
+
+	/**
+	 * @param mutateDuringCrossover
+	 *            the mutateDuringCrossover to set
+	 */
+	@Override
+	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
+		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 }
