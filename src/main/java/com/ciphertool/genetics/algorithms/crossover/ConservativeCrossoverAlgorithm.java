@@ -34,13 +34,6 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	private MutationAlgorithm mutationAlgorithm;
 	private boolean mutateDuringCrossover;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ciphertool.genetics.algorithms.CrossoverAlgorithm#crossover(com.
-	 * ciphertool.genetics.entities.Chromosome,
-	 * com.ciphertool.genetics.entities.Chromosome)
-	 */
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
 		List<Chromosome> children = new ArrayList<Chromosome>();

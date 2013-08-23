@@ -27,13 +27,6 @@ import com.ciphertool.genetics.entities.Chromosome;
 public class RouletteSelector implements Selector {
 	private Logger log = Logger.getLogger(getClass());
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.modes.Selector#chooseNext
-	 * (java.util.List, java.lang.Double)
-	 */
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
 		long randomIndex = (int) (Math.random() * totalFitness);

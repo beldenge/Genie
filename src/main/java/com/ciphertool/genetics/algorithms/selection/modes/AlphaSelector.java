@@ -24,13 +24,6 @@ import com.ciphertool.genetics.entities.Chromosome;
 
 public class AlphaSelector implements Selector {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.modes.Selector#chooseNext
-	 * (java.util.List, java.lang.Double)
-	 */
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
 		Chromosome bestFitIndividual = null;

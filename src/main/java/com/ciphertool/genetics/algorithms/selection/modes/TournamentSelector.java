@@ -31,13 +31,6 @@ public class TournamentSelector implements Selector {
 	private Double selectionAccuracy;
 	private static FitnessComparator fitnessComparator = new DescendingFitnessComparator();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.modes.Selector#getNextIndex
-	 * (java.util.List, java.lang.Double)
-	 */
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
 		Collections.sort(individuals, fitnessComparator);
