@@ -46,8 +46,8 @@ public class TournamentSelector implements Selector {
 	}
 
 	/**
-	 * @param selectionProbability
-	 *            the selectionProbability to set
+	 * @param selectionAccuracy
+	 *            the selectionAccuracy to set
 	 */
 	@Required
 	public void setSelectionAccuracy(Double selectionAccuracy) {
