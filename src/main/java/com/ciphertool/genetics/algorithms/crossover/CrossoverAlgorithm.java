@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.util.FitnessEvaluator;
+import com.ciphertool.genetics.util.fitness.FitnessEvaluator;
 
 public interface CrossoverAlgorithm {
 

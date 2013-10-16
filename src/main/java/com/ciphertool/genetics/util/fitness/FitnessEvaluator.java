@@ -17,15 +17,15 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.util;
+package com.ciphertool.genetics.util.fitness;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-public interface Breeder {
-	public Chromosome breed();
+public interface FitnessEvaluator {
+	public Double evaluate(Chromosome chromosome);
 
 	/**
-	 * The source structure for which this genetic algorithm should generate
+	 * The source structure against which this genetic algorithm should evaluate
 	 * chromosomes.
 	 * 
 	 * @param obj

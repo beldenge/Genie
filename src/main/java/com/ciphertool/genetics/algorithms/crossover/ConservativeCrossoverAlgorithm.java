@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
-import com.ciphertool.genetics.util.FitnessEvaluator;
+import com.ciphertool.genetics.util.fitness.FitnessEvaluator;
 
 public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;

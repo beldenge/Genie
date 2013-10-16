@@ -32,10 +32,9 @@ import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.GenerationStatistics;
-import com.ciphertool.genetics.util.Breeder;
-import com.ciphertool.genetics.util.FitnessComparator;
-import com.ciphertool.genetics.util.FitnessEvaluator;
+import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
+import com.ciphertool.genetics.util.fitness.FitnessComparator;
+import com.ciphertool.genetics.util.fitness.FitnessEvaluator;
 
 public class Population {
 	private Logger log = Logger.getLogger(getClass());

@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ciphertool.genetics.entities.ExecutionStatistics;
+import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 
 public class ExecutionStatisticsDao {
 	private SessionFactory sessionFactory;

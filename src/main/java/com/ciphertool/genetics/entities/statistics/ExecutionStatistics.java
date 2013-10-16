@@ -1,4 +1,4 @@
-package com.ciphertool.genetics.entities;
+package com.ciphertool.genetics.entities.statistics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
