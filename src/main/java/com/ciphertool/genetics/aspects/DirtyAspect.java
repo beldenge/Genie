@@ -44,8 +44,29 @@ public class DirtyAspect {
 		if (entity instanceof Chromosome) {
 			((Chromosome) entity).setDirty(true);
 		} else if (entity instanceof Gene) {
+			if (((Gene) entity).getChromosome() == null) {
+				log.error("Encountered null Chromosome for JoinPoint of type Gene.  Unable to execute advice for pointcut beforeMethodsMarkedWithAtDirty() at join point "
+						+ jp.toShortString());
+
+				return;
+			}
+
 			((Gene) entity).getChromosome().setDirty(true);
 		} else if (entity instanceof Sequence) {
+			if (((Sequence) entity).getGene() == null) {
+				log.error("Encountered null Gene for JoinPoint of type Sequence.  Unable to execute advice for pointcut beforeMethodsMarkedWithAtDirty() at join point "
+						+ jp.toShortString());
+
+				return;
+			}
+
+			if (((Sequence) entity).getGene().getChromosome() == null) {
+				log.error("Encountered null Chromosome for JoinPoint of type Sequence.  Unable to execute advice for pointcut beforeMethodsMarkedWithAtDirty() at join point "
+						+ jp.toShortString());
+
+				return;
+			}
+
 			((Sequence) entity).getGene().getChromosome().setDirty(true);
 		}
 	}
