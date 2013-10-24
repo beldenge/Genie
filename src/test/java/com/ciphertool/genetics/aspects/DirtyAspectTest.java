@@ -38,7 +38,7 @@ public class DirtyAspectTest {
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
 		MockChromosome chromosome = new MockChromosome();
-		chromosome.setDirty(false);
+		chromosome.setEvaluationNeeded(false);
 		MockGene gene = new MockGene();
 		gene.setChromosome(chromosome);
 		MockSequence sequence = new MockSequence();
@@ -52,7 +52,7 @@ public class DirtyAspectTest {
 			fail(e.getMessage());
 		}
 
-		assertTrue(chromosome.isDirty());
+		assertTrue(chromosome.isEvaluationNeeded());
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class DirtyAspectTest {
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
 		MockChromosome chromosome = new MockChromosome();
-		chromosome.setDirty(false);
+		chromosome.setEvaluationNeeded(false);
 		MockGene gene = new MockGene();
 		gene.setChromosome(chromosome);
 
@@ -73,7 +73,7 @@ public class DirtyAspectTest {
 			fail(e.getMessage());
 		}
 
-		assertTrue(chromosome.isDirty());
+		assertTrue(chromosome.isEvaluationNeeded());
 	}
 
 	@Test
@@ -82,7 +82,7 @@ public class DirtyAspectTest {
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
 		MockChromosome chromosome = new MockChromosome();
-		chromosome.setDirty(false);
+		chromosome.setEvaluationNeeded(false);
 		when(mockJoinPoint.getTarget()).thenReturn(chromosome);
 
 		try {
@@ -91,7 +91,7 @@ public class DirtyAspectTest {
 			fail(e.getMessage());
 		}
 
-		assertTrue(chromosome.isDirty());
+		assertTrue(chromosome.isEvaluationNeeded());
 	}
 
 	@Test

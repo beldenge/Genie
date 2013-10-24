@@ -40,7 +40,7 @@ public class CleanAspect {
 		Object chromosome = jp.getTarget();
 
 		if (chromosome instanceof Chromosome) {
-			((Chromosome) chromosome).setDirty(false);
+			((Chromosome) chromosome).setEvaluationNeeded(false);
 		}
 	}
 

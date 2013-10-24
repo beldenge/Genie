@@ -36,7 +36,7 @@ public class CleanAspectTest {
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
 		MockChromosome chromosome = new MockChromosome();
-		chromosome.setDirty(true);
+		chromosome.setEvaluationNeeded(true);
 		when(mockJoinPoint.getTarget()).thenReturn(chromosome);
 
 		try {
@@ -45,7 +45,7 @@ public class CleanAspectTest {
 			fail(e.getMessage());
 		}
 
-		assertFalse(chromosome.isDirty());
+		assertFalse(chromosome.isEvaluationNeeded());
 	}
 
 	@Test

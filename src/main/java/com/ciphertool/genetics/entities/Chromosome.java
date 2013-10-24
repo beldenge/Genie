@@ -116,11 +116,11 @@ public interface Chromosome extends Cloneable {
 	/*
 	 * Whether this Chromosome has changed since it was last evaluated.
 	 */
-	public boolean isDirty();
+	public boolean isEvaluationNeeded();
 
 	/**
-	 * @param isDirty
-	 *            the dirtiness value to set
+	 * @param evaluationNeeded
+	 *            the evaluationNeeded value to set
 	 */
-	public void setDirty(boolean isDirty);
+	public void setEvaluationNeeded(boolean evaluationNeeded);
 }

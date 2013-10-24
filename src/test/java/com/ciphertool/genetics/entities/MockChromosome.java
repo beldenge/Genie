@@ -105,12 +105,12 @@ public class MockChromosome implements Chromosome {
 	}
 
 	@Override
-	public boolean isDirty() {
+	public boolean isEvaluationNeeded() {
 		return this.needsEvaluation;
 	}
 
 	@Override
-	public void setDirty(boolean needsEvaluation) {
+	public void setEvaluationNeeded(boolean needsEvaluation) {
 		this.needsEvaluation = needsEvaluation;
 	}
 

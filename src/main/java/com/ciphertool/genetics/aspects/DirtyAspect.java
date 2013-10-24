@@ -42,7 +42,7 @@ public class DirtyAspect {
 		Object entity = jp.getTarget();
 
 		if (entity instanceof Chromosome) {
-			((Chromosome) entity).setDirty(true);
+			((Chromosome) entity).setEvaluationNeeded(true);
 		} else if (entity instanceof Gene) {
 			if (((Gene) entity).getChromosome() == null) {
 				log.error("Encountered null Chromosome for JoinPoint of type Gene.  Unable to execute advice for pointcut beforeMethodsMarkedWithAtDirty() at join point "
@@ -51,7 +51,7 @@ public class DirtyAspect {
 				return;
 			}
 
-			((Gene) entity).getChromosome().setDirty(true);
+			((Gene) entity).getChromosome().setEvaluationNeeded(true);
 		} else if (entity instanceof Sequence) {
 			if (((Sequence) entity).getGene() == null) {
 				log.error("Encountered null Gene for JoinPoint of type Sequence.  Unable to execute advice for pointcut beforeMethodsMarkedWithAtDirty() at join point "
@@ -67,7 +67,7 @@ public class DirtyAspect {
 				return;
 			}
 
-			((Sequence) entity).getGene().getChromosome().setDirty(true);
+			((Sequence) entity).getGene().getChromosome().setEvaluationNeeded(true);
 		}
 	}
 

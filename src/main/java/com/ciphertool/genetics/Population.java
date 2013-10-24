@@ -129,7 +129,7 @@ public class Population {
 			 * Only evaluate individuals that have changed since the last
 			 * evaluation.
 			 */
-			if (individual.isDirty()) {
+			if (individual.isEvaluationNeeded()) {
 				evaluationCount++;
 				futureTask = new FutureTask<Double>(new EvaluatorTask(individual));
 				futureTasks.add(futureTask);
@@ -281,7 +281,7 @@ public class Population {
 		 * Only evaluate this individual if it hasn't been evaluated yet by some
 		 * other process.
 		 */
-		if (individual.isDirty()) {
+		if (individual.isEvaluationNeeded()) {
 			fitnessEvaluator.evaluate(individual);
 		}
 
