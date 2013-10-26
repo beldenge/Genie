@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 import org.aspectj.lang.JoinPoint;
 import org.junit.Test;
 
-import com.ciphertool.genetics.entities.MockChromosome;
+import com.ciphertool.genetics.mocks.MockChromosome;
 
 public class CleanAspectTest {
 	@Test

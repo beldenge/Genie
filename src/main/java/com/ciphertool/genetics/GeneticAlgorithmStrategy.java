@@ -78,9 +78,9 @@ public class GeneticAlgorithmStrategy {
 	 * @param selector
 	 *            the selector to set
 	 */
-	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
-			int maxGenerations, double survivalRate, double mutationRate,
-			int maxMutationsPerIndividual, double crossoverRate, boolean mutateDuringCrossover,
+	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize,
+			Integer lifespan, Integer maxGenerations, Double survivalRate, Double mutationRate,
+			Integer maxMutationsPerIndividual, Double crossoverRate, Boolean mutateDuringCrossover,
 			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
 			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
 			Selector selector) {
@@ -88,12 +88,12 @@ public class GeneticAlgorithmStrategy {
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
 		this.maxGenerations = maxGenerations;
-		this.survivalRate = survivalRate;
+		this.setSurvivalRate(survivalRate);
 
-		this.mutationRate = mutationRate;
+		this.setMutationRate(mutationRate);
 		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
 
-		this.crossoverRate = crossoverRate;
+		this.setCrossoverRate(crossoverRate);
 		this.mutateDuringCrossover = mutateDuringCrossover;
 
 		this.fitnessEvaluator = fitnessEvaluator;
@@ -143,9 +143,9 @@ public class GeneticAlgorithmStrategy {
 	 * @param useKnownSolutionFitnessEvaluator
 	 *            the useKnownSolutionFitnessEvaluator to set
 	 */
-	public GeneticAlgorithmStrategy(Object geneticStructure, int populationSize, int lifespan,
-			int maxGenerations, double survivalRate, double mutationRate,
-			int maxMutationsPerIndividual, double crossoverRate, boolean mutateDuringCrossover,
+	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize,
+			Integer lifespan, Integer maxGenerations, Double survivalRate, Double mutationRate,
+			Integer maxMutationsPerIndividual, Double crossoverRate, Boolean mutateDuringCrossover,
 			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
 			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
 			Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
@@ -154,12 +154,12 @@ public class GeneticAlgorithmStrategy {
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
 		this.maxGenerations = maxGenerations;
-		this.survivalRate = survivalRate;
+		this.setSurvivalRate(survivalRate);
 
-		this.mutationRate = mutationRate;
+		this.setMutationRate(mutationRate);
 		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
 
-		this.crossoverRate = crossoverRate;
+		this.setCrossoverRate(crossoverRate);
 		this.mutateDuringCrossover = mutateDuringCrossover;
 
 		this.fitnessEvaluator = fitnessEvaluator;

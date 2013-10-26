@@ -17,61 +17,42 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.entities;
+package com.ciphertool.genetics.mocks;
 
-import java.util.List;
+import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.Sequence;
 
-public class MockGene implements Gene {
+public class MockSequence implements Sequence {
 
-	private Chromosome chromosome;
+	private Gene gene;
 
 	@Override
-	public int size() {
+	public Integer getSequenceId() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
-	public void setChromosome(Chromosome chromosome) {
-		this.chromosome = chromosome;
+	public Gene getGene() {
+		return this.gene;
 	}
 
 	@Override
-	public Chromosome getChromosome() {
-		return this.chromosome;
+	public void setGene(Gene gene) {
+		this.gene = gene;
 	}
 
 	@Override
-	public List<Sequence> getSequences() {
+	public Object getValue() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
-	public void resetSequences() {
+	public void setValue(Object obj) {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
-	public void addSequence(Sequence sequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
-	}
-
-	@Override
-	public void insertSequence(int index, Sequence sequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
-	}
-
-	@Override
-	public void removeSequence(Sequence sequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
-	}
-
-	@Override
-	public void replaceSequence(int index, Sequence newSequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
-	}
-
-	@Override
-	public MockGene clone() {
+	public MockSequence clone() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 }

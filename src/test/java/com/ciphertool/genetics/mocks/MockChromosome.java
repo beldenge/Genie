@@ -17,9 +17,12 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.entities;
+package com.ciphertool.genetics.mocks;
 
 import java.util.List;
+
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Gene;
 
 public class MockChromosome implements Chromosome {
 	private boolean needsEvaluation;

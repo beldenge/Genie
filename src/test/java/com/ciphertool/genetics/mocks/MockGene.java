@@ -17,39 +17,65 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.entities;
+package com.ciphertool.genetics.mocks;
 
-public class MockSequence implements Sequence {
+import java.util.List;
 
-	private Gene gene;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.Sequence;
+
+public class MockGene implements Gene {
+
+	private Chromosome chromosome;
 
 	@Override
-	public Integer getSequenceId() {
+	public int size() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
-	public Gene getGene() {
-		return this.gene;
+	public void setChromosome(Chromosome chromosome) {
+		this.chromosome = chromosome;
 	}
 
 	@Override
-	public void setGene(Gene gene) {
-		this.gene = gene;
+	public Chromosome getChromosome() {
+		return this.chromosome;
 	}
 
 	@Override
-	public Object getValue() {
+	public List<Sequence> getSequences() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
-	public void setValue(Object obj) {
+	public void resetSequences() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
-	public MockSequence clone() {
+	public void addSequence(Sequence sequence) {
+		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public void insertSequence(int index, Sequence sequence) {
+		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public void removeSequence(Sequence sequence) {
+		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public void replaceSequence(int index, Sequence newSequence) {
+		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public MockGene clone() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 }
