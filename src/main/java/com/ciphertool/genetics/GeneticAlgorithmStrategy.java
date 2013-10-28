@@ -51,67 +51,6 @@ public class GeneticAlgorithmStrategy {
 	}
 
 	/**
-	 * Most-args constructor
-	 * 
-	 * @param geneticStructure
-	 *            the geneticStructure to set
-	 * @param populationSize
-	 *            the populationSize to set
-	 * @param maxGenerations
-	 *            the maxGenerations to set
-	 * @param survivalRate
-	 *            the survivalRate to set
-	 * @param mutationRate
-	 *            the mutationRate to set
-	 * @param maxMutationsPerIndividual
-	 *            the maxMutationsPerIndividual to set
-	 * @param crossoverRate
-	 *            the crossoverRate to set
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 * @param crossoverAlgorithm
-	 *            the crossoverAlgorithm to set
-	 * @param mutationAlgorithm
-	 *            the mutationAlgorithm to set
-	 * @param selectionAlgorithm
-	 *            the selectionAlgorithm to set
-	 * @param selector
-	 *            the selector to set
-	 */
-	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize,
-			Integer lifespan, Integer maxGenerations, Double survivalRate, Double mutationRate,
-			Integer maxMutationsPerIndividual, Double crossoverRate, Boolean mutateDuringCrossover,
-			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
-			Selector selector) {
-		this.geneticStructure = geneticStructure;
-		this.populationSize = populationSize;
-		this.lifespan = lifespan;
-		this.maxGenerations = maxGenerations;
-		this.setSurvivalRate(survivalRate);
-
-		this.setMutationRate(mutationRate);
-		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
-
-		this.setCrossoverRate(crossoverRate);
-		this.mutateDuringCrossover = mutateDuringCrossover;
-
-		this.fitnessEvaluator = fitnessEvaluator;
-		this.fitnessEvaluator.setGeneticStructure(geneticStructure);
-
-		this.crossoverAlgorithm = crossoverAlgorithm;
-		this.crossoverAlgorithm.setFitnessEvaluator(this.fitnessEvaluator);
-
-		this.mutationAlgorithm = mutationAlgorithm;
-
-		this.selectionAlgorithm = selectionAlgorithm;
-		this.selector = selector;
-
-		this.knownSolutionFitnessEvaluator = null;
-		this.compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
-	}
-
-	/**
 	 * Full-args constructor
 	 * 
 	 * @param geneticStructure

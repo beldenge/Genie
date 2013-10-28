@@ -19,6 +19,8 @@
 
 package com.ciphertool.genetics;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
@@ -57,7 +59,7 @@ public class GeneticAlgorithmStrategyTest {
 				survivalRateToSet, mutationRateToSet, maxMutationsPerIndividualToSet,
 				crossoverRateToSet, mutateDuringCrossoverToSet, fitnessEvaluatorToSet,
 				crossoverAlgorithmToSet, mutationAlgorithmToSet, selectionAlgorithmToSet,
-				selectorToSet);
+				selectorToSet, null, false);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
@@ -74,6 +76,8 @@ public class GeneticAlgorithmStrategyTest {
 		assertSame(mutationAlgorithmToSet, geneticAlgorithmStrategy.getMutationAlgorithm());
 		assertSame(selectionAlgorithmToSet, geneticAlgorithmStrategy.getSelectionAlgorithm());
 		assertSame(selectorToSet, geneticAlgorithmStrategy.getSelector());
+		assertNull(geneticAlgorithmStrategy.getKnownSolutionFitnessEvaluator());
+		assertFalse(geneticAlgorithmStrategy.getCompareToKnownSolution());
 	}
 
 	@Test
