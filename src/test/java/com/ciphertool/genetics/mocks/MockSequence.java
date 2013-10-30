@@ -25,6 +25,7 @@ import com.ciphertool.genetics.entities.Sequence;
 public class MockSequence implements Sequence {
 
 	private Gene gene;
+	private String value;
 
 	@Override
 	public Integer getSequenceId() {
@@ -43,16 +44,50 @@ public class MockSequence implements Sequence {
 
 	@Override
 	public Object getValue() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.value;
 	}
 
 	@Override
 	public void setValue(Object obj) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.value = (String) obj;
 	}
 
 	@Override
 	public MockSequence clone() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		MockSequence other = (MockSequence) obj;
+		if (gene == null) {
+			if (other.gene != null) {
+				return false;
+			}
+		} else if (gene != other.gene) {
+			return false;
+		}
+		if (value == null) {
+			if (other.value != null) {
+				return false;
+			}
+		} else if (!value.equals(other.value)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MockSequence [value=" + value + "]";
 	}
 }

@@ -17,7 +17,7 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.util.fitness;
+package com.ciphertool.genetics.fitness;
 
 import java.util.Comparator;
 

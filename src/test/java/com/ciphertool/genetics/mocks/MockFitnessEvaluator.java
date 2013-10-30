@@ -20,7 +20,7 @@
 package com.ciphertool.genetics.mocks;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.util.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class MockFitnessEvaluator implements FitnessEvaluator {
 	private Object geneticStructure;

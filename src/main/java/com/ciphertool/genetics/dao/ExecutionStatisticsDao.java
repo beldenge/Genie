@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.dao;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Required;
@@ -28,10 +29,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 
 public class ExecutionStatisticsDao {
+	private Logger log = Logger.getLogger(getClass());
+
 	private SessionFactory sessionFactory;
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean insert(ExecutionStatistics executionStatistics) {
+		if (executionStatistics == null) {
+			log.warn("Attempted to insert null ExecutionStatistics.  Returning.");
+
+			return false;
+		}
+
 		Session session = sessionFactory.getCurrentSession();
 		session.persist(executionStatistics);
 		return true;

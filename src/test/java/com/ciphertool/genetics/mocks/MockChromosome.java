@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.mocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
@@ -26,15 +27,19 @@ import com.ciphertool.genetics.entities.Gene;
 
 public class MockChromosome implements Chromosome {
 	private boolean needsEvaluation;
+	private Double fitness;
+	private List<Gene> genes = new ArrayList<Gene>();
+	private static final Integer TARGET_SIZE = 25;
 
 	@Override
 	public List<Gene> getGenes() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.genes;
 	}
 
 	@Override
 	public void addGene(Gene gene) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		gene.setChromosome(this);
+		this.genes.add(gene);
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public Gene removeGene(int index) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.genes.remove(index);
 	}
 
 	@Override
@@ -59,12 +64,12 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public Double getFitness() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.fitness;
 	}
 
 	@Override
 	public void setFitness(Double fitness) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.fitness = fitness;
 	}
 
 	@Override
@@ -99,12 +104,18 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public Integer actualSize() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		int size = 0;
+
+		for (Gene gene : this.genes) {
+			size += gene.size();
+		}
+
+		return size;
 	}
 
 	@Override
 	public Integer targetSize() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return TARGET_SIZE;
 	}
 
 	@Override
@@ -120,5 +131,11 @@ public class MockChromosome implements Chromosome {
 	@Override
 	public MockChromosome clone() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public String toString() {
+		return "MockChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness
+				+ ", genes=" + genes + "]";
 	}
 }

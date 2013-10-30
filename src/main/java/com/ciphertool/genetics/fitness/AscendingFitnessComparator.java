@@ -17,7 +17,7 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.util.fitness;
+package com.ciphertool.genetics.fitness;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
@@ -33,5 +33,4 @@ public class AscendingFitnessComparator implements FitnessComparator {
 
 		return 0;
 	}
-
 }

@@ -24,8 +24,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.util.fitness.DescendingFitnessComparator;
-import com.ciphertool.genetics.util.fitness.FitnessComparator;
+import com.ciphertool.genetics.fitness.DescendingFitnessComparator;
+import com.ciphertool.genetics.fitness.FitnessComparator;
 
 public class TournamentSelector implements Selector {
 	private Double selectionAccuracy;

@@ -17,20 +17,19 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.util.fitness;
+package com.ciphertool.genetics.fitness;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-public class DescendingFitnessComparator implements FitnessComparator {
+public interface FitnessEvaluator {
+	public Double evaluate(Chromosome chromosome);
 
-	@Override
-	public int compare(Chromosome c1, Chromosome c2) {
-		if (c1.getFitness() < c2.getFitness()) {
-			return 1;
-		} else if (c1.getFitness() > c2.getFitness()) {
-			return -1;
-		}
-
-		return 0;
-	}
+	/**
+	 * The source structure against which this genetic algorithm should evaluate
+	 * chromosomes.
+	 * 
+	 * @param obj
+	 *            the Object
+	 */
+	public void setGeneticStructure(Object obj);
 }

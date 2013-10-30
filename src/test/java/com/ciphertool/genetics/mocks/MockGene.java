@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.mocks;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
@@ -28,10 +29,11 @@ import com.ciphertool.genetics.entities.Sequence;
 public class MockGene implements Gene {
 
 	private Chromosome chromosome;
+	private List<Sequence> sequences = new ArrayList<Sequence>();
 
 	@Override
 	public int size() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.sequences.size();
 	}
 
 	@Override
@@ -46,7 +48,7 @@ public class MockGene implements Gene {
 
 	@Override
 	public List<Sequence> getSequences() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.sequences;
 	}
 
 	@Override
@@ -56,7 +58,8 @@ public class MockGene implements Gene {
 
 	@Override
 	public void addSequence(Sequence sequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		sequence.setGene(this);
+		sequences.add(sequence);
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class MockGene implements Gene {
 
 	@Override
 	public void removeSequence(Sequence sequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		sequences.remove(sequence);
 	}
 
 	@Override
@@ -77,5 +80,39 @@ public class MockGene implements Gene {
 	@Override
 	public MockGene clone() {
 		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		MockGene other = (MockGene) obj;
+		if (chromosome == null) {
+			if (other.chromosome != null) {
+				return false;
+			}
+		} else if (chromosome != other.chromosome) {
+			return false;
+		}
+		if (sequences == null) {
+			if (other.sequences != null) {
+				return false;
+			}
+		} else if (!sequences.equals(other.sequences)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "MockGene [sequences=" + sequences + "]";
 	}
 }

@@ -33,8 +33,8 @@ import com.ciphertool.genetics.algorithms.selection.ProbabilisticSelectionAlgori
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockFitnessEvaluator;
-import com.ciphertool.genetics.util.fitness.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategyTest {
 	@Test
