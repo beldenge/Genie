@@ -199,11 +199,25 @@ public class GenerationStatistics implements Serializable {
 	}
 
 	/**
+	 * @return the numberOfMutations
+	 */
+	protected int getNumberOfMutations() {
+		return numberOfMutations;
+	}
+
+	/**
 	 * @param numberOfMutations
 	 *            the numberOfMutations to set
 	 */
 	public void setNumberOfMutations(int numberOfMutations) {
 		this.numberOfMutations = numberOfMutations;
+	}
+
+	/**
+	 * @return the numberOfCrossovers
+	 */
+	protected int getNumberOfCrossovers() {
+		return numberOfCrossovers;
 	}
 
 	/**
@@ -215,11 +229,25 @@ public class GenerationStatistics implements Serializable {
 	}
 
 	/**
+	 * @return the numberRandomlyGenerated
+	 */
+	protected int getNumberRandomlyGenerated() {
+		return numberRandomlyGenerated;
+	}
+
+	/**
 	 * @param numberRandomlyGenerated
 	 *            the numberRandomlyGenerated to set
 	 */
 	public void setNumberRandomlyGenerated(int numberRandomlyGenerated) {
 		this.numberRandomlyGenerated = numberRandomlyGenerated;
+	}
+
+	/**
+	 * @return the numberSelectedOut
+	 */
+	protected int getNumberSelectedOut() {
+		return numberSelectedOut;
 	}
 
 	/**

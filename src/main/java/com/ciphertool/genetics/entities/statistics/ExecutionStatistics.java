@@ -99,14 +99,22 @@ public class ExecutionStatistics implements Serializable {
 
 	public ExecutionStatistics(Date startDateTime, GeneticAlgorithmStrategy strategy) {
 		this.startDateTime = startDateTime;
+
+		if (strategy == null) {
+			return;
+		}
+
 		this.populationSize = strategy.getPopulationSize();
 		this.lifespan = strategy.getLifespan();
 		this.survivalRate = strategy.getSurvivalRate();
 		this.mutationRate = strategy.getMutationRate();
 		this.crossoverRate = strategy.getCrossoverRate();
-		this.crossoverAlgorithm = strategy.getCrossoverAlgorithm().getClass().getSimpleName();
-		this.fitnessEvaluator = strategy.getFitnessEvaluator().getClass().getSimpleName();
-		this.mutationAlgorithm = strategy.getMutationAlgorithm().getClass().getSimpleName();
+		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy
+				.getCrossoverAlgorithm().getClass().getSimpleName() : null;
+		this.fitnessEvaluator = (strategy.getFitnessEvaluator() != null) ? strategy
+				.getFitnessEvaluator().getClass().getSimpleName() : null;
+		this.mutationAlgorithm = (strategy.getMutationAlgorithm() != null) ? strategy
+				.getMutationAlgorithm().getClass().getSimpleName() : null;
 	}
 
 	/**
