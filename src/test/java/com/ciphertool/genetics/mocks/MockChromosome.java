@@ -22,6 +22,7 @@ package com.ciphertool.genetics.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ciphertool.genetics.annotations.Clean;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 
@@ -68,6 +69,7 @@ public class MockChromosome implements Chromosome {
 	}
 
 	@Override
+	@Clean
 	public void setFitness(Double fitness) {
 		this.fitness = fitness;
 	}

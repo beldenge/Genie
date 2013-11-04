@@ -57,7 +57,7 @@ public class Population {
 	/**
 	 * A concurrent task for adding a brand new Chromosome to the population.
 	 */
-	private class GeneratorTask implements Callable<Chromosome> {
+	protected class GeneratorTask implements Callable<Chromosome> {
 
 		public GeneratorTask() {
 		}
@@ -102,7 +102,7 @@ public class Population {
 	/**
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
-	private class EvaluatorTask implements Callable<Double> {
+	protected class EvaluatorTask implements Callable<Double> {
 
 		private Chromosome chromosome;
 
@@ -119,7 +119,7 @@ public class Population {
 	/**
 	 * This method executes all the fitness evaluations concurrently.
 	 */
-	private void doConcurrentFitnessEvaluations() {
+	protected void doConcurrentFitnessEvaluations() {
 		List<FutureTask<Double>> futureTasks = new ArrayList<FutureTask<Double>>();
 		FutureTask<Double> futureTask = null;
 
@@ -136,7 +136,10 @@ public class Population {
 				this.taskExecutor.execute(futureTask);
 			}
 		}
-		log.debug("Evaluations carried out: " + evaluationCount);
+
+		if (log.isDebugEnabled()) {
+			log.debug("Evaluations carried out: " + evaluationCount);
+		}
 
 		for (FutureTask<Double> future : futureTasks) {
 			try {

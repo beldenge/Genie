@@ -19,22 +19,20 @@
 
 package com.ciphertool.genetics.mocks;
 
+import com.ciphertool.genetics.Breeder;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public class MockFitnessEvaluator implements FitnessEvaluator {
+public class MockBreeder implements Breeder {
 	private Object geneticStructure;
-	private static final double DEFAULT_FITNESS_VALUE = 100.0;
 
 	@Override
-	public Double evaluate(Chromosome chromosome) {
-		chromosome.setFitness(DEFAULT_FITNESS_VALUE);
-
-		return DEFAULT_FITNESS_VALUE;
+	public Chromosome breed() {
+		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override
 	public void setGeneticStructure(Object geneticStructure) {
 		this.geneticStructure = geneticStructure;
 	}
+
 }
