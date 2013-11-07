@@ -199,18 +199,15 @@ public class Population {
 	}
 
 	public int increaseAge() {
-		int originalSize = this.individuals.size();
 		Chromosome individual = null;
 		int individualsRemoved = 0;
 
 		/*
-		 * actualIndex is used for removing individuals from this Population
-		 * since the size will decrement each time an individual is removed,
-		 * thus making the loop index incorrect.
+		 * We have to iterate backwards since the size will decrement each time
+		 * an individual is removed.
 		 */
-		int actualIndex = 0;
-		for (int i = 0; i < originalSize; i++) {
-			individual = this.individuals.get(actualIndex);
+		for (int i = this.individuals.size() - 1; i >= 0; i--) {
+			individual = this.individuals.get(i);
 
 			/*
 			 * A value less than zero represents immortality, so always increase
@@ -219,14 +216,13 @@ public class Population {
 			 */
 			if (this.lifespan < 0 || individual.getAge() < this.lifespan) {
 				individual.increaseAge();
-				actualIndex++;
 			} else {
 				/*
 				 * We have to remove by index in case there is more than one
 				 * Chromosome that is equal, since more than likely the unique
 				 * key will not have been generated from database yet.
 				 */
-				this.removeIndividual(actualIndex);
+				this.removeIndividual(i);
 				individualsRemoved++;
 			}
 		}
@@ -302,6 +298,13 @@ public class Population {
 	 * @param index
 	 */
 	public void makeIneligibleForReproduction(int index) {
+		if (index < 0 || index > this.individuals.size() - 1) {
+			log.error("Tried to make individual ineligible by invalid index " + index
+					+ " from population of size " + this.size() + ".  Returning.");
+
+			return;
+		}
+
 		this.ineligibleForReproduction.add(this.removeIndividual(index));
 	}
 

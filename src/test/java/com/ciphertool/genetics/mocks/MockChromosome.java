@@ -28,9 +28,10 @@ import com.ciphertool.genetics.entities.Gene;
 
 public class MockChromosome implements Chromosome {
 	private boolean needsEvaluation;
-	private Double fitness;
+	private Double fitness = 0.0;
 	private List<Gene> genes = new ArrayList<Gene>();
 	private static final Integer TARGET_SIZE = 25;
+	private int age = 0;
 
 	@Override
 	public List<Gene> getGenes() {
@@ -76,17 +77,17 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public int getAge() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.age;
 	}
 
 	@Override
 	public void setAge(int age) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.age = age;
 	}
 
 	@Override
 	public void increaseAge() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.age++;
 	}
 
 	@Override
@@ -132,7 +133,12 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public MockChromosome clone() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		try {
+			return (MockChromosome) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
