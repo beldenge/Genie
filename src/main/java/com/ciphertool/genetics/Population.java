@@ -82,7 +82,7 @@ public class Population {
 
 		for (FutureTask<Chromosome> future : futureTasks) {
 			try {
-				this.individuals.add(future.get());
+				this.addIndividual(future.get());
 
 				individualsAdded++;
 			} catch (InterruptedException ie) {

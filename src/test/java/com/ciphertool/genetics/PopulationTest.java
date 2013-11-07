@@ -39,7 +39,6 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -254,27 +253,22 @@ public class PopulationTest {
 	public void testBreed() {
 		Population population = new Population();
 		population.setTaskExecutor(taskExecutor);
-		assertEquals(0, population.size());
 
 		int expectedPopulationSize = 10;
-		List<MockChromosome> individuals = new ArrayList<MockChromosome>();
-		for (int i = 0; i < expectedPopulationSize; i++) {
-			individuals.add(new MockChromosome());
-		}
 
 		Breeder breederMock = mock(Breeder.class);
-		when(breederMock.breed()).thenReturn(individuals.get(0), individuals.get(1),
-				individuals.get(2), individuals.get(3), individuals.get(4), individuals.get(5),
-				individuals.get(6), individuals.get(7), individuals.get(8), individuals.get(9));
+		MockChromosome mockChromosome = new MockChromosome();
+		mockChromosome.setFitness(5.0);
+		when(breederMock.breed()).thenReturn(mockChromosome.clone());
 		population.setBreeder(breederMock);
+
+		assertEquals(0, population.size());
+		assertEquals(new Double(0.0), population.getTotalFitness());
 
 		population.breed(expectedPopulationSize);
 
 		assertEquals(expectedPopulationSize, population.size());
-
-		for (int i = 0; i < expectedPopulationSize; i++) {
-			assertSame(individuals.get(i), population.getIndividuals().get(i));
-		}
+		assertEquals(new Double(50.0), population.getTotalFitness());
 	}
 
 	@Test
