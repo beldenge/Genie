@@ -21,6 +21,7 @@ package com.ciphertool.genetics.algorithms.selection.modes;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.entities.Chromosome;
@@ -28,11 +29,24 @@ import com.ciphertool.genetics.fitness.DescendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessComparator;
 
 public class TournamentSelector implements Selector {
+	private Logger log = Logger.getLogger(getClass());
 	private Double selectionAccuracy;
 	private static FitnessComparator fitnessComparator = new DescendingFitnessComparator();
 
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
+		if (individuals == null || individuals.isEmpty()) {
+			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
+
+			return -1;
+		}
+
+		if (totalFitness == null) {
+			log.warn("This Selector implementation requires a non-null total fitness.  Unable to continue.");
+
+			return -1;
+		}
+
 		Collections.sort(individuals, fitnessComparator);
 
 		for (int i = 0; i < individuals.size(); i++) {

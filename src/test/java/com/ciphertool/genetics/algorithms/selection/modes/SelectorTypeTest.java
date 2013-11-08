@@ -16,27 +16,22 @@
  * You should have received a copy of the GNU General Public License along with
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
+
 package com.ciphertool.genetics.algorithms.selection.modes;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
-import org.apache.log4j.Logger;
+import org.junit.Test;
 
-import com.ciphertool.genetics.entities.Chromosome;
+public class SelectorTypeTest {
 
-public class RandomSelector implements Selector {
-	private Logger log = Logger.getLogger(getClass());
+	@Test
+	public void testTypes() {
+		assertEquals(4, SelectorType.values().length);
 
-	@Override
-	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
-		if (individuals == null || individuals.isEmpty()) {
-			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
-
-			return -1;
-		}
-
-		int randomIndex = (int) (Math.random() * individuals.size());
-
-		return randomIndex;
+		assertEquals(AlphaSelector.class, SelectorType.ALPHA.getType());
+		assertEquals(RandomSelector.class, SelectorType.RANDOM.getType());
+		assertEquals(RouletteSelector.class, SelectorType.ROULETTE.getType());
+		assertEquals(TournamentSelector.class, SelectorType.TOURNAMENT.getType());
 	}
 }

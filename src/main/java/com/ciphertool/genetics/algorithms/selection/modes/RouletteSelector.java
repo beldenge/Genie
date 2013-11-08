@@ -29,6 +29,18 @@ public class RouletteSelector implements Selector {
 
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
+		if (individuals == null || individuals.isEmpty()) {
+			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
+
+			return -1;
+		}
+
+		if (totalFitness == null) {
+			log.warn("This Selector implementation requires a non-null total fitness.  Unable to continue.");
+
+			return -1;
+		}
+
 		long randomIndex = (int) (Math.random() * totalFitness);
 
 		int winningIndex = -1;
@@ -39,6 +51,8 @@ public class RouletteSelector implements Selector {
 			if (nextIndividual.getFitness() == null) {
 				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
 						+ nextIndividual);
+
+				continue;
 			}
 
 			randomIndex -= nextIndividual.getFitness();

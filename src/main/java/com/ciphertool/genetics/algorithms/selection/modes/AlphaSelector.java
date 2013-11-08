@@ -20,12 +20,21 @@ package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class AlphaSelector implements Selector {
+	private Logger log = Logger.getLogger(getClass());
 
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
+		if (individuals == null || individuals.isEmpty()) {
+			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
+
+			return -1;
+		}
+
 		Chromosome bestFitIndividual = null;
 		Integer bestFitIndex = null;
 
@@ -42,5 +51,4 @@ public class AlphaSelector implements Selector {
 
 		return (bestFitIndex != null) ? bestFitIndex : -1;
 	}
-
 }
