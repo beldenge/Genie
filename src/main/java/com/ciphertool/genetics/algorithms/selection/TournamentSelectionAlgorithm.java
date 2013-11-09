@@ -34,7 +34,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 	private static Selector randomSelector = new RandomSelector();
-	private static Selector tournamentSelector;
+	private Selector groupSelector;
 	private Integer groupSize;
 
 	/*
@@ -48,7 +48,13 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	 * (com.ciphertool.genetics.Population, int, double)
 	 */
 	@Override
-	public int select(Population population, int maxIndividuals, double survivalRate) {
+	public int select(Population population, int maxSurvivors, double survivalRate) {
+		if (population == null || population.getIndividuals().isEmpty()) {
+			log.warn("Attempted to perform selection on null or empty population.  Cannot continue.");
+
+			return 0;
+		}
+
 		int initialPopulationSize = population.size();
 
 		/*
@@ -56,7 +62,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		 * case the current population size is larger than the maximum
 		 * specified.
 		 */
-		long numSurvivors = Math.round(maxIndividuals * survivalRate);
+		long numSurvivors = Math.min(Math.round(maxSurvivors * survivalRate), population.size());
 		int numberRemoved = (int) (initialPopulationSize - numSurvivors);
 
 		if (log.isDebugEnabled()) {
@@ -82,7 +88,8 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 			 */
 			randomIndividuals = new ArrayList<Chromosome>();
 			randomIndividuals.addAll(group.keySet());
-			Integer tournamentIndex = tournamentSelector.getNextIndex(randomIndividuals, null);
+			Integer tournamentIndex = groupSelector.getNextIndex(randomIndividuals,
+					getGroupTotalFitness(randomIndividuals));
 			survivorIndex = group.get(randomIndividuals.get(tournamentIndex));
 
 			survivors.add(population.getIndividuals().get(survivorIndex));
@@ -93,7 +100,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		 * Reset the population by clearing it and then adding back all the
 		 * survivors.
 		 * 
-		 * TODO this is a candidate for parallelization
+		 * TODO: This is a candidate for parallelization
 		 */
 		population.clearIndividuals();
 		for (Chromosome survivor : survivors) {
@@ -101,6 +108,24 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		}
 
 		return numberRemoved;
+	}
+
+	/**
+	 * This method is needed for Selector modes which require the total fitness
+	 * of the List of individuals in order to select from them.
+	 * 
+	 * @param group
+	 *            the group of Chromosomes
+	 * @return the total fitness of the group
+	 */
+	protected static Double getGroupTotalFitness(List<Chromosome> group) {
+		Double groupTotalFitness = 0.0;
+
+		for (Chromosome individual : group) {
+			groupTotalFitness += individual.getFitness();
+		}
+
+		return groupTotalFitness;
 	}
 
 	/**
@@ -113,11 +138,11 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	}
 
 	/**
-	 * @param tournamentSelector
-	 *            the tournamentSelector to set
+	 * @param groupSelector
+	 *            the groupSelector to set
 	 */
 	@Required
-	public static void setTournamentSelector(Selector tournamentSelector) {
-		TournamentSelectionAlgorithm.tournamentSelector = tournamentSelector;
+	public void setGroupSelector(Selector groupSelector) {
+		this.groupSelector = groupSelector;
 	}
 }

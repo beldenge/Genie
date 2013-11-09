@@ -37,12 +37,19 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 	 * (com.ciphertool.genetics.Population, int, double)
 	 */
 	@Override
-	public int select(Population population, int maxIndividuals, double survivalRate) {
+	public int select(Population population, int maxSurvivors, double survivalRate) {
+		if (population == null || population.getIndividuals().isEmpty()) {
+			log.warn("Attempted to perform selection on null or empty population.  Cannot continue.");
+
+			return 0;
+		}
+
 		population.sortIndividuals();
 
 		int initialPopulationSize = population.size();
 
-		long survivorIndex = Math.round((initialPopulationSize * (1 - survivalRate)));
+		long survivorIndex = initialPopulationSize
+				- Math.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
 
 		if (log.isDebugEnabled()) {
 			log.debug(survivorIndex + " individuals to be removed from population of size "

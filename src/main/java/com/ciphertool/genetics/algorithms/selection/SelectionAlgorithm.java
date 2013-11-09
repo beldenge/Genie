@@ -27,11 +27,11 @@ public interface SelectionAlgorithm {
 	 * 
 	 * @param population
 	 *            the population to select upon
-	 * @param maxIndividuals
+	 * @param maxSurvivors
 	 *            the maximum number of individuals allowed in the population
 	 * @param survivalRate
 	 *            the percentage of individuals to survive
 	 * @return the number of individuals selected out (i.e. did not survive)
 	 */
-	public int select(Population population, int maxIndividuals, double survivalRate);
+	public int select(Population population, int maxSurvivors, double survivalRate);
 }
