@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.algorithms.selection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
@@ -119,7 +120,7 @@ public class TournamentSelectionAlgorithmTest {
 		Integer groupSizeFromObject = (Integer) ReflectionUtils.getField(groupSizeField,
 				tournamentSelectionAlgorithm);
 
-		assertEquals(groupSizeToSet, groupSizeFromObject);
+		assertSame(groupSizeToSet, groupSizeFromObject);
 	}
 
 	@Test
@@ -135,7 +136,7 @@ public class TournamentSelectionAlgorithmTest {
 		Selector groupSelectorFromObject = (Selector) ReflectionUtils.getField(groupSelectorField,
 				tournamentSelectionAlgorithm);
 
-		assertEquals(groupSelectorToSet, groupSelectorFromObject);
+		assertSame(groupSelectorToSet, groupSelectorFromObject);
 	}
 
 	@Test

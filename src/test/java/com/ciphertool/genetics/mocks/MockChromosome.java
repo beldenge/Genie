@@ -46,7 +46,7 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public void insertGene(int index, Gene gene) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.genes.add(index, gene);
 	}
 
 	@Override
@@ -56,7 +56,8 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public void replaceGene(int index, Gene newGene) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.removeGene(index);
+		this.insertGene(index, newGene);
 	}
 
 	@Override

@@ -20,7 +20,9 @@
 package com.ciphertool.genetics.algorithms.mutation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -49,38 +51,40 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
 				.getGenes().size())) + 1;
 
-		List<Integer> geneIndices = new ArrayList<Integer>();
+		Map<Integer, Integer> availableIndicesMap = new HashMap<Integer, Integer>();
+		for (int i = 0; i < chromosome.getGenes().size(); i++) {
+			availableIndicesMap.put(i, i);
+		}
+
 		for (int i = 0; i < numMutations; i++) {
 			// Keep track of the mutated indices
-			geneIndices.add(mutateRandomGene(chromosome, geneIndices));
+			availableIndicesMap.remove(mutateRandomGene(chromosome, new ArrayList<Integer>(
+					availableIndicesMap.values())));
 		}
 	}
 
 	/**
 	 * Performs a genetic mutation of a random Gene of the supplied Chromosome
 	 * 
+	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
+	 * @param availableIndices
+	 *            the List of available indices to mutate
+	 * @return the index mutated, or null if none was mutated
 	 */
-	private Integer mutateRandomGene(Chromosome chromosome, List<Integer> geneIndices) {
-		int randomIndex;
+	protected Integer mutateRandomGene(Chromosome chromosome, List<Integer> availableIndices) {
+		if (availableIndices == null || availableIndices.isEmpty()) {
+			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
-		// We don't want to reuse an index, so loop until we find a new one
-		int attempts = 0;
-		do {
-			randomIndex = (int) (Math.random() * chromosome.getGenes().size());
+			return null;
+		}
 
-			attempts++;
-
-			if (attempts >= MAX_FIND_ATTEMPTS) {
-				if (log.isDebugEnabled()) {
-					log.debug("Unable to find a previously unused Gene index after " + attempts
-							+ " attempts.  Returning null.");
-				}
-
-				return null;
-			}
-		} while (geneIndices.contains(randomIndex));
+		/*
+		 * We don't want to reuse an index, so we get one from the List of
+		 * indices which are still available
+		 */
+		int randomIndex = availableIndices.get((int) (Math.random() * availableIndices.size()));
 
 		mutateGene(chromosome, randomIndex);
 
@@ -95,7 +99,7 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Gene to mutate
 	 */
-	private void mutateGene(Chromosome chromosome, int index) {
+	protected void mutateGene(Chromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
 					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()
@@ -121,21 +125,12 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 				if (log.isDebugEnabled()) {
 					log.debug("Unable to find a different Gene of length " + oldGene.size()
 							+ " for Gene " + oldGene + " after " + attempts
-							+ " attempts.  Breaking out of the loop.");
+							+ " attempts.  Not performing mutation.");
 				}
 
-				break;
+				return;
 			}
-		} while (chromosome.getGenes().get(index).equals(newGene));
-
-		if (newGene == null) {
-			if (log.isDebugEnabled()) {
-				log.debug("Could not find a gene of length " + oldGene.size()
-						+ ".  Not performing mutation.");
-			}
-
-			return;
-		}
+		} while (newGene == null || chromosome.getGenes().get(index).equals(newGene));
 
 		chromosome.replaceGene(index, newGene);
 	}

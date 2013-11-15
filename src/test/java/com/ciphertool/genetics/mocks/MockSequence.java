@@ -26,10 +26,18 @@ public class MockSequence implements Sequence {
 
 	private Gene gene;
 	private String value;
+	private Integer sequenceId = 1;
+
+	public MockSequence() {
+	}
+
+	public MockSequence(Object value) {
+		this.value = (String) value;
+	}
 
 	@Override
 	public Integer getSequenceId() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.sequenceId;
 	}
 
 	@Override

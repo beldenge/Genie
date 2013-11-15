@@ -75,10 +75,8 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 			attempts++;
 
 			if (attempts >= MAX_FIND_ATTEMPTS) {
-				if (log.isDebugEnabled()) {
-					log.debug("Unable to find a previously unused Gene index after " + attempts
-							+ " attempts.  Returning null.");
-				}
+				log.warn("Unable to find a previously unused Gene index after " + attempts
+						+ " attempts.  Returning null.");
 
 				return null;
 			}
