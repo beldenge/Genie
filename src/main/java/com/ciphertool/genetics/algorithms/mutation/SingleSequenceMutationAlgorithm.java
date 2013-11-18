@@ -20,7 +20,9 @@
 package com.ciphertool.genetics.algorithms.mutation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -50,10 +52,15 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
 				.getGenes().size())) + 1;
 
-		List<Integer> geneIndices = new ArrayList<Integer>();
+		Map<Integer, Integer> availableIndicesMap = new HashMap<Integer, Integer>();
+		for (int i = 0; i < chromosome.getGenes().size(); i++) {
+			availableIndicesMap.put(i, i);
+		}
+
 		for (int i = 0; i < numMutations; i++) {
 			// Keep track of the mutated indices
-			geneIndices.add(mutateRandomGene(chromosome, geneIndices));
+			availableIndicesMap.remove(mutateRandomGene(chromosome, new ArrayList<Integer>(
+					availableIndicesMap.values())));
 		}
 	}
 
@@ -62,24 +69,22 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
+	 * @param availableIndices
+	 *            the List of available indices to mutate
+	 * @return the index mutated, or null if none was mutated
 	 */
-	private Integer mutateRandomGene(Chromosome chromosome, List<Integer> geneIndices) {
-		int randomIndex;
+	protected Integer mutateRandomGene(Chromosome chromosome, List<Integer> availableIndices) {
+		if (availableIndices == null || availableIndices.isEmpty()) {
+			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
-		// We don't want to reuse an index, so loop until we find a new one
-		int attempts = 0;
-		do {
-			randomIndex = (int) (Math.random() * chromosome.getGenes().size());
+			return null;
+		}
 
-			attempts++;
-
-			if (attempts >= MAX_FIND_ATTEMPTS) {
-				log.warn("Unable to find a previously unused Gene index after " + attempts
-						+ " attempts.  Returning null.");
-
-				return null;
-			}
-		} while (geneIndices.contains(randomIndex));
+		/*
+		 * We don't want to reuse an index, so we get one from the List of
+		 * indices which are still available
+		 */
+		int randomIndex = availableIndices.get((int) (Math.random() * availableIndices.size()));
 
 		mutateGene(chromosome, randomIndex);
 
@@ -94,7 +99,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Gene to mutate
 	 */
-	private void mutateGene(Chromosome chromosome, int index) {
+	protected void mutateGene(Chromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
 					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()
@@ -112,7 +117,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param gene
 	 *            the Gene to mutate
 	 */
-	private void mutateRandomSequence(Gene gene) {
+	protected void mutateRandomSequence(Gene gene) {
 		int randomIndex = (int) (Math.random() * gene.size());
 
 		mutateSequence(gene, randomIndex);
@@ -126,7 +131,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Sequence to mutate
 	 */
-	private void mutateSequence(Gene gene, int index) {
+	protected void mutateSequence(Gene gene, int index) {
 		if (index > gene.size() - 1) {
 			log.info("Attempted to mutate a sequence in Gene with index of " + index
 					+ " (zero-indexed), but the size is only " + gene.size()
@@ -135,15 +140,16 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 			return;
 		}
 
-		/*
-		 * Loop just in case the value of the new Sequence is the same as the
-		 * existing value, since that would defeat the purpose of the mutation.
-		 */
 		Sequence oldSequence = gene.getSequences().get(index);
 		Sequence newSequence = null;
 
 		int ciphertextIndex = oldSequence.getSequenceId();
 		int attempts = 0;
+
+		/*
+		 * Loop just in case the value of the new Sequence is the same as the
+		 * existing value, since that would defeat the purpose of the mutation.
+		 */
 		do {
 			newSequence = sequenceDao.findRandomSequence(gene, ciphertextIndex);
 
@@ -155,9 +161,9 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 							+ " after " + attempts + " attempts.  Breaking out of the loop.");
 				}
 
-				break;
+				return;
 			}
-		} while (oldSequence.getValue().equals(newSequence.getValue()));
+		} while (newSequence == null || oldSequence.getValue().equals(newSequence.getValue()));
 
 		gene.replaceSequence(index, newSequence);
 	}

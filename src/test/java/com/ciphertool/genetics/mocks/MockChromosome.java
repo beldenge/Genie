@@ -30,7 +30,7 @@ public class MockChromosome implements Chromosome {
 	private boolean needsEvaluation;
 	private Double fitness = 0.0;
 	private List<Gene> genes = new ArrayList<Gene>();
-	private static final Integer TARGET_SIZE = 25;
+	private Integer targetSize = 25;
 	private int age = 0;
 
 	@Override
@@ -119,7 +119,18 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public Integer targetSize() {
-		return TARGET_SIZE;
+		return targetSize;
+	}
+
+	/**
+	 * Convenience method for unit tests. This will not normally be implemented
+	 * this way.
+	 * 
+	 * @param targetSize
+	 *            the targetSize to set
+	 */
+	public void setTargetSize(int targetSize) {
+		this.targetSize = targetSize;
 	}
 
 	@Override

@@ -64,7 +64,8 @@ public class MockGene implements Gene {
 
 	@Override
 	public void insertSequence(int index, Sequence sequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		sequence.setGene(this);
+		sequences.add(index, sequence);
 	}
 
 	@Override
@@ -74,7 +75,8 @@ public class MockGene implements Gene {
 
 	@Override
 	public void replaceSequence(int index, Sequence newSequence) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.removeSequence(sequences.get(index));
+		this.insertSequence(index, newSequence);
 	}
 
 	@Override
