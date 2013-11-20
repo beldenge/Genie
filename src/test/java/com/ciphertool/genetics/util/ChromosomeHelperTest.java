@@ -22,7 +22,6 @@ package com.ciphertool.genetics.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -57,9 +56,9 @@ public class ChromosomeHelperTest {
 	public void resetMocks() {
 		reset(geneListDaoMock);
 
-		when(geneListDaoMock.findRandomGene(any(Chromosome.class), anyInt())).thenReturn(
+		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(createRandomGene(5),
 				createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5),
-				createRandomGene(5), createRandomGene(5), createRandomGene(5));
+				createRandomGene(5), createRandomGene(5));
 	}
 
 	@Test

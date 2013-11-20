@@ -81,7 +81,23 @@ public class MockGene implements Gene {
 
 	@Override
 	public MockGene clone() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		MockGene clone;
+
+		try {
+			clone = (MockGene) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		// We intentionally do not override the cloning of the Chromosome
+		clone.sequences = new ArrayList<Sequence>();
+
+		for (Sequence sequence : this.sequences) {
+			clone.addSequence(sequence.clone());
+		}
+
+		return clone;
 	}
 
 	@Override

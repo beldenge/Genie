@@ -62,7 +62,20 @@ public class MockSequence implements Sequence {
 
 	@Override
 	public MockSequence clone() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		MockSequence clone;
+
+		try {
+			clone = (MockSequence) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		// We intentionally do not override the cloning of the Gene
+		clone.value = this.value.toString();
+		clone.sequenceId = this.sequenceId.intValue();
+
+		return clone;
 	}
 
 	@Override

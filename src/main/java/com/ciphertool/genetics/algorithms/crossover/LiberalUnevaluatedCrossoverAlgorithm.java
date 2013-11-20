@@ -76,7 +76,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 				child.replaceGene(childGeneIndex, parentB.getGenes().get(childGeneIndex).clone());
 
 				while (child.actualSize() < child.targetSize()) {
-					child.addGene(geneListDao.findRandomGene(child, child.actualSize() - 1));
+					child.addGene(geneListDao.findRandomGene(child));
 				}
 			}
 

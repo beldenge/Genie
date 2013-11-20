@@ -23,7 +23,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 
 public interface GeneListDao {
-	public Gene findRandomGene(Chromosome chromosome, int beginIndex);
+	public Gene findRandomGene(Chromosome chromosome);
 
-	public Gene findRandomGeneOfLength(Chromosome chromosome, int beginIndex, int length);
+	public Gene findRandomGeneOfLength(Chromosome chromosome, int length);
 }

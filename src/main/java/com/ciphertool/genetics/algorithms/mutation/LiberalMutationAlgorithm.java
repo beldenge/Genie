@@ -119,8 +119,7 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 		Gene newGene = null;
 		int attempts = 0;
 		do {
-			newGene = geneListDao.findRandomGene(chromosome, oldGene.getSequences().get(0)
-					.getSequenceId());
+			newGene = geneListDao.findRandomGene(chromosome);
 
 			attempts++;
 

@@ -46,6 +46,7 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public void insertGene(int index, Gene gene) {
+		gene.setChromosome(this);
 		this.genes.add(index, gene);
 	}
 
@@ -145,12 +146,25 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public MockChromosome clone() {
+		MockChromosome clone;
+
 		try {
-			return (MockChromosome) super.clone();
+			clone = (MockChromosome) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			return null;
 		}
+
+		clone.setFitness(this.fitness.doubleValue());
+		clone.setTargetSize(this.targetSize.intValue());
+
+		clone.genes = new ArrayList<Gene>();
+
+		for (Gene gene : this.genes) {
+			clone.addGene(gene.clone());
+		}
+
+		return clone;
 	}
 
 	@Override

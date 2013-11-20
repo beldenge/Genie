@@ -43,8 +43,7 @@ public class ChromosomeHelper {
 		 * length to fall outside the target length.
 		 */
 		while (chromosomeToResize.actualSize() < chromosomeToResize.targetSize()) {
-			chromosomeToResize.addGene(geneListDao.findRandomGene(chromosomeToResize,
-					chromosomeToResize.actualSize() - 1));
+			chromosomeToResize.addGene(geneListDao.findRandomGene(chromosomeToResize));
 		}
 
 		/*

@@ -32,7 +32,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 
 public class GroupMutationAlgorithm implements MutationAlgorithm {
-	private static Logger log = Logger.getLogger(GroupMutationAlgorithm.class);
+	private Logger log = Logger.getLogger(getClass());
 
 	private static final int MAX_GENES_PER_GROUP = 5;
 
@@ -72,7 +72,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * @param chromosome
 	 *            the Chromosome to mutate
 	 */
-	private void mutateRandomGeneGroup(Chromosome chromosome, Map<Integer, Integer> geneIndices) {
+	protected void mutateRandomGeneGroup(Chromosome chromosome, Map<Integer, Integer> geneIndices) {
 		/*
 		 * Choose a random number of genes constrained by the static max and the
 		 * total number of genes
@@ -117,7 +117,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 *            the proposed end index
 	 * @return whether the proposed index exceeds the chromosome size
 	 */
-	private static boolean exceedsChromosomeSize(Chromosome chromosome, int proposedEndIndex) {
+	protected static boolean exceedsChromosomeSize(Chromosome chromosome, int proposedEndIndex) {
 		/*
 		 * proposedEndIndex is zero-indexed, so we need to subtract 1 from the
 		 * gene list size.
@@ -142,7 +142,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * @return whether the proposed indices overlap a group already mutated
 	 *         previously
 	 */
-	private static boolean overlapsPreviousMutation(Map<Integer, Integer> geneIndices,
+	protected static boolean overlapsPreviousMutation(Map<Integer, Integer> geneIndices,
 			Integer proposedBeginIndex, Integer proposedEndIndex) {
 		Integer nextEndIndex = null;
 
@@ -185,18 +185,29 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 *            the Chromosome to mutate
 	 * @param beginIndex
 	 *            the starting index of the Gene group to mutate
+	 * @param numGenes
+	 *            the number of Genes to mutate
 	 */
-	private void mutateGeneGroup(Chromosome chromosome, int beginIndex, int numGenes) {
-		if ((beginIndex + numGenes) > chromosome.getGenes().size() - 1) {
-			log.info("Attempted to mutate a Gene group in Chromosome with an end index of "
-					+ (beginIndex + numGenes - 1) + " (zero-indexed), but the size is only "
-					+ chromosome.getGenes().size() + ".  Cannot continue.");
-
+	protected void mutateGeneGroup(Chromosome chromosome, int beginIndex, int numGenes) {
+		if (numGenes <= 0) {
+			// Nothing to do
 			return;
 		}
 
-		int beginningSequenceIndex = chromosome.getGenes().get(beginIndex).getSequences().get(0)
-				.getSequenceId();
+		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
+			throw new IllegalArgumentException(
+					"Unable to mutate Gene group from Chromosome starting at index "
+							+ beginIndex
+							+ ", as this index is out of bounds.  Expecting an index in the range [0-"
+							+ (chromosome.getGenes().size() - 1) + "].");
+		}
+
+		if (numGenes > chromosome.getGenes().size() - beginIndex) {
+			throw new IllegalArgumentException("Unable to mutate " + numGenes
+					+ " Genes at beginIndex " + beginIndex + " because there are only "
+					+ (chromosome.getGenes().size() - beginIndex)
+					+ " Genes available to mutate at this index.");
+		}
 
 		// Remove the old genes
 		List<Gene> genesRemoved = removeGenes(chromosome, beginIndex, numGenes);
@@ -209,8 +220,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		}
 
 		// Insert new random genes
-		boolean successfullyMutated = insertRandomGenes(chromosome, beginIndex,
-				beginningSequenceIndex, sequencesRemoved);
+		boolean successfullyMutated = insertRandomGenes(chromosome, beginIndex, sequencesRemoved);
 
 		if (!successfullyMutated) {
 			/*
@@ -221,33 +231,71 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		}
 	}
 
-	private static List<Gene> removeGenes(Chromosome chromosome, int beginIndex, int numGenes) {
+	/**
+	 * Remove a number of Genes equal to numGenes and starting at beginIndex.
+	 * 
+	 * @param chromosome
+	 *            the Chromosome to remove Genes from
+	 * @param beginIndex
+	 *            the index to start removing Genes at
+	 * @param numGenes
+	 *            the number of Genes to remove
+	 * @return the List of Genes removed
+	 */
+	protected static List<Gene> removeGenes(Chromosome chromosome, int beginIndex, int numGenes) {
 		List<Gene> genesRemoved = new ArrayList<Gene>();
 
+		if (numGenes <= 0) {
+			// Nothing to do
+			return genesRemoved;
+		}
+
+		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
+			throw new IllegalArgumentException(
+					"Unable to remove Genes from Chromosome starting at index "
+							+ beginIndex
+							+ ", as this index is out of bounds.  Expecting an index in the range [0-"
+							+ (chromosome.getGenes().size() - 1) + "].");
+		}
+
+		if (numGenes > chromosome.getGenes().size() - beginIndex) {
+			throw new IllegalArgumentException("Unable to remove " + numGenes
+					+ " Genes at beginIndex " + beginIndex + " because there are only "
+					+ (chromosome.getGenes().size() - beginIndex)
+					+ " Genes to remove at this index.");
+		}
+
 		for (int i = 0; i < numGenes; i++) {
-			Gene removedGene = chromosome.getGenes().get(beginIndex).clone();
-
-			chromosome.removeGene(beginIndex);
-
-			genesRemoved.add(removedGene);
+			genesRemoved.add(chromosome.removeGene(beginIndex));
 		}
 
 		return genesRemoved;
 	}
 
-	private boolean insertRandomGenes(Chromosome chromosome, int beginGeneIndex,
-			int beginningSequenceIndex, int sequencesRemoved) {
+	/**
+	 * Insert a sufficient number of random Genes to make up for the Sequences
+	 * removed.
+	 * 
+	 * @param chromosome
+	 *            to Chromosome to insert Genes into
+	 * @param beginGeneIndex
+	 *            the Gene index to start adding from
+	 * @param sequencesRemoved
+	 *            the number of Sequences removed
+	 * @return whether the insertion was successful
+	 */
+	protected boolean insertRandomGenes(Chromosome chromosome, int beginGeneIndex,
+			int sequencesRemoved) {
 		int sequencesAdded = 0;
 
 		List<Gene> genesToAdd = new ArrayList<Gene>();
 
-		do {
-			Gene geneToAdd = geneListDao.findRandomGene(chromosome, beginningSequenceIndex
-					+ sequencesAdded);
+		while (sequencesAdded < sequencesRemoved) {
+			Gene geneToAdd = geneListDao.findRandomGene(chromosome);
 
 			if (geneToAdd.size() > (sequencesRemoved - sequencesAdded)) {
-				geneToAdd = geneListDao.findRandomGeneOfLength(chromosome, beginningSequenceIndex
-						+ sequencesAdded, sequencesRemoved - sequencesAdded);
+				geneToAdd = geneListDao.findRandomGeneOfLength(chromosome, sequencesRemoved
+						- sequencesAdded);
 			}
 
 			if (geneToAdd == null) {
@@ -257,14 +305,16 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 			genesToAdd.add(geneToAdd);
 
 			sequencesAdded += geneToAdd.size();
-		} while (sequencesAdded < sequencesRemoved);
+		}
 
-		for (Gene geneToAdd : genesToAdd) {
+		for (int i = 0; i < genesToAdd.size(); i++) {
 			/*
-			 * We will keep adding them to the beginning of the group, which is
-			 * fine because they are random genes anyway
+			 * It doesn't matter what order we add the Genes in, since they are
+			 * random, but it should generally perform better if we add them
+			 * towards the end. This way less Sequence indices need to be
+			 * updated.
 			 */
-			chromosome.insertGene(beginGeneIndex, geneToAdd);
+			chromosome.insertGene(beginGeneIndex + i, genesToAdd.get(i));
 		}
 
 		return true;
@@ -274,17 +324,19 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * Reverts a group mutation
 	 * 
 	 * @param chromosome
-	 *            the chromosome to revert
+	 *            the Chromosome to revert
 	 * @param genesRemoved
-	 *            the genes to re-add
+	 *            the Genes to re-add
 	 * @param beginIndex
 	 *            the index to start adding from
 	 */
-	private static void revertGenes(Chromosome chromosome, List<Gene> genesRemoved, int beginIndex) {
+	protected static void revertGenes(Chromosome chromosome, List<Gene> genesRemoved, int beginIndex) {
+		int initialListSize = genesRemoved.size();
+
 		/*
 		 * Insert all of the removed genes back in their proper position.
 		 */
-		for (int i = 0; i < genesRemoved.size(); i++) {
+		for (int i = 0; i < initialListSize; i++) {
 			chromosome.insertGene(beginIndex + i, genesRemoved.get(i));
 		}
 	}

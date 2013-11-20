@@ -151,8 +151,8 @@ public class ConservativeMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("x"));
 		mockGeneToReturn.addSequence(new MockSequence("y"));
 		mockGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt(), anyInt()))
-				.thenReturn(mockGeneToReturn);
+		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
+				mockGeneToReturn);
 
 		conservativeMutationAlgorithm.mutateChromosome(mockChromosome);
 
@@ -160,8 +160,7 @@ public class ConservativeMutationAlgorithmTest {
 				.getGenes().get(1))
 				|| (mockGeneToReturn == mockChromosome.getGenes().get(0) && mockGene2 == mockChromosome
 						.getGenes().get(1)));
-		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt(),
-				anyInt());
+		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
 
@@ -185,16 +184,15 @@ public class ConservativeMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("x"));
 		mockGeneToReturn.addSequence(new MockSequence("y"));
 		mockGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt(), anyInt()))
-				.thenReturn(mockGeneToReturn);
+		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
+				mockGeneToReturn);
 
 		conservativeMutationAlgorithm.mutateGene(mockChromosome, 0);
 
 		assertNotSame(mockGene1, mockChromosome.getGenes().get(0));
 		assertSame(mockGeneToReturn, mockChromosome.getGenes().get(0));
 		assertSame(mockGene2, mockChromosome.getGenes().get(1));
-		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt(),
-				anyInt());
+		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
 
@@ -247,8 +245,8 @@ public class ConservativeMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("c"));
 		mockGeneToReturn.getSequences().get(2).setGene(mockGene1);
 		mockGeneToReturn.setChromosome(mockChromosome);
-		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt(), anyInt()))
-				.thenReturn(mockGeneToReturn);
+		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
+				mockGeneToReturn);
 
 		when(logMock.isDebugEnabled()).thenReturn(true);
 
@@ -256,8 +254,7 @@ public class ConservativeMutationAlgorithmTest {
 
 		assertSame(mockGene1, mockChromosome.getGenes().get(0));
 		assertSame(mockGene2, mockChromosome.getGenes().get(1));
-		verify(geneListDaoMock, times(1000)).findRandomGeneOfLength(same(mockChromosome), anyInt(),
-				anyInt());
+		verify(geneListDaoMock, times(1000)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verify(logMock, times(1)).isDebugEnabled();
 		verify(logMock, times(1)).debug(anyString());
 		verifyNoMoreInteractions(logMock);
@@ -283,8 +280,8 @@ public class ConservativeMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("x"));
 		mockGeneToReturn.addSequence(new MockSequence("y"));
 		mockGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt(), anyInt()))
-				.thenReturn(mockGeneToReturn);
+		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
+				mockGeneToReturn);
 
 		Integer mutatedIndex = conservativeMutationAlgorithm.mutateRandomGene(mockChromosome,
 				Arrays.asList(0, 1));
@@ -297,8 +294,7 @@ public class ConservativeMutationAlgorithmTest {
 				|| (mockGeneToReturn == mockChromosome.getGenes().get(0) && mockGene2 == mockChromosome
 						.getGenes().get(1)));
 		assertTrue(mutatedIndex == 0 || mutatedIndex == 1);
-		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt(),
-				anyInt());
+		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
 
@@ -322,8 +318,8 @@ public class ConservativeMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("x"));
 		mockGeneToReturn.addSequence(new MockSequence("y"));
 		mockGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt(), anyInt()))
-				.thenReturn(mockGeneToReturn);
+		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
+				mockGeneToReturn);
 
 		Integer mutatedIndex = conservativeMutationAlgorithm.mutateRandomGene(mockChromosome,
 				Arrays.asList(1));
@@ -334,8 +330,7 @@ public class ConservativeMutationAlgorithmTest {
 		assertTrue(mockGene1 == mockChromosome.getGenes().get(0)
 				&& mockGeneToReturn == mockChromosome.getGenes().get(1));
 		assertEquals(mutatedIndex, new Integer(1));
-		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt(),
-				anyInt());
+		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
 
@@ -355,8 +350,8 @@ public class ConservativeMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("3"));
 		mockChromosome.addGene(mockGene2);
 
-		when(geneListDaoMock.findRandomGeneOfLength(any(Chromosome.class), anyInt(), anyInt()))
-				.thenReturn(null);
+		when(geneListDaoMock.findRandomGeneOfLength(any(Chromosome.class), anyInt())).thenReturn(
+				null);
 
 		Integer mutatedIndex = conservativeMutationAlgorithm.mutateRandomGene(mockChromosome,
 				new ArrayList<Integer>());

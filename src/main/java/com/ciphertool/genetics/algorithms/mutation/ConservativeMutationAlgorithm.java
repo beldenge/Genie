@@ -116,8 +116,7 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 		Gene newGene = null;
 		int attempts = 0;
 		do {
-			newGene = geneListDao.findRandomGeneOfLength(chromosome, oldGene.getSequences().get(0)
-					.getSequenceId(), oldGene.size());
+			newGene = geneListDao.findRandomGeneOfLength(chromosome, oldGene.size());
 
 			attempts++;
 
