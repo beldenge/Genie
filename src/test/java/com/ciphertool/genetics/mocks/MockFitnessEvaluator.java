@@ -23,7 +23,9 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class MockFitnessEvaluator implements FitnessEvaluator {
+	@SuppressWarnings("unused")
 	private Object geneticStructure;
+
 	private static final double DEFAULT_FITNESS_VALUE = 100.0;
 
 	@Override

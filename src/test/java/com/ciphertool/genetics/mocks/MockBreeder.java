@@ -23,6 +23,7 @@ import com.ciphertool.genetics.Breeder;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class MockBreeder implements Breeder {
+	@SuppressWarnings("unused")
 	private Object geneticStructure;
 
 	@Override

@@ -42,7 +42,6 @@ public class GeneticAlgorithmStrategy {
 	private Selector selector;
 	private FitnessEvaluator knownSolutionFitnessEvaluator;
 	private Boolean compareToKnownSolution;
-	private static final Boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
 
 	/**
 	 * Default no-args constructor
