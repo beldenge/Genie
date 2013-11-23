@@ -20,9 +20,7 @@
 package com.ciphertool.genetics.algorithms.mutation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -51,15 +49,14 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
 				.getGenes().size())) + 1;
 
-		Map<Integer, Integer> availableIndicesMap = new HashMap<Integer, Integer>();
+		List<Integer> availableIndices = new ArrayList<Integer>();
 		for (int i = 0; i < chromosome.getGenes().size(); i++) {
-			availableIndicesMap.put(i, i);
+			availableIndices.add(i);
 		}
 
 		for (int i = 0; i < numMutations; i++) {
 			// Keep track of the mutated indices
-			availableIndicesMap.remove(mutateRandomGene(chromosome, new ArrayList<Integer>(
-					availableIndicesMap.values())));
+			mutateRandomGene(chromosome, availableIndices);
 		}
 	}
 
@@ -73,11 +70,11 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 	 *            the List of available indices to mutate
 	 * @return the index mutated, or null if none was mutated
 	 */
-	protected Integer mutateRandomGene(Chromosome chromosome, List<Integer> availableIndices) {
+	protected void mutateRandomGene(Chromosome chromosome, List<Integer> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
 			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
-			return null;
+			return;
 		}
 
 		/*
@@ -88,7 +85,7 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 
 		mutateGene(chromosome, randomIndex);
 
-		return randomIndex;
+		availableIndices.remove(availableIndices.indexOf(randomIndex));
 	}
 
 	/**
@@ -129,7 +126,7 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 
 				return;
 			}
-		} while (newGene == null || chromosome.getGenes().get(index).equals(newGene));
+		} while (newGene == null || oldGene.equals(newGene));
 
 		chromosome.replaceGene(index, newGene);
 	}

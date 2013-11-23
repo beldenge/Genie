@@ -20,14 +20,16 @@
 package com.ciphertool.genetics.algorithms.mutation;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -38,7 +40,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -48,12 +50,13 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.mocks.MockChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class ConservativeMutationAlgorithmTest {
-	private final static int MAX_MUTATIONS = 1;
+	private final static int MAX_MUTATIONS = 2;
 	private static Logger logMock;
 	private static ConservativeMutationAlgorithm conservativeMutationAlgorithm;
 	private static GeneListDao geneListDaoMock;
@@ -73,8 +76,6 @@ public class ConservativeMutationAlgorithmTest {
 
 	@Before
 	public void resetMocks() {
-		conservativeMutationAlgorithm.setMaxMutationsPerChromosome(MAX_MUTATIONS);
-
 		reset(logMock);
 	}
 
@@ -133,19 +134,24 @@ public class ConservativeMutationAlgorithmTest {
 
 	@Test
 	public void testMutateChromosome() {
+		conservativeMutationAlgorithm.setMaxMutationsPerChromosome(MAX_MUTATIONS);
+
 		MockChromosome mockChromosome = new MockChromosome();
+		List<Gene> originalGenes = new ArrayList<Gene>();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("a"));
 		mockGene1.addSequence(new MockSequence("b"));
 		mockGene1.addSequence(new MockSequence("c"));
 		mockChromosome.addGene(mockGene1);
+		originalGenes.add(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("1"));
 		mockGene2.addSequence(new MockSequence("2"));
 		mockGene2.addSequence(new MockSequence("3"));
 		mockChromosome.addGene(mockGene2);
+		originalGenes.add(mockGene2);
 
 		MockGene mockGeneToReturn = new MockGene();
 		mockGeneToReturn.addSequence(new MockSequence("x"));
@@ -156,11 +162,10 @@ public class ConservativeMutationAlgorithmTest {
 
 		conservativeMutationAlgorithm.mutateChromosome(mockChromosome);
 
-		assertTrue((mockGene1 == mockChromosome.getGenes().get(0) && mockGeneToReturn == mockChromosome
-				.getGenes().get(1))
-				|| (mockGeneToReturn == mockChromosome.getGenes().get(0) && mockGene2 == mockChromosome
-						.getGenes().get(1)));
-		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
+		assertFalse(originalGenes.equals(mockChromosome.getGenes()));
+		verify(geneListDaoMock, atLeastOnce()).findRandomGeneOfLength(same(mockChromosome),
+				anyInt());
+		verify(geneListDaoMock, atMost(2)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
 
@@ -283,8 +288,10 @@ public class ConservativeMutationAlgorithmTest {
 		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
 				mockGeneToReturn);
 
-		Integer mutatedIndex = conservativeMutationAlgorithm.mutateRandomGene(mockChromosome,
-				Arrays.asList(0, 1));
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		availableIndices.add(0);
+		availableIndices.add(1);
+		conservativeMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
 
 		/*
 		 * Only one Gene should be mutated.
@@ -293,7 +300,8 @@ public class ConservativeMutationAlgorithmTest {
 				.getGenes().get(1))
 				|| (mockGeneToReturn == mockChromosome.getGenes().get(0) && mockGene2 == mockChromosome
 						.getGenes().get(1)));
-		assertTrue(mutatedIndex == 0 || mutatedIndex == 1);
+		assertEquals(1, availableIndices.size());
+		assertTrue(availableIndices.get(0) == 0 || availableIndices.get(0) == 1);
 		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
@@ -321,15 +329,16 @@ public class ConservativeMutationAlgorithmTest {
 		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), anyInt())).thenReturn(
 				mockGeneToReturn);
 
-		Integer mutatedIndex = conservativeMutationAlgorithm.mutateRandomGene(mockChromosome,
-				Arrays.asList(1));
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		availableIndices.add(1);
+		conservativeMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
 
 		/*
 		 * Only the second Gene should be mutated.
 		 */
 		assertTrue(mockGene1 == mockChromosome.getGenes().get(0)
 				&& mockGeneToReturn == mockChromosome.getGenes().get(1));
-		assertEquals(mutatedIndex, new Integer(1));
+		assertTrue(availableIndices.isEmpty());
 		verify(geneListDaoMock, times(1)).findRandomGeneOfLength(same(mockChromosome), anyInt());
 		verifyZeroInteractions(logMock);
 	}
@@ -353,15 +362,15 @@ public class ConservativeMutationAlgorithmTest {
 		when(geneListDaoMock.findRandomGeneOfLength(any(Chromosome.class), anyInt())).thenReturn(
 				null);
 
-		Integer mutatedIndex = conservativeMutationAlgorithm.mutateRandomGene(mockChromosome,
-				new ArrayList<Integer>());
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		conservativeMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
 
 		/*
 		 * No Genes should be mutated.
 		 */
 		assertTrue(mockGene1 == mockChromosome.getGenes().get(0)
 				&& mockGene2 == mockChromosome.getGenes().get(1));
-		assertNull(mutatedIndex);
+		assertTrue(availableIndices.isEmpty());
 		verifyZeroInteractions(geneListDaoMock);
 		verify(logMock, times(1)).warn(anyString());
 		verifyNoMoreInteractions(logMock);

@@ -20,9 +20,7 @@
 package com.ciphertool.genetics.algorithms.mutation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -34,13 +32,7 @@ import com.ciphertool.genetics.entities.Gene;
 public class GroupMutationAlgorithm implements MutationAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 
-	private static final int MAX_GENES_PER_GROUP = 5;
-
-	/*
-	 * This is set to avoid infinite loops in case we cannot find another
-	 * contiguous group to mutate
-	 */
-	private static final int MAX_ATTEMPTS_PER_MUTATION = 10;
+	private static int MAX_GENES_PER_GROUP = 5;
 
 	private GeneListDao geneListDao;
 	private Integer maxMutationsPerChromosome;
@@ -58,10 +50,14 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
 				.getGenes().size())) + 1;
 
-		Map<Integer, Integer> geneIndices = new HashMap<Integer, Integer>();
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		for (int i = 0; i < chromosome.getGenes().size(); i++) {
+			availableIndices.add(i);
+		}
+
 		for (int i = 0; i < numMutations; i++) {
-			// Keep track of the mutated indices by passing the map by reference
-			mutateRandomGeneGroup(chromosome, geneIndices);
+			// Keep track of the mutated indices
+			mutateRandomGeneGroup(chromosome, availableIndices);
 		}
 	}
 
@@ -71,110 +67,174 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
+	 * @param availableIndices
+	 *            the List of available indices to mutate
 	 */
-	protected void mutateRandomGeneGroup(Chromosome chromosome, Map<Integer, Integer> geneIndices) {
+	protected void mutateRandomGeneGroup(Chromosome chromosome, List<Integer> availableIndices) {
+
+		if (availableIndices == null || availableIndices.isEmpty()) {
+			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
+
+			return;
+		}
+
 		/*
 		 * Choose a random number of genes constrained by the static max and the
 		 * total number of genes
 		 */
-		int numGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome
+		int maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome
 				.getGenes().size())) + 1;
 
-		int randomIndex;
-
-		// We don't want to reuse an index, so loop until we find a new one
-		int attempts = 0;
-		do {
-			randomIndex = (int) (Math.random() * chromosome.getGenes().size());
-
-			attempts++;
-
-			if (attempts >= MAX_ATTEMPTS_PER_MUTATION) {
-				if (log.isTraceEnabled()) {
-					log.trace("Exceeded "
-							+ MAX_ATTEMPTS_PER_MUTATION
-							+ " attempts at finding a gene group to mutate.  Returning without performing mutation.");
-				}
-
-				return;
-			}
-		} while (exceedsChromosomeSize(chromosome, randomIndex + numGenesToMutate)
-				|| overlapsPreviousMutation(geneIndices, randomIndex, randomIndex
-						+ numGenesToMutate));
-
-		mutateGeneGroup(chromosome, randomIndex, numGenesToMutate);
-
-		geneIndices.put(randomIndex, randomIndex + numGenesToMutate - 1);
-	}
-
-	/**
-	 * Checks whether the length of the Chromosome is being exceeded by a
-	 * proposed end indice.
-	 * 
-	 * @param chromosome
-	 *            the Chromosome
-	 * @param proposedEndIndex
-	 *            the proposed end index
-	 * @return whether the proposed index exceeds the chromosome size
-	 */
-	protected static boolean exceedsChromosomeSize(Chromosome chromosome, int proposedEndIndex) {
 		/*
-		 * proposedEndIndex is zero-indexed, so we need to subtract 1 from the
-		 * gene list size.
+		 * We don't want to reuse an index, so we get one from the List of
+		 * indices which are still available
 		 */
-		if (proposedEndIndex > chromosome.getGenes().size() - 1) {
-			return true;
+		int randomAvailableIndex = (int) (Math.random() * availableIndices.size());
+
+		Integer beginIndex = availableIndices.get(randomAvailableIndex);
+
+		Integer numGenesToMutate = 0;
+
+		// Attempt to find indices to mutate by iterating forwards.
+		int indicesAddedRight = addRightIndices(availableIndices, randomAvailableIndex,
+				maxGenesToMutate);
+		numGenesToMutate += indicesAddedRight;
+
+		/*
+		 * If we still have not been able to find enough indices to reach the
+		 * maxGenesToMutate, then try to find more by iterating backwards.
+		 */
+		if (numGenesToMutate < maxGenesToMutate) {
+			int indicesAddedLeft = addLeftIndices(availableIndices, randomAvailableIndex,
+					maxGenesToMutate - numGenesToMutate);
+			beginIndex -= indicesAddedLeft;
+			numGenesToMutate += indicesAddedLeft;
 		}
 
-		return false;
+		int numGenesInserted = mutateGeneGroup(chromosome, beginIndex, numGenesToMutate);
+
+		updateAvailableIndices(availableIndices, availableIndices.indexOf(beginIndex),
+				numGenesToMutate, numGenesInserted);
 	}
 
 	/**
-	 * Checks whether the proposed indices overlap a group which has already
-	 * been mutated so as not to re-mutate them.
+	 * Add indices to be mutated until we reach the maxGenesToMutate, find
+	 * another gap, or we finally hit the end of the List.
 	 * 
-	 * @param geneIndices
-	 *            the Map of indices for groups already mutated previously
-	 * @param proposedBeginIndex
-	 *            the beginning index of a previously mutated group
-	 * @param proposedEndIndex
-	 *            the number of genes to mutate
-	 * @return whether the proposed indices overlap a group already mutated
-	 *         previously
+	 * @param availableIndices
+	 *            the List of availableIndices to mutate
+	 * @param randomAvailableIndex
+	 *            the chosen index into the availableIndices List
+	 * @param maxGenesToMutate
+	 *            the maximum number of Genes to mutate
 	 */
-	protected static boolean overlapsPreviousMutation(Map<Integer, Integer> geneIndices,
-			Integer proposedBeginIndex, Integer proposedEndIndex) {
-		Integer nextEndIndex = null;
+	protected static int addRightIndices(List<Integer> availableIndices, int randomAvailableIndex,
+			int maxGenesToMutate) {
 
-		for (Integer nextBeginIndex : geneIndices.keySet()) {
-			nextEndIndex = geneIndices.get(nextBeginIndex);
+		int indicesAdded = 0;
 
-			// If the proposed begin index is anywhere within the previous group
-			if (proposedBeginIndex >= nextBeginIndex && proposedBeginIndex <= nextEndIndex) {
-				return true;
-			}
+		int indicesLeftToCheck = availableIndices.size() - randomAvailableIndex;
+		for (int i = 0; i < indicesLeftToCheck; i++) {
+			indicesAdded++;
 
-			// If the proposed end index is anywhere within the previous group
-			if (proposedEndIndex >= nextBeginIndex && proposedEndIndex <= nextEndIndex) {
-				return true;
-			}
-
-			// If the proposed indices completely encompass the previous group
-			if (proposedBeginIndex <= nextBeginIndex && proposedEndIndex >= nextEndIndex) {
-				return true;
+			// Break out of the loop if we've reached the end of the List
+			if (randomAvailableIndex + i + 1 >= availableIndices.size()) {
+				break;
 			}
 
 			/*
-			 * Covers the case where one of the proposed indices is valid, but
-			 * the other exactly matches one from the previous group
+			 * Break out of the loop if the next index comes after a gap,
+			 * because we don't want to mutate Genes that have already been
+			 * mutated as part of another group.
 			 */
-			if (proposedBeginIndex == nextBeginIndex || proposedBeginIndex == nextEndIndex
-					|| proposedEndIndex == nextBeginIndex || proposedEndIndex == nextEndIndex) {
-				return true;
+			if (availableIndices.get(randomAvailableIndex + i + 1) - 1 > availableIndices
+					.get(randomAvailableIndex + i)) {
+				break;
+			}
+
+			// Break out of the loop if we've added up to the maximum
+			if (indicesAdded >= maxGenesToMutate) {
+				break;
 			}
 		}
 
-		return false;
+		return indicesAdded;
+	}
+
+	/**
+	 * Add indices to be mutated until we find another gap, we hit the beginning
+	 * of the List, or we finally find enough indices.
+	 * 
+	 * @param availableIndices
+	 *            the List of availableIndices to mutate
+	 * @param randomAvailableIndex
+	 *            the chosen index into the availableIndices List
+	 * @param maxGenesToMutate
+	 *            the maximum number of Genes to mutate
+	 */
+	protected static int addLeftIndices(List<Integer> availableIndices, int randomAvailableIndex,
+			int maxGenesToMutate) {
+
+		int indicesAdded = 0;
+
+		int indicesLeftToCheck = randomAvailableIndex + 1;
+		for (int i = 0; i < indicesLeftToCheck; i++) {
+			indicesAdded++;
+
+			// Break out of the loop if we've reached the beginning of the List
+			if (randomAvailableIndex - i <= 0) {
+				break;
+			}
+
+			/*
+			 * Break out of the loop if the next index comes after a gap,
+			 * because we don't want to mutate Genes that have already been
+			 * mutated as part of another group.
+			 */
+			if (availableIndices.get(randomAvailableIndex - i - 1) + 1 < availableIndices
+					.get(randomAvailableIndex - i)) {
+				break;
+			}
+
+			// Break out of the loop if we've added up to the maximum
+			if (indicesAdded >= maxGenesToMutate) {
+				break;
+			}
+		}
+
+		return indicesAdded;
+	}
+
+	/**
+	 * We need to update the List of available indices by removing the mutated
+	 * indices and incrementing or decrementing the remaining indices based on
+	 * the difference between the number of Genes inserted and removed.
+	 * 
+	 * @param availableIndices
+	 *            the List of availableIndices to mutate
+	 * @param beginIndex
+	 *            the index to begin at
+	 * @param numGenesRemoved
+	 *            the number of Genes removed
+	 * @param numGenesInserted
+	 *            the number of Genes inserted
+	 */
+	protected static void updateAvailableIndices(List<Integer> availableIndices, int beginIndex,
+			int numGenesRemoved, int numGenesInserted) {
+
+		int differenceBetweenInsertedAndRemoved = numGenesInserted - numGenesRemoved;
+
+		// Remove indices that have already been mutated
+		for (int i = beginIndex; i < (beginIndex + numGenesRemoved); i++) {
+			availableIndices.remove(beginIndex);
+		}
+
+		// Modify the remaining indices to the right of the mutated group
+		int originalIndex;
+		for (int i = beginIndex; i < availableIndices.size(); i++) {
+			originalIndex = availableIndices.remove(i);
+			availableIndices.add(i, originalIndex + differenceBetweenInsertedAndRemoved);
+		}
 	}
 
 	/**
@@ -188,10 +248,10 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * @param numGenes
 	 *            the number of Genes to mutate
 	 */
-	protected void mutateGeneGroup(Chromosome chromosome, int beginIndex, int numGenes) {
+	protected int mutateGeneGroup(Chromosome chromosome, int beginIndex, int numGenes) {
 		if (numGenes <= 0) {
 			// Nothing to do
-			return;
+			return 0;
 		}
 
 		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
@@ -220,15 +280,17 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		}
 
 		// Insert new random genes
-		boolean successfullyMutated = insertRandomGenes(chromosome, beginIndex, sequencesRemoved);
+		int numInsertedGenes = insertRandomGenes(chromosome, beginIndex, sequencesRemoved);
 
-		if (!successfullyMutated) {
+		if (numInsertedGenes == 0) {
 			/*
 			 * In certain edge cases, the geneListDao may be unable to return a
 			 * Gene
 			 */
 			revertGenes(chromosome, genesRemoved, beginIndex);
 		}
+
+		return numInsertedGenes;
 	}
 
 	/**
@@ -284,8 +346,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 *            the number of Sequences removed
 	 * @return whether the insertion was successful
 	 */
-	protected boolean insertRandomGenes(Chromosome chromosome, int beginGeneIndex,
-			int sequencesRemoved) {
+	protected int insertRandomGenes(Chromosome chromosome, int beginGeneIndex, int sequencesRemoved) {
 		int sequencesAdded = 0;
 
 		List<Gene> genesToAdd = new ArrayList<Gene>();
@@ -293,13 +354,13 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		while (sequencesAdded < sequencesRemoved) {
 			Gene geneToAdd = geneListDao.findRandomGene(chromosome);
 
-			if (geneToAdd.size() > (sequencesRemoved - sequencesAdded)) {
+			if (geneToAdd != null && geneToAdd.size() > (sequencesRemoved - sequencesAdded)) {
 				geneToAdd = geneListDao.findRandomGeneOfLength(chromosome, sequencesRemoved
 						- sequencesAdded);
 			}
 
 			if (geneToAdd == null) {
-				return false;
+				return 0;
 			}
 
 			genesToAdd.add(geneToAdd);
@@ -317,7 +378,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 			chromosome.insertGene(beginGeneIndex + i, genesToAdd.get(i));
 		}
 
-		return true;
+		return genesToAdd.size();
 	}
 
 	/**

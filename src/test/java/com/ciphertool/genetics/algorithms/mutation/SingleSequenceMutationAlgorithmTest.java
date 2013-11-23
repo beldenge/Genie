@@ -21,13 +21,14 @@ package com.ciphertool.genetics.algorithms.mutation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -38,7 +39,7 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -53,7 +54,7 @@ import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class SingleSequenceMutationAlgorithmTest {
-	private final static int MAX_MUTATIONS = 1;
+	private final static int MAX_MUTATIONS = 2;
 	private static Logger logMock;
 	private static SingleSequenceMutationAlgorithm singleSequenceMutationAlgorithm;
 	private static SequenceDao sequenceDaoMock;
@@ -73,8 +74,6 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Before
 	public void resetMocks() {
-		singleSequenceMutationAlgorithm.setMaxMutationsPerChromosome(MAX_MUTATIONS);
-
 		reset(logMock);
 		reset(sequenceDaoMock);
 	}
@@ -136,12 +135,16 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Test
 	public void testMutateChromosome() {
+		singleSequenceMutationAlgorithm.setMaxMutationsPerChromosome(MAX_MUTATIONS);
+
 		MockChromosome mockChromosome = new MockChromosome();
+		List<Gene> originalGenes = new ArrayList<Gene>();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
 		mockChromosome.addGene(mockGene1);
+		originalGenes.add(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("s"));
@@ -150,6 +153,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
 		mockChromosome.addGene(mockGene2);
+		originalGenes.add(mockGene2);
 
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
@@ -183,12 +187,9 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2Sequence5.setGene(mockGene2);
 		originalMockGene2.setChromosome(mockChromosome);
 
-		/*
-		 * Only one Gene should be mutated.
-		 */
-		assertTrue((originalMockGene1.equals(mockGene1) && !originalMockGene2.equals(mockGene2))
-				|| (!originalMockGene1.equals(mockGene1) && originalMockGene2.equals(mockGene2)));
-		verify(sequenceDaoMock, times(1)).findRandomSequence(any(Gene.class), anyInt());
+		assertFalse(originalGenes.equals(mockChromosome));
+		verify(sequenceDaoMock, atLeastOnce()).findRandomSequence(any(Gene.class), anyInt());
+		verify(sequenceDaoMock, atMost(2)).findRandomSequence(any(Gene.class), anyInt());
 		verifyZeroInteractions(logMock);
 	}
 
@@ -273,8 +274,10 @@ public class SingleSequenceMutationAlgorithmTest {
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
 
-		Integer mutatedIndex = singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome,
-				Arrays.asList(0, 1));
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		availableIndices.add(0);
+		availableIndices.add(1);
+		singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -308,7 +311,8 @@ public class SingleSequenceMutationAlgorithmTest {
 		 */
 		assertTrue((originalMockGene1.equals(mockGene1) && !originalMockGene2.equals(mockGene2))
 				|| (!originalMockGene1.equals(mockGene1) && originalMockGene2.equals(mockGene2)));
-		assertTrue(mutatedIndex == 0 || mutatedIndex == 1);
+		assertEquals(1, availableIndices.size());
+		assertTrue(availableIndices.get(0) == 0 || availableIndices.get(0) == 1);
 		verify(sequenceDaoMock, times(1)).findRandomSequence(any(Gene.class), anyInt());
 		verifyZeroInteractions(logMock);
 	}
@@ -333,8 +337,9 @@ public class SingleSequenceMutationAlgorithmTest {
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
 
-		Integer mutatedIndex = singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome,
-				Arrays.asList(1));
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		availableIndices.add(1);
+		singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -368,8 +373,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		 */
 		assertEquals(originalMockGene1, mockGene1);
 		assertFalse(originalMockGene2.equals(mockGene2));
-		assertTrue(mutatedIndex == 0 || mutatedIndex == 1);
-		assertEquals(mutatedIndex, new Integer(1));
+		assertTrue(availableIndices.isEmpty());
 		verify(sequenceDaoMock, times(1)).findRandomSequence(same(mockGene2), anyInt());
 		verifyZeroInteractions(logMock);
 	}
@@ -391,8 +395,8 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("e"));
 		mockChromosome.addGene(mockGene2);
 
-		Integer mutatedIndex = singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome,
-				new ArrayList<Integer>());
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -425,7 +429,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		 * No Genes should be mutated.
 		 */
 		assertTrue(originalMockGene1.equals(mockGene1) && originalMockGene2.equals(mockGene2));
-		assertNull(mutatedIndex);
+		assertTrue(availableIndices.isEmpty());
 		verifyZeroInteractions(sequenceDaoMock);
 		verify(logMock, times(1)).warn(anyString());
 		verifyNoMoreInteractions(logMock);
