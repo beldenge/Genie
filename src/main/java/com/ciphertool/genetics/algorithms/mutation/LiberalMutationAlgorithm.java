@@ -86,9 +86,22 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 
 		mutateGene(chromosome, randomIndex);
 
+		int numGenesOriginally = chromosome.getGenes().size();
+
 		chromosomeHelper.resizeChromosome(chromosome);
 
+		int numGenesAfterResize = chromosome.getGenes().size();
+		int difference = numGenesOriginally - numGenesAfterResize;
+
 		availableIndices.remove(availableIndices.indexOf(randomIndex));
+
+		/*
+		 * If there are less Genes now due to the resizing, then remove those
+		 * from the end of the availableIndices List as well.
+		 */
+		for (int i = 0; i < difference; i++) {
+			availableIndices.remove(availableIndices.size() - 1);
+		}
 	}
 
 	/**
