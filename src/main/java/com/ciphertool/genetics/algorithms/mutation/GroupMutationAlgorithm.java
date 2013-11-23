@@ -93,12 +93,18 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 
 		Integer beginIndex = availableIndices.get(randomAvailableIndex);
 
-		Integer numGenesToMutate = 0;
+		// We start by counting the current Gene
+		Integer numGenesToMutate = 1;
 
-		// Attempt to find indices to mutate by iterating forwards.
-		int indicesAddedRight = addRightIndices(availableIndices, randomAvailableIndex,
-				maxGenesToMutate);
-		numGenesToMutate += indicesAddedRight;
+		/*
+		 * If the maxGenesToMutate is more than one, then try to find some more
+		 * by iterating forwards.
+		 */
+		if (numGenesToMutate < maxGenesToMutate) {
+			int indicesAddedRight = addRightIndices(availableIndices, randomAvailableIndex,
+					maxGenesToMutate - numGenesToMutate);
+			numGenesToMutate += indicesAddedRight;
+		}
 
 		/*
 		 * If we still have not been able to find enough indices to reach the
@@ -135,8 +141,6 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 
 		int indicesLeftToCheck = availableIndices.size() - randomAvailableIndex;
 		for (int i = 0; i < indicesLeftToCheck; i++) {
-			indicesAdded++;
-
 			// Break out of the loop if we've reached the end of the List
 			if (randomAvailableIndex + i + 1 >= availableIndices.size()) {
 				break;
@@ -156,6 +160,8 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 			if (indicesAdded >= maxGenesToMutate) {
 				break;
 			}
+
+			indicesAdded++;
 		}
 
 		return indicesAdded;
@@ -179,8 +185,6 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 
 		int indicesLeftToCheck = randomAvailableIndex + 1;
 		for (int i = 0; i < indicesLeftToCheck; i++) {
-			indicesAdded++;
-
 			// Break out of the loop if we've reached the beginning of the List
 			if (randomAvailableIndex - i <= 0) {
 				break;
@@ -200,6 +204,8 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 			if (indicesAdded >= maxGenesToMutate) {
 				break;
 			}
+
+			indicesAdded++;
 		}
 
 		return indicesAdded;

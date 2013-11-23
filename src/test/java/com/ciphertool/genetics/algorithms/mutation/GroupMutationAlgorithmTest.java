@@ -492,7 +492,7 @@ public class GroupMutationAlgorithmTest {
 		int indicesAdded = GroupMutationAlgorithm.addRightIndices(availableIndices,
 				randomAvailableIndex, maxGenesToMutate);
 
-		assertEquals(2, indicesAdded);
+		assertEquals(1, indicesAdded);
 	}
 
 	@Test
@@ -504,7 +504,7 @@ public class GroupMutationAlgorithmTest {
 		int indicesAdded = GroupMutationAlgorithm.addRightIndices(availableIndices,
 				randomAvailableIndex, maxGenesToMutate);
 
-		assertEquals(2, indicesAdded);
+		assertEquals(1, indicesAdded);
 	}
 
 	@Test
@@ -528,7 +528,7 @@ public class GroupMutationAlgorithmTest {
 		int indicesAdded = GroupMutationAlgorithm.addLeftIndices(availableIndices,
 				randomAvailableIndex, maxGenesToMutate);
 
-		assertEquals(2, indicesAdded);
+		assertEquals(1, indicesAdded);
 	}
 
 	@Test
@@ -540,7 +540,7 @@ public class GroupMutationAlgorithmTest {
 		int indicesAdded = GroupMutationAlgorithm.addLeftIndices(availableIndices,
 				randomAvailableIndex, maxGenesToMutate);
 
-		assertEquals(2, indicesAdded);
+		assertEquals(1, indicesAdded);
 	}
 
 	@Test
