@@ -55,9 +55,17 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 			availableIndices.add(i);
 		}
 
+		int maxGenesToMutate;
 		for (int i = 0; i < numMutations; i++) {
+			/*
+			 * Choose a random number of genes constrained by the static max and
+			 * the total number of genes
+			 */
+			maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome
+					.getGenes().size())) + 1;
+
 			// Keep track of the mutated indices
-			mutateRandomGeneGroup(chromosome, availableIndices);
+			mutateRandomGeneGroup(chromosome, availableIndices, maxGenesToMutate);
 		}
 	}
 
@@ -70,20 +78,14 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * @param availableIndices
 	 *            the List of available indices to mutate
 	 */
-	protected void mutateRandomGeneGroup(Chromosome chromosome, List<Integer> availableIndices) {
+	protected void mutateRandomGeneGroup(Chromosome chromosome, List<Integer> availableIndices,
+			int maxGenesToMutate) {
 
 		if (availableIndices == null || availableIndices.isEmpty()) {
 			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
 			return;
 		}
-
-		/*
-		 * Choose a random number of genes constrained by the static max and the
-		 * total number of genes
-		 */
-		int maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome
-				.getGenes().size())) + 1;
 
 		/*
 		 * We don't want to reuse an index, so we get one from the List of

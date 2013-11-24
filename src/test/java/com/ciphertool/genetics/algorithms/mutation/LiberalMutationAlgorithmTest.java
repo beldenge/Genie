@@ -32,6 +32,7 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -433,6 +434,7 @@ public class LiberalMutationAlgorithmTest {
 		assertEquals(1, availableIndices.size());
 		assertTrue(availableIndices.get(0) == 0 || availableIndices.get(0) == 1);
 		verify(geneListDaoMock, times(1)).findRandomGene(same(mockChromosome));
+		verify(chromosomeHelperSpy, times(1)).resizeChromosome(same(mockChromosome));
 		verifyZeroInteractions(logMock);
 	}
 
@@ -470,6 +472,7 @@ public class LiberalMutationAlgorithmTest {
 				&& mockGeneToReturn == mockChromosome.getGenes().get(1));
 		assertTrue(availableIndices.isEmpty());
 		verify(geneListDaoMock, times(1)).findRandomGene(same(mockChromosome));
+		verify(chromosomeHelperSpy, times(1)).resizeChromosome(same(mockChromosome));
 		verifyZeroInteractions(logMock);
 	}
 
@@ -503,7 +506,56 @@ public class LiberalMutationAlgorithmTest {
 				&& mockGene2 == mockChromosome.getGenes().get(1));
 		assertTrue(availableIndices.isEmpty());
 		verifyZeroInteractions(geneListDaoMock);
+		verify(chromosomeHelperSpy, never()).resizeChromosome(same(mockChromosome));
 		verify(logMock, times(1)).warn(anyString());
 		verifyNoMoreInteractions(logMock);
+	}
+
+	@Test
+	public void testMutateRandomGeneBoundaryConditions() {
+		MockChromosome mockChromosome = new MockChromosome();
+		mockChromosome.setTargetSize(2);
+		List<Gene> originalGenes = new ArrayList<Gene>();
+
+		MockGene mockGene1 = new MockGene();
+		mockGene1.addSequence(new MockSequence("a"));
+		originalGenes.add(mockGene1);
+
+		MockGene mockGene2 = new MockGene();
+		mockGene2.addSequence(new MockSequence("b"));
+		originalGenes.add(mockGene2);
+
+		MockGene mockGeneToReturn = new MockGene();
+		mockGeneToReturn.addSequence(new MockSequence("1"));
+		mockGeneToReturn.addSequence(new MockSequence("2"));
+
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		do {
+			mockChromosome.resetGenes();
+			mockChromosome.addGene(mockGene1);
+			mockChromosome.addGene(mockGene2);
+			availableIndices.clear();
+			availableIndices.add(0);
+			availableIndices.add(1);
+			when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(
+					mockGeneToReturn.clone());
+			liberalMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
+
+			/*
+			 * If the availableIndices List does not contain the last element,
+			 * we need to repeat, because that does not trigger the specific
+			 * scenario we are testing for.
+			 */
+		} while (availableIndices.size() > 0
+				&& (availableIndices.get(availableIndices.size() - 1) == 0));
+
+		/*
+		 * Only one Gene should be mutated.
+		 */
+		assertFalse(originalGenes.equals(mockChromosome.getGenes()));
+		assertEquals(0, availableIndices.size());
+		verify(geneListDaoMock, atLeastOnce()).findRandomGene(same(mockChromosome));
+		verify(chromosomeHelperSpy, atLeastOnce()).resizeChromosome(same(mockChromosome));
+		verifyZeroInteractions(logMock);
 	}
 }

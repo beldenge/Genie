@@ -294,7 +294,7 @@ public class GroupMutationAlgorithmTest {
 		availableIndices.add(2);
 		availableIndices.add(3);
 		int originalAvailableIndicesSize = availableIndices.size();
-		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices);
+		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices, 2);
 
 		assertFalse(originalGenes.equals(mockChromosome.getGenes()));
 		assertTrue(originalAvailableIndicesSize > availableIndices.size());
@@ -386,7 +386,7 @@ public class GroupMutationAlgorithmTest {
 		availableIndices.add(0);
 		availableIndices.add(1);
 		int originalAvailableIndicesSize = availableIndices.size();
-		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices);
+		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices, 2);
 
 		assertFalse(originalGenes.equals(mockChromosome.getGenes()));
 		assertTrue(originalAvailableIndicesSize > availableIndices.size());
@@ -460,7 +460,7 @@ public class GroupMutationAlgorithmTest {
 		originalGenes.add(mockGene4);
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
-		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices);
+		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices, 2);
 
 		assertTrue(originalGenes.equals(mockChromosome.getGenes()));
 		assertEquals(0, availableIndices.size());
@@ -469,6 +469,57 @@ public class GroupMutationAlgorithmTest {
 		verifyZeroInteractions(geneListDaoMock);
 		verify(logMock, times(1)).warn(anyString());
 		verifyNoMoreInteractions(logMock);
+	}
+
+	@Test
+	public void testMutateRandomGeneGroupBoundaryConditions() {
+		MockChromosome mockChromosome = new MockChromosome();
+		List<MockGene> originalGenes = new ArrayList<>();
+
+		MockGene mockGene1 = new MockGene();
+		mockGene1.addSequence(new MockSequence("g"));
+		mockGene1.addSequence(new MockSequence("e"));
+		mockGene1.addSequence(new MockSequence("o"));
+		mockGene1.addSequence(new MockSequence("r"));
+		mockGene1.addSequence(new MockSequence("g"));
+		mockGene1.addSequence(new MockSequence("e"));
+		mockChromosome.addGene(mockGene1);
+		originalGenes.add(mockGene1);
+
+		MockGene mockGene2 = new MockGene();
+		mockGene2.addSequence(new MockSequence("b"));
+		mockGene2.addSequence(new MockSequence("e"));
+		mockGene2.addSequence(new MockSequence("l"));
+		mockGene2.addSequence(new MockSequence("d"));
+		mockGene2.addSequence(new MockSequence("e"));
+		mockGene2.addSequence(new MockSequence("n"));
+		mockChromosome.addGene(mockGene2);
+		originalGenes.add(mockGene2);
+
+		MockGene mockGeneOfSize3 = new MockGene();
+		mockGeneOfSize3.addSequence(new MockSequence("x"));
+		mockGeneOfSize3.addSequence(new MockSequence("y"));
+		mockGeneOfSize3.addSequence(new MockSequence("z"));
+
+		when(geneListDaoMock.findRandomGene(same(mockChromosome))).thenReturn(mockGeneOfSize3);
+
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		availableIndices.add(0);
+		availableIndices.add(1);
+		groupMutationAlgorithm.mutateRandomGeneGroup(mockChromosome, availableIndices, 3);
+
+		assertFalse(originalGenes.equals(mockChromosome.getGenes()));
+		assertTrue(availableIndices.isEmpty());
+		assertEquals(12, mockChromosome.actualSize().intValue());
+		System.out.println(mockChromosome);
+		assertEquals(4, mockChromosome.getGenes().size());
+		assertEquals(mockGeneOfSize3, mockChromosome.getGenes().get(0));
+		assertEquals(mockGeneOfSize3, mockChromosome.getGenes().get(1));
+		assertEquals(mockGeneOfSize3, mockChromosome.getGenes().get(2));
+		assertEquals(mockGeneOfSize3, mockChromosome.getGenes().get(3));
+
+		verify(geneListDaoMock, times(4)).findRandomGene(same(mockChromosome));
+		verifyZeroInteractions(logMock);
 	}
 
 	@Test

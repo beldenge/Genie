@@ -63,7 +63,8 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public void resetGenes() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.fitness = 0.0;
+		this.genes.clear();
 	}
 
 	@Override
