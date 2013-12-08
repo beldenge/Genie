@@ -112,7 +112,6 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	 *            the fitnessEvaluator to set
 	 */
 	@Override
-	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		/*
 		 * fitnessEvaluator is required by other crossover algorithms, so this
