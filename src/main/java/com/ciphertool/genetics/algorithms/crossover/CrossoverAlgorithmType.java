@@ -30,11 +30,11 @@ public enum CrossoverAlgorithmType {
 			"This will crossover groups of words that match on starting position and end position only if it results in a better fit Chromosome."),
 	LIBERAL_UNEVALUATED(
 			"Liberal Unevaluated",
-			LiberalCrossoverAlgorithm.class,
+			LiberalUnevaluatedCrossoverAlgorithm.class,
 			"This will crossover words by index regardless of starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
 	CONSERVATIVE_UNEVALUATED(
 			"Conservative Unevaluated",
-			ConservativeCrossoverAlgorithm.class,
+			ConservativeUnevaluatedCrossoverAlgorithm.class,
 			"This will only crossover words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
 	LOWEST_COMMON_GROUP_UNEVALUATED(
 			"Lowest Common Group Unevaluated",

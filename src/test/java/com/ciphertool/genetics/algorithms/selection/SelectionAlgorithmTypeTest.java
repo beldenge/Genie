@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.algorithms.selection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -29,11 +30,9 @@ public class SelectionAlgorithmTypeTest {
 	public void testTypes() {
 		assertEquals(3, SelectionAlgorithmType.values().length);
 
-		assertEquals(ProbabilisticSelectionAlgorithm.class, SelectionAlgorithmType.PROBABILISTIC
+		assertSame(ProbabilisticSelectionAlgorithm.class, SelectionAlgorithmType.PROBABILISTIC
 				.getType());
-		assertEquals(TournamentSelectionAlgorithm.class, SelectionAlgorithmType.TOURNAMENT
-				.getType());
-		assertEquals(TruncationSelectionAlgorithm.class, SelectionAlgorithmType.TRUNCATION
-				.getType());
+		assertSame(TournamentSelectionAlgorithm.class, SelectionAlgorithmType.TOURNAMENT.getType());
+		assertSame(TruncationSelectionAlgorithm.class, SelectionAlgorithmType.TRUNCATION.getType());
 	}
 }
