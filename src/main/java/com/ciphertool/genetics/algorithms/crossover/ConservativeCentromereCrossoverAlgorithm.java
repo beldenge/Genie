@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
@@ -33,7 +32,7 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm {
 	Logger log = Logger.getLogger(getClass());
 	private MutationAlgorithm mutationAlgorithm;
-	private boolean mutateDuringCrossover;
+	private boolean mutateDuringCrossover = false;
 
 	/**
 	 * This crossover algorithm finds all the points where both parent
@@ -45,6 +44,11 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 */
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		if (mutateDuringCrossover && mutationAlgorithm == null) {
+			throw new IllegalStateException(
+					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
+		}
+
 		List<Integer> potentialCentromeres = findPotentialCentromeres(parentA, parentB);
 
 		/*
@@ -67,7 +71,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 		return children;
 	}
 
-	private Chromosome performCrossover(Chromosome parentA, Chromosome parentB, int centromere) {
+	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB, int centromere) {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int childBeginGeneIndex = findGeneBeginningAtCentromere(child, centromere);
@@ -111,7 +115,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 *            the centromere to find
 	 * @return the Gene index where the centromere begins
 	 */
-	private static int findGeneBeginningAtCentromere(Chromosome chromosome, int centromere) {
+	protected static int findGeneBeginningAtCentromere(Chromosome chromosome, int centromere) {
 		int geneIndex = 0;
 		int nextSequenceIndex = 0;
 
@@ -138,7 +142,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 * Make sure we don't exceed parentB's index, or else we will get an
 	 * IndexOutOfBoundsException
 	 */
-	private static List<Integer> findPotentialCentromeres(Chromosome mom, Chromosome dad) {
+	protected static List<Integer> findPotentialCentromeres(Chromosome mom, Chromosome dad) {
 		int momGeneIndex = 0;
 		int dadGeneIndex = 0;
 		int momGeneEndSequence = 0;
@@ -191,7 +195,6 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 *            the fitnessEvaluator to set
 	 */
 	@Override
-	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		/*
 		 * fitnessEvaluator is required by other crossover algorithms, so this
@@ -204,7 +207,6 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}

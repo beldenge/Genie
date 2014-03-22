@@ -37,10 +37,15 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
 	private MutationAlgorithm mutationAlgorithm;
-	private boolean mutateDuringCrossover;
+	private boolean mutateDuringCrossover = false;
 
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		if (mutateDuringCrossover && mutationAlgorithm == null) {
+			throw new IllegalStateException(
+					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
+		}
+
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		Chromosome firstChild = performCrossover(parentA, parentB);
@@ -58,7 +63,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 	 * This crossover algorithm does a liberal amount of changes since it
 	 * replaces genes regardless of their begin and end sequence positions
 	 */
-	public Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
+	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = parentA.clone();
 
 		int childGeneIndex = 0;
@@ -139,7 +144,6 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}

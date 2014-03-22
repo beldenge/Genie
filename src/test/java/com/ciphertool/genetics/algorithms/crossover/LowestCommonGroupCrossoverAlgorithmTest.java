@@ -17,26 +17,8 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.mocks;
+package com.ciphertool.genetics.algorithms.crossover;
 
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
+public class LowestCommonGroupCrossoverAlgorithmTest {
 
-public class MockFitnessEvaluator implements FitnessEvaluator {
-	@SuppressWarnings("unused")
-	private Object geneticStructure;
-
-	private static final double DEFAULT_FITNESS_VALUE = 100.0;
-
-	@Override
-	public Double evaluate(Chromosome chromosome) {
-		chromosome.setFitness(DEFAULT_FITNESS_VALUE);
-
-		return DEFAULT_FITNESS_VALUE;
-	}
-
-	@Override
-	public void setGeneticStructure(Object geneticStructure) {
-		this.geneticStructure = geneticStructure;
-	}
 }

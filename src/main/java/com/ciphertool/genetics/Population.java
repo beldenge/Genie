@@ -102,7 +102,7 @@ public class Population {
 	/**
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
-	protected class EvaluatorTask implements Callable<Double> {
+	protected class EvaluatorTask implements Callable<Void> {
 
 		private Chromosome chromosome;
 
@@ -111,8 +111,10 @@ public class Population {
 		}
 
 		@Override
-		public Double call() throws Exception {
-			return fitnessEvaluator.evaluate(this.chromosome);
+		public Void call() throws Exception {
+			this.chromosome.setFitness(fitnessEvaluator.evaluate(this.chromosome));
+
+			return null;
 		}
 	}
 
@@ -120,8 +122,8 @@ public class Population {
 	 * This method executes all the fitness evaluations concurrently.
 	 */
 	protected void doConcurrentFitnessEvaluations() {
-		List<FutureTask<Double>> futureTasks = new ArrayList<FutureTask<Double>>();
-		FutureTask<Double> futureTask = null;
+		List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
+		FutureTask<Void> futureTask = null;
 
 		int evaluationCount = 0;
 		for (Chromosome individual : individuals) {
@@ -131,7 +133,7 @@ public class Population {
 			 */
 			if (individual.isEvaluationNeeded()) {
 				evaluationCount++;
-				futureTask = new FutureTask<Double>(new EvaluatorTask(individual));
+				futureTask = new FutureTask<Void>(new EvaluatorTask(individual));
 				futureTasks.add(futureTask);
 				this.taskExecutor.execute(futureTask);
 			}
@@ -141,7 +143,7 @@ public class Population {
 			log.debug("Evaluations carried out: " + evaluationCount);
 		}
 
-		for (FutureTask<Double> future : futureTasks) {
+		for (FutureTask<Void> future : futureTasks) {
 			try {
 				future.get();
 			} catch (InterruptedException ie) {
@@ -281,7 +283,7 @@ public class Population {
 		 * other process.
 		 */
 		if (individual.isEvaluationNeeded()) {
-			fitnessEvaluator.evaluate(individual);
+			individual.setFitness(fitnessEvaluator.evaluate(individual));
 		}
 
 		this.totalFitness += individual.getFitness();

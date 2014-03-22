@@ -22,6 +22,9 @@ package com.ciphertool.genetics;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
@@ -33,10 +36,12 @@ import com.ciphertool.genetics.algorithms.selection.ProbabilisticSelectionAlgori
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockFitnessEvaluator;
 
 public class GeneticAlgorithmStrategyTest {
+	private static final double DEFAULT_FITNESS_VALUE = 100.0;
+
 	@Test
 	public void testConstructorWithoutComparisonToKnownSolution() {
 		Object geneticStructureToSet = new Object();
@@ -48,7 +53,9 @@ public class GeneticAlgorithmStrategyTest {
 		Integer maxMutationsPerIndividualToSet = new Integer(5);
 		Double crossoverRateToSet = new Double(0.1);
 		Boolean mutateDuringCrossoverToSet = new Boolean(true);
-		FitnessEvaluator fitnessEvaluatorToSet = new MockFitnessEvaluator();
+		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
 		CrossoverAlgorithm crossoverAlgorithmToSet = new ConservativeCrossoverAlgorithm();
 		MutationAlgorithm mutationAlgorithmToSet = new ConservativeMutationAlgorithm();
 		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
@@ -91,12 +98,16 @@ public class GeneticAlgorithmStrategyTest {
 		Integer maxMutationsPerIndividualToSet = new Integer(5);
 		Double crossoverRateToSet = new Double(0.1);
 		Boolean mutateDuringCrossoverToSet = new Boolean(true);
-		FitnessEvaluator fitnessEvaluatorToSet = new MockFitnessEvaluator();
+		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
 		CrossoverAlgorithm crossoverAlgorithmToSet = new ConservativeCrossoverAlgorithm();
 		MutationAlgorithm mutationAlgorithmToSet = new ConservativeMutationAlgorithm();
 		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
 		Selector selectorToSet = new RouletteSelector();
-		FitnessEvaluator knownSolutionFitnessEvaluatorToSet = new MockFitnessEvaluator();
+		FitnessEvaluator knownSolutionFitnessEvaluatorToSet = mock(FitnessEvaluator.class);
+		when(knownSolutionFitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
 		Boolean compareToKnownSolutionToSet = new Boolean(true);
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(
@@ -274,7 +285,9 @@ public class GeneticAlgorithmStrategyTest {
 
 	@Test
 	public void testSetFitnessEvaluator() {
-		FitnessEvaluator fitnessEvaluatorToSet = new MockFitnessEvaluator();
+		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
 		geneticAlgorithmStrategy.setFitnessEvaluator(fitnessEvaluatorToSet);
 
@@ -310,7 +323,9 @@ public class GeneticAlgorithmStrategyTest {
 
 	@Test
 	public void testSetKnownSolutionFitnessEvaluator() {
-		FitnessEvaluator knownSolutionFitnessEvaluatorToSet = new MockFitnessEvaluator();
+		FitnessEvaluator knownSolutionFitnessEvaluatorToSet = mock(FitnessEvaluator.class);
+		when(knownSolutionFitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
 		geneticAlgorithmStrategy
 				.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorToSet);

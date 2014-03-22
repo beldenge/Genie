@@ -90,11 +90,11 @@ public class MockSequence implements Sequence {
 			return false;
 		}
 		MockSequence other = (MockSequence) obj;
-		if (gene == null) {
-			if (other.gene != null) {
+		if (sequenceId == null) {
+			if (other.sequenceId != null) {
 				return false;
 			}
-		} else if (gene != other.gene) {
+		} else if (!sequenceId.equals(other.sequenceId)) {
 			return false;
 		}
 		if (value == null) {

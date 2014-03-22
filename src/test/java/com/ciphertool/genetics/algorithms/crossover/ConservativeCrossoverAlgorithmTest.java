@@ -1,0 +1,553 @@
+/**
+ * Copyright 2013 George Belden
+ * 
+ * This file is part of ZodiacGenetics.
+ * 
+ * ZodiacGenetics is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * ZodiacGenetics is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.ciphertool.genetics.algorithms.crossover;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.util.ReflectionUtils;
+
+import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockGene;
+import com.ciphertool.genetics.mocks.MockSequence;
+
+public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
+
+	@Test
+	public void testSetFitnessEvaluator() {
+		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorToSet);
+
+		Field fitnessEvaluatorField = ReflectionUtils.findField(
+				ConservativeCrossoverAlgorithm.class, "fitnessEvaluator");
+		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
+		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
+				fitnessEvaluatorField, conservativeCrossoverAlgorithm);
+
+		assertSame(fitnessEvaluatorToSet, fitnessEvaluatorFromObject);
+	}
+
+	@Test
+	public void testSetMutationAlgorithm() {
+		MutationAlgorithm mutationAlgorithmToSet = mock(MutationAlgorithm.class);
+
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
+
+		Field mutationAlgorithmField = ReflectionUtils.findField(
+				ConservativeCrossoverAlgorithm.class, "mutationAlgorithm");
+		ReflectionUtils.makeAccessible(mutationAlgorithmField);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils
+				.getField(mutationAlgorithmField, conservativeCrossoverAlgorithm);
+
+		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
+	}
+
+	@Test
+	public void testSetMutateDuringCrossover() {
+		boolean mutateDuringCrossoverToSet = true;
+
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
+
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(
+				ConservativeCrossoverAlgorithm.class, "mutateDuringCrossover");
+		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(
+				mutateDuringCrossoverField, conservativeCrossoverAlgorithm);
+
+		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testCrossoverWithIllegalState() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(true);
+
+		Chromosome mom = getMom();
+		Chromosome dad = getDad();
+		conservativeCrossoverAlgorithm.crossover(mom, dad);
+	}
+
+	@Test
+	public void testCrossover() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		/*
+		 * We do not need to stub out the evaluate() method because the fitness
+		 * value defaults to zero, and this algorithm allows replacements where
+		 * the fitness is equal
+		 */
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
+
+		Chromosome mom = getMom();
+		Chromosome dad = getDad();
+
+		Chromosome momClone = mom.clone();
+		Chromosome dadClone = dad.clone();
+
+		assertEquals(0, mom.getNumberOfChildren());
+		assertEquals(0, dad.getNumberOfChildren());
+
+		List<Chromosome> children = conservativeCrossoverAlgorithm.crossover(mom, dad);
+
+		assertNotNull(children);
+		assertEquals(1, children.size());
+
+		assertFalse(children.get(0).equals(mom));
+		assertFalse(children.get(0).equals(dad));
+
+		assertEquals(1, mom.getNumberOfChildren());
+		assertEquals(1, dad.getNumberOfChildren());
+
+		assertEquals(dad.getGenes().get(0), children.get(0).getGenes().get(0));
+		assertEquals(mom.getGenes().get(1), children.get(0).getGenes().get(1));
+		assertEquals(mom.getGenes().get(2), children.get(0).getGenes().get(2));
+		assertEquals(dad.getGenes().get(3), children.get(0).getGenes().get(3));
+		assertEquals(dad.getGenes().get(4), children.get(0).getGenes().get(4));
+		assertEquals(dad.getGenes().get(5), children.get(0).getGenes().get(5));
+
+		// The "mom" Chromsome should remain unmodified
+		assertEquals(momClone.getGenes(), mom.getGenes());
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes(), dad.getGenes());
+
+		verify(fitnessEvaluatorMock, times(4)).evaluate(any(Chromosome.class));
+	}
+
+	@Test
+	public void testCrossoverNullChild() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-999.0);
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
+
+		MockChromosome mom = new MockChromosome();
+		MockGene momGene = new MockGene();
+		MockSequence momSequence = new MockSequence();
+		momSequence.setValue("m");
+		momGene.addSequence(momSequence);
+		mom.addGene(momGene);
+
+		MockChromosome dad = new MockChromosome();
+		MockGene dadGene = new MockGene();
+		MockSequence dadSequence = new MockSequence();
+		dadSequence.setValue("d");
+		dadGene.addSequence(dadSequence);
+		dad.addGene(dadGene);
+
+		Chromosome momClone = mom.clone();
+		Chromosome dadClone = dad.clone();
+
+		assertEquals(0, mom.getNumberOfChildren());
+		assertEquals(0, dad.getNumberOfChildren());
+
+		List<Chromosome> children = conservativeCrossoverAlgorithm.crossover(mom, dad);
+
+		assertNotNull(children);
+		assertEquals(0, children.size());
+
+		assertEquals(0, mom.getNumberOfChildren());
+		assertEquals(0, dad.getNumberOfChildren());
+
+		// The "mom" Chromsome should remain unmodified
+		assertEquals(momClone.getGenes(), mom.getGenes());
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes(), dad.getGenes());
+
+		verify(fitnessEvaluatorMock, times(1)).evaluate(any(Chromosome.class));
+	}
+
+	@Test
+	public void testPerformCrossover_NoMutation() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		/*
+		 * We do not need to stub out the evaluate() method because the fitness
+		 * value defaults to zero, and this algorithm allows replacements where
+		 * the fitness is equal
+		 */
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
+
+		Chromosome mom = getMom();
+		Chromosome dad = getDad();
+		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+
+		assertNotNull(child);
+		assertFalse(child.equals(mom));
+		assertFalse(child.equals(dad));
+
+		assertEquals(dad.getGenes().get(0), child.getGenes().get(0));
+		assertEquals(mom.getGenes().get(1), child.getGenes().get(1));
+		assertEquals(mom.getGenes().get(2), child.getGenes().get(2));
+		assertEquals(dad.getGenes().get(3), child.getGenes().get(3));
+		assertEquals(dad.getGenes().get(4), child.getGenes().get(4));
+		assertEquals(dad.getGenes().get(5), child.getGenes().get(5));
+
+		verify(fitnessEvaluatorMock, times(4)).evaluate(any(Chromosome.class));
+	}
+
+	@Test
+	public void testPerformCrossover_WithMutation() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		/*
+		 * We do not need to stub out the evaluate() method because the fitness
+		 * value defaults to zero, and this algorithm allows replacements where
+		 * the fitness is equal
+		 */
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		MutationAlgorithm mockMutationAlgorithm = mock(MutationAlgorithm.class);
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(mockMutationAlgorithm);
+
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(true);
+
+		Chromosome mom = getMom();
+		Chromosome dad = getDad();
+		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+
+		assertNotNull(child);
+		assertFalse(child.equals(mom));
+		assertFalse(child.equals(dad));
+
+		assertEquals(dad.getGenes().get(0), child.getGenes().get(0));
+		assertEquals(mom.getGenes().get(1), child.getGenes().get(1));
+		assertEquals(mom.getGenes().get(2), child.getGenes().get(2));
+		assertEquals(dad.getGenes().get(3), child.getGenes().get(3));
+		assertEquals(dad.getGenes().get(4), child.getGenes().get(4));
+		assertEquals(dad.getGenes().get(5), child.getGenes().get(5));
+
+		verify(mockMutationAlgorithm, times(1)).mutateChromosome(eq(child));
+		verify(fitnessEvaluatorMock, times(4)).evaluate(any(Chromosome.class));
+	}
+
+	@Test
+	public void testPerformCrossover_ChildEqualsFirstParent() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-999.0);
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
+
+		MockChromosome mom = new MockChromosome();
+		MockGene momGene = new MockGene();
+		MockSequence momSequence = new MockSequence();
+		momSequence.setValue("m");
+		momGene.addSequence(momSequence);
+		mom.addGene(momGene);
+
+		MockChromosome dad = new MockChromosome();
+		MockGene dadGene = new MockGene();
+		MockSequence dadSequence = new MockSequence();
+		dadSequence.setValue("d");
+		dadGene.addSequence(dadSequence);
+		dad.addGene(dadGene);
+
+		Chromosome momClone = mom.clone();
+		Chromosome dadClone = dad.clone();
+
+		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+
+		assertNull(child);
+
+		// The "mom" Chromsome should remain unmodified
+		assertEquals(momClone.getGenes(), mom.getGenes());
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes(), dad.getGenes());
+
+		verify(fitnessEvaluatorMock, times(1)).evaluate(any(Chromosome.class));
+	}
+
+	@Test
+	public void testPerformCrossover_ChildEqualsSecondParent() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0);
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
+		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
+
+		MockChromosome mom = new MockChromosome();
+		MockGene momGene = new MockGene();
+		MockSequence momSequence = new MockSequence();
+		momSequence.setValue("m");
+		momGene.addSequence(momSequence);
+		mom.addGene(momGene);
+
+		MockChromosome dad = new MockChromosome();
+		MockGene dadGene = new MockGene();
+		MockSequence dadSequence = new MockSequence();
+		dadSequence.setValue("d");
+		dadGene.addSequence(dadSequence);
+		dad.addGene(dadGene);
+
+		Chromosome momClone = mom.clone();
+		Chromosome dadClone = dad.clone();
+
+		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+
+		assertNull(child);
+
+		// The "mom" Chromsome should remain unmodified
+		assertEquals(momClone.getGenes(), mom.getGenes());
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes(), dad.getGenes());
+
+		verify(fitnessEvaluatorMock, times(1)).evaluate(any(Chromosome.class));
+	}
+
+	@Test
+	public void testAttemptToReplaceGeneInChildEqualFitness() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		/*
+		 * We do not need to stub out the evaluate() method because the fitness
+		 * value defaults to zero, and this algorithm allows replacements where
+		 * the fitness is equal
+		 */
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
+
+		Chromosome mom = getMom();
+		Chromosome momClone = mom.clone();
+		Chromosome dad = getDad();
+		Chromosome dadClone = dad.clone();
+		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
+
+		// The "mom" Chromsome should only have the first Gene replaced
+		assertEquals(dad.getGenes().get(0), mom.getGenes().get(0));
+		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
+		assertEquals(momClone.getGenes().get(2), mom.getGenes().get(2));
+		assertEquals(momClone.getGenes().get(3), mom.getGenes().get(3));
+		assertEquals(momClone.getGenes().get(4), mom.getGenes().get(4));
+		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
+		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
+		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
+		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
+		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
+		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+
+		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
+	}
+
+	@Test
+	public void testAttemptToReplaceGeneInChildHigherFitness() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0);
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
+
+		Chromosome mom = getMom();
+		Chromosome momClone = mom.clone();
+		Chromosome dad = getDad();
+		Chromosome dadClone = dad.clone();
+		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
+
+		// The "mom" Chromsome should only have the first Gene replaced
+		assertEquals(dad.getGenes().get(0), mom.getGenes().get(0));
+		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
+		assertEquals(momClone.getGenes().get(2), mom.getGenes().get(2));
+		assertEquals(momClone.getGenes().get(3), mom.getGenes().get(3));
+		assertEquals(momClone.getGenes().get(4), mom.getGenes().get(4));
+		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
+		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
+		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
+		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
+		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
+		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+
+		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
+	}
+
+	@Test
+	public void testAttemptToReplaceGeneInChildLowerFitness() {
+		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
+
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-999.0);
+		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
+
+		Chromosome mom = getMom();
+		Chromosome momClone = mom.clone();
+		Chromosome dad = getDad();
+		Chromosome dadClone = dad.clone();
+		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
+
+		// The "mom" Chromsome should remain unmodified
+		assertEquals(momClone.getGenes().get(0), mom.getGenes().get(0));
+		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
+		assertEquals(momClone.getGenes().get(2), mom.getGenes().get(2));
+		assertEquals(momClone.getGenes().get(3), mom.getGenes().get(3));
+		assertEquals(momClone.getGenes().get(4), mom.getGenes().get(4));
+		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
+
+		// The "dad" Chromosome should remain unmodified
+		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
+		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
+		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
+		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
+		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
+		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+
+		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
+	}
+
+	@Test
+	public void testAdvanceIndexes() {
+		Chromosome child = getMom();
+		Chromosome parent = getDad();
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
+
+		ConservativeCrossoverAlgorithm.advanceIndexes(crossoverProgressDto, child, parent);
+
+		assertEquals(child.getGenes().get(0).size(), crossoverProgressDto
+				.getChildSequencePosition());
+		assertEquals(parent.getGenes().get(0).size(), crossoverProgressDto
+				.getParentSequencePosition());
+		assertEquals(1, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(1, crossoverProgressDto.getChildGeneIndex());
+
+		ConservativeCrossoverAlgorithm.advanceIndexes(crossoverProgressDto, child, parent);
+
+		assertEquals(6, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(8, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(2, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(2, crossoverProgressDto.getChildGeneIndex());
+
+		ConservativeCrossoverAlgorithm.advanceIndexes(crossoverProgressDto, child, parent);
+
+		assertEquals(11, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(8, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(2, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(3, crossoverProgressDto.getChildGeneIndex());
+
+		ConservativeCrossoverAlgorithm.advanceIndexes(crossoverProgressDto, child, parent);
+
+		assertEquals(11, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(11, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(3, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(3, crossoverProgressDto.getChildGeneIndex());
+	}
+
+	@Test
+	public void testAdvanceIndexesWhenChildReachesEnd() {
+		Chromosome child = getMom();
+		Chromosome parent = getDad();
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
+		crossoverProgressDto.advanceChildGeneIndexBy(child.getGenes().size());
+		crossoverProgressDto.advanceChildSequencePositionBy(child.actualSize());
+
+		assertEquals(child.actualSize().intValue(), crossoverProgressDto.getChildSequencePosition());
+		assertEquals(0, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(0, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(child.getGenes().size(), crossoverProgressDto.getChildGeneIndex());
+
+		ConservativeCrossoverAlgorithm.advanceIndexes(crossoverProgressDto, child, parent);
+
+		// None of the indexes should have advanced
+		assertEquals(child.actualSize().intValue(), crossoverProgressDto.getChildSequencePosition());
+		assertEquals(0, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(0, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(child.getGenes().size(), crossoverProgressDto.getChildGeneIndex());
+	}
+
+	@Test
+	public void testAdvanceIndexesWhenParentReachesEnd() {
+		Chromosome child = getMom();
+		Chromosome parent = getDad();
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
+		crossoverProgressDto.advanceParentGeneIndexBy(parent.getGenes().size());
+		crossoverProgressDto.advanceParentSequencePositionBy(parent.actualSize());
+
+		assertEquals(0, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(parent.actualSize().intValue(), crossoverProgressDto
+				.getParentSequencePosition());
+		assertEquals(parent.getGenes().size(), crossoverProgressDto.getParentGeneIndex());
+		assertEquals(0, crossoverProgressDto.getChildGeneIndex());
+
+		ConservativeCrossoverAlgorithm.advanceIndexes(crossoverProgressDto, child, parent);
+
+		// None of the indexes should have advanced
+		assertEquals(0, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(parent.actualSize().intValue(), crossoverProgressDto
+				.getParentSequencePosition());
+		assertEquals(parent.getGenes().size(), crossoverProgressDto.getParentGeneIndex());
+		assertEquals(0, crossoverProgressDto.getChildGeneIndex());
+	}
+}

@@ -32,16 +32,22 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm mutationAlgorithm;
-	private boolean mutateDuringCrossover;
+	private boolean mutateDuringCrossover = false;
 
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		if (mutateDuringCrossover && mutationAlgorithm == null) {
+			throw new IllegalStateException(
+					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
+		}
+
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
-		Chromosome firstChild = performCrossover(parentA, parentB);
-		// The chromosome will be null if it's identical to one of its parents
-		if (firstChild != null) {
-			children.add(firstChild);
+		Chromosome child = performCrossover(parentA, parentB);
+
+		// The Chromosome will be null if it's identical to one of its parents
+		if (child != null) {
+			children.add(child);
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
@@ -52,69 +58,32 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	/**
 	 * This crossover algorithm does a conservative amount of changes since it
 	 * only replaces genes that begin and end at the exact same sequence
-	 * positions
+	 * positions.
 	 */
-	public Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
+	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = (Chromosome) parentA.clone();
 
-		int childSequencePosition = 0;
-		int parentSequencePosition = 0;
-		int childGeneIndex = 0;
-		int parentGeneIndex = 0;
-		Gene geneCopy = null;
-		Double originalFitness = 0.0;
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
 		 * IndexOutOfBoundsException
 		 */
-		while (childGeneIndex < child.getGenes().size()
-				&& childGeneIndex < parentB.getGenes().size()) {
+		while (crossoverProgressDto.getChildGeneIndex() < child.getGenes().size()
+				&& crossoverProgressDto.getParentGeneIndex() < parentB.getGenes().size()) {
 			/*
 			 * Replace from parentB and reevaluate to see if it improves. We are
 			 * extra careful here since genes won't match exactly with sequence
 			 * position.
 			 */
-			if (childSequencePosition == parentSequencePosition) {
-				if (child.getGenes().get(childGeneIndex).size() == parentB.getGenes().get(
-						parentGeneIndex).size()) {
-					geneCopy = child.getGenes().get(childGeneIndex).clone();
-
-					originalFitness = child.getFitness();
-
-					child.replaceGene(childGeneIndex, parentB.getGenes().get(parentGeneIndex)
-							.clone());
-
-					fitnessEvaluator.evaluate(child);
-
-					/*
-					 * Revert to the original gene if this decreased fitness.
-					 * It's ok to let non-beneficial changes progress, as long
-					 * as they are not detrimental.
-					 */
-					if (child.getFitness() < originalFitness) {
-						child.replaceGene(childGeneIndex, geneCopy);
-
-						/*
-						 * Reset the fitness to what it was before the
-						 * replacement.
-						 */
-						child.setFitness(originalFitness);
-					}
-				}
-
-				childSequencePosition += child.getGenes().get(childGeneIndex).size();
-				parentSequencePosition += parentB.getGenes().get(parentGeneIndex).size();
-
-				childGeneIndex++;
-				parentGeneIndex++;
-			} else if (childSequencePosition > parentSequencePosition) {
-				parentSequencePosition += parentB.getGenes().get(parentGeneIndex).size();
-				parentGeneIndex++;
-			} else {
-				childSequencePosition += child.getGenes().get(childGeneIndex).size();
-				childGeneIndex++;
+			if (crossoverProgressDto.getChildSequencePosition() == crossoverProgressDto
+					.getParentSequencePosition()
+					&& child.getGenes().get(crossoverProgressDto.getChildGeneIndex()).size() == parentB
+							.getGenes().get(crossoverProgressDto.getParentGeneIndex()).size()) {
+				attemptToReplaceGeneInChild(crossoverProgressDto, child, parentB);
 			}
+
+			advanceIndexes(crossoverProgressDto, child, parentB);
 		}
 
 		if (mutateDuringCrossover) {
@@ -132,6 +101,62 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 		return child;
 	}
 
+	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto,
+			Chromosome child, Chromosome parentB) {
+		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getChildGeneIndex()).clone();
+
+		double originalFitness = child.getFitness();
+
+		child.replaceGene(crossoverProgressDto.getChildGeneIndex(), parentB.getGenes().get(
+				crossoverProgressDto.getParentGeneIndex()).clone());
+
+		double newFitness = fitnessEvaluator.evaluate(child);
+		child.setFitness(newFitness);
+
+		/*
+		 * Revert to the original gene if this decreased fitness. It's ok to let
+		 * non-beneficial changes progress, as long as they are not detrimental.
+		 */
+		if (newFitness < originalFitness) {
+			child.replaceGene(crossoverProgressDto.getChildGeneIndex(), geneCopy);
+
+			/*
+			 * Reset the fitness to what it was before the replacement.
+			 */
+			child.setFitness(originalFitness);
+		}
+	}
+
+	protected static void advanceIndexes(CrossoverProgressDto crossoverProgressDto,
+			Chromosome child, Chromosome parent) {
+
+		if (crossoverProgressDto.getChildGeneIndex() >= child.getGenes().size()
+				|| crossoverProgressDto.getParentGeneIndex() >= parent.getGenes().size()) {
+			// Nothing to do
+			return;
+		}
+
+		int childGeneSize = child.getGenes().get(crossoverProgressDto.getChildGeneIndex()).size();
+		int parentGeneSize = parent.getGenes().get(crossoverProgressDto.getParentGeneIndex())
+				.size();
+
+		if (crossoverProgressDto.getChildSequencePosition() == crossoverProgressDto
+				.getParentSequencePosition()) {
+			crossoverProgressDto.advanceChildSequencePositionBy(childGeneSize);
+			crossoverProgressDto.advanceParentSequencePositionBy(parentGeneSize);
+
+			crossoverProgressDto.advanceChildGeneIndexBy(1);
+			crossoverProgressDto.advanceParentGeneIndexBy(1);
+		} else if (crossoverProgressDto.getChildSequencePosition() > crossoverProgressDto
+				.getParentSequencePosition()) {
+			crossoverProgressDto.advanceParentSequencePositionBy(parentGeneSize);
+			crossoverProgressDto.advanceParentGeneIndexBy(1);
+		} else {
+			crossoverProgressDto.advanceChildSequencePositionBy(childGeneSize);
+			crossoverProgressDto.advanceChildGeneIndexBy(1);
+		}
+	}
+
 	/**
 	 * @param fitnessEvaluator
 	 *            the fitnessEvaluator to set
@@ -147,7 +172,6 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}

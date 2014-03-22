@@ -22,18 +22,21 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Required;
-
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm {
 	private MutationAlgorithm mutationAlgorithm;
-	private boolean mutateDuringCrossover;
+	private boolean mutateDuringCrossover = false;
 
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		if (mutateDuringCrossover && mutationAlgorithm == null) {
+			throw new IllegalStateException(
+					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
+		}
+
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		Chromosome firstChild = performCrossover(parentA, parentB);
@@ -52,7 +55,7 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions
 	 */
-	public Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
+	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int childSequencePosition = 0;
@@ -124,7 +127,6 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}

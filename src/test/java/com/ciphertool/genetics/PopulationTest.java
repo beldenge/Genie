@@ -31,7 +31,6 @@ import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -54,10 +53,10 @@ import com.ciphertool.genetics.fitness.AscendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockBreeder;
 import com.ciphertool.genetics.mocks.MockChromosome;
-import com.ciphertool.genetics.mocks.MockFitnessEvaluator;
 
 public class PopulationTest {
 	private static ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+	private static final double DEFAULT_FITNESS_VALUE = 100.0;
 
 	@BeforeClass
 	public static void setUp() {
@@ -112,16 +111,18 @@ public class PopulationTest {
 	public void testSetFitnessEvaluator() {
 		Population population = new Population();
 
-		MockFitnessEvaluator mockFitnessEvaluator = new MockFitnessEvaluator();
-		population.setFitnessEvaluator(mockFitnessEvaluator);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Field fitnessEvaluatorField = ReflectionUtils.findField(Population.class,
 				"fitnessEvaluator");
 		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
-		MockFitnessEvaluator fitnessEvaluatorFromObject = (MockFitnessEvaluator) ReflectionUtils
-				.getField(fitnessEvaluatorField, population);
+		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
+				fitnessEvaluatorField, population);
 
-		assertSame(mockFitnessEvaluator, fitnessEvaluatorFromObject);
+		assertSame(fitnessEvaluatorMock, fitnessEvaluatorFromObject);
 	}
 
 	@Test
@@ -188,16 +189,18 @@ public class PopulationTest {
 	public void testSetKnownSolutionFitnessEvaluator() {
 		Population population = new Population();
 
-		MockFitnessEvaluator mockKnownSolutionFitnessEvaluator = new MockFitnessEvaluator();
-		population.setKnownSolutionFitnessEvaluator(mockKnownSolutionFitnessEvaluator);
+		FitnessEvaluator knownSolutionFitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(knownSolutionFitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
+		population.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorMock);
 
 		Field knownSolutionFitnessEvaluatorField = ReflectionUtils.findField(Population.class,
 				"knownSolutionFitnessEvaluator");
 		ReflectionUtils.makeAccessible(knownSolutionFitnessEvaluatorField);
-		MockFitnessEvaluator knownSolutionFitnessEvaluatorFromObject = (MockFitnessEvaluator) ReflectionUtils
+		FitnessEvaluator knownSolutionFitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils
 				.getField(knownSolutionFitnessEvaluatorField, population);
 
-		assertSame(mockKnownSolutionFitnessEvaluator, knownSolutionFitnessEvaluatorFromObject);
+		assertSame(knownSolutionFitnessEvaluatorMock, knownSolutionFitnessEvaluatorFromObject);
 	}
 
 	@Test
@@ -283,14 +286,14 @@ public class PopulationTest {
 		Population.EvaluatorTask evaluatorTask = population.new EvaluatorTask(chromosomeToEvaluate);
 		population.setFitnessEvaluator(mockEvaluator);
 
-		Double fitnessReturned = null;
+		Void fitnessReturned = null;
 		try {
 			fitnessReturned = evaluatorTask.call();
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
 
-		assertSame(fitnessToReturn, fitnessReturned);
+		assertNull(fitnessReturned);
 	}
 
 	@Test
@@ -298,9 +301,10 @@ public class PopulationTest {
 		Population population = new Population();
 		population.setTaskExecutor(taskExecutor);
 
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		MockChromosome chromosomeEvaluationNeeded1 = new MockChromosome();
 		chromosomeEvaluationNeeded1.setFitness(1.0);
@@ -332,7 +336,7 @@ public class PopulationTest {
 		}
 
 		// Only two of the individuals needed to be evaluated
-		verify(fitnessEvaluatorSpy, times(2)).evaluate(any(Chromosome.class));
+		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 	}
 
 	@Test
@@ -342,9 +346,10 @@ public class PopulationTest {
 		Population population = new Population();
 		population.setTaskExecutor(taskExecutor);
 
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		MockChromosome chromosomeEvaluationNeeded1 = new MockChromosome();
 		chromosomeEvaluationNeeded1.setFitness(5.0);
@@ -376,10 +381,10 @@ public class PopulationTest {
 		}
 
 		// Only two of the individuals needed to be evaluated
-		verify(fitnessEvaluatorSpy, times(2)).evaluate(any(Chromosome.class));
+		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 
 		/*
-		 * The MockFitnessEvaluator always returns 100.0, so the total is (100.0
+		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0
 		 * x 2) + 5.0 + 100.1, since two individuals are re-evaluated
 		 */
 		Double expectedTotalFitness = new Double(305.1);
@@ -398,13 +403,15 @@ public class PopulationTest {
 		population.setTaskExecutor(taskExecutor);
 		population.setCompareToKnownSolution(true);
 
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
-		MockFitnessEvaluator knownSolutionFitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator knownSolutionFitnessEvaluatorSpy = spy(knownSolutionFitnessEvaluatorMock);
-		population.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorSpy);
+		FitnessEvaluator knownSolutionFitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(knownSolutionFitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(
+				DEFAULT_FITNESS_VALUE);
+		population.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorMock);
 
 		MockChromosome chromosomeEvaluationNeeded1 = new MockChromosome();
 		chromosomeEvaluationNeeded1.setFitness(5.0);
@@ -436,10 +443,10 @@ public class PopulationTest {
 		}
 
 		// Only two of the individuals needed to be evaluated
-		verify(fitnessEvaluatorSpy, times(2)).evaluate(any(Chromosome.class));
+		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 
 		/*
-		 * The MockFitnessEvaluator always returns 100.0, so the total is (100.0
+		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0
 		 * x 2) + 5.0 + 100.1, since two individuals are re-evaluated
 		 */
 		Double expectedTotalFitness = new Double(305.1);
@@ -448,7 +455,8 @@ public class PopulationTest {
 		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(
 				generationStatistics.getAverageFitness()));
 		assertEquals(new Double(100.1), new Double(generationStatistics.getBestFitness()));
-		assertEquals(new Double(100.0), generationStatistics.getKnownSolutionProximity());
+		assertEquals(new Double(DEFAULT_FITNESS_VALUE), generationStatistics
+				.getKnownSolutionProximity());
 	}
 
 	@Test
@@ -546,9 +554,10 @@ public class PopulationTest {
 		Population population = new Population();
 		population.setTaskExecutor(taskExecutor);
 
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Double fitnessSum = 0.0;
 		assertEquals(fitnessSum, population.getTotalFitness());
@@ -563,7 +572,7 @@ public class PopulationTest {
 		// Validate
 		fitnessSum += chromosomeEvaluationNeeded.getFitness();
 		assertEquals(fitnessSum, population.getTotalFitness());
-		verify(fitnessEvaluatorSpy, times(1)).evaluate(same(chromosomeEvaluationNeeded));
+		verify(fitnessEvaluatorMock, times(1)).evaluate(same(chromosomeEvaluationNeeded));
 		assertEquals(1, population.size());
 		assertSame(chromosomeEvaluationNeeded, population.getIndividuals().get(0));
 
@@ -575,7 +584,7 @@ public class PopulationTest {
 		// Validate
 		fitnessSum += chromosomeEvaluationNotNeeded.getFitness();
 		assertEquals(fitnessSum, population.getTotalFitness());
-		verifyNoMoreInteractions(fitnessEvaluatorSpy);
+		verifyNoMoreInteractions(fitnessEvaluatorMock);
 		assertEquals(2, population.size());
 		assertSame(chromosomeEvaluationNotNeeded, population.getIndividuals().get(1));
 	}
@@ -641,9 +650,10 @@ public class PopulationTest {
 				"ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Double fitnessSum = 0.0;
 		assertEquals(fitnessSum, population.getTotalFitness());
@@ -657,7 +667,7 @@ public class PopulationTest {
 
 		// Validate - this shouldn't affect the individuals List
 		assertEquals(new Double(0.0), population.getTotalFitness());
-		verifyZeroInteractions(fitnessEvaluatorSpy);
+		verifyZeroInteractions(fitnessEvaluatorMock);
 		assertEquals(0, population.size());
 
 		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
@@ -672,7 +682,7 @@ public class PopulationTest {
 
 		// Validate - this shouldn't affect the individuals List
 		assertEquals(new Double(0.0), population.getTotalFitness());
-		verifyZeroInteractions(fitnessEvaluatorSpy);
+		verifyZeroInteractions(fitnessEvaluatorMock);
 		assertEquals(0, population.size());
 
 		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
@@ -743,9 +753,10 @@ public class PopulationTest {
 				"ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Double fitnessSum = 0.0;
 		assertEquals(fitnessSum, population.getTotalFitness());
@@ -767,7 +778,7 @@ public class PopulationTest {
 
 		// Validate - this shouldn't affect the individuals List
 		assertEquals(new Double(0.0), population.getTotalFitness());
-		verifyZeroInteractions(fitnessEvaluatorSpy);
+		verifyZeroInteractions(fitnessEvaluatorMock);
 		assertEquals(0, population.size());
 
 		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
@@ -783,7 +794,7 @@ public class PopulationTest {
 		fitnessSum = chromosomeEvaluationNeeded.getFitness()
 				+ chromosomeEvaluationNotNeeded.getFitness();
 		assertEquals(fitnessSum, population.getTotalFitness());
-		verify(fitnessEvaluatorSpy, times(1)).evaluate(same(chromosomeEvaluationNeeded));
+		verify(fitnessEvaluatorMock, times(1)).evaluate(same(chromosomeEvaluationNeeded));
 		assertEquals(2, population.size());
 		assertSame(chromosomeEvaluationNeeded, population.getIndividuals().get(0));
 		assertSame(chromosomeEvaluationNotNeeded, population.getIndividuals().get(1));
@@ -795,9 +806,10 @@ public class PopulationTest {
 		population.setTaskExecutor(taskExecutor);
 
 		// This is needed to avoid a NullPointerException on fitnessEvaluator
-		MockFitnessEvaluator fitnessEvaluatorMock = new MockFitnessEvaluator();
-		MockFitnessEvaluator fitnessEvaluatorSpy = spy(fitnessEvaluatorMock);
-		population.setFitnessEvaluator(fitnessEvaluatorSpy);
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		assertEquals(0, population.size());
 

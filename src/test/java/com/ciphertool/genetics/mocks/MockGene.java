@@ -112,13 +112,6 @@ public class MockGene implements Gene {
 			return false;
 		}
 		MockGene other = (MockGene) obj;
-		if (chromosome == null) {
-			if (other.chromosome != null) {
-				return false;
-			}
-		} else if (chromosome != other.chromosome) {
-			return false;
-		}
 		if (sequences == null) {
 			if (other.sequences != null) {
 				return false;

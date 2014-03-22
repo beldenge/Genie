@@ -39,10 +39,15 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
 	private MutationAlgorithm mutationAlgorithm;
-	private boolean mutateDuringCrossover;
+	private boolean mutateDuringCrossover = false;
 
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+		if (mutateDuringCrossover && mutationAlgorithm == null) {
+			throw new IllegalStateException(
+					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
+		}
+
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		Chromosome firstChild = performCrossover(parentA, parentB);
@@ -60,7 +65,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * This crossover algorithm does a liberal amount of changes since it
 	 * replaces genes regardless of their begin and end sequence positions
 	 */
-	public Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
+	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = parentA.clone();
 
 		int genesBefore = 0;
@@ -89,14 +94,15 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 				child.addGene(geneListDao.findRandomGene(child));
 			}
 
-			fitnessEvaluator.evaluate(child);
+			double newFitness = fitnessEvaluator.evaluate(child);
+			child.setFitness(newFitness);
 
 			/*
 			 * Revert to the original gene if this decreased fitness. It's ok to
 			 * let non-beneficial changes progress, as long as they are not
 			 * detrimental.
 			 */
-			if (child.getFitness() < originalFitness) {
+			if (newFitness < originalFitness) {
 				child.replaceGene(childGeneIndex, geneCopy);
 
 				while (child.getGenes().size() > genesBefore) {
@@ -166,7 +172,6 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	@Required
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}

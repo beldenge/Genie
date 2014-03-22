@@ -32,6 +32,7 @@ public class MockChromosome implements Chromosome {
 	private List<Gene> genes = new ArrayList<Gene>();
 	private Integer targetSize = 25;
 	private int age = 0;
+	private int numberOfChildren = 0;
 
 	@Override
 	public List<Gene> getGenes() {
@@ -95,17 +96,17 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public int getNumberOfChildren() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		return this.numberOfChildren;
 	}
 
 	@Override
 	public void setNumberOfChildren(int numberOfChildren) {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.numberOfChildren = numberOfChildren;
 	}
 
 	@Override
 	public void increaseNumberOfChildren() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
+		this.numberOfChildren++;
 	}
 
 	@Override
@@ -166,6 +167,28 @@ public class MockChromosome implements Chromosome {
 		}
 
 		return clone;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		MockChromosome other = (MockChromosome) obj;
+		if (genes == null) {
+			if (other.genes != null) {
+				return false;
+			}
+		} else if (!genes.equals(other.genes)) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
