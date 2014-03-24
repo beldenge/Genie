@@ -40,6 +40,7 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		Chromosome firstChild = performCrossover(parentA, parentB);
+
 		// The chromosome will be null if it's identical to one of its parents
 		if (firstChild != null) {
 			children.add(firstChild);
@@ -58,41 +59,28 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = (Chromosome) parentA.clone();
 
-		int childSequencePosition = 0;
-		int parentSequencePosition = 0;
-		int childGeneIndex = 0;
-		int parentGeneIndex = 0;
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
 		 * IndexOutOfBoundsException
 		 */
-		while (childGeneIndex < child.getGenes().size()
-				&& childGeneIndex < parentB.getGenes().size()) {
+		while (crossoverProgressDto.getChildGeneIndex() < child.getGenes().size()
+				&& crossoverProgressDto.getParentGeneIndex() < parentB.getGenes().size()) {
 			/*
-			 * Replace from parentB and reevaluate to see if it improves. We are
-			 * extra careful here since genes won't match exactly with sequence
-			 * position.
+			 * Replace from parentB. We are extra careful here since genes won't
+			 * match exactly with sequence position.
 			 */
-			if (childSequencePosition == parentSequencePosition) {
-				if (child.getGenes().get(childGeneIndex).size() == parentB.getGenes().get(
-						parentGeneIndex).size()) {
-					child.replaceGene(childGeneIndex, parentB.getGenes().get(parentGeneIndex)
-							.clone());
-				}
-
-				childSequencePosition += child.getGenes().get(childGeneIndex).size();
-				parentSequencePosition += parentB.getGenes().get(parentGeneIndex).size();
-
-				childGeneIndex++;
-				parentGeneIndex++;
-			} else if (childSequencePosition > parentSequencePosition) {
-				parentSequencePosition += parentB.getGenes().get(parentGeneIndex).size();
-				parentGeneIndex++;
-			} else {
-				childSequencePosition += child.getGenes().get(childGeneIndex).size();
-				childGeneIndex++;
+			if (crossoverProgressDto.getChildSequencePosition() == crossoverProgressDto
+					.getParentSequencePosition()
+					&& child.getGenes().get(crossoverProgressDto.getChildGeneIndex()).size() == parentB
+							.getGenes().get(crossoverProgressDto.getParentGeneIndex()).size()) {
+				child.replaceGene(crossoverProgressDto.getChildGeneIndex(), parentB.getGenes().get(
+						crossoverProgressDto.getParentGeneIndex()).clone());
 			}
+
+			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
+					parentB);
 		}
 
 		if (mutateDuringCrossover) {

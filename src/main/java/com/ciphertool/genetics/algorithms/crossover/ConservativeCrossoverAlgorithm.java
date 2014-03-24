@@ -83,7 +83,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 				attemptToReplaceGeneInChild(crossoverProgressDto, child, parentB);
 			}
 
-			advanceIndexes(crossoverProgressDto, child, parentB);
+			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
+					parentB);
 		}
 
 		if (mutateDuringCrossover) {
@@ -124,36 +125,6 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			 * Reset the fitness to what it was before the replacement.
 			 */
 			child.setFitness(originalFitness);
-		}
-	}
-
-	protected static void advanceIndexes(CrossoverProgressDto crossoverProgressDto,
-			Chromosome child, Chromosome parent) {
-
-		if (crossoverProgressDto.getChildGeneIndex() >= child.getGenes().size()
-				|| crossoverProgressDto.getParentGeneIndex() >= parent.getGenes().size()) {
-			// Nothing to do
-			return;
-		}
-
-		int childGeneSize = child.getGenes().get(crossoverProgressDto.getChildGeneIndex()).size();
-		int parentGeneSize = parent.getGenes().get(crossoverProgressDto.getParentGeneIndex())
-				.size();
-
-		if (crossoverProgressDto.getChildSequencePosition() == crossoverProgressDto
-				.getParentSequencePosition()) {
-			crossoverProgressDto.advanceChildSequencePositionBy(childGeneSize);
-			crossoverProgressDto.advanceParentSequencePositionBy(parentGeneSize);
-
-			crossoverProgressDto.advanceChildGeneIndexBy(1);
-			crossoverProgressDto.advanceParentGeneIndexBy(1);
-		} else if (crossoverProgressDto.getChildSequencePosition() > crossoverProgressDto
-				.getParentSequencePosition()) {
-			crossoverProgressDto.advanceParentSequencePositionBy(parentGeneSize);
-			crossoverProgressDto.advanceParentGeneIndexBy(1);
-		} else {
-			crossoverProgressDto.advanceChildSequencePositionBy(childGeneSize);
-			crossoverProgressDto.advanceChildGeneIndexBy(1);
 		}
 	}
 

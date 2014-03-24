@@ -44,6 +44,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		Chromosome firstChild = performCrossover(parentA, parentB);
+
 		// The chromosome will be null if it's identical to one of its parents
 		if (firstChild != null) {
 			children.add(firstChild);

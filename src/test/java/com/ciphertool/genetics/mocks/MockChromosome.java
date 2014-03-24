@@ -30,7 +30,7 @@ public class MockChromosome implements Chromosome {
 	private boolean needsEvaluation;
 	private Double fitness = 0.0;
 	private List<Gene> genes = new ArrayList<Gene>();
-	private Integer targetSize = 25;
+	private Integer targetSize = 0;
 	private int age = 0;
 	private int numberOfChildren = 0;
 

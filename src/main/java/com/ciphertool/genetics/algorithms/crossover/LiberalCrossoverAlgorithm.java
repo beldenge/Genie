@@ -22,7 +22,6 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
@@ -33,8 +32,6 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.ChromosomeHelper;
 
 public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
-	@SuppressWarnings("unused")
-	private Logger log = Logger.getLogger(getClass());
 	private FitnessEvaluator fitnessEvaluator;
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
@@ -51,6 +48,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		Chromosome firstChild = performCrossover(parentA, parentB);
+
 		// The chromosome will be null if it's identical to one of its parents
 		if (firstChild != null) {
 			children.add(firstChild);
@@ -68,10 +66,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
 		Chromosome child = parentA.clone();
 
-		int genesBefore = 0;
 		int childGeneIndex = 0;
-		Gene geneCopy = null;
-		Double originalFitness = 0.0;
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
@@ -79,41 +74,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		 */
 		while (childGeneIndex < child.getGenes().size()
 				&& childGeneIndex < parentB.getGenes().size()) {
-			/*
-			 * Replace from parentB and reevaluate to see if it improves.
-			 */
-			geneCopy = child.getGenes().get(childGeneIndex).clone();
-
-			originalFitness = child.getFitness();
-
-			genesBefore = child.getGenes().size();
-
-			child.replaceGene(childGeneIndex, parentB.getGenes().get(childGeneIndex).clone());
-
-			while (child.actualSize() < child.targetSize()) {
-				child.addGene(geneListDao.findRandomGene(child));
-			}
-
-			double newFitness = fitnessEvaluator.evaluate(child);
-			child.setFitness(newFitness);
-
-			/*
-			 * Revert to the original gene if this decreased fitness. It's ok to
-			 * let non-beneficial changes progress, as long as they are not
-			 * detrimental.
-			 */
-			if (newFitness < originalFitness) {
-				child.replaceGene(childGeneIndex, geneCopy);
-
-				while (child.getGenes().size() > genesBefore) {
-					child.removeGene(child.getGenes().size() - 1);
-				}
-
-				/*
-				 * Reset the fitness to what it was before the replacement.
-				 */
-				child.setFitness(originalFitness);
-			}
+			attemptToReplaceGeneInChild(childGeneIndex, child, parentB);
 
 			childGeneIndex++;
 		}
@@ -137,6 +98,48 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */
 		return child;
+	}
+
+	protected void attemptToReplaceGeneInChild(int childGeneIndex, Chromosome child,
+			Chromosome parent) {
+		/*
+		 * Replace from parentB and reevaluate to see if it improves.
+		 */
+		Gene geneCopy = child.getGenes().get(childGeneIndex).clone();
+
+		double originalFitness = child.getFitness();
+
+		int genesBefore = child.getGenes().size();
+
+		child.replaceGene(childGeneIndex, parent.getGenes().get(childGeneIndex).clone());
+
+		/*
+		 * Add Genes to the end in case the Chromosome has too few sequences due
+		 * to the replacement
+		 */
+		while (child.actualSize() < child.targetSize()) {
+			child.addGene(geneListDao.findRandomGene(child));
+		}
+
+		double newFitness = fitnessEvaluator.evaluate(child);
+		child.setFitness(newFitness);
+
+		/*
+		 * Revert to the original gene if this decreased fitness. It's ok to let
+		 * non-beneficial changes progress, as long as they are not detrimental.
+		 */
+		if (newFitness < originalFitness) {
+			child.replaceGene(childGeneIndex, geneCopy);
+
+			while (child.getGenes().size() > genesBefore) {
+				child.removeGene(child.getGenes().size() - 1);
+			}
+
+			/*
+			 * Reset the fitness to what it was before the replacement.
+			 */
+			child.setFitness(originalFitness);
+		}
 	}
 
 	/**

@@ -78,6 +78,7 @@ public class ChromosomeHelperTest {
 	public void testResizeChromosomeLessThanTargetSize() {
 		// Test where the last gene ends exactly at the target size
 		MockChromosome chromosomeToResize = new MockChromosome();
+		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
 
@@ -91,6 +92,7 @@ public class ChromosomeHelperTest {
 
 		// Test where the last gene does not end at the target size
 		chromosomeToResize = new MockChromosome();
+		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(1));
 
@@ -107,6 +109,7 @@ public class ChromosomeHelperTest {
 	public void testResizeChromosomeGreaterThanTargetSize() {
 		// Test where no gene overlaps the the target size
 		MockChromosome chromosomeToResize = new MockChromosome();
+		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
@@ -124,6 +127,7 @@ public class ChromosomeHelperTest {
 
 		// Test where a gene overlaps the the target size
 		chromosomeToResize = new MockChromosome();
+		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
@@ -142,6 +146,7 @@ public class ChromosomeHelperTest {
 	@Test
 	public void testResizeChromosomeAlreadyAtTargetSize() {
 		MockChromosome chromosomeToResize = new MockChromosome();
+		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));

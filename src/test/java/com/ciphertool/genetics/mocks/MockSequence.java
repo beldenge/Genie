@@ -35,6 +35,11 @@ public class MockSequence implements Sequence {
 		this.value = (String) value;
 	}
 
+	public MockSequence(Object value, Integer sequenceId) {
+		this.value = (String) value;
+		this.sequenceId = sequenceId;
+	}
+
 	@Override
 	public Integer getSequenceId() {
 		return this.sequenceId;
