@@ -196,7 +196,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(mom.getGenes().get(4), children.get(0).getGenes().get(4));
 		assertEquals(dad.getGenes().get(5), children.get(0).getGenes().get(5));
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -259,7 +259,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -407,7 +407,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 		assertNull(child);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -460,7 +460,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 		assertNull(child);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -516,22 +516,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(geneToReturn, child.getGenes().get(6));
 
 		// The "mom" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(momClone.getGenes().get(0), mom.getGenes().get(0));
-		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
-		assertEquals(momClone.getGenes().get(2), mom.getGenes().get(2));
-		assertEquals(momClone.getGenes().get(3), mom.getGenes().get(3));
-		assertEquals(momClone.getGenes().get(4), mom.getGenes().get(4));
-		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
+		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
-		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
-		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
-		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
-		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
-		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+		assertEquals(dadClone.getGenes(), dad.getGenes());
 
 		verify(fitnessEvaluatorMock, times(6)).evaluate(same(child));
 		verify(geneListDaoMock, times(1)).findRandomGene(any(Chromosome.class));
@@ -580,22 +568,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(trimmedGene, child.getGenes().get(5));
 
 		// The "mom" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(momClone.getGenes().get(0), mom.getGenes().get(0));
-		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
-		assertEquals(momClone.getGenes().get(2), mom.getGenes().get(2));
-		assertEquals(momClone.getGenes().get(3), mom.getGenes().get(3));
-		assertEquals(momClone.getGenes().get(4), mom.getGenes().get(4));
-		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
+		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
-		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
-		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
-		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
-		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
-		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+		assertEquals(dadClone.getGenes(), dad.getGenes());
 
 		verify(fitnessEvaluatorMock, times(6)).evaluate(same(child));
 	}
@@ -627,7 +603,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		Chromosome dadClone = dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(2, mom, dad);
 
-		// The "mom" Chromsome should only have one Gene replaced
+		// The "mom" Chromosome should only have one Gene replaced
 		assertEquals(7, mom.getGenes().size());
 		assertEquals(momClone.getGenes().get(0), mom.getGenes().get(0));
 		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
@@ -638,13 +614,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(geneToReturn, mom.getGenes().get(6));
 
 		// The "dad" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
-		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
-		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
-		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
-		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
-		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+		assertEquals(dadClone.getGenes(), dad.getGenes());
 
 		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
 		verify(geneListDaoMock, times(1)).findRandomGene(any(Chromosome.class));
@@ -670,7 +640,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		Chromosome dadClone = dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(0, mom, dad);
 
-		// The "mom" Chromsome should only have the first Gene replaced
+		// The "mom" Chromosome should only have the first Gene replaced
 		assertEquals(6, mom.getGenes().size());
 		assertEquals(dad.getGenes().get(0), mom.getGenes().get(0));
 		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
@@ -680,13 +650,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
 
 		// The "dad" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
-		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
-		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
-		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
-		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
-		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+		assertEquals(dadClone.getGenes(), dad.getGenes());
 
 		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
 	}
@@ -707,7 +671,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		Chromosome dadClone = dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(0, mom, dad);
 
-		// The "mom" Chromsome should only have the first Gene replaced
+		// The "mom" Chromosome should only have the first Gene replaced
 		assertEquals(6, mom.getGenes().size());
 		assertEquals(dad.getGenes().get(0), mom.getGenes().get(0));
 		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
@@ -717,13 +681,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
 
 		// The "dad" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
-		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
-		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
-		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
-		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
-		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+		assertEquals(dadClone.getGenes(), dad.getGenes());
 
 		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
 	}
@@ -744,23 +702,11 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		Chromosome dadClone = dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(0, mom, dad);
 
-		// The "mom" Chromsome should remain unmodified
-		assertEquals(6, mom.getGenes().size());
-		assertEquals(momClone.getGenes().get(0), mom.getGenes().get(0));
-		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
-		assertEquals(momClone.getGenes().get(2), mom.getGenes().get(2));
-		assertEquals(momClone.getGenes().get(3), mom.getGenes().get(3));
-		assertEquals(momClone.getGenes().get(4), mom.getGenes().get(4));
-		assertEquals(momClone.getGenes().get(5), mom.getGenes().get(5));
+		// The "mom" Chromosome should remain unmodified
+		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
-		assertEquals(6, dad.getGenes().size());
-		assertEquals(dadClone.getGenes().get(0), dad.getGenes().get(0));
-		assertEquals(dadClone.getGenes().get(1), dad.getGenes().get(1));
-		assertEquals(dadClone.getGenes().get(2), dad.getGenes().get(2));
-		assertEquals(dadClone.getGenes().get(3), dad.getGenes().get(3));
-		assertEquals(dadClone.getGenes().get(4), dad.getGenes().get(4));
-		assertEquals(dadClone.getGenes().get(5), dad.getGenes().get(5));
+		assertEquals(dadClone.getGenes(), dad.getGenes());
 
 		verify(fitnessEvaluatorMock, times(1)).evaluate(same(mom));
 	}

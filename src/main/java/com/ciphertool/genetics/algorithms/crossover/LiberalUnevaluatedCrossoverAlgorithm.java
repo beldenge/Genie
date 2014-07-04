@@ -22,7 +22,6 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
@@ -30,14 +29,14 @@ import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.ChromosomeHelper;
+import com.ciphertool.genetics.util.Coin;
 
 public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm {
-	@SuppressWarnings("unused")
-	private Logger log = Logger.getLogger(getClass());
 	private GeneListDao geneListDao;
 	private ChromosomeHelper chromosomeHelper;
 	private MutationAlgorithm mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
+	private Coin coin;
 
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
@@ -75,16 +74,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 		 */
 		while (childGeneIndex < child.getGenes().size()
 				&& childGeneIndex < parentB.getGenes().size()) {
-			/*
-			 * Flip a coin to see if the current Gene should be replaced
-			 */
-			if (((int) (Math.random() * 2)) == 0) {
-				child.replaceGene(childGeneIndex, parentB.getGenes().get(childGeneIndex).clone());
-
-				while (child.actualSize() < child.targetSize()) {
-					child.addGene(geneListDao.findRandomGene(child));
-				}
-			}
+			attemptToReplaceGeneInChild(childGeneIndex, child, parentB);
 
 			childGeneIndex++;
 		}
@@ -108,6 +98,20 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */
 		return child;
+	}
+
+	protected void attemptToReplaceGeneInChild(int childGeneIndex, Chromosome child,
+			Chromosome parent) {
+		/*
+		 * Flip a coin to see if the current Gene should be replaced
+		 */
+		if (coin.flip()) {
+			child.replaceGene(childGeneIndex, parent.getGenes().get(childGeneIndex).clone());
+
+			while (child.actualSize() < child.targetSize()) {
+				child.addGene(geneListDao.findRandomGene(child));
+			}
+		}
 	}
 
 	/**
@@ -156,5 +160,14 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm 
 	@Override
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
+	}
+
+	/**
+	 * @param coin
+	 *            the coin to set
+	 */
+	@Required
+	public void setCoin(Coin coin) {
+		this.coin = coin;
 	}
 }
