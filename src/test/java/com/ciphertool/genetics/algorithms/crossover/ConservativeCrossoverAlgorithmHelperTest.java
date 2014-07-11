@@ -36,32 +36,32 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
 		assertEquals(child.getGenes().get(0).size(), crossoverProgressDto
-				.getChildSequencePosition());
+				.getFirstChromosomeSequencePosition());
 		assertEquals(parent.getGenes().get(0).size(), crossoverProgressDto
-				.getParentSequencePosition());
-		assertEquals(1, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(1, crossoverProgressDto.getChildGeneIndex());
+				.getSecondChromosomeSequencePosition());
+		assertEquals(1, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(1, crossoverProgressDto.getFirstChromosomeGeneIndex());
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
-		assertEquals(6, crossoverProgressDto.getChildSequencePosition());
-		assertEquals(8, crossoverProgressDto.getParentSequencePosition());
-		assertEquals(2, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(2, crossoverProgressDto.getChildGeneIndex());
+		assertEquals(6, crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(8, crossoverProgressDto.getSecondChromosomeSequencePosition());
+		assertEquals(2, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(2, crossoverProgressDto.getFirstChromosomeGeneIndex());
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
-		assertEquals(11, crossoverProgressDto.getChildSequencePosition());
-		assertEquals(8, crossoverProgressDto.getParentSequencePosition());
-		assertEquals(2, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(3, crossoverProgressDto.getChildGeneIndex());
+		assertEquals(11, crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(8, crossoverProgressDto.getSecondChromosomeSequencePosition());
+		assertEquals(2, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(3, crossoverProgressDto.getFirstChromosomeGeneIndex());
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
-		assertEquals(11, crossoverProgressDto.getChildSequencePosition());
-		assertEquals(11, crossoverProgressDto.getParentSequencePosition());
-		assertEquals(3, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(3, crossoverProgressDto.getChildGeneIndex());
+		assertEquals(11, crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(11, crossoverProgressDto.getSecondChromosomeSequencePosition());
+		assertEquals(3, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(3, crossoverProgressDto.getFirstChromosomeGeneIndex());
 	}
 
 	@Test
@@ -69,21 +69,21 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 		Chromosome child = getMom();
 		Chromosome parent = getDad();
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
-		crossoverProgressDto.advanceChildGeneIndexBy(child.getGenes().size());
-		crossoverProgressDto.advanceChildSequencePositionBy(child.actualSize());
+		crossoverProgressDto.advanceFirstChromosomeGeneIndexBy(child.getGenes().size());
+		crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(child.actualSize());
 
-		assertEquals(child.actualSize().intValue(), crossoverProgressDto.getChildSequencePosition());
-		assertEquals(0, crossoverProgressDto.getParentSequencePosition());
-		assertEquals(0, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(child.getGenes().size(), crossoverProgressDto.getChildGeneIndex());
+		assertEquals(child.actualSize().intValue(), crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeSequencePosition());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(child.getGenes().size(), crossoverProgressDto.getFirstChromosomeGeneIndex());
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
 		// None of the indexes should have advanced
-		assertEquals(child.actualSize().intValue(), crossoverProgressDto.getChildSequencePosition());
-		assertEquals(0, crossoverProgressDto.getParentSequencePosition());
-		assertEquals(0, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(child.getGenes().size(), crossoverProgressDto.getChildGeneIndex());
+		assertEquals(child.actualSize().intValue(), crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeSequencePosition());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(child.getGenes().size(), crossoverProgressDto.getFirstChromosomeGeneIndex());
 	}
 
 	@Test
@@ -91,22 +91,22 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 		Chromosome child = getMom();
 		Chromosome parent = getDad();
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
-		crossoverProgressDto.advanceParentGeneIndexBy(parent.getGenes().size());
-		crossoverProgressDto.advanceParentSequencePositionBy(parent.actualSize());
+		crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(parent.getGenes().size());
+		crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(parent.actualSize());
 
-		assertEquals(0, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeSequencePosition());
 		assertEquals(parent.actualSize().intValue(), crossoverProgressDto
-				.getParentSequencePosition());
-		assertEquals(parent.getGenes().size(), crossoverProgressDto.getParentGeneIndex());
-		assertEquals(0, crossoverProgressDto.getChildGeneIndex());
+				.getSecondChromosomeSequencePosition());
+		assertEquals(parent.getGenes().size(), crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeGeneIndex());
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
 		// None of the indexes should have advanced
-		assertEquals(0, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeSequencePosition());
 		assertEquals(parent.actualSize().intValue(), crossoverProgressDto
-				.getParentSequencePosition());
-		assertEquals(parent.getGenes().size(), crossoverProgressDto.getParentGeneIndex());
-		assertEquals(0, crossoverProgressDto.getChildGeneIndex());
+				.getSecondChromosomeSequencePosition());
+		assertEquals(parent.getGenes().size(), crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeGeneIndex());
 	}
 }

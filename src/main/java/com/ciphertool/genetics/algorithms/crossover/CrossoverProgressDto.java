@@ -25,55 +25,55 @@ package com.ciphertool.genetics.algorithms.crossover;
  * incremented by reference.
  */
 public class CrossoverProgressDto {
-	private int childSequencePosition = 0;
-	private int parentSequencePosition = 0;
-	private int childGeneIndex = 0;
-	private int parentGeneIndex = 0;
+	private int firstChromosomeSequencePosition = 0;
+	private int secondChromosomeSequencePosition = 0;
+	private int firstChromosomeGeneIndex = 0;
+	private int secondChromosomeGeneIndex = 0;
 
 	public CrossoverProgressDto() {
 	}
 
-	public void advanceChildSequencePositionBy(int amountToAdvance) {
-		this.childSequencePosition += amountToAdvance;
+	public void advanceFirstChromosomeSequencePositionBy(int amountToAdvance) {
+		this.firstChromosomeSequencePosition += amountToAdvance;
 	}
 
-	public void advanceParentSequencePositionBy(int amountToAdvance) {
-		this.parentSequencePosition += amountToAdvance;
+	public void advanceSecondChromosomeSequencePositionBy(int amountToAdvance) {
+		this.secondChromosomeSequencePosition += amountToAdvance;
 	}
 
-	public void advanceChildGeneIndexBy(int amountToAdvance) {
-		this.childGeneIndex += amountToAdvance;
+	public void advanceFirstChromosomeGeneIndexBy(int amountToAdvance) {
+		this.firstChromosomeGeneIndex += amountToAdvance;
 	}
 
-	public void advanceParentGeneIndexBy(int amountToAdvance) {
-		this.parentGeneIndex += amountToAdvance;
-	}
-
-	/**
-	 * @return the childSequencePosition
-	 */
-	public int getChildSequencePosition() {
-		return childSequencePosition;
+	public void advanceSecondChromosomeGeneIndexBy(int amountToAdvance) {
+		this.secondChromosomeGeneIndex += amountToAdvance;
 	}
 
 	/**
-	 * @return the parentSequencePosition
+	 * @return the firstChromosomeSequencePosition
 	 */
-	public int getParentSequencePosition() {
-		return parentSequencePosition;
+	public int getFirstChromosomeSequencePosition() {
+		return firstChromosomeSequencePosition;
 	}
 
 	/**
-	 * @return the childGeneIndex
+	 * @return the secondChromosomeSequencePosition
 	 */
-	public int getChildGeneIndex() {
-		return childGeneIndex;
+	public int getSecondChromosomeSequencePosition() {
+		return secondChromosomeSequencePosition;
 	}
 
 	/**
-	 * @return the parentGeneIndex
+	 * @return the firstChromosomeGeneIndex
 	 */
-	public int getParentGeneIndex() {
-		return parentGeneIndex;
+	public int getFirstChromosomeGeneIndex() {
+		return firstChromosomeGeneIndex;
+	}
+
+	/**
+	 * @return the secondChromosomeGeneIndex
+	 */
+	public int getSecondChromosomeGeneIndex() {
+		return secondChromosomeGeneIndex;
 	}
 }

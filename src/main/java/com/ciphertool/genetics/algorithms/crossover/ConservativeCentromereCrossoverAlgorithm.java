@@ -26,13 +26,14 @@ import org.apache.log4j.Logger;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.util.RandomListElementSelector;
 
 public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm {
-	Logger log = Logger.getLogger(getClass());
+	private static Logger log = Logger.getLogger(ConservativeCentromereCrossoverAlgorithm.class);
 	private MutationAlgorithm mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
+	private RandomListElementSelector randomListElementSelector;
 
 	/**
 	 * This crossover algorithm finds all the points where both parent
@@ -51,12 +52,18 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 
 		List<Integer> potentialCentromeres = findPotentialCentromeres(parentA, parentB);
 
+		if (potentialCentromeres == null || potentialCentromeres.isEmpty()) {
+			log.info("Unable to find any potential centromeres for the chosen Chromosomes.  Returning empty List.");
+
+			return new ArrayList<Chromosome>();
+		}
+
 		/*
 		 * Casting to int will truncate the number, giving us an index we can
 		 * safely use against lists.
 		 */
-		int centromere = potentialCentromeres.get((int) (Math.random() * potentialCentromeres
-				.size()));
+		int centromere = potentialCentromeres.get(randomListElementSelector
+				.selectRandomListElement(potentialCentromeres));
 
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
@@ -74,8 +81,17 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB, int centromere) {
 		Chromosome child = (Chromosome) parentA.clone();
 
-		int childBeginGeneIndex = findGeneBeginningAtCentromere(child, centromere);
-		int parentBeginGeneIndex = findGeneBeginningAtCentromere(parentB, centromere);
+		int childBeginGeneIndex;
+		int parentBeginGeneIndex;
+
+		try {
+			childBeginGeneIndex = findGeneBeginningAtCentromere(child, centromere);
+			parentBeginGeneIndex = findGeneBeginningAtCentromere(parentB, centromere);
+		} catch (IllegalStateException ise) {
+			log.error(ise.getMessage());
+
+			return null;
+		}
 
 		/*
 		 * Remove Genes from cloned child.
@@ -127,6 +143,12 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 			 */
 			geneIndex++;
 
+			if (geneIndex >= chromosome.getGenes().size()) {
+				throw new IllegalStateException("Attempted to find Gene beginning at centromere "
+						+ centromere
+						+ " but no Gene was found.  This is indicative of a bad centromere.");
+			}
+
 			nextSequenceIndex = chromosome.getGenes().get(geneIndex).getSequences().get(0)
 					.getSequenceId();
 		} while (nextSequenceIndex != centromere);
@@ -143,40 +165,23 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 * IndexOutOfBoundsException
 	 */
 	protected static List<Integer> findPotentialCentromeres(Chromosome mom, Chromosome dad) {
-		int momGeneIndex = 0;
-		int dadGeneIndex = 0;
-		int momGeneEndSequence = 0;
-		int dadGeneEndSequence = 0;
-		Gene currentMomGene = null;
-		Gene currentDadGene = null;
+		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		List<Integer> potentialCentromeres = new ArrayList<Integer>();
 
-		while (momGeneIndex < mom.getGenes().size() && dadGeneIndex < dad.getGenes().size()) {
-			currentMomGene = mom.getGenes().get(momGeneIndex);
-			currentDadGene = dad.getGenes().get(dadGeneIndex);
-
+		while (crossoverProgressDto.getFirstChromosomeGeneIndex() < mom.getGenes().size()
+				&& crossoverProgressDto.getSecondChromosomeGeneIndex() < dad.getGenes().size()) {
 			/*
 			 * Advance the indexes depending on which Gene's sequence is
 			 * greater. We advance them before checking whether it is a
 			 * potential centromere because a centromere cannot exist at the
 			 * first Gene (at index zero) anyway.
 			 */
-			if (momGeneEndSequence == dadGeneEndSequence) {
-				momGeneEndSequence += currentMomGene.size();
-				dadGeneEndSequence += currentDadGene.size();
+			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, mom, dad);
 
-				momGeneIndex++;
-				dadGeneIndex++;
-			} else if (momGeneEndSequence > dadGeneEndSequence) {
-				dadGeneEndSequence += currentDadGene.size();
-				dadGeneIndex++;
-			} else {
-				momGeneEndSequence += currentMomGene.size();
-				momGeneIndex++;
-			}
+			int momGeneEndSequence = crossoverProgressDto.getFirstChromosomeSequencePosition();
 
-			if ((momGeneEndSequence == dadGeneEndSequence)
+			if ((momGeneEndSequence == crossoverProgressDto.getSecondChromosomeSequencePosition())
 					&& (momGeneEndSequence < mom.targetSize() - 1)) {
 				/*
 				 * Add to the potentialCentromeres list if the end of each Gene
@@ -218,5 +223,13 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	@Override
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
+	}
+
+	/**
+	 * @param randomListElementSelector
+	 *            the randomListElementSelector to set
+	 */
+	public void setRandomListElementSelector(RandomListElementSelector randomListElementSelector) {
+		this.randomListElementSelector = randomListElementSelector;
 	}
 }

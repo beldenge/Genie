@@ -555,10 +555,10 @@ public class LiberalUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgorithm
 		assertEquals(mom.getGenes().get(4), child.getGenes().get(4));
 
 		MockGene trimmedGene = new MockGene();
-		trimmedGene.addSequence(new MockSequence("t", 20));
-		trimmedGene.addSequence(new MockSequence("w", 21));
-		trimmedGene.addSequence(new MockSequence("e", 22));
-		trimmedGene.addSequence(new MockSequence("l", 23));
+		trimmedGene.addSequence(new MockSequence("t", 19));
+		trimmedGene.addSequence(new MockSequence("w", 20));
+		trimmedGene.addSequence(new MockSequence("e", 21));
+		trimmedGene.addSequence(new MockSequence("l", 22));
 		assertEquals(trimmedGene, child.getGenes().get(5));
 
 		// The "mom" Chromosome should remain unmodified

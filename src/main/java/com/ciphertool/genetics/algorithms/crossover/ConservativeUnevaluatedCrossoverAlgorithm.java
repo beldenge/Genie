@@ -65,18 +65,18 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 		 * Make sure we don't exceed parentB's index, or else we will get an
 		 * IndexOutOfBoundsException
 		 */
-		while (crossoverProgressDto.getChildGeneIndex() < child.getGenes().size()
-				&& crossoverProgressDto.getParentGeneIndex() < parentB.getGenes().size()) {
+		while (crossoverProgressDto.getFirstChromosomeGeneIndex() < child.getGenes().size()
+				&& crossoverProgressDto.getSecondChromosomeGeneIndex() < parentB.getGenes().size()) {
 			/*
 			 * Replace from parentB. We are extra careful here since genes won't
 			 * match exactly with sequence position.
 			 */
-			if (crossoverProgressDto.getChildSequencePosition() == crossoverProgressDto
-					.getParentSequencePosition()
-					&& child.getGenes().get(crossoverProgressDto.getChildGeneIndex()).size() == parentB
-							.getGenes().get(crossoverProgressDto.getParentGeneIndex()).size()) {
-				child.replaceGene(crossoverProgressDto.getChildGeneIndex(), parentB.getGenes().get(
-						crossoverProgressDto.getParentGeneIndex()).clone());
+			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
+					.getSecondChromosomeSequencePosition()
+					&& child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size() == parentB
+							.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()).size()) {
+				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
+						crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 			}
 
 			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,

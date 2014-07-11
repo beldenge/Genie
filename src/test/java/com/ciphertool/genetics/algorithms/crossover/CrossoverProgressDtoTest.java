@@ -30,53 +30,53 @@ public class CrossoverProgressDtoTest {
 	public void testConstructor() {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		assertEquals(0, crossoverProgressDto.getChildGeneIndex());
-		assertEquals(0, crossoverProgressDto.getChildSequencePosition());
-		assertEquals(0, crossoverProgressDto.getParentGeneIndex());
-		assertEquals(0, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeGeneIndex());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeGeneIndex());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeSequencePosition());
 	}
 
 	@Test
 	public void testAdvanceChildSequencePositionBy() {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		assertEquals(0, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeSequencePosition());
 
-		crossoverProgressDto.advanceChildSequencePositionBy(AMOUNT_TO_ADVANCE);
+		crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(AMOUNT_TO_ADVANCE);
 
-		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getChildSequencePosition());
+		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getFirstChromosomeSequencePosition());
 	}
 
 	@Test
 	public void testAdvanceParentSequencePositionBy() {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		assertEquals(0, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeSequencePosition());
 
-		crossoverProgressDto.advanceParentSequencePositionBy(AMOUNT_TO_ADVANCE);
+		crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(AMOUNT_TO_ADVANCE);
 
-		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getParentSequencePosition());
+		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getSecondChromosomeSequencePosition());
 	}
 
 	@Test
 	public void testAdvanceChildGeneIndexBy() {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		assertEquals(0, crossoverProgressDto.getChildGeneIndex());
+		assertEquals(0, crossoverProgressDto.getFirstChromosomeGeneIndex());
 
-		crossoverProgressDto.advanceChildGeneIndexBy(AMOUNT_TO_ADVANCE);
+		crossoverProgressDto.advanceFirstChromosomeGeneIndexBy(AMOUNT_TO_ADVANCE);
 
-		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getChildGeneIndex());
+		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getFirstChromosomeGeneIndex());
 	}
 
 	@Test
 	public void testAdvanceParentGeneIndexBy() {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		assertEquals(0, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(0, crossoverProgressDto.getSecondChromosomeGeneIndex());
 
-		crossoverProgressDto.advanceParentGeneIndexBy(AMOUNT_TO_ADVANCE);
+		crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(AMOUNT_TO_ADVANCE);
 
-		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getParentGeneIndex());
+		assertEquals(AMOUNT_TO_ADVANCE, crossoverProgressDto.getSecondChromosomeGeneIndex());
 	}
 }
