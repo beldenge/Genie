@@ -24,31 +24,31 @@ import com.ciphertool.genetics.entities.Chromosome;
 public class ConservativeCrossoverAlgorithmHelper {
 
 	protected static void advanceIndexes(CrossoverProgressDto crossoverProgressDto,
-			Chromosome child, Chromosome parent) {
+			Chromosome first, Chromosome second) {
 
-		if (crossoverProgressDto.getFirstChromosomeGeneIndex() >= child.getGenes().size()
-				|| crossoverProgressDto.getSecondChromosomeGeneIndex() >= parent.getGenes().size()) {
+		if (crossoverProgressDto.getFirstChromosomeGeneIndex() >= first.getGenes().size()
+				|| crossoverProgressDto.getSecondChromosomeGeneIndex() >= second.getGenes().size()) {
 			// Nothing to do
 			return;
 		}
 
-		int childGeneSize = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size();
-		int parentGeneSize = parent.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())
+		int firstGeneSize = first.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size();
+		int secondGeneSize = second.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())
 				.size();
 
 		if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 				.getSecondChromosomeSequencePosition()) {
-			crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(childGeneSize);
-			crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(parentGeneSize);
+			crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(firstGeneSize);
+			crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(secondGeneSize);
 
 			crossoverProgressDto.advanceFirstChromosomeGeneIndexBy(1);
 			crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(1);
 		} else if (crossoverProgressDto.getFirstChromosomeSequencePosition() > crossoverProgressDto
 				.getSecondChromosomeSequencePosition()) {
-			crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(parentGeneSize);
+			crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(secondGeneSize);
 			crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(1);
 		} else {
-			crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(childGeneSize);
+			crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(firstGeneSize);
 			crossoverProgressDto.advanceFirstChromosomeGeneIndexBy(1);
 		}
 	}

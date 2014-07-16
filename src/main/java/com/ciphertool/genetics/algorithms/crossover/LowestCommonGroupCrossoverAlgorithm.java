@@ -64,31 +64,36 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int parentBSize = parentB.getGenes().size();
-		int childSequencePosition = 0;
-		int parentSequencePosition = 0;
-		int childBeginGeneIndex = 0;
-		int childEndGeneIndex = 0;
-		int parentBeginGeneIndex = 0;
-		int parentEndGeneIndex = 0;
 		int insertCount = 0;
 		int geneOffset = 0;
 		Double originalFitness = 0.0;
 		List<Gene> childGeneCopies;
 
-		childSequencePosition += child.getGenes().get(childBeginGeneIndex).size();
-		parentSequencePosition += parentB.getGenes().get(parentBeginGeneIndex).size();
+		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
+
+		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(parentB.getGenes().get(0).size());
+
+		int childBeginGeneIndex = 0, childEndGeneIndex = 0, parentBeginGeneIndex = 0, parentEndGeneIndex = 0;
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
 		 * IndexOutOfBoundsException
 		 */
-		while (childEndGeneIndex < child.getGenes().size() && parentEndGeneIndex < parentBSize) {
+		while (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < child.getGenes().size()
+				&& crossoverProgressDto.getSecondChromosomeEndGeneIndex() < parentBSize) {
+			childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
+			childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
+			parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
+			parentEndGeneIndex = crossoverProgressDto.getSecondChromosomeEndGeneIndex();
+
 			/*
 			 * Replace from parentB and reevaluate to see if it improves. We are
 			 * extra careful here since genes won't match exactly with sequence
 			 * position.
 			 */
-			if (childSequencePosition == parentSequencePosition) {
+			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
+					.getSecondChromosomeSequencePosition()) {
 				originalFitness = child.getFitness();
 
 				/*
@@ -154,49 +159,10 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 					geneOffset = (parentEndGeneIndex - parentBeginGeneIndex)
 							- (childEndGeneIndex - childBeginGeneIndex);
 				}
-
-				childEndGeneIndex += geneOffset + 1;
-				parentEndGeneIndex++;
-
-				childBeginGeneIndex = childEndGeneIndex;
-				parentBeginGeneIndex = parentEndGeneIndex;
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (childEndGeneIndex < child.getGenes().size()) {
-					childSequencePosition += child.getGenes().get(childBeginGeneIndex).size();
-				}
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (parentEndGeneIndex < parentBSize) {
-					parentSequencePosition += parentB.getGenes().get(parentBeginGeneIndex).size();
-				}
-			} else if (childSequencePosition > parentSequencePosition) {
-				parentEndGeneIndex++;
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (parentEndGeneIndex < parentBSize) {
-					parentSequencePosition += parentB.getGenes().get(parentEndGeneIndex).size();
-				}
-			} else { // (childSequencePosition < parentSequencePosition)
-				childEndGeneIndex++;
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (childEndGeneIndex < child.getGenes().size()) {
-					childSequencePosition += child.getGenes().get(childEndGeneIndex).size();
-				}
 			}
+
+			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
+					parentB, geneOffset);
 		}
 
 		if (mutateDuringCrossover) {
