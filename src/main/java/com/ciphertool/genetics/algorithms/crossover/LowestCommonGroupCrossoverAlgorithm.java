@@ -64,17 +64,12 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int parentBSize = parentB.getGenes().size();
-		int insertCount = 0;
 		int geneOffset = 0;
-		Double originalFitness = 0.0;
-		List<Gene> childGeneCopies;
 
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
 		crossoverProgressDto.setSecondChromosomeSequencePosition(parentB.getGenes().get(0).size());
-
-		int childBeginGeneIndex = 0, childEndGeneIndex = 0, parentBeginGeneIndex = 0, parentEndGeneIndex = 0;
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
@@ -82,83 +77,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 		 */
 		while (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < child.getGenes().size()
 				&& crossoverProgressDto.getSecondChromosomeEndGeneIndex() < parentBSize) {
-			childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
-			childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
-			parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
-			parentEndGeneIndex = crossoverProgressDto.getSecondChromosomeEndGeneIndex();
-
-			/*
-			 * Replace from parentB and reevaluate to see if it improves. We are
-			 * extra careful here since genes won't match exactly with sequence
-			 * position.
-			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()) {
-				originalFitness = child.getFitness();
-
-				/*
-				 * Pull out Genes from child into a temporary List.
-				 */
-				childGeneCopies = new ArrayList<Gene>();
-				for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
-					childGeneCopies.add(child.getGenes().get(childBeginGeneIndex).clone());
-
-					child.removeGene(childBeginGeneIndex);
-				}
-
-				/*
-				 * Insert cloned parent Genes into child. insertCount works as
-				 * an offset so that the Genes are inserted in the correct
-				 * order.
-				 */
-				insertCount = 0;
-				for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
-					child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(j)
-							.clone());
-
-					insertCount++;
-				}
-
-				double newFitness = fitnessEvaluator.evaluate(child);
-				child.setFitness(newFitness);
-
-				/*
-				 * Revert to the original gene if this decreased fitness. It's
-				 * ok to let non-beneficial changes progress, as long as they
-				 * are not detrimental.
-				 */
-				if (newFitness < originalFitness) {
-					/*
-					 * Remove the parent Genes from the child.
-					 */
-					for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
-						child.removeGene(childBeginGeneIndex);
-					}
-
-					/*
-					 * Insert the child Gene copies back into the child.
-					 */
-					for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
-						child.insertGene(i, childGeneCopies.remove(0));
-					}
-
-					/*
-					 * Reset the fitness to what it was before the replacement.
-					 */
-					child.setFitness(originalFitness);
-
-					geneOffset = 0;
-				} else {
-					/*
-					 * Offset child gene indices by the number of Genes inserted
-					 * from parentB, since the number of Genes inserted from
-					 * parentB could be different than the number of Genes
-					 * removed from child. The result can be either positive or
-					 * negative.
-					 */
-					geneOffset = (parentEndGeneIndex - parentBeginGeneIndex)
-							- (childEndGeneIndex - childBeginGeneIndex);
-				}
+				geneOffset = attemptToReplaceGeneGroupInChild(crossoverProgressDto, child, parentB);
 			}
 
 			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
@@ -178,6 +99,89 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */
 		return child;
+	}
+
+	/**
+	 * Replace from parentB and reevaluate to see if it improves. We are extra
+	 * careful here since genes won't match exactly with sequence position.
+	 * 
+	 * @param crossoverProgressDto
+	 *            the LowestCommonGroupCrossoverProgressDto
+	 * @param child
+	 *            the child Chromosome
+	 * @param parentB
+	 *            the parent Chromosome
+	 * @return the geneOffset
+	 */
+	protected int attemptToReplaceGeneGroupInChild(
+			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, Chromosome child,
+			Chromosome parentB) {
+		int childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
+		int childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
+		int parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
+		int parentEndGeneIndex = crossoverProgressDto.getSecondChromosomeEndGeneIndex();
+
+		Double originalFitness = child.getFitness();
+
+		/*
+		 * Pull out Genes from child into a temporary List.
+		 */
+		List<Gene> childGeneCopies = new ArrayList<Gene>();
+		for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
+			childGeneCopies.add(child.getGenes().get(childBeginGeneIndex).clone());
+
+			child.removeGene(childBeginGeneIndex);
+		}
+
+		/*
+		 * Insert cloned parent Genes into child. insertCount works as an offset
+		 * so that the Genes are inserted in the correct order.
+		 */
+		int insertCount = 0;
+		for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
+			child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(j).clone());
+
+			insertCount++;
+		}
+
+		double newFitness = fitnessEvaluator.evaluate(child);
+		child.setFitness(newFitness);
+
+		/*
+		 * Revert to the original gene if this decreased fitness. It's ok to let
+		 * non-beneficial changes progress, as long as they are not detrimental.
+		 */
+		if (newFitness < originalFitness) {
+			/*
+			 * Remove the parent Genes from the child.
+			 */
+			for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
+				child.removeGene(childBeginGeneIndex);
+			}
+
+			/*
+			 * Insert the child Gene copies back into the child.
+			 */
+			for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
+				child.insertGene(i, childGeneCopies.remove(0));
+			}
+
+			/*
+			 * Reset the fitness to what it was before the replacement.
+			 */
+			child.setFitness(originalFitness);
+
+			return 0;
+		} else {
+			/*
+			 * Offset child gene indices by the number of Genes inserted from
+			 * parentB, since the number of Genes inserted from parentB could be
+			 * different than the number of Genes removed from child. The result
+			 * can be either positive or negative.
+			 */
+			return (parentEndGeneIndex - parentBeginGeneIndex)
+					- (childEndGeneIndex - childBeginGeneIndex);
+		}
 	}
 
 	/**

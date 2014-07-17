@@ -22,13 +22,17 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.util.Coin;
 
 public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm {
 	private MutationAlgorithm mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
+	private Coin coin;
 
 	@Override
 	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
@@ -60,108 +64,26 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 		Chromosome child = (Chromosome) parentA.clone();
 
 		int parentBSize = parentB.getGenes().size();
-		int childSequencePosition = 0;
-		int parentSequencePosition = 0;
-		int childBeginGeneIndex = 0;
-		int childEndGeneIndex = 0;
-		int parentBeginGeneIndex = 0;
-		int parentEndGeneIndex = 0;
-		int insertCount = 0;
 		int geneOffset = 0;
 
-		childSequencePosition += child.getGenes().get(childBeginGeneIndex).size();
-		parentSequencePosition += parentB.getGenes().get(parentBeginGeneIndex).size();
+		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
+
+		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(parentB.getGenes().get(0).size());
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
 		 * IndexOutOfBoundsException
 		 */
-		while (childEndGeneIndex < child.getGenes().size() && parentEndGeneIndex < parentBSize) {
-			/*
-			 * Replace from parentB and reevaluate to see if it improves. We are
-			 * extra careful here since genes won't match exactly with sequence
-			 * position.
-			 */
-			if (childSequencePosition == parentSequencePosition) {
-				/*
-				 * Flip a coin to see whether we replace the group of words
-				 */
-				if (((int) (Math.random() * 2)) == 1) {
-					/*
-					 * Remove Genes from cloned child.
-					 */
-					for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
-						child.removeGene(childBeginGeneIndex);
-					}
-
-					/*
-					 * Insert cloned parent Genes into child. insertCount works
-					 * as an offset so that the Genes are inserted in the
-					 * correct order.
-					 */
-					insertCount = 0;
-					for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
-						child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(
-								j).clone());
-
-						insertCount++;
-					}
-
-					/*
-					 * Offset child gene indices by the number of Genes inserted
-					 * from parentB, since the number of Genes inserted from
-					 * parentB could be different than the number of Genes
-					 * removed from child. The result can be either positive or
-					 * negative.
-					 */
-					geneOffset = (parentEndGeneIndex - parentBeginGeneIndex)
-							- (childEndGeneIndex - childBeginGeneIndex);
-				} else {
-					geneOffset = 0;
-				}
-
-				childEndGeneIndex += geneOffset + 1;
-				parentEndGeneIndex++;
-
-				childBeginGeneIndex = childEndGeneIndex;
-				parentBeginGeneIndex = parentEndGeneIndex;
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (childEndGeneIndex < child.getGenes().size()) {
-					childSequencePosition += child.getGenes().get(childBeginGeneIndex).size();
-				}
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (parentEndGeneIndex < parentBSize) {
-					parentSequencePosition += parentB.getGenes().get(parentBeginGeneIndex).size();
-				}
-			} else if (childSequencePosition > parentSequencePosition) {
-				parentEndGeneIndex++;
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (parentEndGeneIndex < parentBSize) {
-					parentSequencePosition += parentB.getGenes().get(parentEndGeneIndex).size();
-				}
-			} else { // (childSequencePosition < parentSequencePosition)
-				childEndGeneIndex++;
-
-				/*
-				 * To avoid IndexOutOfBoundsException, first check that the Gene
-				 * index hasn't been exceeded.
-				 */
-				if (childEndGeneIndex < child.getGenes().size()) {
-					childSequencePosition += child.getGenes().get(childEndGeneIndex).size();
-				}
+		while (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < child.getGenes().size()
+				&& crossoverProgressDto.getSecondChromosomeEndGeneIndex() < parentBSize) {
+			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
+					.getSecondChromosomeSequencePosition()) {
+				attemptToReplaceGeneGroupInChild(crossoverProgressDto, child, parentB);
 			}
+
+			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
+					parentB, geneOffset);
 		}
 
 		if (mutateDuringCrossover) {
@@ -177,6 +99,62 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */
 		return child;
+	}
+
+	/**
+	 * Replace Gene group in child from parentB. We are extra careful here since
+	 * genes won't match exactly with sequence position.
+	 * 
+	 * @param crossoverProgressDto
+	 *            the LowestCommonGroupCrossoverProgressDto
+	 * @param child
+	 *            the child Chromosome
+	 * @param parentB
+	 *            the parent Chromosome
+	 * @return the geneOffset
+	 */
+	protected int attemptToReplaceGeneGroupInChild(
+			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, Chromosome child,
+			Chromosome parentB) {
+		int childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
+		int childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
+		int parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
+		int parentEndGeneIndex = crossoverProgressDto.getSecondChromosomeEndGeneIndex();
+
+		/*
+		 * Flip a coin to see whether we replace the group of words
+		 */
+		if (coin.flip()) {
+			/*
+			 * Remove Genes from cloned child.
+			 */
+			for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
+				child.removeGene(childBeginGeneIndex);
+			}
+
+			/*
+			 * Insert cloned parent Genes into child. insertCount works as an
+			 * offset so that the Genes are inserted in the correct order.
+			 */
+			int insertCount = 0;
+			for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
+				child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(j)
+						.clone());
+
+				insertCount++;
+			}
+
+			/*
+			 * Offset child gene indices by the number of Genes inserted from
+			 * parentB, since the number of Genes inserted from parentB could be
+			 * different than the number of Genes removed from child. The result
+			 * can be either positive or negative.
+			 */
+			return (parentEndGeneIndex - parentBeginGeneIndex)
+					- (childEndGeneIndex - childBeginGeneIndex);
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -207,5 +185,14 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	@Override
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
+	}
+
+	/**
+	 * @param coin
+	 *            the coin to set
+	 */
+	@Required
+	public void setCoin(Coin coin) {
+		this.coin = coin;
 	}
 }

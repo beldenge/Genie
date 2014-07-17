@@ -78,8 +78,9 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()
-					&& child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size() == parentB
-							.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()).size()) {
+					&& child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())
+							.size() == parentB.getGenes().get(
+							crossoverProgressDto.getSecondChromosomeGeneIndex()).size()) {
 				attemptToReplaceGeneInChild(crossoverProgressDto, child, parentB);
 			}
 
@@ -104,12 +105,13 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 
 	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto,
 			Chromosome child, Chromosome parentB) {
-		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).clone();
+		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())
+				.clone();
 
 		double originalFitness = child.getFitness();
 
-		child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
-				crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
+		child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes()
+				.get(crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 
 		double newFitness = fitnessEvaluator.evaluate(child);
 		child.setFitness(newFitness);
