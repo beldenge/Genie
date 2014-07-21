@@ -152,7 +152,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		assertEquals(dad.getGenes().get(4), children.get(0).getGenes().get(4));
 		assertEquals(dad.getGenes().get(5), children.get(0).getGenes().get(5));
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -200,7 +200,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -312,7 +312,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		assertNull(child);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -353,7 +353,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		assertNull(child);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -382,7 +382,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		Chromosome dadClone = dad.clone();
 		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
 
-		// The "mom" Chromsome should only have the first Gene replaced
+		// The "mom" Chromosome should only have the first Gene replaced
 		assertEquals(6, mom.getGenes().size());
 		assertEquals(dad.getGenes().get(0), mom.getGenes().get(0));
 		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
@@ -419,7 +419,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		Chromosome dadClone = dad.clone();
 		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
 
-		// The "mom" Chromsome should only have the first Gene replaced
+		// The "mom" Chromosome should only have the first Gene replaced
 		assertEquals(6, mom.getGenes().size());
 		assertEquals(dad.getGenes().get(0), mom.getGenes().get(0));
 		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));
@@ -456,7 +456,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		Chromosome dadClone = dad.clone();
 		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(6, mom.getGenes().size());
 		assertEquals(momClone.getGenes().get(0), mom.getGenes().get(0));
 		assertEquals(momClone.getGenes().get(1), mom.getGenes().get(1));

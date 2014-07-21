@@ -100,7 +100,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		 * Reset the population by clearing it and then adding back all the
 		 * survivors.
 		 * 
-		 * TODO: This is a candidate for parallelization
+		 * This is a candidate for parallelization.
 		 */
 		population.clearIndividuals();
 		for (Chromosome survivor : survivors) {

@@ -123,7 +123,7 @@ public class ConservativeUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgo
 		assertEquals(dad.getGenes().get(4), children.get(0).getGenes().get(4));
 		assertEquals(dad.getGenes().get(5), children.get(0).getGenes().get(5));
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -165,7 +165,7 @@ public class ConservativeUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgo
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -252,7 +252,7 @@ public class ConservativeUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgo
 
 		assertNull(child);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
@@ -287,7 +287,7 @@ public class ConservativeUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgo
 
 		assertNull(child);
 
-		// The "mom" Chromsome should remain unmodified
+		// The "mom" Chromosome should remain unmodified
 		assertEquals(momClone.getGenes(), mom.getGenes());
 
 		// The "dad" Chromosome should remain unmodified
