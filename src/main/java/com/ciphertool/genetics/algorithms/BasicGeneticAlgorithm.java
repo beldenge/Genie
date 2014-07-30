@@ -264,14 +264,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		int momIndex = -1;
 		int dadIndex = -1;
 
-		/*
-		 * We have to round down to protect against
-		 * ArrayIndexOutOfBoundsException in edge cases. Also choose the minimum
-		 * between the current population size and the calculated number of
-		 * pairs in case there are not enough eligible individuals.
-		 */
-		long pairsToCrossover = Math.min((long) (initialPopulationSize * strategy
-				.getCrossoverRate()), ((long) (this.population.size() / 2)));
+		long pairsToCrossover = determinePairsToCrossover(initialPopulationSize);
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
@@ -309,6 +302,17 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		}
 
 		return (int) pairsToCrossover;
+	}
+
+	protected long determinePairsToCrossover(long initialPopulationSize) {
+		/*
+		 * We have to round down to protect against
+		 * ArrayIndexOutOfBoundsException in edge cases. Also choose the minimum
+		 * between the current population size and the calculated number of
+		 * pairs in case there are not enough eligible individuals.
+		 */
+		return Math.min((long) (initialPopulationSize * strategy.getCrossoverRate()),
+				((long) (this.population.size() / 2)));
 	}
 
 	@Override

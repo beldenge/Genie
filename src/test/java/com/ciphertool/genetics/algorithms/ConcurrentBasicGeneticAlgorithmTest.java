@@ -19,16 +19,52 @@
 
 package com.ciphertool.genetics.algorithms;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyListOf;
+import static org.mockito.Matchers.same;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.ReflectionUtils;
 
+import com.ciphertool.genetics.GeneticAlgorithmStrategy;
+import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.selection.modes.Selector;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.mocks.MockChromosome;
+
 public class ConcurrentBasicGeneticAlgorithmTest {
+	private static final double DEFAULT_FITNESS_VALUE = 100.0;
+
+	private static ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+
+	@BeforeClass
+	public static void setUp() {
+		taskExecutor.setCorePoolSize(4);
+		taskExecutor.setMaxPoolSize(4);
+		taskExecutor.setQueueCapacity(100);
+		taskExecutor.setKeepAliveSeconds(1);
+		taskExecutor.setAllowCoreThreadTimeOut(true);
+		taskExecutor.initialize();
+	}
+
 	@Test
 	public void testSetTaskExecutor() {
 		TaskExecutor taskExecutorToSet = mock(TaskExecutor.class);
@@ -43,5 +79,158 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 				taskExecutorField, concurrentBasicGeneticAlgorithm);
 
 		assertSame(taskExecutorToSet, taskExecutorFromObject);
+	}
+
+	@Test
+	public void testCrossoverTask() {
+		Chromosome mom = new MockChromosome();
+		Chromosome dad = new MockChromosome();
+
+		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
+		ConcurrentBasicGeneticAlgorithm.CrossoverTask generatorTask = concurrentBasicGeneticAlgorithm.new CrossoverTask(
+				mom, dad);
+
+		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
+
+		Field crossoverAlgorithmField = ReflectionUtils.findField(
+				ConcurrentBasicGeneticAlgorithm.class, "crossoverAlgorithm");
+		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
+		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
+				crossoverAlgorithmMock);
+
+		Chromosome chromosomeToReturn = new MockChromosome();
+		when(crossoverAlgorithmMock.crossover(same(mom), same(dad))).thenReturn(
+				Arrays.asList(chromosomeToReturn));
+
+		List<Chromosome> chromosomesReturned = null;
+		try {
+			chromosomesReturned = generatorTask.call();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+
+		assertEquals(1, chromosomesReturned.size());
+		assertSame(chromosomeToReturn, chromosomesReturned.get(0));
+		verify(crossoverAlgorithmMock, times(1)).crossover(same(mom), same(dad));
+	}
+
+	@Test
+	public void testCrossover() {
+		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
+		concurrentBasicGeneticAlgorithm.setTaskExecutor(taskExecutor);
+
+		Population population = new Population();
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		Selector selector = mock(Selector.class);
+		population.setSelector(selector);
+		when(selector.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(0,
+				1, 2, 3, 4);
+
+		int initialPopulationSize = 50;
+
+		for (int i = 0; i < initialPopulationSize; i++) {
+			population.addIndividual(new MockChromosome());
+		}
+
+		concurrentBasicGeneticAlgorithm.setPopulation(population);
+
+		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
+
+		Field crossoverAlgorithmField = ReflectionUtils.findField(
+				ConcurrentBasicGeneticAlgorithm.class, "crossoverAlgorithm");
+		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
+		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
+				crossoverAlgorithmMock);
+
+		Chromosome chromosomeToReturn = new MockChromosome();
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
+				.thenReturn(Arrays.asList(chromosomeToReturn));
+
+		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
+		strategy.setCrossoverRate(0.1);
+
+		Field strategyField = ReflectionUtils.findField(ConcurrentBasicGeneticAlgorithm.class,
+				"strategy");
+		ReflectionUtils.makeAccessible(strategyField);
+		ReflectionUtils.setField(strategyField, concurrentBasicGeneticAlgorithm, strategy);
+
+		int childrenProduced = concurrentBasicGeneticAlgorithm.crossover(initialPopulationSize);
+
+		assertEquals(5, childrenProduced);
+
+		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class),
+				any(Chromosome.class));
+	}
+
+	@Test
+	public void testCrossover_SmallPopulation() {
+		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
+		concurrentBasicGeneticAlgorithm.setTaskExecutor(taskExecutor);
+
+		Population population = new Population();
+		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
+				.thenReturn(DEFAULT_FITNESS_VALUE);
+		population.setFitnessEvaluator(fitnessEvaluatorMock);
+
+		Chromosome chromosome = new MockChromosome();
+		population.addIndividual(chromosome);
+		concurrentBasicGeneticAlgorithm.setPopulation(population);
+
+		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
+
+		Field crossoverAlgorithmField = ReflectionUtils.findField(
+				ConcurrentBasicGeneticAlgorithm.class, "crossoverAlgorithm");
+		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
+		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
+				crossoverAlgorithmMock);
+
+		int childrenProduced = concurrentBasicGeneticAlgorithm.crossover(10);
+
+		assertEquals(0, childrenProduced);
+
+		verifyZeroInteractions(crossoverAlgorithmMock);
+	}
+
+	@Test
+	public void testDoConcurrentCrossovers() {
+		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
+		concurrentBasicGeneticAlgorithm.setTaskExecutor(taskExecutor);
+
+		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
+
+		Field crossoverAlgorithmField = ReflectionUtils.findField(
+				ConcurrentBasicGeneticAlgorithm.class, "crossoverAlgorithm");
+		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
+		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
+				crossoverAlgorithmMock);
+
+		Chromosome chromosomeToReturn = new MockChromosome();
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
+				.thenReturn(Arrays.asList(chromosomeToReturn));
+
+		long pairsToCrossover = 5;
+		List<Chromosome> moms = new ArrayList<Chromosome>();
+		List<Chromosome> dads = new ArrayList<Chromosome>();
+
+		for (int i = 0; i < 5; i++) {
+			moms.add(new MockChromosome());
+			dads.add(new MockChromosome());
+		}
+
+		List<Chromosome> childrenReturned = concurrentBasicGeneticAlgorithm.doConcurrentCrossovers(
+				pairsToCrossover, moms, dads);
+
+		assertEquals(5, childrenReturned.size());
+		for (Chromosome child : childrenReturned) {
+			assertSame(chromosomeToReturn, child);
+		}
+
+		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class),
+				any(Chromosome.class));
 	}
 }

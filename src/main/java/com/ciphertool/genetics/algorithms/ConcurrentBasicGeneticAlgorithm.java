@@ -39,7 +39,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 	 * A concurrent task for performing a crossover of two parent Chromosomes,
 	 * producing one child Chromosome.
 	 */
-	private class CrossoverTask implements Callable<List<Chromosome>> {
+	protected class CrossoverTask implements Callable<List<Chromosome>> {
 
 		private Chromosome mom;
 		private Chromosome dad;
@@ -70,13 +70,10 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			return 0;
 		}
 
-		long pairsToCrossover = Math.min((long) (initialPopulationSize * strategy
-				.getCrossoverRate()), ((long) (this.population.size() / 2)));
+		long pairsToCrossover = determinePairsToCrossover(initialPopulationSize);
 
 		log.debug("Pairs to crossover: " + pairsToCrossover);
 
-		Chromosome mom = null;
-		Chromosome dad = null;
 		int momIndex = -1;
 		int dadIndex = -1;
 
@@ -98,8 +95,29 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			this.population.makeIneligibleForReproduction(dadIndex);
 		}
 
+		List<Chromosome> childrenToAdd = doConcurrentCrossovers(pairsToCrossover, moms, dads);
+
+		if (childrenToAdd == null || childrenToAdd.isEmpty()) {
+			log.error("No children produced from concurrent crossover execution.  Expected "
+					+ pairsToCrossover + " children.");
+
+			return 0;
+		}
+
+		for (Chromosome child : childrenToAdd) {
+			this.population.addIndividualAsIneligible(child);
+		}
+
+		return (int) pairsToCrossover;
+	}
+
+	protected List<Chromosome> doConcurrentCrossovers(long pairsToCrossover, List<Chromosome> moms,
+			List<Chromosome> dads) {
 		List<FutureTask<List<Chromosome>>> futureTasks = new ArrayList<FutureTask<List<Chromosome>>>();
 		FutureTask<List<Chromosome>> futureTask = null;
+
+		Chromosome mom = null;
+		Chromosome dad = null;
 
 		/*
 		 * Execute each crossover concurrently. Parents should produce two
@@ -134,11 +152,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			}
 		}
 
-		for (Chromosome child : childrenToAdd) {
-			this.population.addIndividualAsIneligible(child);
-		}
-
-		return (int) pairsToCrossover;
+		return childrenToAdd;
 	}
 
 	/**
