@@ -37,6 +37,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +54,7 @@ import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
+import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockChromosome;
 
@@ -251,6 +253,150 @@ public class BasicGeneticAlgorithmTest {
 		verify(populationMock, times(1)).evaluateFitness(null);
 		verify(populationMock, times(1)).size();
 		verifyNoMoreInteractions(populationMock);
+	}
+
+	@Test
+	public void testFinish() {
+		Date beforeFinish = new Date();
+
+		ExecutionStatisticsDao executionStatisticsDaoToSet = mock(ExecutionStatisticsDao.class);
+
+		BasicGeneticAlgorithm basicGeneticAlgorithm = new BasicGeneticAlgorithm();
+		basicGeneticAlgorithm.setExecutionStatisticsDao(executionStatisticsDaoToSet);
+
+		ExecutionStatistics executionStatistics = new ExecutionStatistics();
+		Field executionStatisticsField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"executionStatistics");
+		ReflectionUtils.makeAccessible(executionStatisticsField);
+		ReflectionUtils.setField(executionStatisticsField, basicGeneticAlgorithm,
+				executionStatistics);
+
+		Field generationCountField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"generationCount");
+		ReflectionUtils.makeAccessible(generationCountField);
+		ReflectionUtils.setField(generationCountField, basicGeneticAlgorithm, 1);
+
+		basicGeneticAlgorithm.finish();
+
+		assertTrue(executionStatistics.getEndDateTime().getTime() >= beforeFinish.getTime());
+
+		verify(executionStatisticsDaoToSet, times(1)).insert(same(executionStatistics));
+
+		ExecutionStatistics executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils
+				.getField(executionStatisticsField, basicGeneticAlgorithm);
+		assertNull(executionStatisticsFromObject);
+	}
+
+	@Test
+	public void testProceedWithNextGeneration() {
+		BasicGeneticAlgorithm basicGeneticAlgorithm = new BasicGeneticAlgorithm();
+
+		int initialPopulationSize = 100;
+		int populationSize = 100;
+		int index = 0;
+		double survivalRate = 0.9;
+		double mutationRate = 0.1;
+		double crossoverRate = 0.1;
+
+		Population populationMock = mock(Population.class);
+
+		List<Chromosome> individuals = new ArrayList<Chromosome>();
+		for (int i = 0; i < initialPopulationSize; i++) {
+			individuals.add(new MockChromosome());
+		}
+
+		when(populationMock.selectIndex()).thenReturn(index);
+		when(populationMock.getIndividuals()).thenReturn(individuals);
+		when(populationMock.size()).thenReturn(initialPopulationSize);
+		when(populationMock.selectIndex()).thenReturn(0);
+		basicGeneticAlgorithm.setPopulation(populationMock);
+
+		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
+		strategyToSet.setPopulationSize(populationSize);
+		strategyToSet.setSurvivalRate(survivalRate);
+		strategyToSet.setMutationRate(mutationRate);
+		strategyToSet.setCrossoverRate(crossoverRate);
+
+		Field strategyField = ReflectionUtils.findField(BasicGeneticAlgorithm.class, "strategy");
+		ReflectionUtils.makeAccessible(strategyField);
+		ReflectionUtils.setField(strategyField, basicGeneticAlgorithm, strategyToSet);
+
+		SelectionAlgorithm selectionAlgorithmMock = mock(SelectionAlgorithm.class);
+
+		Field selectionAlgorithmField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"selectionAlgorithm");
+		ReflectionUtils.makeAccessible(selectionAlgorithmField);
+		ReflectionUtils.setField(selectionAlgorithmField, basicGeneticAlgorithm,
+				selectionAlgorithmMock);
+
+		Field generationCountField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"generationCount");
+		ReflectionUtils.makeAccessible(generationCountField);
+		ReflectionUtils.setField(generationCountField, basicGeneticAlgorithm, 0);
+
+		MutationAlgorithm mutationAlgorithmMock = mock(MutationAlgorithm.class);
+		Field mutationAlgorithmField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"mutationAlgorithm");
+		ReflectionUtils.makeAccessible(mutationAlgorithmField);
+		ReflectionUtils.setField(mutationAlgorithmField, basicGeneticAlgorithm,
+				mutationAlgorithmMock);
+
+		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
+
+		Field crossoverAlgorithmField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"crossoverAlgorithm");
+		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
+		ReflectionUtils.setField(crossoverAlgorithmField, basicGeneticAlgorithm,
+				crossoverAlgorithmMock);
+
+		Chromosome chromosomeToReturn = new MockChromosome();
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
+				.thenReturn(Arrays.asList(chromosomeToReturn));
+
+		ExecutionStatistics executionStatistics = new ExecutionStatistics();
+		Field executionStatisticsField = ReflectionUtils.findField(BasicGeneticAlgorithm.class,
+				"executionStatistics");
+		ReflectionUtils.makeAccessible(executionStatisticsField);
+		ReflectionUtils.setField(executionStatisticsField, basicGeneticAlgorithm,
+				executionStatistics);
+
+		assertEquals(0, executionStatistics.getGenerationStatisticsList().size());
+
+		basicGeneticAlgorithm.proceedWithNextGeneration();
+
+		assertEquals(1, executionStatistics.getGenerationStatisticsList().size());
+
+		/*
+		 * The population size should be reduced by the number of parents used
+		 * during crossover.
+		 */
+		assertEquals(100, populationMock.size());
+
+		int generationCountFromObject = (int) ReflectionUtils.getField(generationCountField,
+				basicGeneticAlgorithm);
+		assertEquals(1, generationCountFromObject);
+
+		verify(selectionAlgorithmMock, times(1)).select(same(populationMock), eq(populationSize),
+				eq(survivalRate));
+		verifyNoMoreInteractions(selectionAlgorithmMock);
+
+		verify(populationMock, times(30)).selectIndex();
+		verify(populationMock, times(30)).getIndividuals();
+		verify(populationMock, times(30)).makeIneligibleForReproduction(index);
+		verify(populationMock, times(20)).addIndividualAsIneligible(any(Chromosome.class));
+		verify(populationMock, times(5)).size();
+		verify(populationMock, times(1)).increaseAge();
+		verify(populationMock, times(1)).resetEligibility();
+		verify(populationMock, times(1)).breed(populationSize);
+		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
+		verifyNoMoreInteractions(populationMock);
+
+		verify(mutationAlgorithmMock, times(10)).mutateChromosome(any(Chromosome.class));
+		verifyNoMoreInteractions(mutationAlgorithmMock);
+
+		verify(crossoverAlgorithmMock, times(10)).crossover(any(Chromosome.class),
+				any(Chromosome.class));
+		verifyNoMoreInteractions(crossoverAlgorithmMock);
 	}
 
 	@Test

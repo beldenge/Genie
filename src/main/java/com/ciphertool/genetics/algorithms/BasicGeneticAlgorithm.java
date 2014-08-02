@@ -57,8 +57,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		do {
 			proceedWithNextGeneration();
-		} while (!stopRequested
-				&& (strategy.getMaxGenerations() < 0 || generationCount < strategy
+		} while (!this.stopRequested
+				&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy
 						.getMaxGenerations()));
 
 		finish();
@@ -91,8 +91,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 				+ ((System.currentTimeMillis() - totalExecutionTime) / this.generationCount)
 				+ "ms.");
 
-		Date endDate = new Date();
-		this.executionStatistics.setEndDateTime(endDate);
+		this.executionStatistics.setEndDateTime(new Date());
 
 		persistStatistics();
 
@@ -102,10 +101,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 	@Override
 	public void proceedWithNextGeneration() {
-		generationCount++;
+		this.generationCount++;
 
-		GenerationStatistics generationStatistics = new GenerationStatistics(executionStatistics,
-				generationCount);
+		GenerationStatistics generationStatistics = new GenerationStatistics(
+				this.executionStatistics, this.generationCount);
 
 		long generationStart = System.currentTimeMillis();
 
@@ -128,7 +127,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		 * anything.
 		 */
 		long startAging = System.currentTimeMillis();
-		totalDeaths += population.increaseAge();
+		totalDeaths += this.population.increaseAge();
 		generationStatistics.setNumberSelectedOut(totalDeaths);
 		if (log.isDebugEnabled()) {
 			log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
@@ -146,7 +145,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
 		}
 
-		population.resetEligibility();
+		this.population.resetEligibility();
 
 		/*
 		 * Adds new random solutions to the population to fill back to the
@@ -155,16 +154,14 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		 * children.
 		 */
 		long startBreeding = System.currentTimeMillis();
-		generationStatistics.setNumberRandomlyGenerated(population.breed(strategy
+		generationStatistics.setNumberRandomlyGenerated(this.population.breed(this.strategy
 				.getPopulationSize()));
 		if (log.isDebugEnabled()) {
 			log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
 		}
 
 		long startEvaluation = System.currentTimeMillis();
-
-		population.evaluateFitness(generationStatistics);
-
+		this.population.evaluateFitness(generationStatistics);
 		if (log.isDebugEnabled()) {
 			log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
 		}
@@ -174,7 +171,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 		log.info(generationStatistics);
 
-		executionStatistics.addGenerationStatistics(generationStatistics);
+		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}
 
 	protected void validateParameters() {
