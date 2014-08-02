@@ -66,42 +66,38 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 
 	@Override
 	public void initialize() {
-		List<String> validationErrors = validateParameters();
-		if (validationErrors.size() > 0) {
-			throw new IllegalStateException(
-					"Unable to execute genetic algorithm because one or more of the required parameters are missing.  The fields that failed validation are "
-							+ validationErrors);
-		}
+		validateParameters();
 
 		this.generationCount = 0;
 
 		this.spawnInitialPopulation();
 
-		stopRequested = false;
+		this.stopRequested = false;
 
 		Date startDate = new Date();
-		executionStatistics = new ExecutionStatistics(startDate, strategy);
+		this.executionStatistics = new ExecutionStatistics(startDate, this.strategy);
 	}
 
 	@Override
 	public void finish() {
 		long totalExecutionTime = 0;
 
-		for (GenerationStatistics generationStatistics : executionStatistics
+		for (GenerationStatistics generationStatistics : this.executionStatistics
 				.getGenerationStatisticsList()) {
 			totalExecutionTime += generationStatistics.getExecutionTime();
 		}
 
 		log.info("Average generation time is "
-				+ ((System.currentTimeMillis() - totalExecutionTime) / generationCount) + "ms.");
+				+ ((System.currentTimeMillis() - totalExecutionTime) / this.generationCount)
+				+ "ms.");
 
 		Date endDate = new Date();
-		executionStatistics.setEndDateTime(endDate);
+		this.executionStatistics.setEndDateTime(endDate);
 
 		persistStatistics();
 
 		// This needs to be reset to null in case the algorithm is re-run
-		executionStatistics = null;
+		this.executionStatistics = null;
 	}
 
 	@Override
@@ -181,67 +177,79 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		executionStatistics.addGenerationStatistics(generationStatistics);
 	}
 
-	private List<String> validateParameters() {
+	protected void validateParameters() {
 		List<String> validationErrors = new ArrayList<String>();
 
 		if (strategy.getGeneticStructure() == null) {
-			validationErrors.add("geneticStructure");
+			validationErrors.add("Parameter 'geneticStructure' cannot be null.");
 		}
 
 		if (strategy.getPopulationSize() == null || strategy.getPopulationSize() <= 0) {
-			validationErrors.add("populationSize");
+			validationErrors.add("Parameter 'populationSize' must be greater than zero.");
 		}
 
 		if (strategy.getLifespan() == null) {
-			validationErrors.add("lifespan");
+			validationErrors.add("Parameter 'lifespan' cannot be null.");
 		}
 
-		if (strategy.getSurvivalRate() == 0) {
-			validationErrors.add("survivalRate");
+		if (strategy.getSurvivalRate() == null || strategy.getSurvivalRate() < 0) {
+			validationErrors.add("Parameter 'survivalRate' must be greater than zero.");
 		}
 
 		if (strategy.getMutationRate() == null || strategy.getMutationRate() < 0) {
-			validationErrors.add("mutationRate");
+			validationErrors.add("Parameter 'mutationRate' must be greater than or equal to zero.");
 		}
 
 		if (strategy.getMaxMutationsPerIndividual() == null
 				|| strategy.getMaxMutationsPerIndividual() < 0) {
-			validationErrors.add("maxMutationsPerIndividual");
+			validationErrors
+					.add("Parameter 'maxMutationsPerIndividual' must be greater than or equal to zero.");
 		}
 
 		if (strategy.getCrossoverRate() == null || strategy.getCrossoverRate() < 0) {
-			validationErrors.add("crossoverRate");
+			validationErrors
+					.add("Parameter 'crossoverRate' must be greater than or equal to zero.");
 		}
 
 		if (strategy.getMutateDuringCrossover() == null) {
-			validationErrors.add("mutateDuringCrossover");
+			validationErrors.add("Parameter 'mutateDuringCrossover' cannot be null.");
 		}
 
 		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
-			validationErrors.add("maxGenerations");
+			validationErrors
+					.add("Parameter 'maxGenerations' cannot be null and must not equal zero.");
 		}
 
 		if (strategy.getCrossoverAlgorithm() == null) {
-			validationErrors.add("crossoverAlgorithm");
+			validationErrors.add("Parameter 'crossoverAlgorithm' cannot be null.");
 		}
 
 		if (strategy.getFitnessEvaluator() == null) {
-			validationErrors.add("fitnessEvaluator");
+			validationErrors.add("Parameter 'fitnessEvaluator' cannot be null.");
 		}
 
 		if (strategy.getMutationAlgorithm() == null) {
-			validationErrors.add("mutationAlgorithm");
+			validationErrors.add("Parameter 'mutationAlgorithm' cannot be null.");
 		}
 
 		if (strategy.getSelectionAlgorithm() == null) {
-			validationErrors.add("selectionAlgorithm");
+			validationErrors.add("Parameter 'selectionAlgorithm' cannot be null.");
 		}
 
 		if (strategy.getSelector() == null) {
-			validationErrors.add("selectorMethod");
+			validationErrors.add("Parameter 'selectorMethod' cannot be null.");
 		}
 
-		return validationErrors;
+		if (validationErrors.size() > 0) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Unable to execute genetic algorithm because one or more of the required parameters are missing.  The validation errors are:");
+
+			for (String validationError : validationErrors) {
+				sb.append("\n\t-" + validationError);
+			}
+
+			throw new IllegalStateException(sb.toString());
+		}
 	}
 
 	@Override
@@ -362,7 +370,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		return (int) mutations;
 	}
 
-	private void spawnInitialPopulation() {
+	protected void spawnInitialPopulation() {
 		long start = System.currentTimeMillis();
 
 		this.population.clearIndividuals();
@@ -379,10 +387,13 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	 * @param executionStatistics
 	 *            the ExecutionStatistics to persist
 	 */
-	private void persistStatistics() {
+	protected void persistStatistics() {
 		log.info("Persisting statistics to database.");
+
 		long startInsert = System.currentTimeMillis();
-		executionStatisticsDao.insert(executionStatistics);
+
+		this.executionStatisticsDao.insert(this.executionStatistics);
+
 		log.info("Took " + (System.currentTimeMillis() - startInsert)
 				+ "ms to persist statistics to database.");
 	}

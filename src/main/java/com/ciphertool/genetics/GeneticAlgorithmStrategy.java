@@ -175,7 +175,7 @@ public class GeneticAlgorithmStrategy {
 	 *            the survivalRate to set
 	 */
 	public void setSurvivalRate(Double survivalRate) {
-		if (survivalRate < 0.0 || survivalRate > 1.0) {
+		if (survivalRate == null || survivalRate < 0.0 || survivalRate > 1.0) {
 			throw new IllegalArgumentException(
 					"Tried to set a survivalRate of "
 							+ survivalRate
@@ -197,7 +197,7 @@ public class GeneticAlgorithmStrategy {
 	 *            the mutationRate to set
 	 */
 	public void setMutationRate(Double mutationRate) {
-		if (mutationRate < 0.0 || mutationRate > 1.0) {
+		if (mutationRate == null || mutationRate < 0.0 || mutationRate > 1.0) {
 			throw new IllegalArgumentException(
 					"Tried to set a mutationRate of "
 							+ mutationRate
@@ -234,7 +234,7 @@ public class GeneticAlgorithmStrategy {
 	 *            the crossoverRate to set
 	 */
 	public void setCrossoverRate(Double crossoverRate) {
-		if (crossoverRate < 0.0 || crossoverRate > 1.0) {
+		if (crossoverRate == null || crossoverRate < 0.0 || crossoverRate > 1.0) {
 			throw new IllegalArgumentException(
 					"Tried to set a crossoverRate of "
 							+ crossoverRate

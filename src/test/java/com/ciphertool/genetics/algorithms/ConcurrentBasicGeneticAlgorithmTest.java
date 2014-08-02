@@ -114,6 +114,7 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		verify(crossoverAlgorithmMock, times(1)).crossover(same(mom), same(dad));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testCrossover() {
 		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
@@ -125,10 +126,10 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 				.thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
-		Selector selector = mock(Selector.class);
-		population.setSelector(selector);
-		when(selector.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(0,
-				1, 2, 3, 4);
+		Selector selectorMock = mock(Selector.class);
+		population.setSelector(selectorMock);
+		when(selectorMock.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(
+				0, 1, 2, 3, 4);
 
 		int initialPopulationSize = 50;
 
@@ -158,24 +159,43 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, concurrentBasicGeneticAlgorithm, strategy);
 
+		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class,
+				"ineligibleForReproduction");
+		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
+				.getField(ineligibleForReproductionField, population);
+
+		assertEquals(0, ineligibleForReproductionFromObject.size());
+
 		int childrenProduced = concurrentBasicGeneticAlgorithm.crossover(initialPopulationSize);
 
+		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
+				ineligibleForReproductionField, population);
+
+		/*
+		 * The population size should be reduced by the number of parents used
+		 * during crossover.
+		 */
+		assertEquals(40, population.size());
+
 		assertEquals(5, childrenProduced);
+
+		// There should be 10 ineligible parents, along with the 5 children
+		assertEquals(15, ineligibleForReproductionFromObject.size());
+
+		verify(selectorMock, times(10))
+				.getNextIndex(anyListOf(Chromosome.class), any(Double.class));
 
 		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class),
 				any(Chromosome.class));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Test
 	public void testCrossover_SmallPopulation() {
 		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
-		concurrentBasicGeneticAlgorithm.setTaskExecutor(taskExecutor);
 
 		Population population = new Population();
-		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
-				.thenReturn(DEFAULT_FITNESS_VALUE);
-		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Chromosome chromosome = new MockChromosome();
 		population.addIndividual(chromosome);
@@ -189,7 +209,22 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
+		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class,
+				"ineligibleForReproduction");
+		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
+				.getField(ineligibleForReproductionField, population);
+
+		assertEquals(0, ineligibleForReproductionFromObject.size());
+
 		int childrenProduced = concurrentBasicGeneticAlgorithm.crossover(10);
+
+		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
+				ineligibleForReproductionField, population);
+
+		assertEquals(1, population.size());
+
+		assertEquals(0, ineligibleForReproductionFromObject.size());
 
 		assertEquals(0, childrenProduced);
 
