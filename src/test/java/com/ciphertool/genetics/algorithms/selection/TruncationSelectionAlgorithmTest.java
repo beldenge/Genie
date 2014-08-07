@@ -173,9 +173,9 @@ public class TruncationSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		population.removeIndividual(9);
-		population.removeIndividual(8);
-		population.removeIndividual(7);
+		population.removeIndividualTemporarily(9);
+		population.removeIndividualTemporarily(8);
+		population.removeIndividualTemporarily(7);
 
 		assertEquals(7, population.size());
 		assertEquals(new Double(34.0), population.getTotalFitness());

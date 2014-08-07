@@ -71,8 +71,8 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		for (int i = 0; i < numSurvivors; i++) {
 			survivorIndex = selector.getNextIndex(population.getIndividuals(), population
 					.getTotalFitness());
-			survivors.add(population.getIndividuals().get(survivorIndex));
-			population.removeIndividual(survivorIndex);
+
+			survivors.add(population.removeIndividualTemporarily(survivorIndex));
 		}
 
 		/*
@@ -81,7 +81,11 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		 * 
 		 * This is a candidate for parallelization
 		 */
-		population.clearIndividuals();
+		int numberOfUnluckyIndividuals = population.getIndividuals().size();
+		for (int i = 0; i < numberOfUnluckyIndividuals; i++) {
+			population.killIndividual(population.getIndividuals().size() - 1);
+		}
+
 		for (Chromosome survivor : survivors) {
 			population.addIndividual(survivor);
 		}

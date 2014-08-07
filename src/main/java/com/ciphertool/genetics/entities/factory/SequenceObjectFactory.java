@@ -17,22 +17,9 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.entities;
+package com.ciphertool.genetics.entities.factory;
 
-public interface Sequence extends Cloneable {
-	public Integer getSequenceId();
+import com.ciphertool.genetics.entities.Sequence;
 
-	public Gene getGene();
-
-	public void setGene(Gene gene);
-
-	public Sequence clone();
-
-	public Object getValue();
-
-	public void setValue(Object obj);
-
-	public void setValueClean(Object obj);
-
-	public void reset();
+public interface SequenceObjectFactory extends ObjectFactory<Sequence> {
 }

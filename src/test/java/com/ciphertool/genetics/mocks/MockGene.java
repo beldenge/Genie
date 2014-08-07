@@ -25,6 +25,7 @@ import java.util.List;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.Sequence;
+import com.ciphertool.genetics.entities.pool.SequenceObjectPool;
 
 public class MockGene implements Gene {
 
@@ -98,6 +99,15 @@ public class MockGene implements Gene {
 		}
 
 		return clone;
+	}
+
+	@Override
+	public void destroy() {
+		for (Sequence sequence : this.sequences) {
+			SequenceObjectPool.returnObjectToPool(sequence);
+		}
+
+		this.sequences = null;
 	}
 
 	@Override

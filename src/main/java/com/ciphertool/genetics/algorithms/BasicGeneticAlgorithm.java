@@ -33,6 +33,7 @@ import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.pool.SequenceObjectPool;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
@@ -117,9 +118,9 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		 */
 		long startSelect = System.currentTimeMillis();
 		int totalDeaths = select();
-		if (log.isDebugEnabled()) {
-			log.debug("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
-		}
+		// if (log.isDebugEnabled()) {
+		log.info("Selection took " + (System.currentTimeMillis() - startSelect) + "ms.");
+		// }
 
 		/*
 		 * We want to increase age before children are produced in following
@@ -129,20 +130,24 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		long startAging = System.currentTimeMillis();
 		totalDeaths += this.population.increaseAge();
 		generationStatistics.setNumberSelectedOut(totalDeaths);
-		if (log.isDebugEnabled()) {
-			log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
+		// if (log.isDebugEnabled()) {
+		log.info("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
+		// }
+
+		if (strategy.getCrossoverRate() > 0.0) {
+			long startCrossover = System.currentTimeMillis();
+			generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
+			// if (log.isDebugEnabled()) {
+			log.info("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+			// }
 		}
 
-		long startCrossover = System.currentTimeMillis();
-		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
-		if (log.isDebugEnabled()) {
-			log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
-		}
-
-		long startMutation = System.currentTimeMillis();
-		generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
-		if (log.isDebugEnabled()) {
-			log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
+		if (strategy.getMutationRate() > 0.0) {
+			long startMutation = System.currentTimeMillis();
+			generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
+			// if (log.isDebugEnabled()) {
+			log.info("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
+			// }
 		}
 
 		this.population.resetEligibility();
@@ -156,15 +161,15 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		long startBreeding = System.currentTimeMillis();
 		generationStatistics.setNumberRandomlyGenerated(this.population.breed(this.strategy
 				.getPopulationSize()));
-		if (log.isDebugEnabled()) {
-			log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
-		}
+		// if (log.isDebugEnabled()) {
+		log.info("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
+		// }
 
 		long startEvaluation = System.currentTimeMillis();
 		this.population.evaluateFitness(generationStatistics);
-		if (log.isDebugEnabled()) {
-			log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
-		}
+		// if (log.isDebugEnabled()) {
+		log.info("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
+		// }
 
 		long executionTime = (System.currentTimeMillis() - generationStart);
 		generationStatistics.setExecutionTime(executionTime);
@@ -172,6 +177,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		log.info(generationStatistics);
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
+
+		SequenceObjectPool.balancePool();
 	}
 
 	protected void validateParameters() {

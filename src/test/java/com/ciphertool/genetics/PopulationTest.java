@@ -590,7 +590,7 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testRemoveIndividual() {
+	public void testRemoveIndividualTemporarily() {
 		Population population = new Population();
 
 		MockChromosome chromosome1 = new MockChromosome();
@@ -606,17 +606,17 @@ public class PopulationTest {
 		assertEquals(fitnessSum, population.getTotalFitness());
 		assertEquals(2, population.size());
 
-		fitnessSum -= population.removeIndividual(1).getFitness();
+		fitnessSum -= population.removeIndividualTemporarily(1).getFitness();
 		assertEquals(fitnessSum, population.getTotalFitness());
 		assertEquals(1, population.size());
 		assertSame(chromosome1, population.getIndividuals().get(0));
 
-		fitnessSum -= population.removeIndividual(0).getFitness();
+		fitnessSum -= population.removeIndividualTemporarily(0).getFitness();
 		assertEquals(fitnessSum, population.getTotalFitness());
 		assertEquals(0, population.size());
 
 		// Try to remove an individual that doesn't exist
-		assertNull(population.removeIndividual(0));
+		assertNull(population.removeIndividualTemporarily(0));
 	}
 
 	@Test
@@ -741,7 +741,7 @@ public class PopulationTest {
 		assertSame(chromosome2, ineligibleForReproductionFromObject.get(1));
 
 		// Try to remove an individual that doesn't exist
-		assertNull(population.removeIndividual(0));
+		assertNull(population.removeIndividualTemporarily(0));
 	}
 
 	@SuppressWarnings("unchecked")

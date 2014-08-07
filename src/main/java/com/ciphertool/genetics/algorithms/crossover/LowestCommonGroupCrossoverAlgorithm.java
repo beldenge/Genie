@@ -92,6 +92,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
+			child.destroy();
+
 			return null;
 		}
 
@@ -161,6 +163,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 
 			/*
 			 * Insert the child Gene copies back into the child.
+			 * 
+			 * TODO: It's faster to remove from the end of the List because no
+			 * elements need to shift
 			 */
 			for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
 				child.insertGene(i, childGeneCopies.remove(0));
@@ -173,6 +178,10 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 
 			return 0;
 		} else {
+			for (Gene gene : childGeneCopies) {
+				gene.destroy();
+			}
+
 			/*
 			 * Offset child gene indices by the number of Genes inserted from
 			 * parentB, since the number of Genes inserted from parentB could be

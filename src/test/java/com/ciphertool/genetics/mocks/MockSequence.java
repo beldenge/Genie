@@ -116,4 +116,14 @@ public class MockSequence implements Sequence {
 	public String toString() {
 		return "MockSequence [value=" + value + "]";
 	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setValueClean(Object obj) {
+		this.value = (String) obj;
+	}
 }

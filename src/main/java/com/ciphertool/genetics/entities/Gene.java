@@ -84,4 +84,6 @@ public interface Gene extends Cloneable {
 	 * @param newGene
 	 */
 	public void replaceSequence(int index, Sequence newSequence);
+
+	public void destroy();
 }

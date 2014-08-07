@@ -64,7 +64,7 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 			 * fitness value may or may not be preferred depending on the
 			 * comparator used.
 			 */
-			population.removeIndividual(0);
+			population.killIndividual(0);
 		}
 
 		return i;

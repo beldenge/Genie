@@ -93,7 +93,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 			survivorIndex = group.get(randomIndividuals.get(tournamentIndex));
 
 			survivors.add(population.getIndividuals().get(survivorIndex));
-			population.removeIndividual(survivorIndex);
+			population.removeIndividualTemporarily(survivorIndex);
 		}
 
 		/*
@@ -102,7 +102,11 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		 * 
 		 * This is a candidate for parallelization.
 		 */
-		population.clearIndividuals();
+		int numberOfUnluckyIndividuals = population.getIndividuals().size();
+		for (int i = 0; i < numberOfUnluckyIndividuals; i++) {
+			population.killIndividual(0);
+		}
+
 		for (Chromosome survivor : survivors) {
 			population.addIndividual(survivor);
 		}

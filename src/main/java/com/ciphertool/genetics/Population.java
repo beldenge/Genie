@@ -173,14 +173,6 @@ public class Population {
 		Double averageFitness = Double.valueOf(this.totalFitness)
 				/ Double.valueOf(individuals.size());
 
-		if (log.isDebugEnabled()) {
-			log.debug("Population of size " + individuals.size() + " has an average fitness of "
-					+ String.format("%1$,.2f", averageFitness));
-
-			log.debug("Best fitness in population is "
-					+ String.format("%1$,.2f", bestFitIndividual.getFitness()));
-		}
-
 		if (generationStatistics != null) {
 			generationStatistics.setAverageFitness(averageFitness);
 			generationStatistics.setBestFitness(bestFitIndividual.getFitness());
@@ -194,6 +186,9 @@ public class Population {
 				Chromosome bestFitClone = bestFitIndividual.clone();
 				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator
 						.evaluate(bestFitClone));
+
+				// It is no longer needed
+				bestFitClone.destroy();
 			}
 		}
 
@@ -224,7 +219,7 @@ public class Population {
 				 * Chromosome that is equal, since more than likely the unique
 				 * key will not have been generated from database yet.
 				 */
-				this.removeIndividual(i);
+				this.killIndividual(i);
 				individualsRemoved++;
 			}
 		}
@@ -253,7 +248,7 @@ public class Population {
 	 * 
 	 * @param individual
 	 */
-	public Chromosome removeIndividual(int indexToRemove) {
+	public Chromosome removeIndividualTemporarily(int indexToRemove) {
 		if (indexToRemove < 0 || indexToRemove > this.individuals.size() - 1) {
 			log.error("Tried to remove individual by invalid index " + indexToRemove
 					+ " from population of size " + this.size() + ".  Returning.");
@@ -266,7 +261,22 @@ public class Population {
 		return this.individuals.remove(indexToRemove);
 	}
 
+	/**
+	 * Removes an individual from the population based on its index, never to be
+	 * used again and allowing it to be garbage collected. This is much more
+	 * efficient than removing by equality.
+	 * 
+	 * @param individual
+	 */
+	public void killIndividual(int indexToRemove) {
+		removeIndividualTemporarily(indexToRemove).destroy();
+	}
+
 	public void clearIndividuals() {
+		for (Chromosome individual : this.individuals) {
+			individual.destroy();
+		}
+
 		this.individuals.clear();
 
 		this.totalFitness = 0.0;
@@ -307,7 +317,7 @@ public class Population {
 			return;
 		}
 
-		this.ineligibleForReproduction.add(this.removeIndividual(index));
+		this.ineligibleForReproduction.add(this.removeIndividualTemporarily(index));
 	}
 
 	/**

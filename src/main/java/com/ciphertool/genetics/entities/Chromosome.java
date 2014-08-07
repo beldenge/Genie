@@ -123,4 +123,6 @@ public interface Chromosome extends Cloneable {
 	 *            the evaluationNeeded value to set
 	 */
 	public void setEvaluationNeeded(boolean evaluationNeeded);
+
+	public void destroy();
 }

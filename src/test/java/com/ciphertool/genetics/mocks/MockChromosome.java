@@ -147,6 +147,15 @@ public class MockChromosome implements Chromosome {
 	}
 
 	@Override
+	public void destroy() {
+		for (Gene gene : this.genes) {
+			gene.destroy();
+		}
+
+		this.genes.clear();
+	}
+
+	@Override
 	public MockChromosome clone() {
 		MockChromosome clone;
 
