@@ -129,6 +129,10 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 		Gene newGene = null;
 		int attempts = 0;
 		do {
+			if (newGene != null) {
+				newGene.destroy();
+			}
+
 			newGene = geneListDao.findRandomGene(chromosome);
 
 			attempts++;

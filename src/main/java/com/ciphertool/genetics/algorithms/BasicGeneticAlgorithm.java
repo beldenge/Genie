@@ -179,6 +179,8 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 
 		SequenceObjectPool.balancePool();
+
+		log.info(SequenceObjectPool.toStringStatic());
 	}
 
 	protected void validateParameters() {

@@ -92,8 +92,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 					getGroupTotalFitness(randomIndividuals));
 			survivorIndex = group.get(randomIndividuals.get(tournamentIndex));
 
-			survivors.add(population.getIndividuals().get(survivorIndex));
-			population.removeIndividualTemporarily(survivorIndex);
+			survivors.add(population.removeIndividualTemporarily(survivorIndex));
 		}
 
 		/*

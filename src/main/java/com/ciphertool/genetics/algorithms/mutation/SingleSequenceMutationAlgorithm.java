@@ -29,6 +29,7 @@ import com.ciphertool.genetics.dao.SequenceDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.Sequence;
+import com.ciphertool.genetics.entities.pool.SequenceObjectPool;
 
 public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	private static Logger log = Logger.getLogger(SingleSequenceMutationAlgorithm.class);
@@ -148,6 +149,10 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 		 * existing value, since that would defeat the purpose of the mutation.
 		 */
 		do {
+			if (newSequence != null) {
+				SequenceObjectPool.returnObjectToPool(newSequence);
+			}
+
 			newSequence = sequenceDao.findRandomSequence(gene, ciphertextIndex);
 
 			attempts++;

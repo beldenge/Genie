@@ -49,6 +49,8 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.GeneListDao;
@@ -374,7 +376,7 @@ public class LiberalMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("3"));
 		mockChromosome.addGene(mockGene2);
 
-		MockGene mockGeneToReturn = new MockGene();
+		final MockGene mockGeneToReturn = new MockGene();
 		mockGeneToReturn.addSequence(new MockSequence("a"));
 		mockGeneToReturn.getSequences().get(0).setGene(mockGene1);
 		mockGeneToReturn.addSequence(new MockSequence("b"));
@@ -382,7 +384,12 @@ public class LiberalMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("c"));
 		mockGeneToReturn.getSequences().get(2).setGene(mockGene1);
 		mockGeneToReturn.setChromosome(mockChromosome);
-		when(geneListDaoMock.findRandomGene(same(mockChromosome))).thenReturn(mockGeneToReturn);
+		when(geneListDaoMock.findRandomGene(same(mockChromosome))).thenAnswer(
+				new Answer<MockGene>() {
+					public MockGene answer(InvocationOnMock invocation) throws Throwable {
+						return mockGeneToReturn.clone();
+					}
+				});
 
 		when(logMock.isDebugEnabled()).thenReturn(true);
 
