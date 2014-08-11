@@ -179,6 +179,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 			return 0;
 		} else {
 			for (Gene gene : childGeneCopies) {
+				// We didn't need them afterall
 				gene.destroy();
 			}
 

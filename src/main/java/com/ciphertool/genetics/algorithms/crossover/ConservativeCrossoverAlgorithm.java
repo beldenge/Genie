@@ -94,6 +94,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
+			child.destroy();
+
 			return null;
 		}
 
@@ -127,6 +129,9 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			 * Reset the fitness to what it was before the replacement.
 			 */
 			child.setFitness(originalFitness);
+		} else {
+			// We didn't need it afterall
+			geneCopy.destroy();
 		}
 	}
 

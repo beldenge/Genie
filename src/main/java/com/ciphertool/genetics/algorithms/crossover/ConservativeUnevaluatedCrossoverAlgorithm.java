@@ -73,10 +73,12 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()
-					&& child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size() == parentB
-							.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()).size()) {
-				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
-						crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
+					&& child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())
+							.size() == parentB.getGenes().get(
+							crossoverProgressDto.getSecondChromosomeGeneIndex()).size()) {
+				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB
+						.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())
+						.clone());
 			}
 
 			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
@@ -89,6 +91,8 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
+			child.destroy();
+
 			return null;
 		}
 

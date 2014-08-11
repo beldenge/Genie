@@ -92,6 +92,8 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 
 		// Don't return this child if it's identical to one of its parents
 		if (child.equals(parentA) || child.equals(parentB)) {
+			child.destroy();
+
 			return null;
 		}
 
