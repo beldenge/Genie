@@ -277,7 +277,7 @@ public class GroupMutationAlgorithmTest {
 		mockChromosome.addGene(mockGene4);
 		originalGenes.add(mockGene4);
 
-		MockGene mockGeneOfSize3 = new MockGene();
+		final MockGene mockGeneOfSize3 = new MockGene();
 		mockGeneOfSize3.addSequence(new MockSequence("x"));
 		mockGeneOfSize3.addSequence(new MockSequence("y"));
 		mockGeneOfSize3.addSequence(new MockSequence("z"));
@@ -289,7 +289,12 @@ public class GroupMutationAlgorithmTest {
 		MockGene mockGeneOfSize1 = new MockGene();
 		mockGeneOfSize1.addSequence(new MockSequence("u"));
 
-		when(geneListDaoMock.findRandomGene(same(mockChromosome))).thenReturn(mockGeneOfSize3);
+		when(geneListDaoMock.findRandomGene(same(mockChromosome))).thenAnswer(
+				new Answer<MockGene>() {
+					public MockGene answer(InvocationOnMock invocation) throws Throwable {
+						return mockGeneOfSize3.clone();
+					}
+				});
 		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), eq(2))).thenReturn(
 				mockGeneOfSize2);
 		when(geneListDaoMock.findRandomGeneOfLength(same(mockChromosome), eq(1))).thenReturn(
