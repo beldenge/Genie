@@ -25,17 +25,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.ciphertool.genetics.entities.Sequence;
-import com.ciphertool.genetics.entities.factory.SequenceObjectFactory;
+import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.factory.GeneObjectFactory;
 
 /*
  * This is an Object pool which eliminates the concurrency burden by maintaining pools of objects for each thread.  This comes with the cost of additional memory usage due to objects not being intrinsically balanced among threads.
  */
-public class SequenceObjectPool {
+public class GeneObjectPool {
 	private static AtomicLong numberOfObjectsInUse = new AtomicLong(0);
-	private static SequenceObjectFactory sequenceFactory;
+	private static GeneObjectFactory geneFactory;
 
-	private static Map<Long, List<Sequence>> objectsAvailableByThreadMap = new HashMap<Long, List<Sequence>>();
+	private static Map<Long, List<Gene>> objectsAvailableByThreadMap = new HashMap<Long, List<Gene>>();
 
 	public static long getNumberOfObjectsInUse() {
 		return numberOfObjectsInUse.get();
@@ -43,66 +43,66 @@ public class SequenceObjectPool {
 
 	public static long getNumberOfObjectsAvailable() {
 		long totalObjectsAvailable = 0;
-		for (List<Sequence> sequenceList : objectsAvailableByThreadMap.values()) {
-			totalObjectsAvailable += sequenceList.size();
+		for (List<Gene> geneList : objectsAvailableByThreadMap.values()) {
+			totalObjectsAvailable += geneList.size();
 		}
 
 		return totalObjectsAvailable;
 	}
 
-	public static Sequence getNextObjectFromPool() {
+	public static Gene getNextObjectFromPool() {
 		addThreadIdIfNotExists();
 
 		numberOfObjectsInUse.incrementAndGet();
 
-		List<Sequence> sequencePoolForThread = objectsAvailableByThreadMap.get(Thread
-				.currentThread().getId());
+		List<Gene> genePoolForThread = objectsAvailableByThreadMap.get(Thread.currentThread()
+				.getId());
 
-		if (sequencePoolForThread.isEmpty()) {
-			return sequenceFactory.createObject();
+		if (genePoolForThread.isEmpty()) {
+			return geneFactory.createObject();
 		}
 
 		/*
 		 * It's faster to remove from the end of the List because no elements
 		 * need to shift
 		 */
-		return sequencePoolForThread.remove(sequencePoolForThread.size() - 1);
+		return genePoolForThread.remove(genePoolForThread.size() - 1);
 	}
 
-	public static void returnObjectToPool(Sequence plaintextSequence) {
+	public static void returnObjectToPool(Gene wordGene) {
 		addThreadIdIfNotExists();
 
 		numberOfObjectsInUse.decrementAndGet();
 
-		plaintextSequence.reset();
+		wordGene.reset();
 
-		objectsAvailableByThreadMap.get(Thread.currentThread().getId()).add(plaintextSequence);
+		objectsAvailableByThreadMap.get(Thread.currentThread().getId()).add(wordGene);
 	}
 
 	protected static void addThreadIdIfNotExists() {
 		long currentThreadId = Thread.currentThread().getId();
 
 		if (!objectsAvailableByThreadMap.containsKey(currentThreadId)) {
-			objectsAvailableByThreadMap.put(currentThreadId, new ArrayList<Sequence>());
+			objectsAvailableByThreadMap.put(currentThreadId, new ArrayList<Gene>());
 		}
 	}
 
-	public static void setObjectFactory(SequenceObjectFactory sequenceFactoryToSet) {
-		sequenceFactory = sequenceFactoryToSet;
+	public static void setObjectFactory(GeneObjectFactory geneFactoryToSet) {
+		geneFactory = geneFactoryToSet;
 	}
 
 	public static void balancePool() {
-		List<Sequence> entirePool = new ArrayList<Sequence>();
+		List<Gene> entirePool = new ArrayList<Gene>();
 
-		for (List<Sequence> sequenceList : objectsAvailableByThreadMap.values()) {
-			int sequencePoolForThreadSize = sequenceList.size();
+		for (List<Gene> geneList : objectsAvailableByThreadMap.values()) {
+			int genePoolForThreadSize = geneList.size();
 
-			for (int i = 0; i < sequencePoolForThreadSize; i++) {
+			for (int i = 0; i < genePoolForThreadSize; i++) {
 				/*
 				 * It's faster to remove from the end of the List because no
 				 * elements need to shift
 				 */
-				entirePool.add(sequenceList.remove(sequenceList.size() - 1));
+				entirePool.add(geneList.remove(geneList.size() - 1));
 			}
 		}
 
@@ -114,12 +114,12 @@ public class SequenceObjectPool {
 		int eachThreadNewSize = entirePool.size() / objectsAvailableByThreadMap.size();
 
 		int currentThread = 0;
-		for (List<Sequence> sequenceList : objectsAvailableByThreadMap.values()) {
+		for (List<Gene> geneList : objectsAvailableByThreadMap.values()) {
 			currentThread++;
 
 			if (currentThread == objectsAvailableByThreadMap.size()) {
 				// This is the last thread, so just add whatever is left over
-				sequenceList.addAll(entirePool);
+				geneList.addAll(entirePool);
 
 			} else {
 				for (int i = 0; i < eachThreadNewSize; i++) {
@@ -127,16 +127,15 @@ public class SequenceObjectPool {
 					 * It's faster to remove from the end of the List because no
 					 * elements need to shift
 					 */
-					sequenceList.add(entirePool.remove(entirePool.size() - 1));
+					geneList.add(entirePool.remove(entirePool.size() - 1));
 				}
 			}
 		}
 	}
 
 	public static String toStringStatic() {
-		String toString = "PlaintextSequenceObjectPool [numberOfObjectsInUse="
-				+ numberOfObjectsInUse + ", numberOfObjectsAvailable="
-				+ getNumberOfObjectsAvailable() + "]  Breakdown:\n";
+		String toString = "WordGeneObjectPool [numberOfObjectsInUse=" + numberOfObjectsInUse
+				+ ", numberOfObjectsAvailable=" + getNumberOfObjectsAvailable() + "]  Breakdown:\n";
 
 		for (Long key : objectsAvailableByThreadMap.keySet()) {
 			toString += "Thread ID: " + key + ", Size: "

@@ -285,18 +285,21 @@ public class Population {
 	/**
 	 * @param individual
 	 */
-	public void addIndividual(Chromosome individual) {
+	public boolean addIndividual(Chromosome individual) {
 		this.individuals.add(individual);
 
 		/*
 		 * Only evaluate this individual if it hasn't been evaluated yet by some
 		 * other process.
 		 */
-		if (individual.isEvaluationNeeded()) {
+		boolean needsEvaluation = individual.isEvaluationNeeded();
+		if (needsEvaluation) {
 			individual.setFitness(fitnessEvaluator.evaluate(individual));
 		}
 
 		this.totalFitness += individual.getFitness();
+
+		return needsEvaluation;
 	}
 
 	/**

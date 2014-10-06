@@ -111,6 +111,11 @@ public class MockGene implements Gene {
 	}
 
 	@Override
+	public void reset() {
+		throw new UnsupportedOperationException("Method stub not yet implemented");
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;

@@ -66,6 +66,20 @@ public class MockSequence implements Sequence {
 	}
 
 	@Override
+	public void reset() {
+		this.gene = null;
+
+		this.sequenceId = null;
+
+		this.value = null;
+	}
+
+	@Override
+	public void setValueClean(Object obj) {
+		this.value = (String) obj;
+	}
+
+	@Override
 	public MockSequence clone() {
 		MockSequence clone;
 
@@ -115,15 +129,5 @@ public class MockSequence implements Sequence {
 	@Override
 	public String toString() {
 		return "MockSequence [value=" + value + "]";
-	}
-
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setValueClean(Object obj) {
-		this.value = (String) obj;
 	}
 }

@@ -98,16 +98,20 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		/*
 		 * Reset the population by clearing it and then adding back all the
 		 * survivors.
-		 * 
-		 * This is a candidate for parallelization.
 		 */
 		int numberOfUnluckyIndividuals = population.getIndividuals().size();
 		for (int i = 0; i < numberOfUnluckyIndividuals; i++) {
-			population.killIndividual(0);
+			population.killIndividual(population.getIndividuals().size() - 1);
 		}
 
+		// This is a candidate for parallelization
+		int numEvaluations = 0;
 		for (Chromosome survivor : survivors) {
-			population.addIndividual(survivor);
+			numEvaluations += population.addIndividual(survivor) ? 1 : 0;
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Number of evaluations during Selection: " + numEvaluations);
 		}
 
 		return numberRemoved;

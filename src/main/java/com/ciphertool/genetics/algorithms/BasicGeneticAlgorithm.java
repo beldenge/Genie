@@ -33,6 +33,7 @@ import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.pool.GeneObjectPool;
 import com.ciphertool.genetics.entities.pool.SequenceObjectPool;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
@@ -179,6 +180,7 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 
 		SequenceObjectPool.balancePool();
+		GeneObjectPool.balancePool();
 	}
 
 	protected void validateParameters() {
