@@ -92,19 +92,23 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 					getGroupTotalFitness(randomIndividuals));
 			survivorIndex = group.get(randomIndividuals.get(tournamentIndex));
 
-			survivors.add(population.getIndividuals().get(survivorIndex));
-			population.removeIndividual(survivorIndex);
+			survivors.add(population.removeIndividual(survivorIndex));
 		}
 
 		/*
 		 * Reset the population by clearing it and then adding back all the
 		 * survivors.
-		 * 
-		 * This is a candidate for parallelization.
 		 */
 		population.clearIndividuals();
+
+		// This is a candidate for parallelization
+		int numEvaluations = 0;
 		for (Chromosome survivor : survivors) {
-			population.addIndividual(survivor);
+			numEvaluations += population.addIndividual(survivor) ? 1 : 0;
+		}
+
+		if (log.isDebugEnabled()) {
+			log.debug("Number of evaluations during Selection: " + numEvaluations);
 		}
 
 		return numberRemoved;

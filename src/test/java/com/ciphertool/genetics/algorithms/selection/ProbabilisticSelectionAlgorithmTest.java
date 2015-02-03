@@ -114,7 +114,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(2, numberRemoved);
 		assertEquals(8, population.size());
 		assertEquals(new Double(40.0), population.getTotalFitness());
-		verify(logMock, times(1)).isDebugEnabled();
+		verify(logMock, times(2)).isDebugEnabled();
 		verifyNoMoreInteractions(logMock);
 	}
 
@@ -148,7 +148,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(6, numberRemoved);
 		assertEquals(8, population.size());
 		assertEquals(new Double(40.0), population.getTotalFitness());
-		verify(logMock, times(1)).isDebugEnabled();
+		verify(logMock, times(2)).isDebugEnabled();
 		verifyNoMoreInteractions(logMock);
 	}
 
@@ -170,7 +170,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(0, numberRemoved);
 		assertEquals(7, population.size());
 		assertEquals(new Double(35.0), population.getTotalFitness());
-		verify(logMock, times(1)).isDebugEnabled();
+		verify(logMock, times(2)).isDebugEnabled();
 		verifyNoMoreInteractions(logMock);
 	}
 
@@ -190,7 +190,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(1, numberRemoved);
 		assertEquals(9, population.size());
 		assertEquals(new Double(45.0), population.getTotalFitness());
-		verify(logMock, times(1)).isDebugEnabled();
+		verify(logMock, times(2)).isDebugEnabled();
 		verifyNoMoreInteractions(logMock);
 	}
 
@@ -210,7 +210,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(2, numberRemoved);
 		assertEquals(8, population.size());
 		assertEquals(new Double(40.0), population.getTotalFitness());
-		verify(logMock, times(1)).isDebugEnabled();
+		verify(logMock, times(2)).isDebugEnabled();
 		verifyNoMoreInteractions(logMock);
 	}
 

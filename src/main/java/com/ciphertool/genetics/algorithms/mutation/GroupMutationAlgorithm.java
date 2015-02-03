@@ -278,24 +278,13 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		}
 
 		// Remove the old genes
-		List<Gene> genesRemoved = removeGenes(chromosome, beginIndex, numGenes);
-
-		int sequencesRemoved = 0;
-
-		// Count the number of sequences from all the removed genes
-		for (Gene removedGene : genesRemoved) {
-			sequencesRemoved += removedGene.size();
-		}
+		int sequencesToRemove = countSequencesToRemove(chromosome, beginIndex, numGenes);
 
 		// Insert new random genes
-		int numInsertedGenes = insertRandomGenes(chromosome, beginIndex, sequencesRemoved);
+		int numInsertedGenes = insertRandomGenes(chromosome, beginIndex, sequencesToRemove);
 
-		if (numInsertedGenes == 0) {
-			/*
-			 * In certain edge cases, the geneListDao may be unable to return a
-			 * Gene
-			 */
-			revertGenes(chromosome, genesRemoved, beginIndex);
+		if (numInsertedGenes != 0) {
+			removeGenes(chromosome, beginIndex + numInsertedGenes, numGenes);
 		}
 
 		return numInsertedGenes;
@@ -389,25 +378,34 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		return genesToAdd.size();
 	}
 
-	/**
-	 * Reverts a group mutation
-	 * 
-	 * @param chromosome
-	 *            the Chromosome to revert
-	 * @param genesRemoved
-	 *            the Genes to re-add
-	 * @param beginIndex
-	 *            the index to start adding from
-	 */
-	protected static void revertGenes(Chromosome chromosome, List<Gene> genesRemoved, int beginIndex) {
-		int initialListSize = genesRemoved.size();
-
-		/*
-		 * Insert all of the removed genes back in their proper position.
-		 */
-		for (int i = 0; i < initialListSize; i++) {
-			chromosome.insertGene(beginIndex + i, genesRemoved.get(i));
+	protected static int countSequencesToRemove(Chromosome chromosome, int beginIndex, int numGenes) {
+		if (numGenes <= 0) {
+			// Nothing to do
+			return 0;
 		}
+
+		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
+			throw new IllegalArgumentException(
+					"Unable to count Genes from Chromosome starting at index "
+							+ beginIndex
+							+ ", as this index is out of bounds.  Expecting an index in the range [0-"
+							+ (chromosome.getGenes().size() - 1) + "].");
+		}
+
+		if (numGenes > chromosome.getGenes().size() - beginIndex) {
+			throw new IllegalArgumentException("Unable to count " + numGenes
+					+ " Genes at beginIndex " + beginIndex + " because there are only "
+					+ (chromosome.getGenes().size() - beginIndex)
+					+ " Genes to remove at this index.");
+		}
+
+		int sequenceCount = 0;
+
+		for (int i = 0; i < numGenes; i++) {
+			sequenceCount += chromosome.getGenes().get(beginIndex + i).size();
+		}
+
+		return sequenceCount;
 	}
 
 	/**

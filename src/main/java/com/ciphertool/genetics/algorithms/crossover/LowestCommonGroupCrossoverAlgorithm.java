@@ -161,6 +161,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 
 			/*
 			 * Insert the child Gene copies back into the child.
+			 * 
+			 * TODO: It's faster to remove from the end of the List because no
+			 * elements need to shift
 			 */
 			for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
 				child.insertGene(i, childGeneCopies.remove(0));

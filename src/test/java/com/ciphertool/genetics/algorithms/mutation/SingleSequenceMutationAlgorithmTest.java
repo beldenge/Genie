@@ -45,6 +45,8 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.SequenceDao;
@@ -489,8 +491,12 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence sequenceToReplace = new MockSequence("e");
 		mockGene.addSequence(sequenceToReplace);
 
-		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenReturn(
-				new MockSequence("e"));
+		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenAnswer(
+				new Answer<MockSequence>() {
+					public MockSequence answer(InvocationOnMock invocation) throws Throwable {
+						return new MockSequence("e");
+					}
+				});
 		when(logMock.isDebugEnabled()).thenReturn(true);
 
 		singleSequenceMutationAlgorithm.mutateSequence(mockGene, 4);

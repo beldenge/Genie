@@ -133,16 +133,20 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 			log.debug("Aging took " + (System.currentTimeMillis() - startAging) + "ms.");
 		}
 
-		long startCrossover = System.currentTimeMillis();
-		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
-		if (log.isDebugEnabled()) {
-			log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+		if (strategy.getCrossoverRate() > 0.0) {
+			long startCrossover = System.currentTimeMillis();
+			generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
+			if (log.isDebugEnabled()) {
+				log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+			}
 		}
 
-		long startMutation = System.currentTimeMillis();
-		generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
-		if (log.isDebugEnabled()) {
-			log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
+		if (strategy.getMutationRate() > 0.0) {
+			long startMutation = System.currentTimeMillis();
+			generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
+			if (log.isDebugEnabled()) {
+				log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
+			}
 		}
 
 		this.population.resetEligibility();

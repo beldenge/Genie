@@ -48,25 +48,23 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 
 		int initialPopulationSize = population.size();
 
-		long survivorIndex = initialPopulationSize
-				- Math.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
+		int survivorIndex = initialPopulationSize
+				- (int) Math.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
 
 		if (log.isDebugEnabled()) {
 			log.debug(survivorIndex + " individuals to be removed from population of size "
 					+ population.size() + " and survival rate of " + survivalRate + ".");
 		}
 
-		int i;
-		for (i = 0; i < survivorIndex; i++) {
+		for (int i = survivorIndex - 1; i >= 0; i--) {
 			/*
-			 * We must remove the first element every time, since the List is
-			 * sorted in ascending order in terms of fitness, where higher
-			 * fitness value may or may not be preferred depending on the
+			 * The List is sorted in ascending order in terms of fitness, where
+			 * higher fitness value may or may not be preferred depending on the
 			 * comparator used.
 			 */
-			population.removeIndividual(0);
+			population.removeIndividual(i);
 		}
 
-		return i;
+		return survivorIndex;
 	}
 }
