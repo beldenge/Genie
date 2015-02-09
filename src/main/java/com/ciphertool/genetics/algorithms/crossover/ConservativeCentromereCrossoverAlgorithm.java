@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.RandomListElementSelector;
 
@@ -149,7 +150,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 						+ " but no Gene was found.  This is indicative of a bad centromere.");
 			}
 
-			nextSequenceIndex = chromosome.getGenes().get(geneIndex).getSequences().get(0)
+			nextSequenceIndex = ((ComplexGene) chromosome.getGenes().get(geneIndex)).getSequences().get(0)
 					.getSequenceId();
 		} while (nextSequenceIndex != centromere);
 

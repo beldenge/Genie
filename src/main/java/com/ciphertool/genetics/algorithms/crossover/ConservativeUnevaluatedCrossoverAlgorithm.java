@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm {
@@ -73,8 +74,8 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()
-					&& child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size() == parentB
-							.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()).size()) {
+					&& ((ComplexGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size() == ((ComplexGene) parentB
+							.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())).size()) {
 				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
 						crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 			}

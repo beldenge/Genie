@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
 
 public class GroupMutationAlgorithm implements MutationAlgorithm {
@@ -351,7 +352,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		while (sequencesAdded < sequencesRemoved) {
 			Gene geneToAdd = geneListDao.findRandomGene(chromosome);
 
-			if (geneToAdd != null && geneToAdd.size() > (sequencesRemoved - sequencesAdded)) {
+			if (geneToAdd != null && ((ComplexGene) geneToAdd).size() > (sequencesRemoved - sequencesAdded)) {
 				geneToAdd = geneListDao.findRandomGeneOfLength(chromosome, sequencesRemoved
 						- sequencesAdded);
 			}
@@ -362,7 +363,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 
 			genesToAdd.add(geneToAdd);
 
-			sequencesAdded += geneToAdd.size();
+			sequencesAdded += ((ComplexGene) geneToAdd).size();
 		}
 
 		for (int i = 0; i < genesToAdd.size(); i++) {
@@ -402,7 +403,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		int sequenceCount = 0;
 
 		for (int i = 0; i < numGenes; i++) {
-			sequenceCount += chromosome.getGenes().get(beginIndex + i).size();
+			sequenceCount += ((ComplexGene) chromosome.getGenes().get(beginIndex + i)).size();
 		}
 
 		return sequenceCount;

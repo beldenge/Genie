@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.SequenceDao;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Sequence;
 
 public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
@@ -105,7 +105,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 			return;
 		}
 
-		mutateRandomSequence(chromosome.getGenes().get(index));
+		mutateRandomSequence((ComplexGene) chromosome.getGenes().get(index));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param gene
 	 *            the Gene to mutate
 	 */
-	protected void mutateRandomSequence(Gene gene) {
+	protected void mutateRandomSequence(ComplexGene gene) {
 		int randomIndex = (int) (Math.random() * gene.size());
 
 		mutateSequence(gene, randomIndex);
@@ -128,7 +128,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Sequence to mutate
 	 */
-	protected void mutateSequence(Gene gene, int index) {
+	protected void mutateSequence(ComplexGene gene, int index) {
 		if (index > gene.size() - 1) {
 			log.info("Attempted to mutate a sequence in Gene with index of " + index
 					+ " (zero-indexed), but the size is only " + gene.size()

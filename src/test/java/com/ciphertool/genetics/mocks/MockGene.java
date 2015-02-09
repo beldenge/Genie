@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Sequence;
 
-public class MockGene implements Gene {
+public class MockGene implements ComplexGene {
 
 	private Chromosome chromosome;
 	private List<Sequence> sequences = new ArrayList<Sequence>();
@@ -49,11 +49,6 @@ public class MockGene implements Gene {
 	@Override
 	public List<Sequence> getSequences() {
 		return this.sequences;
-	}
-
-	@Override
-	public void resetSequences() {
-		throw new UnsupportedOperationException("Method stub not yet implemented");
 	}
 
 	@Override

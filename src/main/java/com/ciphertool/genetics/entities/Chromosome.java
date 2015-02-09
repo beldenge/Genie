@@ -64,11 +64,6 @@ public interface Chromosome extends Cloneable {
 	public void replaceGene(int index, Gene newGene);
 
 	/**
-	 * Re-initializes the Collection of Genes.
-	 */
-	public void resetGenes();
-
-	/**
 	 * @return
 	 */
 	public Double getFitness();

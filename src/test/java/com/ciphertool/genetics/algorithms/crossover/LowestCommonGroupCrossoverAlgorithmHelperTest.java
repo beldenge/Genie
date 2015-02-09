@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 
 public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgorithmTestBase {
 	@Test
@@ -32,8 +33,8 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		Chromosome parent = getDad();
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(parent.getGenes().get(0).size());
+		crossoverProgressDto.setFirstChromosomeSequencePosition(((ComplexGene) child.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((ComplexGene) parent.getGenes().get(0)).size());
 
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
 				parent, 0);
@@ -82,8 +83,8 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		Chromosome parent = getDad();
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(parent.getGenes().get(0).size());
+		crossoverProgressDto.setFirstChromosomeSequencePosition(((ComplexGene) child.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((ComplexGene) parent.getGenes().get(0)).size());
 
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
 				parent, 1);
@@ -108,8 +109,8 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		Chromosome parent = getDad();
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(parent.getGenes().get(0).size());
+		crossoverProgressDto.setFirstChromosomeSequencePosition(((ComplexGene) child.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((ComplexGene) parent.getGenes().get(0)).size());
 
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
 				parent, -1);

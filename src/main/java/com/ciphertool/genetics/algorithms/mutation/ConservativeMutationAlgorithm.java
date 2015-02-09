@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
 
 public class ConservativeMutationAlgorithm implements MutationAlgorithm {
@@ -113,13 +114,13 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm {
 		Gene newGene = null;
 		int attempts = 0;
 		do {
-			newGene = geneListDao.findRandomGeneOfLength(chromosome, oldGene.size());
+			newGene = geneListDao.findRandomGeneOfLength(chromosome, ((ComplexGene) oldGene).size());
 
 			attempts++;
 
 			if (attempts >= MAX_FIND_ATTEMPTS) {
 				if (log.isDebugEnabled()) {
-					log.debug("Unable to find a different Gene of length " + oldGene.size()
+					log.debug("Unable to find a different Gene of length " + ((ComplexGene) oldGene).size()
 							+ " for Gene " + oldGene + " after " + attempts
 							+ " attempts.  Not performing mutation.");
 				}

@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 
 public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithmTestBase {
 
@@ -35,9 +36,9 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
-		assertEquals(child.getGenes().get(0).size(), crossoverProgressDto
+		assertEquals(((ComplexGene) child.getGenes().get(0)).size(), crossoverProgressDto
 				.getFirstChromosomeSequencePosition());
-		assertEquals(parent.getGenes().get(0).size(), crossoverProgressDto
+		assertEquals(((ComplexGene) parent.getGenes().get(0)).size(), crossoverProgressDto
 				.getSecondChromosomeSequencePosition());
 		assertEquals(1, crossoverProgressDto.getSecondChromosomeGeneIndex());
 		assertEquals(1, crossoverProgressDto.getFirstChromosomeGeneIndex());

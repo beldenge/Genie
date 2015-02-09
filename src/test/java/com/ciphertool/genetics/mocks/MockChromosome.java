@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.ciphertool.genetics.annotations.Clean;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
 
 public class MockChromosome implements Chromosome {
@@ -60,12 +61,6 @@ public class MockChromosome implements Chromosome {
 	public void replaceGene(int index, Gene newGene) {
 		this.removeGene(index);
 		this.insertGene(index, newGene);
-	}
-
-	@Override
-	public void resetGenes() {
-		this.fitness = 0.0;
-		this.genes.clear();
 	}
 
 	@Override
@@ -114,7 +109,7 @@ public class MockChromosome implements Chromosome {
 		int size = 0;
 
 		for (Gene gene : this.genes) {
-			size += gene.size();
+			size += ((ComplexGene) gene).size();
 		}
 
 		return size;

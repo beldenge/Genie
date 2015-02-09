@@ -52,6 +52,7 @@ import org.mockito.stubbing.Answer;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.mocks.MockChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
@@ -327,7 +328,7 @@ public class GroupMutationAlgorithmTest {
 		}
 
 		Gene lastGene = mockChromosome.getGenes().get(mockChromosome.getGenes().size() - 1);
-		switch (lastGene.size()) {
+		switch (((ComplexGene) lastGene).size()) {
 		case 3:
 			assertEquals(mockGeneOfSize3, lastGene);
 			break;

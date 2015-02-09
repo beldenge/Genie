@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.ComplexGene;
 
 public class ChromosomeHelper {
 	private GeneListDao geneListDao;
@@ -51,7 +51,7 @@ public class ChromosomeHelper {
 		 * causing the sequence length to exceed the target length.
 		 */
 		while (chromosomeToResize.actualSize() > chromosomeToResize.targetSize()) {
-			Gene lastGene = chromosomeToResize.getGenes().get(
+			ComplexGene lastGene = (ComplexGene) chromosomeToResize.getGenes().get(
 					chromosomeToResize.getGenes().size() - 1);
 
 			if (chromosomeToResize.actualSize() - lastGene.size() >= chromosomeToResize

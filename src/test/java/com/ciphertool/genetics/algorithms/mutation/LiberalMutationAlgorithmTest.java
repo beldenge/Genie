@@ -55,6 +55,7 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.mocks.MockChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
@@ -291,7 +292,7 @@ public class LiberalMutationAlgorithmTest {
 		assertTrue(mockChromosome.getGenes().size() >= 3);
 		assertEquals(new Integer(6), mockChromosome.actualSize());
 		// The last Sequence(s) should always be from the ChromosomeHelper
-		assertEquals("y", mockChromosome.getGenes().get(2).getSequences().get(0).getValue());
+		assertEquals("y", ((ComplexGene) mockChromosome.getGenes().get(2)).getSequences().get(0).getValue());
 		verify(geneListDaoMock, atLeast(1)).findRandomGene(same(mockChromosome));
 		verify(geneListDaoMock, atMost(2)).findRandomGene(same(mockChromosome));
 		verify(geneListDaoMockForChromosomeHelper, atLeast(1)).findRandomGene(same(mockChromosome));
@@ -538,7 +539,10 @@ public class LiberalMutationAlgorithmTest {
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		do {
-			mockChromosome.resetGenes();
+			mockChromosome.setFitness(0.0);
+			while (!mockChromosome.getGenes().isEmpty()) {
+				mockChromosome.removeGene(mockChromosome.getGenes().size() - 1);
+			}
 			mockChromosome.addGene(mockGene1);
 			mockChromosome.addGene(mockGene2);
 			availableIndices.clear();

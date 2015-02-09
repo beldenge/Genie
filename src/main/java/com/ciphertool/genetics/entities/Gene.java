@@ -19,15 +19,8 @@
 
 package com.ciphertool.genetics.entities;
 
-import java.util.List;
 
 public interface Gene extends Cloneable {
-
-	/*
-	 * Return the size of this Gene, measured as the number of sequences making
-	 * up this Gene.
-	 */
-	public int size();
 
 	public Gene clone();
 
@@ -42,46 +35,4 @@ public interface Gene extends Cloneable {
 	 * @return the Chromosome that this Gene is a part of
 	 */
 	public Chromosome getChromosome();
-
-	/**
-	 * @return an unmodifiable List of this Gene's Sequences
-	 */
-	public List<Sequence> getSequences();
-
-	/**
-	 * Re-initializes the Collection of Sequences.
-	 */
-	public void resetSequences();
-
-	/**
-	 * Adds a Sequence to the end of the Gene.
-	 * 
-	 * @param sequence
-	 */
-	public void addSequence(Sequence sequence);
-
-	/**
-	 * Inserts a Sequence at the specified index. Care must be taken to update
-	 * any Sequence indexes which follow the inserted Sequence.
-	 * 
-	 * @param index
-	 * @param sequence
-	 */
-	public void insertSequence(int index, Sequence sequence);
-
-	/**
-	 * Removes a Sequence at the specified index. Care must be taken to update
-	 * any Sequence indexes which follow the removed Sequence.
-	 * 
-	 * @param sequence
-	 */
-	public void removeSequence(Sequence sequence);
-
-	/**
-	 * Replaces a Sequence at the specified index.
-	 * 
-	 * @param index
-	 * @param newGene
-	 */
-	public void replaceSequence(int index, Sequence newSequence);
 }

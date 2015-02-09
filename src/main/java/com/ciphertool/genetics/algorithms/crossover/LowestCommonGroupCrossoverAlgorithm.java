@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
@@ -68,8 +69,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		crossoverProgressDto.setFirstChromosomeSequencePosition(child.getGenes().get(0).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(parentB.getGenes().get(0).size());
+		crossoverProgressDto.setFirstChromosomeSequencePosition(((ComplexGene) child.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((ComplexGene) parentB.getGenes().get(0)).size());
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an

@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.algorithms.crossover;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.ComplexGene;
 
 public class ConservativeCrossoverAlgorithmHelper {
 
@@ -32,8 +33,8 @@ public class ConservativeCrossoverAlgorithmHelper {
 			return;
 		}
 
-		int firstGeneSize = first.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).size();
-		int secondGeneSize = second.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())
+		int firstGeneSize = ((ComplexGene) first.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size();
+		int secondGeneSize = ((ComplexGene) second.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()))
 				.size();
 
 		if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
