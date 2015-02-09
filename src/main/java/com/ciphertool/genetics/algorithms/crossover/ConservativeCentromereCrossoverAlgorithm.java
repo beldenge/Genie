@@ -25,14 +25,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.RandomListElementSelector;
 
-public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm {
+public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(ConservativeCentromereCrossoverAlgorithm.class);
-	private MutationAlgorithm mutationAlgorithm;
+	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 	private RandomListElementSelector randomListElementSelector;
 
@@ -45,7 +45,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
 	 */
 	@Override
-	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		if (mutateDuringCrossover && mutationAlgorithm == null) {
 			throw new IllegalStateException(
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
@@ -56,7 +56,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 		if (potentialCentromeres == null || potentialCentromeres.isEmpty()) {
 			log.info("Unable to find any potential centromeres for the chosen Chromosomes.  Returning empty List.");
 
-			return new ArrayList<Chromosome>();
+			return new ArrayList<KeylessChromosome>();
 		}
 
 		/*
@@ -66,9 +66,9 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 		int centromere = potentialCentromeres.get(randomListElementSelector
 				.selectRandomListElement(potentialCentromeres));
 
-		List<Chromosome> children = new ArrayList<Chromosome>();
+		List<KeylessChromosome> children = new ArrayList<KeylessChromosome>();
 
-		Chromosome firstChild = performCrossover(parentA, parentB, centromere);
+		KeylessChromosome firstChild = performCrossover(parentA, parentB, centromere);
 		// The chromosome will be null if it's identical to one of its parents
 		if (firstChild != null) {
 			children.add(firstChild);
@@ -79,8 +79,8 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 		return children;
 	}
 
-	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB, int centromere) {
-		Chromosome child = (Chromosome) parentA.clone();
+	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB, int centromere) {
+		KeylessChromosome child = (KeylessChromosome) parentA.clone();
 
 		int childBeginGeneIndex;
 		int parentBeginGeneIndex;
@@ -132,7 +132,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 *            the centromere to find
 	 * @return the Gene index where the centromere begins
 	 */
-	protected static int findGeneBeginningAtCentromere(Chromosome chromosome, int centromere) {
+	protected static int findGeneBeginningAtCentromere(KeylessChromosome chromosome, int centromere) {
 		int geneIndex = 0;
 		int nextSequenceIndex = 0;
 
@@ -150,7 +150,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 						+ " but no Gene was found.  This is indicative of a bad centromere.");
 			}
 
-			nextSequenceIndex = ((ComplexGene) chromosome.getGenes().get(geneIndex)).getSequences().get(0)
+			nextSequenceIndex = ((VariableLengthGene) chromosome.getGenes().get(geneIndex)).getSequences().get(0)
 					.getSequenceId();
 		} while (nextSequenceIndex != centromere);
 
@@ -165,7 +165,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 * Make sure we don't exceed parentB's index, or else we will get an
 	 * IndexOutOfBoundsException
 	 */
-	protected static List<Integer> findPotentialCentromeres(Chromosome mom, Chromosome dad) {
+	protected static List<Integer> findPotentialCentromeres(KeylessChromosome mom, KeylessChromosome dad) {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		List<Integer> potentialCentromeres = new ArrayList<Integer>();
@@ -213,7 +213,7 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+	public void setMutationAlgorithm(MutationAlgorithm<KeylessChromosome> mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}
 

@@ -26,20 +26,20 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
-import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
-import com.ciphertool.genetics.util.ChromosomeHelper;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
-public class LiberalMutationAlgorithm implements MutationAlgorithm {
+public class LiberalMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(LiberalMutationAlgorithm.class);
 	private GeneListDao geneListDao;
-	private ChromosomeHelper chromosomeHelper;
+	private KeylessChromosomeHelper keylessChromosomeHelper;
 	private Integer maxMutationsPerChromosome;
 
 	private static final int MAX_FIND_ATTEMPTS = 1000;
 
 	@Override
-	public void mutateChromosome(Chromosome chromosome) {
+	public void mutateChromosome(KeylessChromosome chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
@@ -71,7 +71,7 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 	 *            the List of available indices to mutate
 	 * @return the index mutated, or null if none was mutated
 	 */
-	protected void mutateRandomGene(Chromosome chromosome, List<Integer> availableIndices) {
+	protected void mutateRandomGene(KeylessChromosome chromosome, List<Integer> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
 			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
@@ -88,7 +88,7 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 
 		int numGenesOriginally = chromosome.getGenes().size();
 
-		chromosomeHelper.resizeChromosome(chromosome);
+		keylessChromosomeHelper.resizeChromosome(chromosome);
 
 		int numGenesAfterResize = chromosome.getGenes().size();
 		int difference = numGenesOriginally - numGenesAfterResize;
@@ -112,7 +112,7 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Gene to mutate
 	 */
-	protected void mutateGene(Chromosome chromosome, int index) {
+	protected void mutateGene(KeylessChromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
 					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()
@@ -156,12 +156,12 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm {
 	}
 
 	/**
-	 * @param chromosomeHelper
-	 *            the chromosomeHelper to set
+	 * @param keylessChromosomeHelper
+	 *            the keylessChromosomeHelper to set
 	 */
 	@Required
-	public void setChromosomeHelper(ChromosomeHelper chromosomeHelper) {
-		this.chromosomeHelper = chromosomeHelper;
+	public void setChromosomeHelper(KeylessChromosomeHelper keylessChromosomeHelper) {
+		this.keylessChromosomeHelper = keylessChromosomeHelper;
 	}
 
 	@Override

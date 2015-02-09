@@ -25,26 +25,26 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
+public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private FitnessEvaluator fitnessEvaluator;
-	private MutationAlgorithm mutationAlgorithm;
+	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 
 	@Override
-	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		if (mutateDuringCrossover && mutationAlgorithm == null) {
 			throw new IllegalStateException(
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<Chromosome> children = new ArrayList<Chromosome>();
+		List<KeylessChromosome> children = new ArrayList<KeylessChromosome>();
 
-		Chromosome child = performCrossover(parentA, parentB);
+		KeylessChromosome child = performCrossover(parentA, parentB);
 
 		// The Chromosome will be null if it's identical to one of its parents
 		if (child != null) {
@@ -61,8 +61,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions.
 	 */
-	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
-		Chromosome child = (Chromosome) parentA.clone();
+	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
+		KeylessChromosome child = (KeylessChromosome) parentA.clone();
 
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
@@ -79,8 +79,8 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()
-					&& (((ComplexGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()))
-							.size() == ((ComplexGene) parentB.getGenes().get(
+					&& (((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()))
+							.size() == ((VariableLengthGene) parentB.getGenes().get(
 							crossoverProgressDto.getSecondChromosomeGeneIndex())).size())) {
 				attemptToReplaceGeneInChild(crossoverProgressDto, child, parentB);
 			}
@@ -105,7 +105,7 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	}
 
 	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto,
-			Chromosome child, Chromosome parentB) {
+			KeylessChromosome child, KeylessChromosome parentB) {
 		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())
 				.clone();
 
@@ -146,7 +146,7 @@ public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm {
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+	public void setMutationAlgorithm(MutationAlgorithm<KeylessChromosome> mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}
 

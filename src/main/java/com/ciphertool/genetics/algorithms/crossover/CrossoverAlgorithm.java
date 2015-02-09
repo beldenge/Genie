@@ -25,7 +25,7 @@ import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public interface CrossoverAlgorithm {
+public interface CrossoverAlgorithm<T extends Chromosome> {
 
 	/**
 	 * Performs crossover to a List of children by cloning one or both of the
@@ -37,7 +37,7 @@ public interface CrossoverAlgorithm {
 	 *            the second parent
 	 * @return the List of children Chromosomes produced from the crossover
 	 */
-	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB);
+	public List<T> crossover(T parentA, T parentB);
 
 	/**
 	 * @param fitnessEvaluator
@@ -49,7 +49,7 @@ public interface CrossoverAlgorithm {
 	 * @param mutationAlgorithm
 	 *            the mutationAlgorithm to set
 	 */
-	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm);
+	public void setMutationAlgorithm(MutationAlgorithm<T> mutationAlgorithm);
 
 	/**
 	 * @param mutateDuringCrossover

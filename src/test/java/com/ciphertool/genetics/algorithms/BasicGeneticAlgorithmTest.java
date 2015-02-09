@@ -56,7 +56,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class BasicGeneticAlgorithmTest {
 	private static final double DEFAULT_FITNESS_VALUE = 100.0;
@@ -302,7 +302,7 @@ public class BasicGeneticAlgorithmTest {
 
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 		for (int i = 0; i < initialPopulationSize; i++) {
-			individuals.add(new MockChromosome());
+			individuals.add(new MockKeylessChromosome());
 		}
 
 		when(populationMock.selectIndex()).thenReturn(index);
@@ -349,7 +349,7 @@ public class BasicGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, basicGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockChromosome();
+		Chromosome chromosomeToReturn = new MockKeylessChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
 				.thenReturn(Arrays.asList(chromosomeToReturn));
 
@@ -555,7 +555,7 @@ public class BasicGeneticAlgorithmTest {
 		int initialPopulationSize = 50;
 
 		for (int i = 0; i < initialPopulationSize; i++) {
-			population.addIndividual(new MockChromosome());
+			population.addIndividual(new MockKeylessChromosome());
 		}
 
 		basicGeneticAlgorithm.setPopulation(population);
@@ -568,7 +568,7 @@ public class BasicGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, basicGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockChromosome();
+		Chromosome chromosomeToReturn = new MockKeylessChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
 				.thenReturn(Arrays.asList(chromosomeToReturn));
 
@@ -617,7 +617,7 @@ public class BasicGeneticAlgorithmTest {
 
 		Population population = new Population();
 
-		Chromosome chromosome = new MockChromosome();
+		Chromosome chromosome = new MockKeylessChromosome();
 		population.addIndividual(chromosome);
 		basicGeneticAlgorithm.setPopulation(population);
 

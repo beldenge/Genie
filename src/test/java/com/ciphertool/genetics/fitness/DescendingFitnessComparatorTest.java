@@ -23,15 +23,15 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class DescendingFitnessComparatorTest {
 	@Test
 	public void testCompare() {
-		MockChromosome higherFitness = new MockChromosome();
+		MockKeylessChromosome higherFitness = new MockKeylessChromosome();
 		higherFitness.setFitness(2.0);
 
-		MockChromosome lowerFitness = new MockChromosome();
+		MockKeylessChromosome lowerFitness = new MockKeylessChromosome();
 		lowerFitness.setFitness(1.0);
 
 		DescendingFitnessComparator descendingFitnessComparator = new DescendingFitnessComparator();
@@ -45,10 +45,10 @@ public class DescendingFitnessComparatorTest {
 
 	@Test
 	public void testCompareEqual() {
-		MockChromosome mockA = new MockChromosome();
+		MockKeylessChromosome mockA = new MockKeylessChromosome();
 		mockA.setFitness(3.0);
 
-		MockChromosome mockB = new MockChromosome();
+		MockKeylessChromosome mockB = new MockKeylessChromosome();
 		mockB.setFitness(3.0);
 
 		DescendingFitnessComparator descendingFitnessComparator = new DescendingFitnessComparator();

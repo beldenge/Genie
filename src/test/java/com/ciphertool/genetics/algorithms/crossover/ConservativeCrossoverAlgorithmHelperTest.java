@@ -23,22 +23,22 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithmTestBase {
 
 	@Test
 	public void testAdvanceIndexes() {
-		Chromosome child = getMom();
-		Chromosome parent = getDad();
+		KeylessChromosome child = getMom();
+		KeylessChromosome parent = getDad();
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
-		assertEquals(((ComplexGene) child.getGenes().get(0)).size(), crossoverProgressDto
+		assertEquals(((VariableLengthGene) child.getGenes().get(0)).size(), crossoverProgressDto
 				.getFirstChromosomeSequencePosition());
-		assertEquals(((ComplexGene) parent.getGenes().get(0)).size(), crossoverProgressDto
+		assertEquals(((VariableLengthGene) parent.getGenes().get(0)).size(), crossoverProgressDto
 				.getSecondChromosomeSequencePosition());
 		assertEquals(1, crossoverProgressDto.getSecondChromosomeGeneIndex());
 		assertEquals(1, crossoverProgressDto.getFirstChromosomeGeneIndex());
@@ -67,8 +67,8 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 
 	@Test
 	public void testAdvanceIndexesWhenChildReachesEnd() {
-		Chromosome child = getMom();
-		Chromosome parent = getDad();
+		KeylessChromosome child = getMom();
+		KeylessChromosome parent = getDad();
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 		crossoverProgressDto.advanceFirstChromosomeGeneIndexBy(child.getGenes().size());
 		crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(child.actualSize());
@@ -89,8 +89,8 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 
 	@Test
 	public void testAdvanceIndexesWhenParentReachesEnd() {
-		Chromosome child = getMom();
-		Chromosome parent = getDad();
+		KeylessChromosome child = getMom();
+		KeylessChromosome parent = getDad();
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 		crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(parent.getGenes().size());
 		crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(parent.actualSize());

@@ -36,7 +36,7 @@ import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.Population;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class ProbabilisticSelectionAlgorithmTest {
 	private static Logger logMock;
@@ -57,43 +57,43 @@ public class ProbabilisticSelectionAlgorithmTest {
 	public void resetDependencies() {
 		population = new Population();
 
-		MockChromosome chromosome1 = new MockChromosome();
+		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
 		chromosome1.setFitness(5.0);
 		population.addIndividual(chromosome1);
 
-		MockChromosome chromosome2 = new MockChromosome();
+		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
 		chromosome2.setFitness(5.0);
 		population.addIndividual(chromosome2);
 
-		MockChromosome chromosome3 = new MockChromosome();
+		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
 		chromosome3.setFitness(5.0);
 		population.addIndividual(chromosome3);
 
-		MockChromosome chromosome4 = new MockChromosome();
+		MockKeylessChromosome chromosome4 = new MockKeylessChromosome();
 		chromosome4.setFitness(5.0);
 		population.addIndividual(chromosome4);
 
-		MockChromosome chromosome5 = new MockChromosome();
+		MockKeylessChromosome chromosome5 = new MockKeylessChromosome();
 		chromosome5.setFitness(5.0);
 		population.addIndividual(chromosome5);
 
-		MockChromosome chromosome6 = new MockChromosome();
+		MockKeylessChromosome chromosome6 = new MockKeylessChromosome();
 		chromosome6.setFitness(5.0);
 		population.addIndividual(chromosome6);
 
-		MockChromosome chromosome7 = new MockChromosome();
+		MockKeylessChromosome chromosome7 = new MockKeylessChromosome();
 		chromosome7.setFitness(5.0);
 		population.addIndividual(chromosome7);
 
-		MockChromosome chromosome8 = new MockChromosome();
+		MockKeylessChromosome chromosome8 = new MockKeylessChromosome();
 		chromosome8.setFitness(5.0);
 		population.addIndividual(chromosome8);
 
-		MockChromosome chromosome9 = new MockChromosome();
+		MockKeylessChromosome chromosome9 = new MockKeylessChromosome();
 		chromosome9.setFitness(5.0);
 		population.addIndividual(chromosome9);
 
-		MockChromosome chromosome10 = new MockChromosome();
+		MockKeylessChromosome chromosome10 = new MockKeylessChromosome();
 		chromosome10.setFitness(5.0);
 		population.addIndividual(chromosome10);
 
@@ -123,19 +123,19 @@ public class ProbabilisticSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		MockChromosome chromosome11 = new MockChromosome();
+		MockKeylessChromosome chromosome11 = new MockKeylessChromosome();
 		chromosome11.setFitness(5.0);
 		population.addIndividual(chromosome11);
 
-		MockChromosome chromosome12 = new MockChromosome();
+		MockKeylessChromosome chromosome12 = new MockKeylessChromosome();
 		chromosome12.setFitness(5.0);
 		population.addIndividual(chromosome12);
 
-		MockChromosome chromosome13 = new MockChromosome();
+		MockKeylessChromosome chromosome13 = new MockKeylessChromosome();
 		chromosome13.setFitness(5.0);
 		population.addIndividual(chromosome13);
 
-		MockChromosome chromosome14 = new MockChromosome();
+		MockKeylessChromosome chromosome14 = new MockKeylessChromosome();
 		chromosome14.setFitness(5.0);
 		population.addIndividual(chromosome14);
 

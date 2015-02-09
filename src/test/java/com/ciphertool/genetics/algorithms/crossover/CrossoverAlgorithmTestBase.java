@@ -1,14 +1,14 @@
 package com.ciphertool.genetics.algorithms.crossover;
 
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class CrossoverAlgorithmTestBase {
 
-	protected static Chromosome getMom() {
-		MockChromosome momChromosome = new MockChromosome();
+	protected static KeylessChromosome getMom() {
+		MockKeylessChromosome momChromosome = new MockKeylessChromosome();
 
 		MockGene momGene1 = new MockGene();
 		momGene1.addSequence(new MockSequence("o", 0));
@@ -58,8 +58,8 @@ public class CrossoverAlgorithmTestBase {
 		return momChromosome;
 	}
 
-	protected static Chromosome getDad() {
-		MockChromosome dadChromosome = new MockChromosome();
+	protected static KeylessChromosome getDad() {
+		MockKeylessChromosome dadChromosome = new MockKeylessChromosome();
 
 		MockGene dadGene1 = new MockGene();
 		dadGene1.addSequence(new MockSequence("s", 0));

@@ -25,26 +25,26 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
+public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private FitnessEvaluator fitnessEvaluator;
-	private MutationAlgorithm mutationAlgorithm;
+	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 
 	@Override
-	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		if (mutateDuringCrossover && mutationAlgorithm == null) {
 			throw new IllegalStateException(
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<Chromosome> children = new ArrayList<Chromosome>();
+		List<KeylessChromosome> children = new ArrayList<KeylessChromosome>();
 
-		Chromosome firstChild = performCrossover(parentA, parentB);
+		KeylessChromosome firstChild = performCrossover(parentA, parentB);
 
 		// The chromosome will be null if it's identical to one of its parents
 		if (firstChild != null) {
@@ -61,16 +61,16 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * only replaces genes that begin and end at the exact same sequence
 	 * positions
 	 */
-	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
-		Chromosome child = (Chromosome) parentA.clone();
+	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
+		KeylessChromosome child = (KeylessChromosome) parentA.clone();
 
 		int parentBSize = parentB.getGenes().size();
 		int geneOffset = 0;
 
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		crossoverProgressDto.setFirstChromosomeSequencePosition(((ComplexGene) child.getGenes().get(0)).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(((ComplexGene) parentB.getGenes().get(0)).size());
+		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0)).size());
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
@@ -115,8 +115,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * @return the geneOffset
 	 */
 	protected int attemptToReplaceGeneGroupInChild(
-			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, Chromosome child,
-			Chromosome parentB) {
+			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, KeylessChromosome child,
+			KeylessChromosome parentB) {
 		int childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
 		int childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
 		int parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
@@ -203,7 +203,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements CrossoverAlgorithm {
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+	public void setMutationAlgorithm(MutationAlgorithm<KeylessChromosome> mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}
 

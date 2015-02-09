@@ -36,20 +36,20 @@ import org.springframework.util.ReflectionUtils;
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockSequence;
 
-public class ChromosomeHelperTest {
-	private static ChromosomeHelper chromosomeHelper;
+public class KeylessChromosomeHelperTest {
+	private static KeylessChromosomeHelper keylessChromosomeHelper;
 	private static GeneListDao geneListDaoMock;
 
 	@BeforeClass
 	public static void setUp() {
-		chromosomeHelper = new ChromosomeHelper();
+		keylessChromosomeHelper = new KeylessChromosomeHelper();
 		geneListDaoMock = mock(GeneListDao.class);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 	}
 
 	@Before
@@ -63,13 +63,13 @@ public class ChromosomeHelperTest {
 
 	@Test
 	public void testSetGeneListDao() {
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		Field geneListDaoField = ReflectionUtils.findField(ChromosomeHelper.class, "geneListDao");
+		Field geneListDaoField = ReflectionUtils.findField(KeylessChromosomeHelper.class, "geneListDao");
 		ReflectionUtils.makeAccessible(geneListDaoField);
 		GeneListDao geneListDaoFromObject = (GeneListDao) ReflectionUtils.getField(
-				geneListDaoField, chromosomeHelper);
+				geneListDaoField, keylessChromosomeHelper);
 
 		assertSame(geneListDaoMock, geneListDaoFromObject);
 	}
@@ -77,7 +77,7 @@ public class ChromosomeHelperTest {
 	@Test
 	public void testResizeChromosomeLessThanTargetSize() {
 		// Test where the last gene ends exactly at the target size
-		MockChromosome chromosomeToResize = new MockChromosome();
+		MockKeylessChromosome chromosomeToResize = new MockKeylessChromosome();
 		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
@@ -85,13 +85,13 @@ public class ChromosomeHelperTest {
 		assertEquals(2, chromosomeToResize.getGenes().size());
 		assertEquals(new Integer(10), chromosomeToResize.actualSize());
 
-		chromosomeHelper.resizeChromosome(chromosomeToResize);
+		keylessChromosomeHelper.resizeChromosome(chromosomeToResize);
 
 		assertEquals(5, chromosomeToResize.getGenes().size());
 		assertEquals(chromosomeToResize.targetSize(), chromosomeToResize.actualSize());
 
 		// Test where the last gene does not end at the target size
-		chromosomeToResize = new MockChromosome();
+		chromosomeToResize = new MockKeylessChromosome();
 		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(1));
@@ -99,7 +99,7 @@ public class ChromosomeHelperTest {
 		assertEquals(2, chromosomeToResize.getGenes().size());
 		assertEquals(new Integer(6), chromosomeToResize.actualSize());
 
-		chromosomeHelper.resizeChromosome(chromosomeToResize);
+		keylessChromosomeHelper.resizeChromosome(chromosomeToResize);
 
 		assertEquals(6, chromosomeToResize.getGenes().size());
 		assertEquals(chromosomeToResize.targetSize(), chromosomeToResize.actualSize());
@@ -108,7 +108,7 @@ public class ChromosomeHelperTest {
 	@Test
 	public void testResizeChromosomeGreaterThanTargetSize() {
 		// Test where no gene overlaps the the target size
-		MockChromosome chromosomeToResize = new MockChromosome();
+		MockKeylessChromosome chromosomeToResize = new MockKeylessChromosome();
 		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
@@ -120,13 +120,13 @@ public class ChromosomeHelperTest {
 		assertEquals(6, chromosomeToResize.getGenes().size());
 		assertEquals(new Integer(30), chromosomeToResize.actualSize());
 
-		chromosomeHelper.resizeChromosome(chromosomeToResize);
+		keylessChromosomeHelper.resizeChromosome(chromosomeToResize);
 
 		assertEquals(5, chromosomeToResize.getGenes().size());
 		assertEquals(chromosomeToResize.targetSize(), chromosomeToResize.actualSize());
 
 		// Test where a gene overlaps the the target size
-		chromosomeToResize = new MockChromosome();
+		chromosomeToResize = new MockKeylessChromosome();
 		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
@@ -137,7 +137,7 @@ public class ChromosomeHelperTest {
 		assertEquals(5, chromosomeToResize.getGenes().size());
 		assertEquals(new Integer(30), chromosomeToResize.actualSize());
 
-		chromosomeHelper.resizeChromosome(chromosomeToResize);
+		keylessChromosomeHelper.resizeChromosome(chromosomeToResize);
 
 		assertEquals(5, chromosomeToResize.getGenes().size());
 		assertEquals(chromosomeToResize.targetSize(), chromosomeToResize.actualSize());
@@ -145,7 +145,7 @@ public class ChromosomeHelperTest {
 
 	@Test
 	public void testResizeChromosomeAlreadyAtTargetSize() {
-		MockChromosome chromosomeToResize = new MockChromosome();
+		MockKeylessChromosome chromosomeToResize = new MockKeylessChromosome();
 		chromosomeToResize.setTargetSize(25);
 		chromosomeToResize.addGene(createRandomGene(5));
 		chromosomeToResize.addGene(createRandomGene(5));
@@ -156,7 +156,7 @@ public class ChromosomeHelperTest {
 		assertEquals(5, chromosomeToResize.getGenes().size());
 		assertEquals(new Integer(25), chromosomeToResize.actualSize());
 
-		chromosomeHelper.resizeChromosome(chromosomeToResize);
+		keylessChromosomeHelper.resizeChromosome(chromosomeToResize);
 
 		assertEquals(5, chromosomeToResize.getGenes().size());
 		assertEquals(chromosomeToResize.targetSize(), chromosomeToResize.actualSize());

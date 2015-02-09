@@ -51,7 +51,7 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.SequenceDao;
 import com.ciphertool.genetics.entities.Gene;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockSequence;
 
@@ -117,12 +117,12 @@ public class SingleSequenceMutationAlgorithmTest {
 	public void testMutateChromosomeNullMaxMutations() {
 		singleSequenceMutationAlgorithm.setMaxMutationsPerChromosome(null);
 
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene1);
+		mockKeylessChromosome.addGene(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("s"));
@@ -130,22 +130,22 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("i"));
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene2);
+		mockKeylessChromosome.addGene(mockGene2);
 
-		singleSequenceMutationAlgorithm.mutateChromosome(mockChromosome);
+		singleSequenceMutationAlgorithm.mutateChromosome(mockKeylessChromosome);
 	}
 
 	@Test
 	public void testMutateChromosome() {
 		singleSequenceMutationAlgorithm.setMaxMutationsPerChromosome(MAX_MUTATIONS);
 
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 		List<Gene> originalGenes = new ArrayList<Gene>();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene1);
+		mockKeylessChromosome.addGene(mockGene1);
 		originalGenes.add(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
@@ -154,13 +154,13 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("i"));
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene2);
+		mockKeylessChromosome.addGene(mockGene2);
 		originalGenes.add(mockGene2);
 
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
 
-		singleSequenceMutationAlgorithm.mutateChromosome(mockChromosome);
+		singleSequenceMutationAlgorithm.mutateChromosome(mockKeylessChromosome);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -169,7 +169,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene1Sequence2 = new MockSequence("e");
 		originalMockGene1.addSequence(mockGene1Sequence2);
 		mockGene1Sequence2.setGene(mockGene1);
-		originalMockGene1.setChromosome(mockChromosome);
+		originalMockGene1.setChromosome(mockKeylessChromosome);
 
 		MockGene originalMockGene2 = new MockGene();
 		MockSequence mockGene2Sequence1 = new MockSequence("s");
@@ -187,9 +187,9 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene2Sequence5 = new MockSequence("e");
 		originalMockGene2.addSequence(mockGene2Sequence5);
 		mockGene2Sequence5.setGene(mockGene2);
-		originalMockGene2.setChromosome(mockChromosome);
+		originalMockGene2.setChromosome(mockKeylessChromosome);
 
-		assertFalse(originalGenes.equals(mockChromosome));
+		assertFalse(originalGenes.equals(mockKeylessChromosome));
 		verify(sequenceDaoMock, atLeastOnce()).findRandomSequence(any(Gene.class), anyInt());
 		verify(sequenceDaoMock, atMost(2)).findRandomSequence(any(Gene.class), anyInt());
 		verifyZeroInteractions(logMock);
@@ -197,12 +197,12 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Test
 	public void testMutateGene() {
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene1);
+		mockKeylessChromosome.addGene(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("s"));
@@ -210,12 +210,12 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("i"));
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene2);
+		mockKeylessChromosome.addGene(mockGene2);
 
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
 
-		singleSequenceMutationAlgorithm.mutateGene(mockChromosome, 0);
+		singleSequenceMutationAlgorithm.mutateGene(mockKeylessChromosome, 0);
 
 		// Only one of the letters from the first Gene should be changed
 		assertTrue(("w".equals(mockGene1.getSequences().get(0).getValue()) && !"e".equals(mockGene1
@@ -233,7 +233,7 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Test
 	public void testMutateInvalidGene() {
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 
 		MockGene mockGene = new MockGene();
 		mockGene.addSequence(new MockSequence("s"));
@@ -241,9 +241,9 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene.addSequence(new MockSequence("i"));
 		mockGene.addSequence(new MockSequence("l"));
 		mockGene.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene);
+		mockKeylessChromosome.addGene(mockGene);
 
-		singleSequenceMutationAlgorithm.mutateGene(mockChromosome, 1);
+		singleSequenceMutationAlgorithm.mutateGene(mockKeylessChromosome, 1);
 
 		// Nothing should be changed
 		assertEquals("s", mockGene.getSequences().get(0).getValue());
@@ -258,12 +258,12 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Test
 	public void testMutateRandomGene() {
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene1);
+		mockKeylessChromosome.addGene(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("s"));
@@ -271,7 +271,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("i"));
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene2);
+		mockKeylessChromosome.addGene(mockGene2);
 
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
@@ -279,7 +279,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		availableIndices.add(0);
 		availableIndices.add(1);
-		singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
+		singleSequenceMutationAlgorithm.mutateRandomGene(mockKeylessChromosome, availableIndices);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -288,7 +288,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene1Sequence2 = new MockSequence("e");
 		originalMockGene1.addSequence(mockGene1Sequence2);
 		mockGene1Sequence2.setGene(mockGene1);
-		originalMockGene1.setChromosome(mockChromosome);
+		originalMockGene1.setChromosome(mockKeylessChromosome);
 
 		MockGene originalMockGene2 = new MockGene();
 		MockSequence mockGene2Sequence1 = new MockSequence("s");
@@ -306,7 +306,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene2Sequence5 = new MockSequence("e");
 		originalMockGene2.addSequence(mockGene2Sequence5);
 		mockGene2Sequence5.setGene(mockGene2);
-		originalMockGene2.setChromosome(mockChromosome);
+		originalMockGene2.setChromosome(mockKeylessChromosome);
 
 		/*
 		 * Only one Gene should be mutated.
@@ -321,12 +321,12 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Test
 	public void testMutateRandomGeneWithUsedIndex() {
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene1);
+		mockKeylessChromosome.addGene(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("s"));
@@ -334,14 +334,14 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("i"));
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene2);
+		mockKeylessChromosome.addGene(mockGene2);
 
 		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
 				new MockSequence("x"));
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		availableIndices.add(1);
-		singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
+		singleSequenceMutationAlgorithm.mutateRandomGene(mockKeylessChromosome, availableIndices);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -350,7 +350,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene1Sequence2 = new MockSequence("e");
 		originalMockGene1.addSequence(mockGene1Sequence2);
 		mockGene1Sequence2.setGene(mockGene1);
-		originalMockGene1.setChromosome(mockChromosome);
+		originalMockGene1.setChromosome(mockKeylessChromosome);
 
 		MockGene originalMockGene2 = new MockGene();
 		MockSequence mockGene2Sequence1 = new MockSequence("s");
@@ -368,7 +368,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene2Sequence5 = new MockSequence("e");
 		originalMockGene2.addSequence(mockGene2Sequence5);
 		mockGene2Sequence5.setGene(mockGene2);
-		originalMockGene2.setChromosome(mockChromosome);
+		originalMockGene2.setChromosome(mockKeylessChromosome);
 
 		/*
 		 * Only one Gene should be mutated.
@@ -382,12 +382,12 @@ public class SingleSequenceMutationAlgorithmTest {
 
 	@Test
 	public void testMutateRandomGeneWithAllIndicesUsed() {
-		MockChromosome mockChromosome = new MockChromosome();
+		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
 
 		MockGene mockGene1 = new MockGene();
 		mockGene1.addSequence(new MockSequence("w"));
 		mockGene1.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene1);
+		mockKeylessChromosome.addGene(mockGene1);
 
 		MockGene mockGene2 = new MockGene();
 		mockGene2.addSequence(new MockSequence("s"));
@@ -395,10 +395,10 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("i"));
 		mockGene2.addSequence(new MockSequence("l"));
 		mockGene2.addSequence(new MockSequence("e"));
-		mockChromosome.addGene(mockGene2);
+		mockKeylessChromosome.addGene(mockGene2);
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
-		singleSequenceMutationAlgorithm.mutateRandomGene(mockChromosome, availableIndices);
+		singleSequenceMutationAlgorithm.mutateRandomGene(mockKeylessChromosome, availableIndices);
 
 		MockGene originalMockGene1 = new MockGene();
 		MockSequence mockGene1Sequence1 = new MockSequence("w");
@@ -407,7 +407,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene1Sequence2 = new MockSequence("e");
 		originalMockGene1.addSequence(mockGene1Sequence2);
 		mockGene1Sequence2.setGene(mockGene1);
-		originalMockGene1.setChromosome(mockChromosome);
+		originalMockGene1.setChromosome(mockKeylessChromosome);
 
 		MockGene originalMockGene2 = new MockGene();
 		MockSequence mockGene2Sequence1 = new MockSequence("s");
@@ -425,7 +425,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence mockGene2Sequence5 = new MockSequence("e");
 		originalMockGene2.addSequence(mockGene2Sequence5);
 		mockGene2Sequence5.setGene(mockGene2);
-		originalMockGene2.setChromosome(mockChromosome);
+		originalMockGene2.setChromosome(mockKeylessChromosome);
 
 		/*
 		 * No Genes should be mutated.

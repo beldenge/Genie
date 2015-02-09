@@ -41,11 +41,12 @@ import org.springframework.util.ReflectionUtils;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneListDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
-import com.ciphertool.genetics.util.ChromosomeHelper;
+import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
@@ -66,14 +67,14 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 	@Test
 	public void testSetChromosomeHelper() {
-		ChromosomeHelper chromosomeHelperToSet = mock(ChromosomeHelper.class);
+		KeylessChromosomeHelper chromosomeHelperToSet = mock(KeylessChromosomeHelper.class);
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelperToSet);
 
 		Field chromosomeHelperField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class,
-				"chromosomeHelper");
+				"keylessChromosomeHelper");
 		ReflectionUtils.makeAccessible(chromosomeHelperField);
-		ChromosomeHelper chromosomeHelperFromObject = (ChromosomeHelper) ReflectionUtils.getField(
+		KeylessChromosomeHelper chromosomeHelperFromObject = (KeylessChromosomeHelper) ReflectionUtils.getField(
 				chromosomeHelperField, liberalCrossoverAlgorithm);
 
 		assertSame(chromosomeHelperToSet, chromosomeHelperFromObject);
@@ -94,6 +95,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		assertSame(fitnessEvaluatorToSet, fitnessEvaluatorFromObject);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testSetMutationAlgorithm() {
 		MutationAlgorithm mutationAlgorithmToSet = mock(MutationAlgorithm.class);
@@ -136,8 +138,8 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(true);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
 		liberalCrossoverAlgorithm.crossover(mom, dad);
 	}
 
@@ -153,7 +155,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
@@ -163,21 +165,21 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		geneToReturn.addSequence(new MockSequence("d"));
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<Chromosome> children = liberalCrossoverAlgorithm.crossover(mom, dad);
+		List<KeylessChromosome> children = liberalCrossoverAlgorithm.crossover(mom, dad);
 
 		assertNotNull(children);
 		assertEquals(1, children.size());
@@ -216,7 +218,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
@@ -226,32 +228,32 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		geneToReturn.addSequence(new MockSequence("d"));
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<Chromosome> children = liberalCrossoverAlgorithm.crossover(mom, dad);
+		List<KeylessChromosome> children = liberalCrossoverAlgorithm.crossover(mom, dad);
 
 		assertNotNull(children);
 		assertEquals(0, children.size());
@@ -280,7 +282,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
@@ -290,14 +292,14 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		geneToReturn.addSequence(new MockSequence("d"));
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
-		Chromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -314,6 +316,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		verify(fitnessEvaluatorMock, times(6)).evaluate(any(Chromosome.class));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testPerformCrossover_WithMutation() {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
@@ -328,7 +331,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(true);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
@@ -338,14 +341,14 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		geneToReturn.addSequence(new MockSequence("d"));
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
-		Chromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -374,36 +377,36 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
 		geneToReturn.addSequence(new MockSequence("w"));
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
-		Chromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNull(child);
 
@@ -427,36 +430,36 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
 		geneToReturn.addSequence(new MockSequence("w"));
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
-		Chromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNull(child);
 
@@ -481,7 +484,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 
 		GeneListDao geneListDaoMock = mock(GeneListDao.class);
 		MockGene geneToReturn = new MockGene();
@@ -492,15 +495,15 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		chromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
-		Chromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
+		KeylessChromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -537,17 +540,17 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		ChromosomeHelper chromosomeHelper = new ChromosomeHelper();
+		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
 		// The GeneListDao should never be used
-		chromosomeHelper.setGeneListDao(null);
+		keylessChromosomeHelper.setGeneListDao(null);
 
-		liberalCrossoverAlgorithm.setChromosomeHelper(chromosomeHelper);
+		liberalCrossoverAlgorithm.setChromosomeHelper(keylessChromosomeHelper);
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
-		Chromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
+		KeylessChromosome child = liberalCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -597,10 +600,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(geneToReturn);
 		liberalCrossoverAlgorithm.setGeneListDao(geneListDaoMock);
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(2, mom, dad);
 
 		// The "mom" Chromosome should only have one Gene replaced
@@ -634,10 +637,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 		liberalCrossoverAlgorithm.setGeneListDao(null);
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(0, mom, dad);
 
 		// The "mom" Chromosome should only have the first Gene replaced
@@ -665,10 +668,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 		liberalCrossoverAlgorithm.setGeneListDao(null);
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(0, mom, dad);
 
 		// The "mom" Chromosome should only have the first Gene replaced
@@ -696,10 +699,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 
 		liberalCrossoverAlgorithm.setGeneListDao(null);
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		liberalCrossoverAlgorithm.attemptToReplaceGeneInChild(0, mom, dad);
 
 		// The "mom" Chromosome should remain unmodified

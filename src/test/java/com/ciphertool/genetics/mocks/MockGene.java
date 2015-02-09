@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.entities.Sequence;
 
-public class MockGene implements ComplexGene {
+public class MockGene implements VariableLengthGene {
 
 	private Chromosome chromosome;
 	private List<Sequence> sequences = new ArrayList<Sequence>();

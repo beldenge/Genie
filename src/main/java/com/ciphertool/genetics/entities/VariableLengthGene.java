@@ -21,7 +21,7 @@ package com.ciphertool.genetics.entities;
 
 import java.util.List;
 
-public interface ComplexGene extends Gene {
+public interface VariableLengthGene extends Gene {
 	/**
 	 * @return an unmodifiable List of this Gene's Sequences
 	 */

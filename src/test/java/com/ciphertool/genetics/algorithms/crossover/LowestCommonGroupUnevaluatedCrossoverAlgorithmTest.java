@@ -37,10 +37,10 @@ import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
 import com.ciphertool.genetics.util.Coin;
 
@@ -60,6 +60,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		assertSame(coinToSet, coinFromObject);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testSetMutationAlgorithm() {
 		MutationAlgorithm mutationAlgorithmToSet = mock(MutationAlgorithm.class);
@@ -103,8 +104,8 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(true);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom, dad);
 	}
 
@@ -119,16 +120,16 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<Chromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom,
+		List<KeylessChromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom,
 				dad);
 
 		assertNotNull(children);
@@ -168,27 +169,27 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<Chromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom,
+		List<KeylessChromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom,
 				dad);
 
 		assertNotNull(children);
@@ -217,9 +218,9 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
-		Chromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
 				.performCrossover(mom, dad);
 
 		assertNotNull(child);
@@ -237,6 +238,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		verify(coinMock, times(5)).flip();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testPerformCrossover_WithMutation() {
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
@@ -250,9 +252,9 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(true);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
-		Chromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
 				.performCrossover(mom, dad);
 
 		assertNotNull(child);
@@ -282,24 +284,24 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
-		Chromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
 				.performCrossover(mom, dad);
 
 		assertNull(child);
@@ -324,24 +326,24 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
-		Chromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
 				.performCrossover(mom, dad);
 
 		assertNull(child);
@@ -365,10 +367,10 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 
 		crossoverProgressDto.advanceFirstChromosomeEndGeneIndexBy(2);
 		crossoverProgressDto.advanceSecondChromosomeEndGeneIndexBy(2);
@@ -409,10 +411,10 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 
 		crossoverProgressDto.advanceFirstChromosomeEndGeneIndexBy(2);
 		crossoverProgressDto.advanceSecondChromosomeEndGeneIndexBy(2);

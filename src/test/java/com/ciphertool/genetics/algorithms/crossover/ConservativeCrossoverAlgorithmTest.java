@@ -40,9 +40,10 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
@@ -62,6 +63,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		assertSame(fitnessEvaluatorToSet, fitnessEvaluatorFromObject);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testSetMutationAlgorithm() {
 		MutationAlgorithm mutationAlgorithmToSet = mock(MutationAlgorithm.class);
@@ -104,8 +106,8 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(true);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
 		conservativeCrossoverAlgorithm.crossover(mom, dad);
 	}
 
@@ -124,16 +126,16 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<Chromosome> children = conservativeCrossoverAlgorithm.crossover(mom, dad);
+		List<KeylessChromosome> children = conservativeCrossoverAlgorithm.crossover(mom, dad);
 
 		assertNotNull(children);
 		assertEquals(1, children.size());
@@ -172,27 +174,27 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<Chromosome> children = conservativeCrossoverAlgorithm.crossover(mom, dad);
+		List<KeylessChromosome> children = conservativeCrossoverAlgorithm.crossover(mom, dad);
 
 		assertNotNull(children);
 		assertEquals(0, children.size());
@@ -224,9 +226,9 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
-		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -243,6 +245,7 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		verify(fitnessEvaluatorMock, times(4)).evaluate(any(Chromosome.class));
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testPerformCrossover_WithMutation() {
 		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
@@ -260,9 +263,9 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(true);
 
-		Chromosome mom = getMom();
-		Chromosome dad = getDad();
-		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome mom = getMom();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -291,24 +294,24 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
-		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNull(child);
 
@@ -332,24 +335,24 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(false);
 
-		MockChromosome mom = new MockChromosome();
+		MockKeylessChromosome mom = new MockKeylessChromosome();
 		mom.setTargetSize(1);
 		MockGene momGene = new MockGene();
 		MockSequence momSequence = new MockSequence("m");
 		momGene.addSequence(momSequence);
 		mom.addGene(momGene);
 
-		MockChromosome dad = new MockChromosome();
+		MockKeylessChromosome dad = new MockKeylessChromosome();
 		dad.setTargetSize(1);
 		MockGene dadGene = new MockGene();
 		MockSequence dadSequence = new MockSequence("d");
 		dadGene.addSequence(dadSequence);
 		dad.addGene(dadGene);
 
-		Chromosome momClone = mom.clone();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome momClone = mom.clone();
+		KeylessChromosome dadClone = dad.clone();
 
-		Chromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
+		KeylessChromosome child = conservativeCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNull(child);
 
@@ -376,10 +379,10 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should only have the first Gene replaced
@@ -413,10 +416,10 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should only have the first Gene replaced
@@ -450,10 +453,10 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
-		Chromosome mom = getMom();
-		Chromosome momClone = mom.clone();
-		Chromosome dad = getDad();
-		Chromosome dadClone = dad.clone();
+		KeylessChromosome mom = getMom();
+		KeylessChromosome momClone = (KeylessChromosome) mom.clone();
+		KeylessChromosome dad = getDad();
+		KeylessChromosome dadClone = (KeylessChromosome) dad.clone();
 		conservativeCrossoverAlgorithm.attemptToReplaceGeneInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should remain unmodified

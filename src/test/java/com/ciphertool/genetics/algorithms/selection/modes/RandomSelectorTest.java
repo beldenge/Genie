@@ -39,7 +39,7 @@ import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class RandomSelectorTest {
 	private static RandomSelector randomSelector;
@@ -64,16 +64,16 @@ public class RandomSelectorTest {
 	public void testGetNextIndex() {
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
-		MockChromosome chromosome1 = new MockChromosome();
+		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
 		chromosome1.setFitness(2.0);
 		individuals.add(chromosome1);
 
 		Double bestFitness = 3.0;
-		MockChromosome chromosome2 = new MockChromosome();
+		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
 		chromosome2.setFitness(bestFitness);
 		individuals.add(chromosome2);
 
-		MockChromosome chromosome3 = new MockChromosome();
+		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
 		chromosome3.setFitness(1.0);
 		individuals.add(chromosome3);
 

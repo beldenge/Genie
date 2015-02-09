@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 George Belden
+ * Copyright 2015 George Belden
  * 
  * This file is part of ZodiacGenetics.
  * 
@@ -17,24 +17,37 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.mutation;
+package com.ciphertool.genetics.entities;
 
-import com.ciphertool.genetics.entities.Chromosome;
+import java.util.Map;
 
-
-public interface MutationAlgorithm<T extends Chromosome> {
+public interface KeyedChromosome<T> extends Chromosome {
 	/**
-	 * Performs a genetic mutation of the supplied Chromosome.
+	 * @return an unmodifiable Map of this Chromosome's Genes
+	 */
+	public Map<T, Gene> getGenes();
+
+	/**
+	 * Adds a Gene at the specified key.
 	 * 
-	 * @param chromosome
-	 *            the Chromosome to mutate
+	 * @param index
+	 * @param gene
 	 */
-	public void mutateChromosome(T chromosome);
+	public void putGene(T key, Gene gene);
 
 	/**
-	 * @param maxMutationsPerChromosome
-	 *            the maximum number of mutations to perform on the given
-	 *            individual
+	 * Removes a Gene at the specified key.
+	 * 
+	 * @param index
+	 * @return
 	 */
-	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome);
+	public Gene removeGene(T key);
+
+	/**
+	 * Replaces a Gene at the specified key.
+	 * 
+	 * @param index
+	 * @param newGene
+	 */
+	public void replaceGene(T key, Gene newGene);
 }

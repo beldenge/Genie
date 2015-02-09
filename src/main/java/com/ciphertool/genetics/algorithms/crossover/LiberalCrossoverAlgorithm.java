@@ -26,28 +26,28 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneListDao;
-import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.util.ChromosomeHelper;
+import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
-public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
+public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private FitnessEvaluator fitnessEvaluator;
 	private GeneListDao geneListDao;
-	private ChromosomeHelper chromosomeHelper;
-	private MutationAlgorithm mutationAlgorithm;
+	private KeylessChromosomeHelper keylessChromosomeHelper;
+	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 
 	@Override
-	public List<Chromosome> crossover(Chromosome parentA, Chromosome parentB) {
+	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		if (mutateDuringCrossover && mutationAlgorithm == null) {
 			throw new IllegalStateException(
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<Chromosome> children = new ArrayList<Chromosome>();
+		List<KeylessChromosome> children = new ArrayList<KeylessChromosome>();
 
-		Chromosome firstChild = performCrossover(parentA, parentB);
+		KeylessChromosome firstChild = performCrossover(parentA, parentB);
 
 		// The chromosome will be null if it's identical to one of its parents
 		if (firstChild != null) {
@@ -63,8 +63,8 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	 * This crossover algorithm does a liberal amount of changes since it
 	 * replaces genes regardless of their begin and end sequence positions
 	 */
-	protected Chromosome performCrossover(Chromosome parentA, Chromosome parentB) {
-		Chromosome child = parentA.clone();
+	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
+		KeylessChromosome child = (KeylessChromosome) parentA.clone();
 
 		int childGeneIndex = 0;
 
@@ -83,7 +83,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		 * Trim the Chromosome in case it ends with too many sequences due to
 		 * the nature of this algorithm
 		 */
-		chromosomeHelper.resizeChromosome(child);
+		keylessChromosomeHelper.resizeChromosome(child);
 
 		if (mutateDuringCrossover) {
 			mutationAlgorithm.mutateChromosome(child);
@@ -100,8 +100,8 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 		return child;
 	}
 
-	protected void attemptToReplaceGeneInChild(int childGeneIndex, Chromosome child,
-			Chromosome parent) {
+	protected void attemptToReplaceGeneInChild(int childGeneIndex, KeylessChromosome child,
+			KeylessChromosome parent) {
 		/*
 		 * Replace from parentB and reevaluate to see if it improves.
 		 */
@@ -162,12 +162,12 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	}
 
 	/**
-	 * @param chromosomeHelper
-	 *            the chromosomeHelper to set
+	 * @param keylessChromosomeHelper
+	 *            the keylessChromosomeHelper to set
 	 */
 	@Required
-	public void setChromosomeHelper(ChromosomeHelper chromosomeHelper) {
-		this.chromosomeHelper = chromosomeHelper;
+	public void setChromosomeHelper(KeylessChromosomeHelper keylessChromosomeHelper) {
+		this.keylessChromosomeHelper = keylessChromosomeHelper;
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm {
 	 *            the mutationAlgorithm to set
 	 */
 	@Override
-	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
+	public void setMutationAlgorithm(MutationAlgorithm<KeylessChromosome> mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}
 

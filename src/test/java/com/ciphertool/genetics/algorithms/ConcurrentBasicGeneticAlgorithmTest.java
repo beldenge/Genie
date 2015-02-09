@@ -48,7 +48,7 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class ConcurrentBasicGeneticAlgorithmTest {
 	private static final double DEFAULT_FITNESS_VALUE = 100.0;
@@ -83,8 +83,8 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 
 	@Test
 	public void testCrossoverTask() {
-		Chromosome mom = new MockChromosome();
-		Chromosome dad = new MockChromosome();
+		Chromosome mom = new MockKeylessChromosome();
+		Chromosome dad = new MockKeylessChromosome();
 
 		ConcurrentBasicGeneticAlgorithm concurrentBasicGeneticAlgorithm = new ConcurrentBasicGeneticAlgorithm();
 		ConcurrentBasicGeneticAlgorithm.CrossoverTask generatorTask = concurrentBasicGeneticAlgorithm.new CrossoverTask(
@@ -98,7 +98,7 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockChromosome();
+		Chromosome chromosomeToReturn = new MockKeylessChromosome();
 		when(crossoverAlgorithmMock.crossover(same(mom), same(dad))).thenReturn(
 				Arrays.asList(chromosomeToReturn));
 
@@ -134,7 +134,7 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		int initialPopulationSize = 50;
 
 		for (int i = 0; i < initialPopulationSize; i++) {
-			population.addIndividual(new MockChromosome());
+			population.addIndividual(new MockKeylessChromosome());
 		}
 
 		concurrentBasicGeneticAlgorithm.setPopulation(population);
@@ -147,7 +147,7 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockChromosome();
+		Chromosome chromosomeToReturn = new MockKeylessChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
 				.thenReturn(Arrays.asList(chromosomeToReturn));
 
@@ -197,7 +197,7 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 
 		Population population = new Population();
 
-		Chromosome chromosome = new MockChromosome();
+		Chromosome chromosome = new MockKeylessChromosome();
 		population.addIndividual(chromosome);
 		concurrentBasicGeneticAlgorithm.setPopulation(population);
 
@@ -244,7 +244,7 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentBasicGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockChromosome();
+		Chromosome chromosomeToReturn = new MockKeylessChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
 				.thenReturn(Arrays.asList(chromosomeToReturn));
 
@@ -253,8 +253,8 @@ public class ConcurrentBasicGeneticAlgorithmTest {
 		List<Chromosome> dads = new ArrayList<Chromosome>();
 
 		for (int i = 0; i < 5; i++) {
-			moms.add(new MockChromosome());
-			dads.add(new MockChromosome());
+			moms.add(new MockKeylessChromosome());
+			dads.add(new MockKeylessChromosome());
 		}
 
 		List<Chromosome> childrenReturned = concurrentBasicGeneticAlgorithm.doConcurrentCrossovers(

@@ -19,13 +19,13 @@
 
 package com.ciphertool.genetics.algorithms.crossover;
 
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class ConservativeCrossoverAlgorithmHelper {
 
 	protected static void advanceIndexes(CrossoverProgressDto crossoverProgressDto,
-			Chromosome first, Chromosome second) {
+			KeylessChromosome first, KeylessChromosome second) {
 
 		if (crossoverProgressDto.getFirstChromosomeGeneIndex() >= first.getGenes().size()
 				|| crossoverProgressDto.getSecondChromosomeGeneIndex() >= second.getGenes().size()) {
@@ -33,8 +33,8 @@ public class ConservativeCrossoverAlgorithmHelper {
 			return;
 		}
 
-		int firstGeneSize = ((ComplexGene) first.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size();
-		int secondGeneSize = ((ComplexGene) second.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()))
+		int firstGeneSize = ((VariableLengthGene) first.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size();
+		int secondGeneSize = ((VariableLengthGene) second.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()))
 				.size();
 
 		if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto

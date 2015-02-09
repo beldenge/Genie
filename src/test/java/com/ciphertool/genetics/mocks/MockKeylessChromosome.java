@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.annotations.Clean;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
-public class MockChromosome implements Chromosome {
+public class MockKeylessChromosome implements KeylessChromosome {
 	private boolean needsEvaluation;
 	private Double fitness = 0.0;
 	private List<Gene> genes = new ArrayList<Gene>();
@@ -109,7 +109,7 @@ public class MockChromosome implements Chromosome {
 		int size = 0;
 
 		for (Gene gene : this.genes) {
-			size += ((ComplexGene) gene).size();
+			size += ((VariableLengthGene) gene).size();
 		}
 
 		return size;
@@ -142,11 +142,11 @@ public class MockChromosome implements Chromosome {
 	}
 
 	@Override
-	public MockChromosome clone() {
-		MockChromosome clone;
+	public MockKeylessChromosome clone() {
+		MockKeylessChromosome clone;
 
 		try {
-			clone = (MockChromosome) super.clone();
+			clone = (MockKeylessChromosome) super.clone();
 		} catch (CloneNotSupportedException e) {
 			e.printStackTrace();
 			return null;
@@ -175,7 +175,7 @@ public class MockChromosome implements Chromosome {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		MockChromosome other = (MockChromosome) obj;
+		MockKeylessChromosome other = (MockKeylessChromosome) obj;
 		if (genes == null) {
 			if (other.genes != null) {
 				return false;
@@ -188,7 +188,7 @@ public class MockChromosome implements Chromosome {
 
 	@Override
 	public String toString() {
-		return "MockChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness
+		return "MockKeylessChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness
 				+ ", genes=" + genes + "]";
 	}
 }

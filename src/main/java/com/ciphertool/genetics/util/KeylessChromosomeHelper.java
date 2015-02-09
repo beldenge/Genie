@@ -22,10 +22,10 @@ package com.ciphertool.genetics.util;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
-public class ChromosomeHelper {
+public class KeylessChromosomeHelper {
 	private GeneListDao geneListDao;
 
 	/**
@@ -35,7 +35,7 @@ public class ChromosomeHelper {
 	 * @param chromosomeToResize
 	 *            the Chromosome to resize
 	 */
-	public void resizeChromosome(Chromosome chromosomeToResize) {
+	public void resizeChromosome(KeylessChromosome chromosomeToResize) {
 		/*
 		 * Pad the end with more Genes in case the new Gene was shorter, causing
 		 * the sequence length to fall below the target length. This should be
@@ -51,7 +51,7 @@ public class ChromosomeHelper {
 		 * causing the sequence length to exceed the target length.
 		 */
 		while (chromosomeToResize.actualSize() > chromosomeToResize.targetSize()) {
-			ComplexGene lastGene = (ComplexGene) chromosomeToResize.getGenes().get(
+			VariableLengthGene lastGene = (VariableLengthGene) chromosomeToResize.getGenes().get(
 					chromosomeToResize.getGenes().size() - 1);
 
 			if (chromosomeToResize.actualSize() - lastGene.size() >= chromosomeToResize

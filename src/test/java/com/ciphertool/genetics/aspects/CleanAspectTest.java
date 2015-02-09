@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 import org.aspectj.lang.JoinPoint;
 import org.junit.Test;
 
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class CleanAspectTest {
 	@Test
@@ -35,7 +35,7 @@ public class CleanAspectTest {
 		CleanAspect cleanAspect = new CleanAspect();
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
-		MockChromosome chromosome = new MockChromosome();
+		MockKeylessChromosome chromosome = new MockKeylessChromosome();
 		chromosome.setEvaluationNeeded(true);
 		when(mockJoinPoint.getTarget()).thenReturn(chromosome);
 

@@ -26,11 +26,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneListDao;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
 import com.ciphertool.genetics.entities.Gene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
-public class GroupMutationAlgorithm implements MutationAlgorithm {
+public class GroupMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
 	private Logger log = Logger.getLogger(getClass());
 
 	private static int MAX_GENES_PER_GROUP = 5;
@@ -39,7 +39,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	private Integer maxMutationsPerChromosome;
 
 	@Override
-	public void mutateChromosome(Chromosome chromosome) {
+	public void mutateChromosome(KeylessChromosome chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
@@ -79,7 +79,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * @param availableIndices
 	 *            the List of available indices to mutate
 	 */
-	protected void mutateRandomGeneGroup(Chromosome chromosome, List<Integer> availableIndices,
+	protected void mutateRandomGeneGroup(KeylessChromosome chromosome, List<Integer> availableIndices,
 			int maxGenesToMutate) {
 
 		if (availableIndices == null || availableIndices.isEmpty()) {
@@ -257,7 +257,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 * @param numGenes
 	 *            the number of Genes to mutate
 	 */
-	protected int mutateGeneGroup(Chromosome chromosome, int beginIndex, int numGenes) {
+	protected int mutateGeneGroup(KeylessChromosome chromosome, int beginIndex, int numGenes) {
 		if (numGenes <= 0) {
 			// Nothing to do
 			return 0;
@@ -302,7 +302,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 *            the number of Genes to remove
 	 * @return the List of Genes removed
 	 */
-	protected static List<Gene> removeGenes(Chromosome chromosome, int beginIndex, int numGenes) {
+	protected static List<Gene> removeGenes(KeylessChromosome chromosome, int beginIndex, int numGenes) {
 		List<Gene> genesRemoved = new ArrayList<Gene>();
 
 		if (numGenes <= 0) {
@@ -344,7 +344,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 	 *            the number of Sequences removed
 	 * @return whether the insertion was successful
 	 */
-	protected int insertRandomGenes(Chromosome chromosome, int beginGeneIndex, int sequencesRemoved) {
+	protected int insertRandomGenes(KeylessChromosome chromosome, int beginGeneIndex, int sequencesRemoved) {
 		int sequencesAdded = 0;
 
 		List<Gene> genesToAdd = new ArrayList<Gene>();
@@ -352,7 +352,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		while (sequencesAdded < sequencesRemoved) {
 			Gene geneToAdd = geneListDao.findRandomGene(chromosome);
 
-			if (geneToAdd != null && ((ComplexGene) geneToAdd).size() > (sequencesRemoved - sequencesAdded)) {
+			if (geneToAdd != null && ((VariableLengthGene) geneToAdd).size() > (sequencesRemoved - sequencesAdded)) {
 				geneToAdd = geneListDao.findRandomGeneOfLength(chromosome, sequencesRemoved
 						- sequencesAdded);
 			}
@@ -363,7 +363,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 
 			genesToAdd.add(geneToAdd);
 
-			sequencesAdded += ((ComplexGene) geneToAdd).size();
+			sequencesAdded += ((VariableLengthGene) geneToAdd).size();
 		}
 
 		for (int i = 0; i < genesToAdd.size(); i++) {
@@ -379,7 +379,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		return genesToAdd.size();
 	}
 
-	protected static int countSequencesToRemove(Chromosome chromosome, int beginIndex, int numGenes) {
+	protected static int countSequencesToRemove(KeylessChromosome chromosome, int beginIndex, int numGenes) {
 		if (numGenes <= 0) {
 			// Nothing to do
 			return 0;
@@ -403,7 +403,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm {
 		int sequenceCount = 0;
 
 		for (int i = 0; i < numGenes; i++) {
-			sequenceCount += ((ComplexGene) chromosome.getGenes().get(beginIndex + i)).size();
+			sequenceCount += ((VariableLengthGene) chromosome.getGenes().get(beginIndex + i)).size();
 		}
 
 		return sequenceCount;

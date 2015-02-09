@@ -26,11 +26,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.SequenceDao;
-import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.ComplexGene;
+import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.Sequence;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
-public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
+public class SingleSequenceMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(SingleSequenceMutationAlgorithm.class);
 	private SequenceDao sequenceDao;
 	private Integer maxMutationsPerChromosome;
@@ -38,7 +38,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	private static final int MAX_FIND_ATTEMPTS = 1000;
 
 	@Override
-	public void mutateChromosome(Chromosome chromosome) {
+	public void mutateChromosome(KeylessChromosome chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
@@ -70,7 +70,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 *            the List of available indices to mutate
 	 * @return the index mutated, or null if none was mutated
 	 */
-	protected void mutateRandomGene(Chromosome chromosome, List<Integer> availableIndices) {
+	protected void mutateRandomGene(KeylessChromosome chromosome, List<Integer> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
 			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
@@ -96,7 +96,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Gene to mutate
 	 */
-	protected void mutateGene(Chromosome chromosome, int index) {
+	protected void mutateGene(KeylessChromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
 					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()
@@ -105,7 +105,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 			return;
 		}
 
-		mutateRandomSequence((ComplexGene) chromosome.getGenes().get(index));
+		mutateRandomSequence((VariableLengthGene) chromosome.getGenes().get(index));
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param gene
 	 *            the Gene to mutate
 	 */
-	protected void mutateRandomSequence(ComplexGene gene) {
+	protected void mutateRandomSequence(VariableLengthGene gene) {
 		int randomIndex = (int) (Math.random() * gene.size());
 
 		mutateSequence(gene, randomIndex);
@@ -128,7 +128,7 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm {
 	 * @param index
 	 *            the index of the Sequence to mutate
 	 */
-	protected void mutateSequence(ComplexGene gene, int index) {
+	protected void mutateSequence(VariableLengthGene gene, int index) {
 		if (index > gene.size() - 1) {
 			log.info("Attempted to mutate a sequence in Gene with index of " + index
 					+ " (zero-indexed), but the size is only " + gene.size()

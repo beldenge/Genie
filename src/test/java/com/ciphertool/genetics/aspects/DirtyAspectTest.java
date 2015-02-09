@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 import org.aspectj.lang.JoinPoint;
 import org.junit.Test;
 
-import com.ciphertool.genetics.mocks.MockChromosome;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockSequence;
 
@@ -37,7 +37,7 @@ public class DirtyAspectTest {
 		DirtyAspect dirtyAspect = new DirtyAspect();
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
-		MockChromosome chromosome = new MockChromosome();
+		MockKeylessChromosome chromosome = new MockKeylessChromosome();
 		chromosome.setEvaluationNeeded(false);
 		MockGene gene = new MockGene();
 		gene.setChromosome(chromosome);
@@ -60,7 +60,7 @@ public class DirtyAspectTest {
 		DirtyAspect dirtyAspect = new DirtyAspect();
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
-		MockChromosome chromosome = new MockChromosome();
+		MockKeylessChromosome chromosome = new MockKeylessChromosome();
 		chromosome.setEvaluationNeeded(false);
 		MockGene gene = new MockGene();
 		gene.setChromosome(chromosome);
@@ -81,7 +81,7 @@ public class DirtyAspectTest {
 		DirtyAspect dirtyAspect = new DirtyAspect();
 		JoinPoint mockJoinPoint = mock(JoinPoint.class);
 
-		MockChromosome chromosome = new MockChromosome();
+		MockKeylessChromosome chromosome = new MockKeylessChromosome();
 		chromosome.setEvaluationNeeded(false);
 		when(mockJoinPoint.getTarget()).thenReturn(chromosome);
 
