@@ -25,14 +25,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.dao.VariableLengthGeneDao;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class ConservativeMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(ConservativeMutationAlgorithm.class);
-	private GeneListDao geneListDao;
+	private VariableLengthGeneDao geneDao;
 	private Integer maxMutationsPerChromosome;
 
 	private static final int MAX_FIND_ATTEMPTS = 1000;
@@ -64,12 +64,10 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm<KeylessC
 	/**
 	 * Performs a genetic mutation of a random Gene of the supplied Chromosome
 	 * 
-	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
 	 * @param availableIndices
 	 *            the List of available indices to mutate
-	 * @return the index mutated, or null if none was mutated
 	 */
 	protected void mutateRandomGene(KeylessChromosome chromosome, List<Integer> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
@@ -114,7 +112,7 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm<KeylessC
 		Gene newGene = null;
 		int attempts = 0;
 		do {
-			newGene = geneListDao.findRandomGeneOfLength(chromosome, ((VariableLengthGene) oldGene).size());
+			newGene = geneDao.findRandomGeneOfLength(chromosome, ((VariableLengthGene) oldGene).size());
 
 			attempts++;
 
@@ -133,12 +131,12 @@ public class ConservativeMutationAlgorithm implements MutationAlgorithm<KeylessC
 	}
 
 	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
+	 * @param geneDao
+	 *            the geneDao to set
 	 */
 	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+	public void setGeneDao(VariableLengthGeneDao geneDao) {
+		this.geneDao = geneDao;
 	}
 
 	@Override

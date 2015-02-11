@@ -33,45 +33,45 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
-import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockGene;
+import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class KeylessChromosomeHelperTest {
 	private static KeylessChromosomeHelper keylessChromosomeHelper;
-	private static GeneListDao geneListDaoMock;
+	private static GeneDao geneDaoMock;
 
 	@BeforeClass
 	public static void setUp() {
 		keylessChromosomeHelper = new KeylessChromosomeHelper();
-		geneListDaoMock = mock(GeneListDao.class);
+		geneDaoMock = mock(GeneDao.class);
 
-		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneDao(geneDaoMock);
 	}
 
 	@Before
 	public void resetMocks() {
-		reset(geneListDaoMock);
+		reset(geneDaoMock);
 
-		when(geneListDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(createRandomGene(5),
+		when(geneDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(createRandomGene(5),
 				createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5),
 				createRandomGene(5), createRandomGene(5));
 	}
 
 	@Test
-	public void testSetGeneListDao() {
+	public void testSetGeneDao() {
 		KeylessChromosomeHelper keylessChromosomeHelper = new KeylessChromosomeHelper();
-		keylessChromosomeHelper.setGeneListDao(geneListDaoMock);
+		keylessChromosomeHelper.setGeneDao(geneDaoMock);
 
-		Field geneListDaoField = ReflectionUtils.findField(KeylessChromosomeHelper.class, "geneListDao");
-		ReflectionUtils.makeAccessible(geneListDaoField);
-		GeneListDao geneListDaoFromObject = (GeneListDao) ReflectionUtils.getField(
-				geneListDaoField, keylessChromosomeHelper);
+		Field geneDaoField = ReflectionUtils.findField(KeylessChromosomeHelper.class, "geneDao");
+		ReflectionUtils.makeAccessible(geneDaoField);
+		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(
+				geneDaoField, keylessChromosomeHelper);
 
-		assertSame(geneListDaoMock, geneListDaoFromObject);
+		assertSame(geneDaoMock, geneDaoFromObject);
 	}
 
 	@Test

@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.dao.VariableLengthGeneDao;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
@@ -35,7 +35,7 @@ public class GroupMutationAlgorithm implements MutationAlgorithm<KeylessChromoso
 
 	private static int MAX_GENES_PER_GROUP = 5;
 
-	private GeneListDao geneListDao;
+	private VariableLengthGeneDao geneDao;
 	private Integer maxMutationsPerChromosome;
 
 	@Override
@@ -350,10 +350,10 @@ public class GroupMutationAlgorithm implements MutationAlgorithm<KeylessChromoso
 		List<Gene> genesToAdd = new ArrayList<Gene>();
 
 		while (sequencesAdded < sequencesRemoved) {
-			Gene geneToAdd = geneListDao.findRandomGene(chromosome);
+			Gene geneToAdd = geneDao.findRandomGene(chromosome);
 
 			if (geneToAdd != null && ((VariableLengthGene) geneToAdd).size() > (sequencesRemoved - sequencesAdded)) {
-				geneToAdd = geneListDao.findRandomGeneOfLength(chromosome, sequencesRemoved
+				geneToAdd = geneDao.findRandomGeneOfLength(chromosome, sequencesRemoved
 						- sequencesAdded);
 			}
 
@@ -410,12 +410,12 @@ public class GroupMutationAlgorithm implements MutationAlgorithm<KeylessChromoso
 	}
 
 	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
+	 * @param geneDao
+	 *            the geneDao to set
 	 */
 	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+	public void setGeneDao(VariableLengthGeneDao geneDao) {
+		this.geneDao = geneDao;
 	}
 
 	@Override

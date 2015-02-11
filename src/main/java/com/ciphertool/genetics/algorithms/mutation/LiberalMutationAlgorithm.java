@@ -25,14 +25,14 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(LiberalMutationAlgorithm.class);
-	private GeneListDao geneListDao;
+	private GeneDao geneDao;
 	private KeylessChromosomeHelper keylessChromosomeHelper;
 	private Integer maxMutationsPerChromosome;
 
@@ -69,7 +69,6 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm<KeylessChromo
 	 *            the Chromosome to mutate
 	 * @param availableIndices
 	 *            the List of available indices to mutate
-	 * @return the index mutated, or null if none was mutated
 	 */
 	protected void mutateRandomGene(KeylessChromosome chromosome, List<Integer> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
@@ -129,7 +128,7 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm<KeylessChromo
 		Gene newGene = null;
 		int attempts = 0;
 		do {
-			newGene = geneListDao.findRandomGene(chromosome);
+			newGene = geneDao.findRandomGene(chromosome);
 
 			attempts++;
 
@@ -147,12 +146,12 @@ public class LiberalMutationAlgorithm implements MutationAlgorithm<KeylessChromo
 	}
 
 	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
+	 * @param geneDao
+	 *            the geneDao to set
 	 */
 	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+	public void setGeneDao(GeneDao geneDao) {
+		this.geneDao = geneDao;
 	}
 
 	/**

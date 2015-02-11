@@ -22,8 +22,6 @@ package com.ciphertool.genetics.dao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 
-public interface GeneListDao {
+public interface GeneDao {
 	public Gene findRandomGene(Chromosome chromosome);
-
-	public Gene findRandomGeneOfLength(Chromosome chromosome, int length);
 }

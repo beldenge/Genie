@@ -21,12 +21,12 @@ package com.ciphertool.genetics.util;
 
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class KeylessChromosomeHelper {
-	private GeneListDao geneListDao;
+	private GeneDao geneDao;
 
 	/**
 	 * Trims or pads the Chromosome in case the new Gene is respectively longer
@@ -43,7 +43,7 @@ public class KeylessChromosomeHelper {
 		 * length to fall outside the target length.
 		 */
 		while (chromosomeToResize.actualSize() < chromosomeToResize.targetSize()) {
-			chromosomeToResize.addGene(geneListDao.findRandomGene(chromosomeToResize));
+			chromosomeToResize.addGene(geneDao.findRandomGene(chromosomeToResize));
 		}
 
 		/*
@@ -76,11 +76,11 @@ public class KeylessChromosomeHelper {
 	}
 
 	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
+	 * @param geneDao
+	 *            the geneDao to set
 	 */
 	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+	public void setGeneDao(GeneDao geneDao) {
+		this.geneDao = geneDao;
 	}
 }

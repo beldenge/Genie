@@ -25,7 +25,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.dao.GeneListDao;
+import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
@@ -33,7 +33,7 @@ import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private FitnessEvaluator fitnessEvaluator;
-	private GeneListDao geneListDao;
+	private GeneDao geneDao;
 	private KeylessChromosomeHelper keylessChromosomeHelper;
 	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
@@ -118,7 +118,7 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChro
 		 * to the replacement
 		 */
 		while (child.actualSize() < child.targetSize()) {
-			child.addGene(geneListDao.findRandomGene(child));
+			child.addGene(geneDao.findRandomGene(child));
 		}
 
 		double newFitness = fitnessEvaluator.evaluate(child);
@@ -153,12 +153,12 @@ public class LiberalCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChro
 	}
 
 	/**
-	 * @param geneListDao
-	 *            the geneListDao to set
+	 * @param geneDao
+	 *            the geneDao to set
 	 */
 	@Required
-	public void setGeneListDao(GeneListDao geneListDao) {
-		this.geneListDao = geneListDao;
+	public void setGeneDao(GeneDao geneDao) {
+		this.geneDao = geneDao;
 	}
 
 	/**

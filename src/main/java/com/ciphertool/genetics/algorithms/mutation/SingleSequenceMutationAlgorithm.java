@@ -68,7 +68,6 @@ public class SingleSequenceMutationAlgorithm implements MutationAlgorithm<Keyles
 	 *            the Chromosome to mutate
 	 * @param availableIndices
 	 *            the List of available indices to mutate
-	 * @return the index mutated, or null if none was mutated
 	 */
 	protected void mutateRandomGene(KeylessChromosome chromosome, List<Integer> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
