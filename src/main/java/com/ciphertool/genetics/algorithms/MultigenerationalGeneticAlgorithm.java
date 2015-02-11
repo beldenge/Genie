@@ -36,7 +36,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
-public class BasicGeneticAlgorithm implements GeneticAlgorithm {
+public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 	protected GeneticAlgorithmStrategy strategy;
 	protected Population population;
@@ -45,10 +45,10 @@ public class BasicGeneticAlgorithm implements GeneticAlgorithm {
 	protected SelectionAlgorithm selectionAlgorithm;
 	private boolean stopRequested;
 	private ExecutionStatisticsDao executionStatisticsDao;
-	private int generationCount = 0;
-	private ExecutionStatistics executionStatistics;
+	protected int generationCount = 0;
+	protected ExecutionStatistics executionStatistics;
 
-	public BasicGeneticAlgorithm() {
+	public MultigenerationalGeneticAlgorithm() {
 	}
 
 	@Override

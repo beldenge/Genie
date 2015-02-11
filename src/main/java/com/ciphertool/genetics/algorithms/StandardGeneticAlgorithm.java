@@ -1,22 +1,3 @@
-/**
- * Copyright 2015 George Belden
- * 
- * This file is part of ZodiacGenetics.
- * 
- * ZodiacGenetics is free software: you can redistribute it and/or modify it
- * under the terms of the GNU General Public License as published by the Free
- * Software Foundation, either version 3 of the License, or (at your option) any
- * later version.
- * 
- * ZodiacGenetics is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- * 
- * You should have received a copy of the GNU General Public License along with
- * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
- */
-
 package com.ciphertool.genetics.algorithms;
 
 import java.util.ArrayList;
@@ -30,9 +11,11 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
-public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
+public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
+	
 	private TaskExecutor taskExecutor;
 
 	/**
@@ -54,6 +37,37 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			return crossoverAlgorithm.crossover(mom, dad);
 		}
 	}
+	
+	@Override
+	public void proceedWithNextGeneration() {
+		this.generationCount++;
+
+		GenerationStatistics generationStatistics = new GenerationStatistics(
+				this.executionStatistics, this.generationCount);
+
+		long generationStart = System.currentTimeMillis();
+
+		int populationSizeBeforeGeneration = this.population.size();
+
+		long startCrossover = System.currentTimeMillis();
+		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
+		if (log.isDebugEnabled()) {
+			log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+		}
+
+		long startEvaluation = System.currentTimeMillis();
+		this.population.evaluateFitness(generationStatistics);
+		if (log.isDebugEnabled()) {
+			log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
+		}
+
+		long executionTime = (System.currentTimeMillis() - generationStart);
+		generationStatistics.setExecutionTime(executionTime);
+
+		log.info(generationStatistics);
+
+		this.executionStatistics.addGenerationStatistics(generationStatistics);
+	}
 
 	/*
 	 * Crossover algorithm utilizing Roulette Wheel Selection
@@ -70,9 +84,7 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 			return 0;
 		}
 
-		long pairsToCrossover = determinePairsToCrossover(initialPopulationSize);
-
-		log.debug("Pairs to crossover: " + pairsToCrossover);
+		log.debug("Pairs to crossover: " + initialPopulationSize);
 
 		int momIndex = -1;
 		int dadIndex = -1;
@@ -85,30 +97,30 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		 * guaranteed to be at least as fit. This also prevents parents from
 		 * reproducing more than one time per generation.
 		 */
-		for (int i = 0; i < pairsToCrossover; i++) {
+		for (int i = 0; i < initialPopulationSize; i++) {
 			momIndex = this.population.selectIndex();
 			moms.add(this.population.getIndividuals().get(momIndex));
-			this.population.makeIneligibleForReproduction(momIndex);
 
 			dadIndex = this.population.selectIndex();
 			dads.add(this.population.getIndividuals().get(dadIndex));
-			this.population.makeIneligibleForReproduction(dadIndex);
 		}
 
-		List<Chromosome> childrenToAdd = doConcurrentCrossovers(pairsToCrossover, moms, dads);
+		List<Chromosome> childrenToAdd = doConcurrentCrossovers(initialPopulationSize, moms, dads);
 
-		if (childrenToAdd == null || childrenToAdd.isEmpty()) {
-			log.error("No children produced from concurrent crossover execution.  Expected "
-					+ pairsToCrossover + " children.");
+		if (childrenToAdd == null || childrenToAdd.size() < initialPopulationSize) {
+			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size()) + " children produced from concurrent crossover execution.  Expected "
+					+ initialPopulationSize + " children.");
 
-			return 0;
+			return ((null == childrenToAdd) ? 0 : childrenToAdd.size());
 		}
 
+		this.population.clearIndividuals();
+		
 		for (Chromosome child : childrenToAdd) {
-			this.population.addIndividualAsIneligible(child);
+			this.population.addIndividual(child);
 		}
 
-		return (int) pairsToCrossover;
+		return (int) childrenToAdd.size();
 	}
 
 	protected List<Chromosome> doConcurrentCrossovers(long pairsToCrossover, List<Chromosome> moms,
@@ -153,6 +165,20 @@ public class ConcurrentBasicGeneticAlgorithm extends BasicGeneticAlgorithm {
 		}
 
 		return childrenToAdd;
+	}
+	
+	@Override
+	public int mutate(int initialPopulationSize) {
+		// Do nothing.  We are testing a Genetic Algorithm which has no separate "Mutate" step.
+
+		return 0;
+	}
+	
+	@Override
+	public int select() {
+		// Do nothing.  We are testing a Genetic Algorithm which has no separate "Select" step.
+		
+		return 0;
 	}
 
 	/**
