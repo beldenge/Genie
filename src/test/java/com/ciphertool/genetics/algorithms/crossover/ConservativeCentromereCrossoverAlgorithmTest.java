@@ -40,7 +40,6 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.KeylessChromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
@@ -100,9 +99,6 @@ public class ConservativeCentromereCrossoverAlgorithmTest extends CrossoverAlgor
 	@Test(expected = IllegalStateException.class)
 	public void testCrossoverWithIllegalState() {
 		ConservativeCentromereCrossoverAlgorithm conservativeCentromereCrossoverAlgorithm = new ConservativeCentromereCrossoverAlgorithm();
-
-		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		conservativeCentromereCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		conservativeCentromereCrossoverAlgorithm.setMutationAlgorithm(null);
 		conservativeCentromereCrossoverAlgorithm.setMutateDuringCrossover(true);

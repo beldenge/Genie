@@ -27,7 +27,6 @@ import org.apache.log4j.Logger;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.RandomListElementSelector;
 
 public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
@@ -194,18 +193,6 @@ public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgori
 		}
 
 		return potentialCentromeres;
-	}
-
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
-	@Override
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		/*
-		 * fitnessEvaluator is required by other crossover algorithms, so this
-		 * is just to satisfy the interface.
-		 */
 	}
 
 	/**

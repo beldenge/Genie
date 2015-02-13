@@ -27,9 +27,8 @@ import org.springframework.beans.factory.annotation.Required;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeylessChromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 import com.ciphertool.genetics.util.Coin;
+import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private GeneDao geneDao;
@@ -112,18 +111,6 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 				child.addGene(geneDao.findRandomGene(child));
 			}
 		}
-	}
-
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
-	@Override
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		/*
-		 * fitnessEvaluator is required by other crossover algorithms, so this
-		 * is just to satisfy the interface.
-		 */
 	}
 
 	/**

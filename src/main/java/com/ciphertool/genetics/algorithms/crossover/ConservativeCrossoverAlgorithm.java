@@ -30,7 +30,7 @@ import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public class ConservativeCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
+public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<KeylessChromosome> {
 	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;

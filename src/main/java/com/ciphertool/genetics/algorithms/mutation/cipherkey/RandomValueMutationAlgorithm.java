@@ -1,3 +1,22 @@
+/**
+ * Copyright 2015 George Belden
+ * 
+ * This file is part of ZodiacGenetics.
+ * 
+ * ZodiacGenetics is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * ZodiacGenetics is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.ciphertool.genetics.algorithms.mutation.cipherkey;
 
 import java.util.Random;
@@ -10,14 +29,14 @@ import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
-public class RandomValueMutationAlgorithm implements MutationAlgorithm<KeyedChromosome<String>> {
+public class RandomValueMutationAlgorithm implements MutationAlgorithm<KeyedChromosome<Object>> {
 	private static Logger log = Logger.getLogger(RandomValueMutationAlgorithm.class);
 	
 	private GeneDao geneDao;
 	private Integer maxMutationsPerChromosome;
 	
 	@Override
-	public void mutateChromosome(KeyedChromosome<String> chromosome) {
+	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
@@ -29,7 +48,7 @@ public class RandomValueMutationAlgorithm implements MutationAlgorithm<KeyedChro
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
 				.getGenes().size())) + 1;
 		
-		Set<String> availableKeys = chromosome.getGenes().keySet();
+		Set<Object> availableKeys = chromosome.getGenes().keySet();
 		
 		for (int i = 0; i < numMutations; i++) {
 			// Keep track of the mutated keys
@@ -45,7 +64,7 @@ public class RandomValueMutationAlgorithm implements MutationAlgorithm<KeyedChro
 	 * @param availableIndices
 	 *            the Set of available indices to mutate
 	 */
-	protected void mutateRandomGene(KeyedChromosome<String> chromosome, Set<String> availableIndices) {
+	protected void mutateRandomGene(KeyedChromosome<Object> chromosome, Set<Object> availableIndices) {
 		if (availableIndices == null || availableIndices.isEmpty()) {
 			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
 
@@ -59,7 +78,7 @@ public class RandomValueMutationAlgorithm implements MutationAlgorithm<KeyedChro
 		Object randomKey = keys[generator.nextInt(keys.length)];
 		
 		// Replace that map value with a randomly generated Gene
-		chromosome.getGenes().put((String) randomKey, geneDao.findRandomGene(chromosome));
+		chromosome.getGenes().put((Object) randomKey, geneDao.findRandomGene(chromosome));
 		
 		// Remove the key so that it is not used for mutation again
 		availableIndices.remove(randomKey);

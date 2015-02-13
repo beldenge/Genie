@@ -41,7 +41,6 @@ import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.KeylessChromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
@@ -130,9 +129,6 @@ public class LiberalUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgorithm
 	@Test(expected = IllegalStateException.class)
 	public void testCrossoverWithIllegalState() {
 		LiberalUnevaluatedCrossoverAlgorithm liberalUnevaluatedCrossoverAlgorithm = new LiberalUnevaluatedCrossoverAlgorithm();
-
-		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		liberalUnevaluatedCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		liberalUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		liberalUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(true);

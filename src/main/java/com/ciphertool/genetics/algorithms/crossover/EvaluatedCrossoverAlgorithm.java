@@ -19,34 +19,13 @@
 
 package com.ciphertool.genetics.algorithms.crossover;
 
-import java.util.List;
-
-import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public interface CrossoverAlgorithm<T extends Chromosome> {
-
+public interface EvaluatedCrossoverAlgorithm<T extends Chromosome> extends CrossoverAlgorithm<T> {
 	/**
-	 * Performs crossover to a List of children by cloning one or both of the
-	 * parents and then selectively replacing Genes from the other parent.
-	 * 
-	 * @param parentA
-	 *            the first parent
-	 * @param parentB
-	 *            the second parent
-	 * @return the List of children Chromosomes produced from the crossover
+	 * @param fitnessEvaluator
+	 *            the FitnessEvaluator to set
 	 */
-	public List<T> crossover(T parentA, T parentB);
-
-	/**
-	 * @param mutationAlgorithm
-	 *            the mutationAlgorithm to set
-	 */
-	public void setMutationAlgorithm(MutationAlgorithm<T> mutationAlgorithm);
-
-	/**
-	 * @param mutateDuringCrossover
-	 *            whether to mutate during crossover
-	 */
-	public void setMutateDuringCrossover(boolean mutateDuringCrossover);
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
 }

@@ -25,7 +25,6 @@ import java.util.List;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
 	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
@@ -97,18 +96,6 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 		 * Child is guaranteed to have at least as good fitness as its parent
 		 */
 		return child;
-	}
-
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
-	@Override
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		/*
-		 * fitnessEvaluator is required by other crossover algorithms, so this
-		 * is just to satisfy the interface.
-		 */
 	}
 
 	/**

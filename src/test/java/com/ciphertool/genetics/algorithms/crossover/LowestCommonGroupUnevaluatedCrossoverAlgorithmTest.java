@@ -38,7 +38,6 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.KeylessChromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
@@ -97,9 +96,6 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 	@Test(expected = IllegalStateException.class)
 	public void testCrossoverWithIllegalState() {
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
-
-		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(null);
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(true);
