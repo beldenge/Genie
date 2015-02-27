@@ -29,8 +29,8 @@ import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.util.RandomListElementSelector;
 
-public class ConservativeCentromereCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
-	private static Logger log = Logger.getLogger(ConservativeCentromereCrossoverAlgorithm.class);
+public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
+	private static Logger log = Logger.getLogger(ConservativeSinglePointCrossoverAlgorithm.class);
 	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 	private RandomListElementSelector randomListElementSelector;

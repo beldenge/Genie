@@ -30,7 +30,7 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
-public class LiberalMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
+public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(LiberalMutationAlgorithm.class);
 	private GeneDao geneDao;
 	private KeylessChromosomeHelper keylessChromosomeHelper;

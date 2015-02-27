@@ -30,7 +30,7 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
-public class ConservativeMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
+public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
 	private static Logger log = Logger.getLogger(ConservativeMutationAlgorithm.class);
 	private VariableLengthGeneDao geneDao;
 	private Integer maxMutationsPerChromosome;

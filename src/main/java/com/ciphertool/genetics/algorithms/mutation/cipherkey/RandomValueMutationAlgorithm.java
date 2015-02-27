@@ -25,11 +25,11 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
-public class RandomValueMutationAlgorithm implements MutationAlgorithm<KeyedChromosome<Object>> {
+public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm<KeyedChromosome<Object>> {
 	private static Logger log = Logger.getLogger(RandomValueMutationAlgorithm.class);
 	
 	private GeneDao geneDao;

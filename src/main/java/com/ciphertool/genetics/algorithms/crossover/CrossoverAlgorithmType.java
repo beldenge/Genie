@@ -40,8 +40,8 @@ public enum CrossoverAlgorithmType {
 			"Lowest Common Group Unevaluated",
 			LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 			"This will crossover groups of words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
-	CONSERVATIVE_CENTROMERE("Conservative Centromere",
-			ConservativeCentromereCrossoverAlgorithm.class,
+	CONSERVATIVE_SINGLE_POINT("Conservative Single Point",
+			ConservativeSinglePointCrossoverAlgorithm.class,
 			"This will crossover from a common centromere position determined somewhat randomly");
 
 	private String displayName;

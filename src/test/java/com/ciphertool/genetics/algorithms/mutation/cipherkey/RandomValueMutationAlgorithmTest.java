@@ -17,17 +17,8 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.mutation;
+package com.ciphertool.genetics.algorithms.mutation.cipherkey;
 
-import com.ciphertool.genetics.entities.Chromosome;
+public class RandomValueMutationAlgorithmTest {
 
-
-public interface MutationAlgorithm<T extends Chromosome> {
-	/**
-	 * Performs a genetic mutation of the supplied Chromosome.
-	 * 
-	 * @param chromosome
-	 *            the Chromosome to mutate
-	 */
-	public void mutateChromosome(T chromosome);
 }

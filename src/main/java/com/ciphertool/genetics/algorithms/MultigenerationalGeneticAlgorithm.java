@@ -30,6 +30,7 @@ import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
@@ -445,8 +446,11 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 				.getMutateDuringCrossover());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
-		this.mutationAlgorithm.setMaxMutationsPerChromosome(geneticAlgorithmStrategy
+		
+		if (this.mutationAlgorithm instanceof NonUniformMutationAlgorithm) {
+			((NonUniformMutationAlgorithm) this.mutationAlgorithm).setMaxMutationsPerChromosome(geneticAlgorithmStrategy
 				.getMaxMutationsPerIndividual());
+		}
 
 		this.selectionAlgorithm = geneticAlgorithmStrategy.getSelectionAlgorithm();
 

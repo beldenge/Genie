@@ -21,13 +21,11 @@ package com.ciphertool.genetics.algorithms.mutation;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-
-public interface MutationAlgorithm<T extends Chromosome> {
+public interface NonUniformMutationAlgorithm<T extends Chromosome> extends MutationAlgorithm<T> {
 	/**
-	 * Performs a genetic mutation of the supplied Chromosome.
-	 * 
-	 * @param chromosome
-	 *            the Chromosome to mutate
+	 * @param maxMutationsPerChromosome
+	 *            the maximum number of mutations to perform on the given
+	 *            individual
 	 */
-	public void mutateChromosome(T chromosome);
+	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome);
 }

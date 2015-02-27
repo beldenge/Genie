@@ -30,7 +30,7 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
-public class GroupMutationAlgorithm implements MutationAlgorithm<KeylessChromosome> {
+public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
 	private Logger log = Logger.getLogger(getClass());
 
 	private static int MAX_GENES_PER_GROUP = 5;

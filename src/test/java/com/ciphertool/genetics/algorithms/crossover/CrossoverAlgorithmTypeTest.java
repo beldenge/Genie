@@ -31,8 +31,8 @@ public class CrossoverAlgorithmTypeTest {
 
 		assertSame(ConservativeCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE
 				.getType());
-		assertSame(ConservativeCentromereCrossoverAlgorithm.class,
-				CrossoverAlgorithmType.CONSERVATIVE_CENTROMERE.getType());
+		assertSame(ConservativeSinglePointCrossoverAlgorithm.class,
+				CrossoverAlgorithmType.CONSERVATIVE_SINGLE_POINT.getType());
 		assertSame(ConservativeUnevaluatedCrossoverAlgorithm.class,
 				CrossoverAlgorithmType.CONSERVATIVE_UNEVALUATED.getType());
 		assertSame(LiberalCrossoverAlgorithm.class, CrossoverAlgorithmType.LIBERAL.getType());

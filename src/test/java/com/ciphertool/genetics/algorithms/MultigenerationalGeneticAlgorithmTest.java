@@ -49,6 +49,7 @@ import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
@@ -95,7 +96,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		Population populationMock = mock(Population.class);
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
-		MutationAlgorithm mutationAlgorithmMock = mock(MutationAlgorithm.class);
+		NonUniformMutationAlgorithm mutationAlgorithmMock = mock(NonUniformMutationAlgorithm.class);
 		SelectionAlgorithm selectionAlgorithmMock = mock(SelectionAlgorithm.class);
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		FitnessEvaluator knownSolutionFitnessEvaluatorMock = mock(FitnessEvaluator.class);

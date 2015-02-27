@@ -16,18 +16,14 @@
  * You should have received a copy of the GNU General Public License along with
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.ciphertool.genetics.algorithms.mutation;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-
-public interface MutationAlgorithm<T extends Chromosome> {
+public interface UniformMutationAlgorithm<T extends Chromosome> extends MutationAlgorithm<T> {
 	/**
-	 * Performs a genetic mutation of the supplied Chromosome.
-	 * 
-	 * @param chromosome
-	 *            the Chromosome to mutate
+	 * @param mutationRate
+	 *            the mutation rate specified as a percentage
 	 */
-	public void mutateChromosome(T chromosome);
+	public void setMutationRate(Double mutationRate);
 }
