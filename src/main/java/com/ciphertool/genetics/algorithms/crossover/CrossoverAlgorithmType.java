@@ -44,9 +44,11 @@ public enum CrossoverAlgorithmType {
 			"This will crossover from a common centromere position determined somewhat randomly");
 
 	private String displayName;
+	@SuppressWarnings("rawtypes")
 	private Class<? extends CrossoverAlgorithm> type;
 	private String description;
 
+	@SuppressWarnings("rawtypes")
 	CrossoverAlgorithmType(String displayName, Class<? extends CrossoverAlgorithm> type, String description) {
 		this.displayName = displayName;
 		this.type = type;
@@ -63,6 +65,7 @@ public enum CrossoverAlgorithmType {
 	/**
 	 * @return the types
 	 */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends CrossoverAlgorithm> getType() {
 		return type;
 	}

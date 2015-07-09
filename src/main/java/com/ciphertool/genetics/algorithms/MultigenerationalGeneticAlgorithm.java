@@ -41,7 +41,9 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 	protected GeneticAlgorithmStrategy strategy;
 	protected Population population;
+	@SuppressWarnings("rawtypes")
 	protected CrossoverAlgorithm crossoverAlgorithm;
+	@SuppressWarnings("rawtypes")
 	protected MutationAlgorithm mutationAlgorithm;
 	protected SelectionAlgorithm selectionAlgorithm;
 	private boolean stopRequested;
@@ -248,6 +250,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 				.getSurvivalRate());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int crossover(int initialPopulationSize) {
 		if (this.population.size() < 2) {
@@ -310,6 +313,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 				((long) (this.population.size() / 2)));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public int mutate(int initialPopulationSize) {
 		int mutantIndex = -1;
@@ -409,6 +413,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		return strategy;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());

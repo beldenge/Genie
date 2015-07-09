@@ -31,6 +31,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			this.dad = dad;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public List<Chromosome> call() throws Exception {
 			return crossoverAlgorithm.crossover(mom, dad);

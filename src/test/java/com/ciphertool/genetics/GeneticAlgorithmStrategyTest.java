@@ -42,6 +42,7 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 public class GeneticAlgorithmStrategyTest {
 	private static final double DEFAULT_FITNESS_VALUE = 100.0;
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testConstructorWithoutComparisonToKnownSolution() {
 		Object geneticStructureToSet = new Object();
@@ -83,6 +84,7 @@ public class GeneticAlgorithmStrategyTest {
 		assertFalse(geneticAlgorithmStrategy.getCompareToKnownSolution());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testConstructorWithComparisonToKnownSolution() {
 		Object geneticStructureToSet = new Object();
@@ -263,6 +265,7 @@ public class GeneticAlgorithmStrategyTest {
 		assertSame(maxGenerationsToSet, geneticAlgorithmStrategy.getMaxGenerations());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSetCrossoverAlgorithm() {
 		CrossoverAlgorithm crossoverAlgorithmToSet = new ConservativeCrossoverAlgorithm();
@@ -282,6 +285,7 @@ public class GeneticAlgorithmStrategyTest {
 		assertSame(fitnessEvaluatorToSet, geneticAlgorithmStrategy.getFitnessEvaluator());
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSetMutationAlgorithm() {
 		MutationAlgorithm mutationAlgorithmToSet = new ConservativeMutationAlgorithm();

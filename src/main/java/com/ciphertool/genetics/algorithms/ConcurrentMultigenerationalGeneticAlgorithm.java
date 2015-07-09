@@ -48,6 +48,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 			this.dad = dad;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public List<Chromosome> call() throws Exception {
 			return crossoverAlgorithm.crossover(mom, dad);

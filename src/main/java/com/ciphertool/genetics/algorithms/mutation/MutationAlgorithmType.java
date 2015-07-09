@@ -29,9 +29,11 @@ public enum MutationAlgorithmType {
 			"This will mutate a single sequence of a specified gene");
 
 	private String displayName;
+	@SuppressWarnings("rawtypes")
 	private Class<? extends MutationAlgorithm> type;
 	private String description;
 
+	@SuppressWarnings("rawtypes")
 	MutationAlgorithmType(String displayName, Class<? extends MutationAlgorithm> type, String description) {
 		this.displayName = displayName;
 		this.type = type;
@@ -48,6 +50,7 @@ public enum MutationAlgorithmType {
 	/**
 	 * @return the types
 	 */
+	@SuppressWarnings("rawtypes")
 	public Class<? extends MutationAlgorithm> getType() {
 		return type;
 	}

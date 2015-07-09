@@ -90,6 +90,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertSame(executionStatisticsDaoToSet, executionStatisticsDaoFromObject);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testSetStrategy() {
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
@@ -166,6 +167,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertSame(selectionAlgorithmMock, selectionAlgorithmFromObject);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testInitialize() {
 		Date beforeInitialize = new Date();
@@ -282,6 +284,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertNull(executionStatisticsFromObject);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testProceedWithNextGeneration() {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
@@ -516,7 +519,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verifyNoMoreInteractions(selectionAlgorithmMock);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testCrossover() {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
@@ -583,7 +586,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class), any(Chromosome.class));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testCrossover_SmallPopulation() {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
@@ -669,6 +672,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertEquals(25, pairsToCrossover);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testMutate() {
 		int initialPopulationSize = 100;
@@ -709,6 +713,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verifyNoMoreInteractions(mutationAlgorithmMock);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testMutate_SmallPopulation() {
 		int initialPopulationSize = 100;

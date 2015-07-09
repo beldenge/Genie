@@ -81,6 +81,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		assertSame(taskExecutorToSet, taskExecutorFromObject);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testCrossoverTask() {
 		Chromosome mom = new MockKeylessChromosome();
@@ -113,7 +114,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		verify(crossoverAlgorithmMock, times(1)).crossover(same(mom), same(dad));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testCrossover() {
 		ConcurrentMultigenerationalGeneticAlgorithm concurrentMultigenerationalGeneticAlgorithm = new ConcurrentMultigenerationalGeneticAlgorithm();
@@ -182,7 +183,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class), any(Chromosome.class));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testCrossover_SmallPopulation() {
 		ConcurrentMultigenerationalGeneticAlgorithm concurrentMultigenerationalGeneticAlgorithm = new ConcurrentMultigenerationalGeneticAlgorithm();
@@ -222,6 +223,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		verifyZeroInteractions(crossoverAlgorithmMock);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testDoConcurrentCrossovers() {
 		ConcurrentMultigenerationalGeneticAlgorithm concurrentMultigenerationalGeneticAlgorithm = new ConcurrentMultigenerationalGeneticAlgorithm();

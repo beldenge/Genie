@@ -36,8 +36,10 @@ public class GeneticAlgorithmStrategy {
 	private Double crossoverRate;
 	private Boolean mutateDuringCrossover;
 	private Integer maxGenerations;
+	@SuppressWarnings("rawtypes")
 	private CrossoverAlgorithm crossoverAlgorithm;
 	private FitnessEvaluator fitnessEvaluator;
+	@SuppressWarnings("rawtypes")
 	private MutationAlgorithm mutationAlgorithm;
 	private SelectionAlgorithm selectionAlgorithm;
 	private Selector selector;
@@ -82,6 +84,7 @@ public class GeneticAlgorithmStrategy {
 	 * @param useKnownSolutionFitnessEvaluator
 	 *            the useKnownSolutionFitnessEvaluator to set
 	 */
+	@SuppressWarnings("rawtypes")
 	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer lifespan,
 			Integer maxGenerations, Double survivalRate, Double mutationRate, Integer maxMutationsPerIndividual,
 			Double crossoverRate, Boolean mutateDuringCrossover, FitnessEvaluator fitnessEvaluator,
@@ -259,6 +262,7 @@ public class GeneticAlgorithmStrategy {
 	/**
 	 * @return the crossoverAlgorithm
 	 */
+	@SuppressWarnings("rawtypes")
 	public CrossoverAlgorithm getCrossoverAlgorithm() {
 		return crossoverAlgorithm;
 	}
@@ -267,6 +271,7 @@ public class GeneticAlgorithmStrategy {
 	 * @param crossoverAlgorithm
 	 *            the crossoverAlgorithm to set
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setCrossoverAlgorithm(CrossoverAlgorithm crossoverAlgorithm) {
 		this.crossoverAlgorithm = crossoverAlgorithm;
 	}
@@ -289,6 +294,7 @@ public class GeneticAlgorithmStrategy {
 	/**
 	 * @return the mutationAlgorithm
 	 */
+	@SuppressWarnings("rawtypes")
 	public MutationAlgorithm getMutationAlgorithm() {
 		return mutationAlgorithm;
 	}
@@ -297,6 +303,7 @@ public class GeneticAlgorithmStrategy {
 	 * @param mutationAlgorithm
 	 *            the mutationAlgorithm to set
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
 	}

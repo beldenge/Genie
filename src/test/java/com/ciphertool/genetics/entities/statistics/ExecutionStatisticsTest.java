@@ -289,6 +289,7 @@ public class ExecutionStatisticsTest {
 		assertEquals(executionStatisticsWithNullPropertiesA, executionStatisticsWithNullPropertiesB);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private static GeneticAlgorithmStrategy createGeneticAlgorithmStrategy() {
 		Integer populationSizeToSet = 1000;
 		Integer lifespanToSet = 25;
