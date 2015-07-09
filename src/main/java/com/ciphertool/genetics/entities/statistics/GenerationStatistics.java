@@ -267,12 +267,10 @@ public class GenerationStatistics implements Serializable {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(bestFitness);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result
-				+ ((executionStatistics == null) ? 0 : executionStatistics.hashCode());
+		result = prime * result + ((executionStatistics == null) ? 0 : executionStatistics.hashCode());
 		result = prime * result + (int) (executionTime ^ (executionTime >>> 32));
 		result = prime * result + generation;
-		result = prime * result
-				+ ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
+		result = prime * result + ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
@@ -289,8 +287,7 @@ public class GenerationStatistics implements Serializable {
 			return false;
 		}
 		GenerationStatistics other = (GenerationStatistics) obj;
-		if (Double.doubleToLongBits(averageFitness) != Double
-				.doubleToLongBits(other.averageFitness)) {
+		if (Double.doubleToLongBits(averageFitness) != Double.doubleToLongBits(other.averageFitness)) {
 			return false;
 		}
 		if (Double.doubleToLongBits(bestFitness) != Double.doubleToLongBits(other.bestFitness)) {
@@ -331,10 +328,9 @@ public class GenerationStatistics implements Serializable {
 		String proximity = (this.knownSolutionProximity == null) ? "" : ", proximityToKnown="
 				+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
 
-		return "[generation=" + generation + ", executionTime=" + executionTime
-				+ ", averageFitness=" + String.format("%1$,.2f", averageFitness) + ", bestFitness="
-				+ String.format("%1$,.2f", bestFitness) + proximity + ", deaths="
-				+ numberSelectedOut + ", crossovers=" + numberOfCrossovers + ", mutations="
+		return "[generation=" + generation + ", executionTime=" + executionTime + ", averageFitness="
+				+ String.format("%1$,.2f", averageFitness) + ", bestFitness=" + String.format("%1$,.2f", bestFitness)
+				+ proximity + ", deaths=" + numberSelectedOut + ", crossovers=" + numberOfCrossovers + ", mutations="
 				+ numberOfMutations + ", newSpawns=" + numberRandomlyGenerated + "]";
 	}
 }

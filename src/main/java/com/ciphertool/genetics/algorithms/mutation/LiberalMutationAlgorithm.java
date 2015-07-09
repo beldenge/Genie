@@ -48,8 +48,7 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
 		 */
-		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
-				.getGenes().size())) + 1;
+		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		for (int i = 0; i < chromosome.getGenes().size(); i++) {
@@ -114,8 +113,7 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 	protected void mutateGene(KeylessChromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
-					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()
-					+ ".  Cannot continue.");
+					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size() + ".  Cannot continue.");
 
 			return;
 		}
@@ -134,8 +132,8 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 
 			if (attempts >= MAX_FIND_ATTEMPTS) {
 				if (log.isDebugEnabled()) {
-					log.debug("Unable to find a different value for Gene " + oldGene + " after "
-							+ attempts + " attempts.  Breaking out of the loop.");
+					log.debug("Unable to find a different value for Gene " + oldGene + " after " + attempts
+							+ " attempts.  Breaking out of the loop.");
 				}
 
 				return;

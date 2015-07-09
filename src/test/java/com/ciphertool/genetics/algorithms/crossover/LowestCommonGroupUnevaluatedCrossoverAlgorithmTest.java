@@ -50,11 +50,10 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setCoin(coinToSet);
 
-		Field coinField = ReflectionUtils.findField(
-				LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "coin");
+		Field coinField = ReflectionUtils.findField(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "coin");
 		ReflectionUtils.makeAccessible(coinField);
-		Coin coinFromObject = (Coin) ReflectionUtils.getField(coinField,
-				lowestCommonGroupUnevaluatedCrossoverAlgorithm);
+		Coin coinFromObject = (Coin) ReflectionUtils
+				.getField(coinField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
 
 		assertSame(coinToSet, coinFromObject);
 	}
@@ -67,11 +66,11 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(
-				LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
+				"mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils
-				.getField(mutationAlgorithmField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
+				mutationAlgorithmField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -81,14 +80,13 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		boolean mutateDuringCrossoverToSet = true;
 
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
-		lowestCommonGroupUnevaluatedCrossoverAlgorithm
-				.setMutateDuringCrossover(mutateDuringCrossoverToSet);
+		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
 		Field mutateDuringCrossoverField = ReflectionUtils.findField(
 				LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(
-				mutateDuringCrossoverField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
+				lowestCommonGroupUnevaluatedCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}
@@ -125,8 +123,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<KeylessChromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom,
-				dad);
+		List<KeylessChromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom, dad);
 
 		assertNotNull(children);
 		assertEquals(1, children.size());
@@ -185,8 +182,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		assertEquals(0, mom.getNumberOfChildren());
 		assertEquals(0, dad.getNumberOfChildren());
 
-		List<KeylessChromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom,
-				dad);
+		List<KeylessChromosome> children = lowestCommonGroupUnevaluatedCrossoverAlgorithm.crossover(mom, dad);
 
 		assertNotNull(children);
 		assertEquals(0, children.size());
@@ -216,8 +212,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 
 		KeylessChromosome mom = getMom();
 		KeylessChromosome dad = getDad();
-		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
-				.performCrossover(mom, dad);
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -250,8 +245,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 
 		KeylessChromosome mom = getMom();
 		KeylessChromosome dad = getDad();
-		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
-				.performCrossover(mom, dad);
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNotNull(child);
 		assertFalse(child.equals(mom));
@@ -297,8 +291,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		KeylessChromosome momClone = mom.clone();
 		KeylessChromosome dadClone = dad.clone();
 
-		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
-				.performCrossover(mom, dad);
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNull(child);
 
@@ -339,8 +332,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		KeylessChromosome momClone = mom.clone();
 		KeylessChromosome dadClone = dad.clone();
 
-		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm
-				.performCrossover(mom, dad);
+		KeylessChromosome child = lowestCommonGroupUnevaluatedCrossoverAlgorithm.performCrossover(mom, dad);
 
 		assertNull(child);
 
@@ -373,8 +365,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		crossoverProgressDto.setFirstChromosomeSequencePosition(11);
 		crossoverProgressDto.setSecondChromosomeSequencePosition(11);
 
-		lowestCommonGroupUnevaluatedCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(
-				crossoverProgressDto, mom, dad);
+		lowestCommonGroupUnevaluatedCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should have the first three Genes replaced
 		assertEquals(6, mom.getGenes().size());
@@ -417,8 +408,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		crossoverProgressDto.setFirstChromosomeSequencePosition(11);
 		crossoverProgressDto.setSecondChromosomeSequencePosition(11);
 
-		lowestCommonGroupUnevaluatedCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(
-				crossoverProgressDto, mom, dad);
+		lowestCommonGroupUnevaluatedCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should remain unmodified
 		assertEquals(6, mom.getGenes().size());

@@ -75,8 +75,8 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		Field taskExecutorField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class,
 				"taskExecutor");
 		ReflectionUtils.makeAccessible(taskExecutorField);
-		TaskExecutor taskExecutorFromObject = (TaskExecutor) ReflectionUtils.getField(
-				taskExecutorField, concurrentMultigenerationalGeneticAlgorithm);
+		TaskExecutor taskExecutorFromObject = (TaskExecutor) ReflectionUtils.getField(taskExecutorField,
+				concurrentMultigenerationalGeneticAlgorithm);
 
 		assertSame(taskExecutorToSet, taskExecutorFromObject);
 	}
@@ -92,15 +92,14 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 
-		Field crossoverAlgorithmField = ReflectionUtils.findField(
-				ConcurrentMultigenerationalGeneticAlgorithm.class, "crossoverAlgorithm");
+		Field crossoverAlgorithmField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class,
+				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
 		Chromosome chromosomeToReturn = new MockKeylessChromosome();
-		when(crossoverAlgorithmMock.crossover(same(mom), same(dad))).thenReturn(
-				Arrays.asList(chromosomeToReturn));
+		when(crossoverAlgorithmMock.crossover(same(mom), same(dad))).thenReturn(Arrays.asList(chromosomeToReturn));
 
 		List<Chromosome> chromosomesReturned = null;
 		try {
@@ -122,14 +121,12 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 
 		Population population = new Population();
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
-				.thenReturn(DEFAULT_FITNESS_VALUE);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Selector selectorMock = mock(Selector.class);
 		population.setSelector(selectorMock);
-		when(selectorMock.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(
-				0, 1, 2, 3, 4);
+		when(selectorMock.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(0, 1, 2, 3, 4);
 
 		int initialPopulationSize = 50;
 
@@ -141,29 +138,27 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 
-		Field crossoverAlgorithmField = ReflectionUtils.findField(
-				ConcurrentMultigenerationalGeneticAlgorithm.class, "crossoverAlgorithm");
+		Field crossoverAlgorithmField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class,
+				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
 		Chromosome chromosomeToReturn = new MockKeylessChromosome();
-		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
-				.thenReturn(Arrays.asList(chromosomeToReturn));
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(
+				Arrays.asList(chromosomeToReturn));
 
 		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
 		strategy.setCrossoverRate(0.1);
 
-		Field strategyField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class,
-				"strategy");
+		Field strategyField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class, "strategy");
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, concurrentMultigenerationalGeneticAlgorithm, strategy);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class,
-				"ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
-				.getField(ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
+				ineligibleForReproductionField, population);
 
 		assertEquals(0, ineligibleForReproductionFromObject.size());
 
@@ -183,11 +178,9 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		// There should be 10 ineligible parents, along with the 5 children
 		assertEquals(15, ineligibleForReproductionFromObject.size());
 
-		verify(selectorMock, times(10))
-				.getNextIndex(anyListOf(Chromosome.class), any(Double.class));
+		verify(selectorMock, times(10)).getNextIndex(anyListOf(Chromosome.class), any(Double.class));
 
-		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class),
-				any(Chromosome.class));
+		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class), any(Chromosome.class));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -203,17 +196,16 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 
-		Field crossoverAlgorithmField = ReflectionUtils.findField(
-				ConcurrentMultigenerationalGeneticAlgorithm.class, "crossoverAlgorithm");
+		Field crossoverAlgorithmField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class,
+				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class,
-				"ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
-				.getField(ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
+				ineligibleForReproductionField, population);
 
 		assertEquals(0, ineligibleForReproductionFromObject.size());
 
@@ -238,15 +230,15 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 
-		Field crossoverAlgorithmField = ReflectionUtils.findField(
-				ConcurrentMultigenerationalGeneticAlgorithm.class, "crossoverAlgorithm");
+		Field crossoverAlgorithmField = ReflectionUtils.findField(ConcurrentMultigenerationalGeneticAlgorithm.class,
+				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
 		Chromosome chromosomeToReturn = new MockKeylessChromosome();
-		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
-				.thenReturn(Arrays.asList(chromosomeToReturn));
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(
+				Arrays.asList(chromosomeToReturn));
 
 		long pairsToCrossover = 5;
 		List<Chromosome> moms = new ArrayList<Chromosome>();
@@ -265,7 +257,6 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 			assertSame(chromosomeToReturn, child);
 		}
 
-		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class),
-				any(Chromosome.class));
+		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class), any(Chromosome.class));
 	}
 }

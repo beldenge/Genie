@@ -24,9 +24,7 @@ public enum SelectionAlgorithmType {
 			"Truncation",
 			TruncationSelectionAlgorithm.class,
 			"Performs selection by simply dropping all of the individuals that fall below the survival rate, based on fitness. So only the most fit individuals will survive."),
-	PROBABILISTIC(
-			"Probabilistic",
-			ProbabilisticSelectionAlgorithm.class,
+	PROBABILISTIC("Probabilistic", ProbabilisticSelectionAlgorithm.class,
 			"Performs selection by giving each individual a probabilistic chance of survival, weighted by its fitness."),
 	TOURNAMENT("Tournament", TournamentSelectionAlgorithm.class,
 			"Performs selection by running probabilistic tournaments on small groups of individuals.");
@@ -35,8 +33,7 @@ public enum SelectionAlgorithmType {
 	private Class<? extends SelectionAlgorithm> type;
 	private String description;
 
-	SelectionAlgorithmType(String displayName, Class<? extends SelectionAlgorithm> type,
-			String description) {
+	SelectionAlgorithmType(String displayName, Class<? extends SelectionAlgorithm> type, String description) {
 		this.displayName = displayName;
 		this.type = type;
 		this.description = description;

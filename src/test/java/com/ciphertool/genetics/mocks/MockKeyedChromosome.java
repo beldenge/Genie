@@ -110,11 +110,11 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 	public void setEvaluationNeeded(boolean needsEvaluation) {
 		this.needsEvaluation = needsEvaluation;
 	}
-	
+
 	@Override
 	public void putGene(Object key, Gene gene) {
 		gene.setChromosome(this);
-		
+
 		this.genes.put(key, gene);
 	}
 
@@ -146,7 +146,7 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 		 * the evaluationNeeded flag because the cloned default is correct.
 		 */
 		copyChromosome.setFitness(this.fitness.doubleValue());
-		
+
 		/*
 		 * We don't need to clone the solutionSetId or cipherId as even though
 		 * they are objects, they should remain static.
@@ -186,7 +186,7 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 
 	@Override
 	public String toString() {
-		return "MockKeyedChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness
-				+ ", genes=" + genes + "]";
+		return "MockKeyedChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness + ", genes=" + genes
+				+ "]";
 	}
 }

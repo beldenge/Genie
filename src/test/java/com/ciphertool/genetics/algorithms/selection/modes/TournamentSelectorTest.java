@@ -68,12 +68,10 @@ public class TournamentSelectorTest {
 		TournamentSelector tournamentSelector = new TournamentSelector();
 		tournamentSelector.setSelectionAccuracy(selectionAccuracyToSet);
 
-		Field selectionAccuracyField = ReflectionUtils.findField(TournamentSelector.class,
-				"selectionAccuracy");
+		Field selectionAccuracyField = ReflectionUtils.findField(TournamentSelector.class, "selectionAccuracy");
 		ReflectionUtils.makeAccessible(selectionAccuracyField);
 
-		assertEquals(selectionAccuracyToSet, ReflectionUtils.getField(selectionAccuracyField,
-				tournamentSelector));
+		assertEquals(selectionAccuracyToSet, ReflectionUtils.getField(selectionAccuracyField, tournamentSelector));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

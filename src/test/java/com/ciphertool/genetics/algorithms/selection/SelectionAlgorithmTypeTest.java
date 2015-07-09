@@ -30,8 +30,7 @@ public class SelectionAlgorithmTypeTest {
 	public void testTypes() {
 		assertEquals(3, SelectionAlgorithmType.values().length);
 
-		assertSame(ProbabilisticSelectionAlgorithm.class, SelectionAlgorithmType.PROBABILISTIC
-				.getType());
+		assertSame(ProbabilisticSelectionAlgorithm.class, SelectionAlgorithmType.PROBABILISTIC.getType());
 		assertSame(TournamentSelectionAlgorithm.class, SelectionAlgorithmType.TOURNAMENT.getType());
 		assertSame(TruncationSelectionAlgorithm.class, SelectionAlgorithmType.TRUNCATION.getType());
 	}

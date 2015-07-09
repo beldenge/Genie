@@ -31,10 +31,10 @@ import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm<KeyedChromosome<Object>> {
 	private static Logger log = Logger.getLogger(RandomValueMutationAlgorithm.class);
-	
+
 	private GeneDao geneDao;
 	private Integer maxMutationsPerChromosome;
-	
+
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
 		if (maxMutationsPerChromosome == null) {
@@ -45,17 +45,16 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
 		 */
-		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
-				.getGenes().size())) + 1;
-		
+		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
+
 		Set<Object> availableKeys = chromosome.getGenes().keySet();
-		
+
 		for (int i = 0; i < numMutations; i++) {
 			// Keep track of the mutated keys
 			mutateRandomGene(chromosome, availableKeys);
 		}
 	}
-	
+
 	/**
 	 * Performs a genetic mutation of a random Gene of the supplied Chromosome
 	 * 
@@ -70,20 +69,20 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 
 			return;
 		}
-		
+
 		Random generator = new Random();
 		Object[] keys = availableIndices.toArray();
-		
+
 		// Get a random map key
 		Object randomKey = keys[generator.nextInt(keys.length)];
-		
+
 		// Replace that map value with a randomly generated Gene
 		chromosome.getGenes().put((Object) randomKey, geneDao.findRandomGene(chromosome));
-		
+
 		// Remove the key so that it is not used for mutation again
 		availableIndices.remove(randomKey);
 	}
-	
+
 	/**
 	 * @param geneDao
 	 *            the geneDao to set

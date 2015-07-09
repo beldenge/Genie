@@ -58,7 +58,7 @@ public interface VariableLengthGene extends Gene {
 	 * @param newGene
 	 */
 	public void replaceSequence(int index, Sequence newSequence);
-	
+
 	/**
 	 * Return the size of this Gene, measured as the number of sequences making
 	 * up this Gene.

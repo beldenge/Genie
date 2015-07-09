@@ -31,15 +31,14 @@ import com.ciphertool.genetics.entities.KeyedChromosome;
 public class RandomCentromereCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
-	
+
 	@Override
-	public List<KeyedChromosome<Object>> crossover(
-			KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
+	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
 		if (mutateDuringCrossover && mutationAlgorithm == null) {
 			throw new IllegalStateException(
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
-		
+
 		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
 
 		KeyedChromosome<Object> child = performCrossover(parentA, parentB);
@@ -50,35 +49,36 @@ public class RandomCentromereCrossoverAlgorithm implements CrossoverAlgorithm<Ke
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
-		
+
 		return children;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
 		Random generator = new Random();
 		Set<Object> availableKeys = parentA.getGenes().keySet();
 		Object[] keys = availableKeys.toArray();
-		
+
 		// Get a random map key
 		int randomIndex = generator.nextInt(keys.length);
-		
+
 		// Replace all the Genes from the map key to the end of the array
 		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
 		for (int i = 0; i <= randomIndex; i++) {
 			Object nextKey = (Object) keys[i];
-			
+
 			if (null == parentB.getGenes().get(nextKey)) {
-				throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey + ", but no such key was found.  Cannot continue.");
+				throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
+						+ ", but no such key was found.  Cannot continue.");
 			}
-			
+
 			child.getGenes().put(nextKey, parentB.getGenes().get(nextKey).clone());
 		}
-		
+
 		if (mutateDuringCrossover) {
 			mutationAlgorithm.mutateChromosome(child);
 		}
-		
+
 		return child;
 	}
 

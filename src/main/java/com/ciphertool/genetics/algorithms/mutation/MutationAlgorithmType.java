@@ -22,12 +22,9 @@ package com.ciphertool.genetics.algorithms.mutation;
 public enum MutationAlgorithmType {
 	LIBERAL("Liberal", LiberalMutationAlgorithm.class,
 			"This will mutate genes by index regardless of starting position and end position"),
-	CONSERVATIVE(
-			"Conservative",
-			ConservativeMutationAlgorithm.class,
+	CONSERVATIVE("Conservative", ConservativeMutationAlgorithm.class,
 			"This will mutate genes, only replacing them with genes that match on starting position and end position"),
-	GROUP("Group", GroupMutationAlgorithm.class,
-			"This mutates groups of genes instead of individual genes"),
+	GROUP("Group", GroupMutationAlgorithm.class, "This mutates groups of genes instead of individual genes"),
 	SINGLE_SEQUENCE("Single Sequence", SingleSequenceMutationAlgorithm.class,
 			"This will mutate a single sequence of a specified gene");
 
@@ -35,8 +32,7 @@ public enum MutationAlgorithmType {
 	private Class<? extends MutationAlgorithm> type;
 	private String description;
 
-	MutationAlgorithmType(String displayName, Class<? extends MutationAlgorithm> type,
-			String description) {
+	MutationAlgorithmType(String displayName, Class<? extends MutationAlgorithm> type, String description) {
 		this.displayName = displayName;
 		this.type = type;
 		this.description = description;

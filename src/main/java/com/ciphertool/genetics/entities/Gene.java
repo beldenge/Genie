@@ -19,7 +19,6 @@
 
 package com.ciphertool.genetics.entities;
 
-
 public interface Gene extends Cloneable {
 
 	public Gene clone();

@@ -15,7 +15,7 @@ import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
-	
+
 	private TaskExecutor taskExecutor;
 
 	/**
@@ -37,13 +37,13 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			return crossoverAlgorithm.crossover(mom, dad);
 		}
 	}
-	
+
 	@Override
 	public void proceedWithNextGeneration() {
 		this.generationCount++;
 
-		GenerationStatistics generationStatistics = new GenerationStatistics(
-				this.executionStatistics, this.generationCount);
+		GenerationStatistics generationStatistics = new GenerationStatistics(this.executionStatistics,
+				this.generationCount);
 
 		long generationStart = System.currentTimeMillis();
 
@@ -108,14 +108,15 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		List<Chromosome> childrenToAdd = doConcurrentCrossovers(initialPopulationSize, moms, dads);
 
 		if (childrenToAdd == null || childrenToAdd.size() < initialPopulationSize) {
-			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size()) + " children produced from concurrent crossover execution.  Expected "
-					+ initialPopulationSize + " children.");
+			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size())
+					+ " children produced from concurrent crossover execution.  Expected " + initialPopulationSize
+					+ " children.");
 
 			return ((null == childrenToAdd) ? 0 : childrenToAdd.size());
 		}
 
 		this.population.clearIndividuals();
-		
+
 		for (Chromosome child : childrenToAdd) {
 			this.population.addIndividual(child);
 		}
@@ -166,18 +167,20 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 
 		return childrenToAdd;
 	}
-	
+
 	@Override
 	public int mutate(int initialPopulationSize) {
-		// Do nothing.  We are testing a Genetic Algorithm which has no separate "Mutate" step.
+		// Do nothing. We are testing a Genetic Algorithm which has no separate
+		// "Mutate" step.
 
 		return 0;
 	}
-	
+
 	@Override
 	public int select() {
-		// Do nothing.  We are testing a Genetic Algorithm which has no separate "Select" step.
-		
+		// Do nothing. We are testing a Genetic Algorithm which has no separate
+		// "Select" step.
+
 		return 0;
 	}
 

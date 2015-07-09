@@ -70,7 +70,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0))
+				.size());
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
@@ -83,8 +84,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 				geneOffset = attemptToReplaceGeneGroupInChild(crossoverProgressDto, child, parentB);
 			}
 
-			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
-					parentB, geneOffset);
+			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parentB, geneOffset);
 		}
 
 		if (mutateDuringCrossover) {
@@ -114,9 +114,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 	 *            the parent Chromosome
 	 * @return the geneOffset
 	 */
-	protected int attemptToReplaceGeneGroupInChild(
-			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, KeylessChromosome child,
-			KeylessChromosome parentB) {
+	protected int attemptToReplaceGeneGroupInChild(LowestCommonGroupCrossoverProgressDto crossoverProgressDto,
+			KeylessChromosome child, KeylessChromosome parentB) {
 		int childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
 		int childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
 		int parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
@@ -183,8 +182,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 			 * different than the number of Genes removed from child. The result
 			 * can be either positive or negative.
 			 */
-			return (parentEndGeneIndex - parentBeginGeneIndex)
-					- (childEndGeneIndex - childBeginGeneIndex);
+			return (parentEndGeneIndex - parentBeginGeneIndex) - (childEndGeneIndex - childBeginGeneIndex);
 		}
 	}
 

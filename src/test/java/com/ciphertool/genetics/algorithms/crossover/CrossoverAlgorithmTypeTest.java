@@ -29,17 +29,14 @@ public class CrossoverAlgorithmTypeTest {
 	public void testTypes() {
 		assertEquals(7, CrossoverAlgorithmType.values().length);
 
-		assertSame(ConservativeCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE
+		assertSame(ConservativeCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE.getType());
+		assertSame(ConservativeSinglePointCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE_SINGLE_POINT
 				.getType());
-		assertSame(ConservativeSinglePointCrossoverAlgorithm.class,
-				CrossoverAlgorithmType.CONSERVATIVE_SINGLE_POINT.getType());
-		assertSame(ConservativeUnevaluatedCrossoverAlgorithm.class,
-				CrossoverAlgorithmType.CONSERVATIVE_UNEVALUATED.getType());
+		assertSame(ConservativeUnevaluatedCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE_UNEVALUATED
+				.getType());
 		assertSame(LiberalCrossoverAlgorithm.class, CrossoverAlgorithmType.LIBERAL.getType());
-		assertSame(LiberalUnevaluatedCrossoverAlgorithm.class,
-				CrossoverAlgorithmType.LIBERAL_UNEVALUATED.getType());
-		assertSame(LowestCommonGroupCrossoverAlgorithm.class,
-				CrossoverAlgorithmType.LOWEST_COMMON_GROUP.getType());
+		assertSame(LiberalUnevaluatedCrossoverAlgorithm.class, CrossoverAlgorithmType.LIBERAL_UNEVALUATED.getType());
+		assertSame(LowestCommonGroupCrossoverAlgorithm.class, CrossoverAlgorithmType.LOWEST_COMMON_GROUP.getType());
 		assertSame(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 				CrossoverAlgorithmType.LOWEST_COMMON_GROUP_UNEVALUATED.getType());
 	}

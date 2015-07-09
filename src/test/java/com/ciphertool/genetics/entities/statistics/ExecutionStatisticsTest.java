@@ -51,12 +51,12 @@ public class ExecutionStatisticsTest {
 		assertSame(strategy.getSurvivalRate(), executionStatistics.getSurvivalRate());
 		assertSame(strategy.getMutationRate(), executionStatistics.getMutationRate());
 		assertSame(strategy.getCrossoverRate(), executionStatistics.getCrossoverRate());
-		assertEquals(strategy.getCrossoverAlgorithm().getClass().getSimpleName(),
-				executionStatistics.getCrossoverAlgorithm());
+		assertEquals(strategy.getCrossoverAlgorithm().getClass().getSimpleName(), executionStatistics
+				.getCrossoverAlgorithm());
 		assertEquals(strategy.getFitnessEvaluator().getClass().getSimpleName(), executionStatistics
 				.getFitnessEvaluator());
-		assertEquals(strategy.getMutationAlgorithm().getClass().getSimpleName(),
-				executionStatistics.getMutationAlgorithm());
+		assertEquals(strategy.getMutationAlgorithm().getClass().getSimpleName(), executionStatistics
+				.getMutationAlgorithm());
 
 		// Test that we don't run into NPE if the complex arguments are null
 		strategy.setCrossoverAlgorithm(null);
@@ -174,8 +174,7 @@ public class ExecutionStatisticsTest {
 		executionStatistics.addGenerationStatistics(new GenerationStatistics());
 		executionStatistics.addGenerationStatistics(new GenerationStatistics());
 
-		List<GenerationStatistics> generationStatisticsList = executionStatistics
-				.getGenerationStatisticsList();
+		List<GenerationStatistics> generationStatisticsList = executionStatistics.getGenerationStatisticsList();
 		generationStatisticsList.remove(0); // should throw exception
 	}
 
@@ -231,63 +230,58 @@ public class ExecutionStatisticsTest {
 
 		ExecutionStatistics base = new ExecutionStatistics(baseStartDate, baseStrategy);
 
-		ExecutionStatistics executionStatisticsEqualToBase = new ExecutionStatistics(baseStartDate,
-				baseStrategy);
+		ExecutionStatistics executionStatisticsEqualToBase = new ExecutionStatistics(baseStartDate, baseStrategy);
 		assertEquals(base, executionStatisticsEqualToBase);
 
-		ExecutionStatistics executionStatisticsWithDifferentId = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentId = new ExecutionStatistics(baseStartDate, baseStrategy);
 		executionStatisticsWithDifferentId.setId(54321);
 		assertFalse(base.equals(executionStatisticsWithDifferentId));
 
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.YEAR, -1);
 		Date differentStartDate = cal.getTime();
-		ExecutionStatistics executionStatisticsWithDifferentStartDate = new ExecutionStatistics(
-				differentStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentStartDate = new ExecutionStatistics(differentStartDate,
+				baseStrategy);
 		assertFalse(base.equals(executionStatisticsWithDifferentStartDate));
 
-		ExecutionStatistics executionStatisticsWithDifferentPopulationSize = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentPopulationSize = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
 		executionStatisticsWithDifferentPopulationSize.setPopulationSize(999);
 		assertFalse(base.equals(executionStatisticsWithDifferentPopulationSize));
 
-		ExecutionStatistics executionStatisticsWithDifferentLifespan = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentLifespan = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
 		executionStatisticsWithDifferentLifespan.setLifespan(50);
 		assertFalse(base.equals(executionStatisticsWithDifferentLifespan));
 
-		ExecutionStatistics executionStatisticsWithDifferentSurvivalRate = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentSurvivalRate = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
 		executionStatisticsWithDifferentSurvivalRate.setSurvivalRate(1.0);
 		assertFalse(base.equals(executionStatisticsWithDifferentSurvivalRate));
 
-		ExecutionStatistics executionStatisticsWithDifferentMutationRate = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentMutationRate = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
 		executionStatisticsWithDifferentMutationRate.setMutationRate(1.0);
 		assertFalse(base.equals(executionStatisticsWithDifferentMutationRate));
 
-		ExecutionStatistics executionStatisticsWithDifferentCrossoverRate = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
+		ExecutionStatistics executionStatisticsWithDifferentCrossoverRate = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
 		executionStatisticsWithDifferentCrossoverRate.setCrossoverRate(1.0);
 		assertFalse(base.equals(executionStatisticsWithDifferentCrossoverRate));
 
-		ExecutionStatistics executionStatisticsWithDifferentCrossoverAlgorithm = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
-		executionStatisticsWithDifferentCrossoverAlgorithm
-				.setCrossoverAlgorithm("differentCrossoverAlgorithm");
+		ExecutionStatistics executionStatisticsWithDifferentCrossoverAlgorithm = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
+		executionStatisticsWithDifferentCrossoverAlgorithm.setCrossoverAlgorithm("differentCrossoverAlgorithm");
 		assertFalse(base.equals(executionStatisticsWithDifferentCrossoverAlgorithm));
 
-		ExecutionStatistics executionStatisticsWithDifferentFitnessEvaluator = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
-		executionStatisticsWithDifferentFitnessEvaluator
-				.setFitnessEvaluator("differentFitnessEvaluator");
+		ExecutionStatistics executionStatisticsWithDifferentFitnessEvaluator = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
+		executionStatisticsWithDifferentFitnessEvaluator.setFitnessEvaluator("differentFitnessEvaluator");
 		assertFalse(base.equals(executionStatisticsWithDifferentFitnessEvaluator));
 
-		ExecutionStatistics executionStatisticsWithDifferentMutationAlgorithm = new ExecutionStatistics(
-				baseStartDate, baseStrategy);
-		executionStatisticsWithDifferentMutationAlgorithm
-				.setMutationAlgorithm("differentMutationAlgorithm");
+		ExecutionStatistics executionStatisticsWithDifferentMutationAlgorithm = new ExecutionStatistics(baseStartDate,
+				baseStrategy);
+		executionStatisticsWithDifferentMutationAlgorithm.setMutationAlgorithm("differentMutationAlgorithm");
 		assertFalse(base.equals(executionStatisticsWithDifferentMutationAlgorithm));
 
 		ExecutionStatistics executionStatisticsWithNullPropertiesA = new ExecutionStatistics();

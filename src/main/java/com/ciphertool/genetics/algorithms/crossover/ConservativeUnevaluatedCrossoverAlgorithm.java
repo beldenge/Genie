@@ -73,14 +73,14 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()
-					&& ((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size() == ((VariableLengthGene) parentB
-							.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())).size()) {
+					&& ((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()))
+							.size() == ((VariableLengthGene) parentB.getGenes().get(
+							crossoverProgressDto.getSecondChromosomeGeneIndex())).size()) {
 				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
 						crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 			}
 
-			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
-					parentB);
+			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parentB);
 		}
 
 		if (mutateDuringCrossover) {

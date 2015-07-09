@@ -48,8 +48,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
 		 */
-		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
-				.getGenes().size())) + 1;
+		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		for (int i = 0; i < chromosome.getGenes().size(); i++) {
@@ -62,8 +61,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			 * Choose a random number of genes constrained by the static max and
 			 * the total number of genes
 			 */
-			maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome
-					.getGenes().size())) + 1;
+			maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome.getGenes().size())) + 1;
 
 			// Keep track of the mutated indices
 			mutateRandomGeneGroup(chromosome, availableIndices, maxGenesToMutate);
@@ -104,8 +102,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		 * by iterating forwards.
 		 */
 		if (numGenesToMutate < maxGenesToMutate) {
-			int indicesAddedRight = addRightIndices(availableIndices, randomAvailableIndex,
-					maxGenesToMutate - numGenesToMutate);
+			int indicesAddedRight = addRightIndices(availableIndices, randomAvailableIndex, maxGenesToMutate
+					- numGenesToMutate);
 			numGenesToMutate += indicesAddedRight;
 		}
 
@@ -114,16 +112,16 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		 * maxGenesToMutate, then try to find more by iterating backwards.
 		 */
 		if (numGenesToMutate < maxGenesToMutate) {
-			int indicesAddedLeft = addLeftIndices(availableIndices, randomAvailableIndex,
-					maxGenesToMutate - numGenesToMutate);
+			int indicesAddedLeft = addLeftIndices(availableIndices, randomAvailableIndex, maxGenesToMutate
+					- numGenesToMutate);
 			beginIndex -= indicesAddedLeft;
 			numGenesToMutate += indicesAddedLeft;
 		}
 
 		int numGenesInserted = mutateGeneGroup(chromosome, beginIndex, numGenesToMutate);
 
-		updateAvailableIndices(availableIndices, availableIndices.indexOf(beginIndex),
-				numGenesToMutate, numGenesInserted);
+		updateAvailableIndices(availableIndices, availableIndices.indexOf(beginIndex), numGenesToMutate,
+				numGenesInserted);
 	}
 
 	/**
@@ -137,8 +135,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	 * @param maxGenesToMutate
 	 *            the maximum number of Genes to mutate
 	 */
-	protected static int addRightIndices(List<Integer> availableIndices, int randomAvailableIndex,
-			int maxGenesToMutate) {
+	protected static int addRightIndices(List<Integer> availableIndices, int randomAvailableIndex, int maxGenesToMutate) {
 
 		int indicesAdded = 0;
 
@@ -154,8 +151,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			 * because we don't want to mutate Genes that have already been
 			 * mutated as part of another group.
 			 */
-			if (availableIndices.get(randomAvailableIndex + i + 1) - 1 > availableIndices
-					.get(randomAvailableIndex + i)) {
+			if (availableIndices.get(randomAvailableIndex + i + 1) - 1 > availableIndices.get(randomAvailableIndex + i)) {
 				break;
 			}
 
@@ -181,8 +177,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	 * @param maxGenesToMutate
 	 *            the maximum number of Genes to mutate
 	 */
-	protected static int addLeftIndices(List<Integer> availableIndices, int randomAvailableIndex,
-			int maxGenesToMutate) {
+	protected static int addLeftIndices(List<Integer> availableIndices, int randomAvailableIndex, int maxGenesToMutate) {
 
 		int indicesAdded = 0;
 
@@ -198,8 +193,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			 * because we don't want to mutate Genes that have already been
 			 * mutated as part of another group.
 			 */
-			if (availableIndices.get(randomAvailableIndex - i - 1) + 1 < availableIndices
-					.get(randomAvailableIndex - i)) {
+			if (availableIndices.get(randomAvailableIndex - i - 1) + 1 < availableIndices.get(randomAvailableIndex - i)) {
 				break;
 			}
 
@@ -228,8 +222,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	 * @param numGenesInserted
 	 *            the number of Genes inserted
 	 */
-	protected static void updateAvailableIndices(List<Integer> availableIndices, int beginIndex,
-			int numGenesRemoved, int numGenesInserted) {
+	protected static void updateAvailableIndices(List<Integer> availableIndices, int beginIndex, int numGenesRemoved,
+			int numGenesInserted) {
 
 		int differenceBetweenInsertedAndRemoved = numGenesInserted - numGenesRemoved;
 
@@ -264,17 +258,14 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		}
 
 		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
-			throw new IllegalArgumentException(
-					"Unable to mutate Gene group from Chromosome starting at index "
-							+ beginIndex
-							+ ", as this index is out of bounds.  Expecting an index in the range [0-"
-							+ (chromosome.getGenes().size() - 1) + "].");
+			throw new IllegalArgumentException("Unable to mutate Gene group from Chromosome starting at index "
+					+ beginIndex + ", as this index is out of bounds.  Expecting an index in the range [0-"
+					+ (chromosome.getGenes().size() - 1) + "].");
 		}
 
 		if (numGenes > chromosome.getGenes().size() - beginIndex) {
-			throw new IllegalArgumentException("Unable to mutate " + numGenes
-					+ " Genes at beginIndex " + beginIndex + " because there are only "
-					+ (chromosome.getGenes().size() - beginIndex)
+			throw new IllegalArgumentException("Unable to mutate " + numGenes + " Genes at beginIndex " + beginIndex
+					+ " because there are only " + (chromosome.getGenes().size() - beginIndex)
 					+ " Genes available to mutate at this index.");
 		}
 
@@ -311,17 +302,14 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		}
 
 		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
-			throw new IllegalArgumentException(
-					"Unable to remove Genes from Chromosome starting at index "
-							+ beginIndex
-							+ ", as this index is out of bounds.  Expecting an index in the range [0-"
-							+ (chromosome.getGenes().size() - 1) + "].");
+			throw new IllegalArgumentException("Unable to remove Genes from Chromosome starting at index " + beginIndex
+					+ ", as this index is out of bounds.  Expecting an index in the range [0-"
+					+ (chromosome.getGenes().size() - 1) + "].");
 		}
 
 		if (numGenes > chromosome.getGenes().size() - beginIndex) {
-			throw new IllegalArgumentException("Unable to remove " + numGenes
-					+ " Genes at beginIndex " + beginIndex + " because there are only "
-					+ (chromosome.getGenes().size() - beginIndex)
+			throw new IllegalArgumentException("Unable to remove " + numGenes + " Genes at beginIndex " + beginIndex
+					+ " because there are only " + (chromosome.getGenes().size() - beginIndex)
 					+ " Genes to remove at this index.");
 		}
 
@@ -353,8 +341,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			Gene geneToAdd = geneDao.findRandomGene(chromosome);
 
 			if (geneToAdd != null && ((VariableLengthGene) geneToAdd).size() > (sequencesRemoved - sequencesAdded)) {
-				geneToAdd = geneDao.findRandomGeneOfLength(chromosome, sequencesRemoved
-						- sequencesAdded);
+				geneToAdd = geneDao.findRandomGeneOfLength(chromosome, sequencesRemoved - sequencesAdded);
 			}
 
 			if (geneToAdd == null) {
@@ -386,17 +373,14 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		}
 
 		if (beginIndex < 0 || beginIndex >= chromosome.getGenes().size()) {
-			throw new IllegalArgumentException(
-					"Unable to count Genes from Chromosome starting at index "
-							+ beginIndex
-							+ ", as this index is out of bounds.  Expecting an index in the range [0-"
-							+ (chromosome.getGenes().size() - 1) + "].");
+			throw new IllegalArgumentException("Unable to count Genes from Chromosome starting at index " + beginIndex
+					+ ", as this index is out of bounds.  Expecting an index in the range [0-"
+					+ (chromosome.getGenes().size() - 1) + "].");
 		}
 
 		if (numGenes > chromosome.getGenes().size() - beginIndex) {
-			throw new IllegalArgumentException("Unable to count " + numGenes
-					+ " Genes at beginIndex " + beginIndex + " because there are only "
-					+ (chromosome.getGenes().size() - beginIndex)
+			throw new IllegalArgumentException("Unable to count " + numGenes + " Genes at beginIndex " + beginIndex
+					+ " because there are only " + (chromosome.getGenes().size() - beginIndex)
 					+ " Genes to remove at this index.");
 		}
 

@@ -144,8 +144,7 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 			geneIndex++;
 
 			if (geneIndex >= chromosome.getGenes().size()) {
-				throw new IllegalStateException("Attempted to find Gene beginning at centromere "
-						+ centromere
+				throw new IllegalStateException("Attempted to find Gene beginning at centromere " + centromere
 						+ " but no Gene was found.  This is indicative of a bad centromere.");
 			}
 

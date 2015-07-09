@@ -109,12 +109,12 @@ public class ExecutionStatistics implements Serializable {
 		this.survivalRate = strategy.getSurvivalRate();
 		this.mutationRate = strategy.getMutationRate();
 		this.crossoverRate = strategy.getCrossoverRate();
-		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy
-				.getCrossoverAlgorithm().getClass().getSimpleName() : null;
-		this.fitnessEvaluator = (strategy.getFitnessEvaluator() != null) ? strategy
-				.getFitnessEvaluator().getClass().getSimpleName() : null;
-		this.mutationAlgorithm = (strategy.getMutationAlgorithm() != null) ? strategy
-				.getMutationAlgorithm().getClass().getSimpleName() : null;
+		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy.getCrossoverAlgorithm()
+				.getClass().getSimpleName() : null;
+		this.fitnessEvaluator = (strategy.getFitnessEvaluator() != null) ? strategy.getFitnessEvaluator().getClass()
+				.getSimpleName() : null;
+		this.mutationAlgorithm = (strategy.getMutationAlgorithm() != null) ? strategy.getMutationAlgorithm().getClass()
+				.getSimpleName() : null;
 	}
 
 	/**
@@ -309,8 +309,7 @@ public class ExecutionStatistics implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((crossoverAlgorithm == null) ? 0 : crossoverAlgorithm.hashCode());
+		result = prime * result + ((crossoverAlgorithm == null) ? 0 : crossoverAlgorithm.hashCode());
 		result = prime * result + ((crossoverRate == null) ? 0 : crossoverRate.hashCode());
 		result = prime * result + ((endDateTime == null) ? 0 : endDateTime.hashCode());
 		result = prime * result + ((fitnessEvaluator == null) ? 0 : fitnessEvaluator.hashCode());
@@ -418,11 +417,10 @@ public class ExecutionStatistics implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ExecutionStatistics [id=" + id + ", startDateTime=" + startDateTime
-				+ ", endDateTime=" + endDateTime + ", populationSize=" + populationSize
-				+ ", lifespan=" + lifespan + ", survivalRate=" + survivalRate + ", mutationRate="
-				+ mutationRate + ", crossoverRate=" + crossoverRate + ", crossoverAlgorithm="
-				+ crossoverAlgorithm + ", fitnessEvaluator=" + fitnessEvaluator
-				+ ", mutationAlgorithm=" + mutationAlgorithm + "]";
+		return "ExecutionStatistics [id=" + id + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime
+				+ ", populationSize=" + populationSize + ", lifespan=" + lifespan + ", survivalRate=" + survivalRate
+				+ ", mutationRate=" + mutationRate + ", crossoverRate=" + crossoverRate + ", crossoverAlgorithm="
+				+ crossoverAlgorithm + ", fitnessEvaluator=" + fitnessEvaluator + ", mutationAlgorithm="
+				+ mutationAlgorithm + "]";
 	}
 }

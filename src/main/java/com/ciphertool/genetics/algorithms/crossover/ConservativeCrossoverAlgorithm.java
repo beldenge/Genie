@@ -85,8 +85,7 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 				attemptToReplaceGeneInChild(crossoverProgressDto, child, parentB);
 			}
 
-			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
-					parentB);
+			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parentB);
 		}
 
 		if (mutateDuringCrossover) {
@@ -104,15 +103,14 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 		return child;
 	}
 
-	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto,
-			KeylessChromosome child, KeylessChromosome parentB) {
-		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())
-				.clone();
+	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto, KeylessChromosome child,
+			KeylessChromosome parentB) {
+		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).clone();
 
 		double originalFitness = child.getFitness();
 
-		child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes()
-				.get(crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
+		child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
+				crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 
 		double newFitness = fitnessEvaluator.evaluate(child);
 		child.setFitness(newFitness);

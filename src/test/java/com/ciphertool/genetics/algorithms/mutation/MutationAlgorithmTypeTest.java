@@ -29,11 +29,9 @@ public class MutationAlgorithmTypeTest {
 	public void testTypes() {
 		assertEquals(4, MutationAlgorithmType.values().length);
 
-		assertEquals(ConservativeMutationAlgorithm.class, MutationAlgorithmType.CONSERVATIVE
-				.getType());
+		assertEquals(ConservativeMutationAlgorithm.class, MutationAlgorithmType.CONSERVATIVE.getType());
 		assertEquals(GroupMutationAlgorithm.class, MutationAlgorithmType.GROUP.getType());
 		assertEquals(LiberalMutationAlgorithm.class, MutationAlgorithmType.LIBERAL.getType());
-		assertEquals(SingleSequenceMutationAlgorithm.class, MutationAlgorithmType.SINGLE_SEQUENCE
-				.getType());
+		assertEquals(SingleSequenceMutationAlgorithm.class, MutationAlgorithmType.SINGLE_SEQUENCE.getType());
 	}
 }

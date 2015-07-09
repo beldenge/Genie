@@ -42,8 +42,7 @@ public class AlphaSelector implements Selector {
 		for (int i = 0; i < individuals.size(); i++) {
 			currentIndividual = individuals.get(i);
 
-			if (bestFitIndex == null
-					|| currentIndividual.getFitness() > bestFitIndividual.getFitness()) {
+			if (bestFitIndex == null || currentIndividual.getFitness() > bestFitIndividual.getFitness()) {
 				bestFitIndividual = currentIndividual;
 				bestFitIndex = i;
 			}

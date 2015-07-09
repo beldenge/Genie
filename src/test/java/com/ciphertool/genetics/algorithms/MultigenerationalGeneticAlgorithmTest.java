@@ -84,8 +84,8 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field executionStatisticsDaoField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"executionStatisticsDao");
 		ReflectionUtils.makeAccessible(executionStatisticsDaoField);
-		ExecutionStatisticsDao executionStatisticsDaoFromObject = (ExecutionStatisticsDao) ReflectionUtils
-				.getField(executionStatisticsDaoField, multigenerationalGeneticAlgorithm);
+		ExecutionStatisticsDao executionStatisticsDaoFromObject = (ExecutionStatisticsDao) ReflectionUtils.getField(
+				executionStatisticsDaoField, multigenerationalGeneticAlgorithm);
 
 		assertSame(executionStatisticsDaoToSet, executionStatisticsDaoFromObject);
 	}
@@ -123,48 +123,45 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		Field strategyField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "strategy");
 		ReflectionUtils.makeAccessible(strategyField);
-		GeneticAlgorithmStrategy strategyFromObject = (GeneticAlgorithmStrategy) ReflectionUtils
-				.getField(strategyField, multigenerationalGeneticAlgorithm);
+		GeneticAlgorithmStrategy strategyFromObject = (GeneticAlgorithmStrategy) ReflectionUtils.getField(
+				strategyField, multigenerationalGeneticAlgorithm);
 
 		assertSame(strategyToSet, strategyFromObject);
 		verify(populationMock, times(1)).setGeneticStructure(same(geneticStructure));
 		verify(populationMock, times(1)).setFitnessEvaluator(same(fitnessEvaluatorMock));
 		verify(populationMock, times(1)).setLifespan(eq(lifeSpan));
-		verify(populationMock, times(1)).setKnownSolutionFitnessEvaluator(
-				same(knownSolutionFitnessEvaluatorMock));
+		verify(populationMock, times(1)).setKnownSolutionFitnessEvaluator(same(knownSolutionFitnessEvaluatorMock));
 		verify(populationMock, times(1)).setCompareToKnownSolution(eq(compareToKnownSolution));
 		verifyNoMoreInteractions(populationMock);
 
 		verify(crossoverAlgorithmMock, times(1)).setMutationAlgorithm(same(mutationAlgorithmMock));
-		verify(crossoverAlgorithmMock, times(1))
-				.setMutateDuringCrossover(eq(mutateDuringCrossover));
+		verify(crossoverAlgorithmMock, times(1)).setMutateDuringCrossover(eq(mutateDuringCrossover));
 		verifyNoMoreInteractions(crossoverAlgorithmMock);
 
-		verify(mutationAlgorithmMock, times(1)).setMaxMutationsPerChromosome(
-				eq(maxMutationsPerIndividual));
+		verify(mutationAlgorithmMock, times(1)).setMaxMutationsPerChromosome(eq(maxMutationsPerIndividual));
 		verifyNoMoreInteractions(mutationAlgorithmMock);
 
 		Field crossoverAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
-		CrossoverAlgorithm crossoverAlgorithmFromObject = (CrossoverAlgorithm) ReflectionUtils
-				.getField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm);
+		CrossoverAlgorithm crossoverAlgorithmFromObject = (CrossoverAlgorithm) ReflectionUtils.getField(
+				crossoverAlgorithmField, multigenerationalGeneticAlgorithm);
 
 		assertSame(crossoverAlgorithmMock, crossoverAlgorithmFromObject);
 
 		Field mutationAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils
-				.getField(mutationAlgorithmField, multigenerationalGeneticAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
+				mutationAlgorithmField, multigenerationalGeneticAlgorithm);
 
 		assertSame(mutationAlgorithmMock, mutationAlgorithmFromObject);
 
 		Field selectionAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"selectionAlgorithm");
 		ReflectionUtils.makeAccessible(selectionAlgorithmField);
-		SelectionAlgorithm selectionAlgorithmFromObject = (SelectionAlgorithm) ReflectionUtils
-				.getField(selectionAlgorithmField, multigenerationalGeneticAlgorithm);
+		SelectionAlgorithm selectionAlgorithmFromObject = (SelectionAlgorithm) ReflectionUtils.getField(
+				selectionAlgorithmField, multigenerationalGeneticAlgorithm);
 
 		assertSame(selectionAlgorithmMock, selectionAlgorithmFromObject);
 	}
@@ -211,16 +208,15 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(generationCountField);
 		ReflectionUtils.setField(generationCountField, multigenerationalGeneticAlgorithm, 1);
 
-		Field stopRequestedField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
-				"stopRequested");
+		Field stopRequestedField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "stopRequested");
 		ReflectionUtils.makeAccessible(stopRequestedField);
 		ReflectionUtils.setField(stopRequestedField, multigenerationalGeneticAlgorithm, true);
 
 		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"executionStatistics");
 		ReflectionUtils.makeAccessible(executionStatisticsField);
-		ExecutionStatistics executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils
-				.getField(executionStatisticsField, multigenerationalGeneticAlgorithm);
+		ExecutionStatistics executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils.getField(
+				executionStatisticsField, multigenerationalGeneticAlgorithm);
 		assertNull(executionStatisticsFromObject);
 
 		multigenerationalGeneticAlgorithm.initialize();
@@ -229,25 +225,24 @@ public class MultigenerationalGeneticAlgorithmTest {
 				multigenerationalGeneticAlgorithm);
 		boolean stopRequestedFromObject = (boolean) ReflectionUtils.getField(stopRequestedField,
 				multigenerationalGeneticAlgorithm);
-		executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils.getField(
-				executionStatisticsField, multigenerationalGeneticAlgorithm);
+		executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils.getField(executionStatisticsField,
+				multigenerationalGeneticAlgorithm);
 
 		assertEquals(0, generationCountFromObject);
 		assertFalse(stopRequestedFromObject);
 		assertNotNull(executionStatisticsFromObject);
-		assertTrue(executionStatisticsFromObject.getStartDateTime().getTime() >= beforeInitialize
-				.getTime());
+		assertTrue(executionStatisticsFromObject.getStartDateTime().getTime() >= beforeInitialize.getTime());
 		assertEquals(populationSize, executionStatisticsFromObject.getPopulationSize().intValue());
 		assertEquals(lifeSpan, executionStatisticsFromObject.getLifespan().intValue());
 		assertEquals(new Double(survivalRate), executionStatisticsFromObject.getSurvivalRate());
 		assertEquals(new Double(mutationRate), executionStatisticsFromObject.getMutationRate());
 		assertEquals(new Double(crossoverRate), executionStatisticsFromObject.getCrossoverRate());
-		assertEquals(crossoverAlgorithmMock.getClass().getSimpleName(),
-				executionStatisticsFromObject.getCrossoverAlgorithm());
+		assertEquals(crossoverAlgorithmMock.getClass().getSimpleName(), executionStatisticsFromObject
+				.getCrossoverAlgorithm());
 		assertEquals(fitnessEvaluatorMock.getClass().getSimpleName(), executionStatisticsFromObject
 				.getFitnessEvaluator());
-		assertEquals(mutationAlgorithmMock.getClass().getSimpleName(),
-				executionStatisticsFromObject.getMutationAlgorithm());
+		assertEquals(mutationAlgorithmMock.getClass().getSimpleName(), executionStatisticsFromObject
+				.getMutationAlgorithm());
 
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).breed(eq(populationSize));
@@ -269,8 +264,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"executionStatistics");
 		ReflectionUtils.makeAccessible(executionStatisticsField);
-		ReflectionUtils.setField(executionStatisticsField, multigenerationalGeneticAlgorithm,
-				executionStatistics);
+		ReflectionUtils.setField(executionStatisticsField, multigenerationalGeneticAlgorithm, executionStatistics);
 
 		Field generationCountField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"generationCount");
@@ -283,8 +277,8 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		verify(executionStatisticsDaoToSet, times(1)).insert(same(executionStatistics));
 
-		ExecutionStatistics executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils
-				.getField(executionStatisticsField, multigenerationalGeneticAlgorithm);
+		ExecutionStatistics executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils.getField(
+				executionStatisticsField, multigenerationalGeneticAlgorithm);
 		assertNull(executionStatisticsFromObject);
 	}
 
@@ -327,8 +321,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field selectionAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"selectionAlgorithm");
 		ReflectionUtils.makeAccessible(selectionAlgorithmField);
-		ReflectionUtils.setField(selectionAlgorithmField, multigenerationalGeneticAlgorithm,
-				selectionAlgorithmMock);
+		ReflectionUtils.setField(selectionAlgorithmField, multigenerationalGeneticAlgorithm, selectionAlgorithmMock);
 
 		Field generationCountField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"generationCount");
@@ -339,27 +332,24 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field mutationAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		ReflectionUtils.setField(mutationAlgorithmField, multigenerationalGeneticAlgorithm,
-				mutationAlgorithmMock);
+		ReflectionUtils.setField(mutationAlgorithmField, multigenerationalGeneticAlgorithm, mutationAlgorithmMock);
 
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 
 		Field crossoverAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
-		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm,
-				crossoverAlgorithmMock);
+		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
 		Chromosome chromosomeToReturn = new MockKeylessChromosome();
-		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
-				.thenReturn(Arrays.asList(chromosomeToReturn));
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(
+				Arrays.asList(chromosomeToReturn));
 
 		ExecutionStatistics executionStatistics = new ExecutionStatistics();
 		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"executionStatistics");
 		ReflectionUtils.makeAccessible(executionStatisticsField);
-		ReflectionUtils.setField(executionStatisticsField, multigenerationalGeneticAlgorithm,
-				executionStatistics);
+		ReflectionUtils.setField(executionStatisticsField, multigenerationalGeneticAlgorithm, executionStatistics);
 
 		assertEquals(0, executionStatistics.getGenerationStatisticsList().size());
 
@@ -377,8 +367,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 				multigenerationalGeneticAlgorithm);
 		assertEquals(1, generationCountFromObject);
 
-		verify(selectionAlgorithmMock, times(1)).select(same(populationMock), eq(populationSize),
-				eq(survivalRate));
+		verify(selectionAlgorithmMock, times(1)).select(same(populationMock), eq(populationSize), eq(survivalRate));
 		verifyNoMoreInteractions(selectionAlgorithmMock);
 
 		verify(populationMock, times(30)).selectIndex();
@@ -395,8 +384,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(mutationAlgorithmMock, times(10)).mutateChromosome(any(Chromosome.class));
 		verifyNoMoreInteractions(mutationAlgorithmMock);
 
-		verify(crossoverAlgorithmMock, times(10)).crossover(any(Chromosome.class),
-				any(Chromosome.class));
+		verify(crossoverAlgorithmMock, times(10)).crossover(any(Chromosome.class), any(Chromosome.class));
 		verifyNoMoreInteractions(crossoverAlgorithmMock);
 	}
 
@@ -438,8 +426,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		 * This must be set via reflection because the setter method does its
 		 * own validation
 		 */
-		Field survivalRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class,
-				"survivalRate");
+		Field survivalRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "survivalRate");
 		ReflectionUtils.makeAccessible(survivalRateField);
 		ReflectionUtils.setField(survivalRateField, strategyToSet, -0.1);
 
@@ -447,8 +434,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		 * This must be set via reflection because the setter method does its
 		 * own validation
 		 */
-		Field mutationRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class,
-				"mutationRate");
+		Field mutationRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "mutationRate");
 		ReflectionUtils.makeAccessible(mutationRateField);
 		ReflectionUtils.setField(mutationRateField, strategyToSet, -0.1);
 
@@ -458,8 +444,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		 * This must be set via reflection because the setter method does its
 		 * own validation
 		 */
-		Field crossoverRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class,
-				"crossoverRate");
+		Field crossoverRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "crossoverRate");
 		ReflectionUtils.makeAccessible(crossoverRateField);
 		ReflectionUtils.setField(crossoverRateField, strategyToSet, -0.1);
 
@@ -527,13 +512,11 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field selectionAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"selectionAlgorithm");
 		ReflectionUtils.makeAccessible(selectionAlgorithmField);
-		ReflectionUtils.setField(selectionAlgorithmField, multigenerationalGeneticAlgorithm,
-				selectionAlgorithmMock);
+		ReflectionUtils.setField(selectionAlgorithmField, multigenerationalGeneticAlgorithm, selectionAlgorithmMock);
 
 		multigenerationalGeneticAlgorithm.select();
 
-		verify(selectionAlgorithmMock, times(1)).select(same(population), eq(populationSize),
-				eq(survivalRate));
+		verify(selectionAlgorithmMock, times(1)).select(same(population), eq(populationSize), eq(survivalRate));
 		verifyNoMoreInteractions(selectionAlgorithmMock);
 	}
 
@@ -544,14 +527,12 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		Population population = new Population();
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class)))
-				.thenReturn(DEFAULT_FITNESS_VALUE);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		Selector selectorMock = mock(Selector.class);
 		population.setSelector(selectorMock);
-		when(selectorMock.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(
-				0, 1, 2, 3, 4);
+		when(selectorMock.getNextIndex(anyListOf(Chromosome.class), any(Double.class))).thenReturn(0, 1, 2, 3, 4);
 
 		int initialPopulationSize = 50;
 
@@ -566,12 +547,11 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field crossoverAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
-		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm,
-				crossoverAlgorithmMock);
+		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
 		Chromosome chromosomeToReturn = new MockKeylessChromosome();
-		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class)))
-				.thenReturn(Arrays.asList(chromosomeToReturn));
+		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(
+				Arrays.asList(chromosomeToReturn));
 
 		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
 		strategy.setCrossoverRate(0.1);
@@ -580,11 +560,10 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, multigenerationalGeneticAlgorithm, strategy);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class,
-				"ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
-				.getField(ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
+				ineligibleForReproductionField, population);
 
 		assertEquals(0, ineligibleForReproductionFromObject.size());
 
@@ -604,11 +583,9 @@ public class MultigenerationalGeneticAlgorithmTest {
 		// There should be 10 ineligible parents, along with the 5 children
 		assertEquals(15, ineligibleForReproductionFromObject.size());
 
-		verify(selectorMock, times(10))
-				.getNextIndex(anyListOf(Chromosome.class), any(Double.class));
+		verify(selectorMock, times(10)).getNextIndex(anyListOf(Chromosome.class), any(Double.class));
 
-		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class),
-				any(Chromosome.class));
+		verify(crossoverAlgorithmMock, times(5)).crossover(any(Chromosome.class), any(Chromosome.class));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -627,14 +604,12 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field crossoverAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"crossoverAlgorithm");
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
-		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm,
-				crossoverAlgorithmMock);
+		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class,
-				"ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils
-				.getField(ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
+				ineligibleForReproductionField, population);
 
 		assertEquals(0, ineligibleForReproductionFromObject.size());
 
@@ -670,8 +645,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, multigenerationalGeneticAlgorithm, strategyToSet);
 
-		long pairsToCrossover = multigenerationalGeneticAlgorithm
-				.determinePairsToCrossover(initialPopulationSize);
+		long pairsToCrossover = multigenerationalGeneticAlgorithm.determinePairsToCrossover(initialPopulationSize);
 
 		assertEquals(50, pairsToCrossover);
 	}
@@ -695,8 +669,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, multigenerationalGeneticAlgorithm, strategyToSet);
 
-		long pairsToCrossover = multigenerationalGeneticAlgorithm
-				.determinePairsToCrossover(initialPopulationSize);
+		long pairsToCrossover = multigenerationalGeneticAlgorithm.determinePairsToCrossover(initialPopulationSize);
 
 		assertEquals(25, pairsToCrossover);
 	}
@@ -726,8 +699,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field mutationAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		ReflectionUtils.setField(mutationAlgorithmField, multigenerationalGeneticAlgorithm,
-				mutationAlgorithmMock);
+		ReflectionUtils.setField(mutationAlgorithmField, multigenerationalGeneticAlgorithm, mutationAlgorithmMock);
 
 		multigenerationalGeneticAlgorithm.mutate(initialPopulationSize);
 
@@ -768,21 +740,18 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field mutationAlgorithmField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		ReflectionUtils.setField(mutationAlgorithmField, multigenerationalGeneticAlgorithm,
-				mutationAlgorithmMock);
+		ReflectionUtils.setField(mutationAlgorithmField, multigenerationalGeneticAlgorithm, mutationAlgorithmMock);
 
 		multigenerationalGeneticAlgorithm.mutate(initialPopulationSize);
 
 		verify(populationMock, times(actualPopulationSize)).selectIndex();
 		verify(populationMock, times(actualPopulationSize)).getIndividuals();
 		verify(populationMock, times(actualPopulationSize)).makeIneligibleForReproduction(index);
-		verify(populationMock, times(actualPopulationSize)).addIndividualAsIneligible(
-				any(Chromosome.class));
+		verify(populationMock, times(actualPopulationSize)).addIndividualAsIneligible(any(Chromosome.class));
 		verify(populationMock, times(1)).size();
 		verifyNoMoreInteractions(populationMock);
 
-		verify(mutationAlgorithmMock, times(actualPopulationSize)).mutateChromosome(
-				any(Chromosome.class));
+		verify(mutationAlgorithmMock, times(actualPopulationSize)).mutateChromosome(any(Chromosome.class));
 		verifyNoMoreInteractions(mutationAlgorithmMock);
 	}
 
@@ -821,8 +790,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
 				"executionStatistics");
 		ReflectionUtils.makeAccessible(executionStatisticsField);
-		ReflectionUtils.setField(executionStatisticsField, multigenerationalGeneticAlgorithm,
-				executionStatistics);
+		ReflectionUtils.setField(executionStatisticsField, multigenerationalGeneticAlgorithm, executionStatistics);
 
 		multigenerationalGeneticAlgorithm.persistStatistics();
 
@@ -833,8 +801,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testRequestStop() {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
-		Field stopRequestedField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
-				"stopRequested");
+		Field stopRequestedField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "stopRequested");
 		ReflectionUtils.makeAccessible(stopRequestedField);
 		boolean stopRequestedFromObject = (boolean) ReflectionUtils.getField(stopRequestedField,
 				multigenerationalGeneticAlgorithm);

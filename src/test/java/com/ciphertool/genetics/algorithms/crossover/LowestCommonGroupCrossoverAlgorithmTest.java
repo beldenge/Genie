@@ -53,8 +53,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		LowestCommonGroupCrossoverAlgorithm lowestCommonGroupCrossoverAlgorithm = new LowestCommonGroupCrossoverAlgorithm();
 		lowestCommonGroupCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorToSet);
 
-		Field fitnessEvaluatorField = ReflectionUtils.findField(
-				LowestCommonGroupCrossoverAlgorithm.class, "fitnessEvaluator");
+		Field fitnessEvaluatorField = ReflectionUtils.findField(LowestCommonGroupCrossoverAlgorithm.class,
+				"fitnessEvaluator");
 		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
 		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
 				fitnessEvaluatorField, lowestCommonGroupCrossoverAlgorithm);
@@ -70,11 +70,11 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		LowestCommonGroupCrossoverAlgorithm lowestCommonGroupCrossoverAlgorithm = new LowestCommonGroupCrossoverAlgorithm();
 		lowestCommonGroupCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(
-				LowestCommonGroupCrossoverAlgorithm.class, "mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(LowestCommonGroupCrossoverAlgorithm.class,
+				"mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils
-				.getField(mutationAlgorithmField, lowestCommonGroupCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
+				mutationAlgorithmField, lowestCommonGroupCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -86,11 +86,11 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		LowestCommonGroupCrossoverAlgorithm lowestCommonGroupCrossoverAlgorithm = new LowestCommonGroupCrossoverAlgorithm();
 		lowestCommonGroupCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(
-				LowestCommonGroupCrossoverAlgorithm.class, "mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(LowestCommonGroupCrossoverAlgorithm.class,
+				"mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(
-				mutateDuringCrossoverField, lowestCommonGroupCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
+				lowestCommonGroupCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}
@@ -115,8 +115,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		LowestCommonGroupCrossoverAlgorithm lowestCommonGroupCrossoverAlgorithm = new LowestCommonGroupCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(
-				-999.0).thenReturn(999.0).thenReturn(-999.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(-999.0).thenReturn(
+				999.0).thenReturn(-999.0);
 		/*
 		 * We do not need to stub out the evaluate() method because the fitness
 		 * value defaults to zero, and this algorithm allows replacements where
@@ -217,8 +217,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		LowestCommonGroupCrossoverAlgorithm lowestCommonGroupCrossoverAlgorithm = new LowestCommonGroupCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(
-				-999.0).thenReturn(999.0).thenReturn(-999.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(-999.0).thenReturn(
+				999.0).thenReturn(-999.0);
 		/*
 		 * We do not need to stub out the evaluate() method because the fitness
 		 * value defaults to zero, and this algorithm allows replacements where
@@ -254,8 +254,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		LowestCommonGroupCrossoverAlgorithm lowestCommonGroupCrossoverAlgorithm = new LowestCommonGroupCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(
-				-999.0).thenReturn(999.0).thenReturn(-999.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(-999.0).thenReturn(
+				999.0).thenReturn(-999.0);
 		/*
 		 * We do not need to stub out the evaluate() method because the fitness
 		 * value defaults to zero, and this algorithm allows replacements where
@@ -394,8 +394,7 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		crossoverProgressDto.setFirstChromosomeSequencePosition(11);
 		crossoverProgressDto.setSecondChromosomeSequencePosition(11);
 
-		lowestCommonGroupCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto,
-				mom, dad);
+		lowestCommonGroupCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should have the first three Genes replaced
 		assertEquals(6, mom.getGenes().size());
@@ -438,8 +437,7 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		crossoverProgressDto.setFirstChromosomeSequencePosition(11);
 		crossoverProgressDto.setSecondChromosomeSequencePosition(11);
 
-		lowestCommonGroupCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto,
-				mom, dad);
+		lowestCommonGroupCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should have the first three Genes replaced
 		assertEquals(6, mom.getGenes().size());
@@ -482,8 +480,7 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		crossoverProgressDto.setFirstChromosomeSequencePosition(11);
 		crossoverProgressDto.setSecondChromosomeSequencePosition(11);
 
-		lowestCommonGroupCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto,
-				mom, dad);
+		lowestCommonGroupCrossoverAlgorithm.attemptToReplaceGeneGroupInChild(crossoverProgressDto, mom, dad);
 
 		// The "mom" Chromosome should remain unmodified
 		assertEquals(6, mom.getGenes().size());

@@ -69,7 +69,8 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0))
+				.size());
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an
@@ -82,8 +83,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 				attemptToReplaceGeneGroupInChild(crossoverProgressDto, child, parentB);
 			}
 
-			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child,
-					parentB, geneOffset);
+			LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parentB, geneOffset);
 		}
 
 		if (mutateDuringCrossover) {
@@ -113,9 +113,8 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	 *            the parent Chromosome
 	 * @return the geneOffset
 	 */
-	protected int attemptToReplaceGeneGroupInChild(
-			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, KeylessChromosome child,
-			KeylessChromosome parentB) {
+	protected int attemptToReplaceGeneGroupInChild(LowestCommonGroupCrossoverProgressDto crossoverProgressDto,
+			KeylessChromosome child, KeylessChromosome parentB) {
 		int childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
 		int childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
 		int parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();
@@ -138,8 +137,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 			 */
 			int insertCount = 0;
 			for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
-				child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(j)
-						.clone());
+				child.insertGene(childBeginGeneIndex + insertCount, parentB.getGenes().get(j).clone());
 
 				insertCount++;
 			}
@@ -150,8 +148,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 			 * different than the number of Genes removed from child. The result
 			 * can be either positive or negative.
 			 */
-			return (parentEndGeneIndex - parentBeginGeneIndex)
-					- (childEndGeneIndex - childBeginGeneIndex);
+			return (parentEndGeneIndex - parentBeginGeneIndex) - (childEndGeneIndex - childBeginGeneIndex);
 		} else {
 			return 0;
 		}

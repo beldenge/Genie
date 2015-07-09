@@ -87,11 +87,9 @@ public class RandomValueMutationAlgorithmTest {
 		RandomValueMutationAlgorithm randomValueMutationAlgorithm = new RandomValueMutationAlgorithm();
 		randomValueMutationAlgorithm.setGeneDao(geneDaoToSet);
 
-		Field geneDaoField = ReflectionUtils.findField(RandomValueMutationAlgorithm.class,
-				"geneDao");
+		Field geneDaoField = ReflectionUtils.findField(RandomValueMutationAlgorithm.class, "geneDao");
 		ReflectionUtils.makeAccessible(geneDaoField);
-		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(
-				geneDaoField, randomValueMutationAlgorithm);
+		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(geneDaoField, randomValueMutationAlgorithm);
 
 		assertSame(geneDaoToSet, geneDaoFromObject);
 	}
@@ -103,8 +101,8 @@ public class RandomValueMutationAlgorithmTest {
 		RandomValueMutationAlgorithm randomValueMutationAlgorithm = new RandomValueMutationAlgorithm();
 		randomValueMutationAlgorithm.setMaxMutationsPerChromosome(maxMutationsPerChromosomeToSet);
 
-		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(
-				RandomValueMutationAlgorithm.class, "maxMutationsPerChromosome");
+		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(RandomValueMutationAlgorithm.class,
+				"maxMutationsPerChromosome");
 		ReflectionUtils.makeAccessible(maxMutationsPerChromosomeField);
 		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(
 				maxMutationsPerChromosomeField, randomValueMutationAlgorithm);
@@ -143,8 +141,7 @@ public class RandomValueMutationAlgorithmTest {
 		originalGenes.add(mockGene2);
 
 		MockGene mockGeneToReturn = new MockGene();
-		when(geneDaoMock.findRandomGene(same(mockKeyedChromosome))).thenReturn(
-				mockGeneToReturn);
+		when(geneDaoMock.findRandomGene(same(mockKeyedChromosome))).thenReturn(mockGeneToReturn);
 
 		randomValueMutationAlgorithm.mutateChromosome(mockKeyedChromosome);
 
@@ -165,8 +162,7 @@ public class RandomValueMutationAlgorithmTest {
 		mockKeyedChromosome.putGene("2", mockGene2);
 
 		MockGene mockGeneToReturn = new MockGene();
-		when(geneDaoMock.findRandomGene(same(mockKeyedChromosome))).thenReturn(
-				mockGeneToReturn);
+		when(geneDaoMock.findRandomGene(same(mockKeyedChromosome))).thenReturn(mockGeneToReturn);
 
 		Set<Object> availableIndices = new HashSet<Object>();
 		availableIndices.add("1");
@@ -197,8 +193,7 @@ public class RandomValueMutationAlgorithmTest {
 		mockKeyedChromosome.putGene("2", mockGene2);
 
 		MockGene mockGeneToReturn = new MockGene();
-		when(geneDaoMock.findRandomGene(same(mockKeyedChromosome))).thenReturn(
-				mockGeneToReturn);
+		when(geneDaoMock.findRandomGene(same(mockKeyedChromosome))).thenReturn(mockGeneToReturn);
 
 		Set<Object> availableIndices = new HashSet<Object>();
 		availableIndices.add("2");
@@ -224,8 +219,7 @@ public class RandomValueMutationAlgorithmTest {
 		MockGene mockGene2 = new MockGene();
 		mockKeyedChromosome.putGene("2", mockGene2);
 
-		when(geneDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(
-				null);
+		when(geneDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(null);
 
 		Set<Object> availableIndices = new HashSet<Object>();
 		randomValueMutationAlgorithm.mutateRandomGene(mockKeyedChromosome, availableIndices);

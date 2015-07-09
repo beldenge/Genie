@@ -57,20 +57,18 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		 * case the current population size is larger than the maximum
 		 * specified.
 		 */
-		long numSurvivors = Math
-				.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
+		long numSurvivors = Math.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
 		int numberRemoved = (int) (initialPopulationSize - numSurvivors);
 
 		if (log.isDebugEnabled()) {
-			log.debug(numberRemoved + " individuals to be removed from population of size "
-					+ initialPopulationSize + " and survival rate of " + survivalRate + ".");
+			log.debug(numberRemoved + " individuals to be removed from population of size " + initialPopulationSize
+					+ " and survival rate of " + survivalRate + ".");
 		}
 
 		List<Chromosome> survivors = new ArrayList<Chromosome>();
 		int survivorIndex;
 		for (int i = 0; i < numSurvivors; i++) {
-			survivorIndex = selector.getNextIndex(population.getIndividuals(), population
-					.getTotalFitness());
+			survivorIndex = selector.getNextIndex(population.getIndividuals(), population.getTotalFitness());
 
 			survivors.add(population.removeIndividual(survivorIndex));
 		}
@@ -80,7 +78,7 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		 * survivors.
 		 */
 		population.clearIndividuals();
-		
+
 		// This is a candidate for parallelization
 		int numEvaluations = 0;
 		for (Chromosome survivor : survivors) {

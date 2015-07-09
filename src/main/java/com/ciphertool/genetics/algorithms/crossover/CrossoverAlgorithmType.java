@@ -40,16 +40,14 @@ public enum CrossoverAlgorithmType {
 			"Lowest Common Group Unevaluated",
 			LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 			"This will crossover groups of words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
-	CONSERVATIVE_SINGLE_POINT("Conservative Single Point",
-			ConservativeSinglePointCrossoverAlgorithm.class,
+	CONSERVATIVE_SINGLE_POINT("Conservative Single Point", ConservativeSinglePointCrossoverAlgorithm.class,
 			"This will crossover from a common centromere position determined somewhat randomly");
 
 	private String displayName;
 	private Class<? extends CrossoverAlgorithm> type;
 	private String description;
 
-	CrossoverAlgorithmType(String displayName, Class<? extends CrossoverAlgorithm> type,
-			String description) {
+	CrossoverAlgorithmType(String displayName, Class<? extends CrossoverAlgorithm> type, String description) {
 		this.displayName = displayName;
 		this.type = type;
 		this.description = description;

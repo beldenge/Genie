@@ -24,13 +24,11 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class LowestCommonGroupCrossoverAlgorithmHelper {
 
-	protected static void advanceIndexes(
-			LowestCommonGroupCrossoverProgressDto crossoverProgressDto, KeylessChromosome first,
-			KeylessChromosome second, int geneOffset) {
+	protected static void advanceIndexes(LowestCommonGroupCrossoverProgressDto crossoverProgressDto,
+			KeylessChromosome first, KeylessChromosome second, int geneOffset) {
 
 		if (crossoverProgressDto.getFirstChromosomeEndGeneIndex() >= first.getGenes().size()
-				|| crossoverProgressDto.getSecondChromosomeEndGeneIndex() >= second.getGenes()
-						.size()) {
+				|| crossoverProgressDto.getSecondChromosomeEndGeneIndex() >= second.getGenes().size()) {
 			// Nothing to do
 			return;
 		}
@@ -43,8 +41,8 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			crossoverProgressDto.advanceFirstChromosomeEndGeneIndexBy(geneOffset + 1);
 			crossoverProgressDto.advanceSecondChromosomeEndGeneIndexBy(1);
 
-			crossoverProgressDto.setFirstChromosomeBeginGeneIndex(crossoverProgressDto
-					.getFirstChromosomeEndGeneIndex());
+			crossoverProgressDto
+					.setFirstChromosomeBeginGeneIndex(crossoverProgressDto.getFirstChromosomeEndGeneIndex());
 			crossoverProgressDto.setSecondChromosomeBeginGeneIndex(crossoverProgressDto
 					.getSecondChromosomeEndGeneIndex());
 
@@ -53,8 +51,8 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			 * index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < firstChromosomeSize) {
-				crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(((VariableLengthGene)first.getGenes().get(
-						crossoverProgressDto.getFirstChromosomeBeginGeneIndex())).size());
+				crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(((VariableLengthGene) first.getGenes()
+						.get(crossoverProgressDto.getFirstChromosomeBeginGeneIndex())).size());
 			}
 
 			/*
@@ -74,7 +72,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			 * index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getSecondChromosomeEndGeneIndex() < secondChromosomeSize) {
-				crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(((VariableLengthGene)second.getGenes()
+				crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(((VariableLengthGene) second.getGenes()
 						.get(crossoverProgressDto.getSecondChromosomeEndGeneIndex())).size());
 			}
 		} else {
@@ -85,8 +83,8 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			 * index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < firstChromosomeSize) {
-				crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(((VariableLengthGene) first.getGenes().get(
-						crossoverProgressDto.getFirstChromosomeEndGeneIndex())).size());
+				crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(((VariableLengthGene) first.getGenes()
+						.get(crossoverProgressDto.getFirstChromosomeEndGeneIndex())).size());
 			}
 		}
 	}

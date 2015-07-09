@@ -21,7 +21,6 @@ package com.ciphertool.genetics.algorithms.mutation;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
-
 public interface MutationAlgorithm<T extends Chromosome> {
 	/**
 	 * Performs a genetic mutation of the supplied Chromosome.

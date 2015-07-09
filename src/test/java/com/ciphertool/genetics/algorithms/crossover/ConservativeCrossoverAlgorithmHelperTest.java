@@ -96,8 +96,7 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 		crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(parent.actualSize());
 
 		assertEquals(0, crossoverProgressDto.getFirstChromosomeSequencePosition());
-		assertEquals(parent.actualSize().intValue(), crossoverProgressDto
-				.getSecondChromosomeSequencePosition());
+		assertEquals(parent.actualSize().intValue(), crossoverProgressDto.getSecondChromosomeSequencePosition());
 		assertEquals(parent.getGenes().size(), crossoverProgressDto.getSecondChromosomeGeneIndex());
 		assertEquals(0, crossoverProgressDto.getFirstChromosomeGeneIndex());
 
@@ -105,8 +104,7 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 
 		// None of the indexes should have advanced
 		assertEquals(0, crossoverProgressDto.getFirstChromosomeSequencePosition());
-		assertEquals(parent.actualSize().intValue(), crossoverProgressDto
-				.getSecondChromosomeSequencePosition());
+		assertEquals(parent.actualSize().intValue(), crossoverProgressDto.getSecondChromosomeSequencePosition());
 		assertEquals(parent.getGenes().size(), crossoverProgressDto.getSecondChromosomeGeneIndex());
 		assertEquals(0, crossoverProgressDto.getFirstChromosomeGeneIndex());
 	}

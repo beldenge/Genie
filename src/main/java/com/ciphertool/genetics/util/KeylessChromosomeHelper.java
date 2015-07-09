@@ -54,8 +54,7 @@ public class KeylessChromosomeHelper {
 			VariableLengthGene lastGene = (VariableLengthGene) chromosomeToResize.getGenes().get(
 					chromosomeToResize.getGenes().size() - 1);
 
-			if (chromosomeToResize.actualSize() - lastGene.size() >= chromosomeToResize
-					.targetSize()) {
+			if (chromosomeToResize.actualSize() - lastGene.size() >= chromosomeToResize.targetSize()) {
 				/*
 				 * If the last Gene is entirely outside the range of this
 				 * Chromosome's target size, just remove it altogether.

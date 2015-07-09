@@ -66,10 +66,8 @@ public class TournamentSelector implements Selector {
 	@Required
 	public void setSelectionAccuracy(Double selectionAccuracy) {
 		if (selectionAccuracy < 0.0 || selectionAccuracy > 1.0) {
-			throw new IllegalArgumentException(
-					"Tried to set a selectionAccuracy of "
-							+ selectionAccuracy
-							+ ", but TournamentSelector requires a selectionAccuracy between 0.0 and 1.0 inclusive.");
+			throw new IllegalArgumentException("Tried to set a selectionAccuracy of " + selectionAccuracy
+					+ ", but TournamentSelector requires a selectionAccuracy between 0.0 and 1.0 inclusive.");
 		}
 
 		this.selectionAccuracy = selectionAccuracy;

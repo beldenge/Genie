@@ -82,12 +82,11 @@ public class GeneticAlgorithmStrategy {
 	 * @param useKnownSolutionFitnessEvaluator
 	 *            the useKnownSolutionFitnessEvaluator to set
 	 */
-	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize,
-			Integer lifespan, Integer maxGenerations, Double survivalRate, Double mutationRate,
-			Integer maxMutationsPerIndividual, Double crossoverRate, Boolean mutateDuringCrossover,
-			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm,
-			Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
+	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer lifespan,
+			Integer maxGenerations, Double survivalRate, Double mutationRate, Integer maxMutationsPerIndividual,
+			Double crossoverRate, Boolean mutateDuringCrossover, FitnessEvaluator fitnessEvaluator,
+			CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm,
+			SelectionAlgorithm selectionAlgorithm, Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
 			Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
@@ -105,7 +104,7 @@ public class GeneticAlgorithmStrategy {
 		this.fitnessEvaluator.setGeneticStructure(geneticStructure);
 
 		this.crossoverAlgorithm = crossoverAlgorithm;
-		
+
 		if (crossoverAlgorithm instanceof EvaluatedCrossoverAlgorithm) {
 			((EvaluatedCrossoverAlgorithm) this.crossoverAlgorithm).setFitnessEvaluator(this.fitnessEvaluator);
 		}
@@ -180,10 +179,8 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setSurvivalRate(Double survivalRate) {
 		if (survivalRate == null || survivalRate < 0.0 || survivalRate > 1.0) {
-			throw new IllegalArgumentException(
-					"Tried to set a survivalRate of "
-							+ survivalRate
-							+ ", but GeneicAlgorithmStrategy requires a survivalRate between 0.0 and 1.0 inclusive.");
+			throw new IllegalArgumentException("Tried to set a survivalRate of " + survivalRate
+					+ ", but GeneicAlgorithmStrategy requires a survivalRate between 0.0 and 1.0 inclusive.");
 		}
 
 		this.survivalRate = survivalRate;
@@ -202,10 +199,8 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setMutationRate(Double mutationRate) {
 		if (mutationRate == null || mutationRate < 0.0 || mutationRate > 1.0) {
-			throw new IllegalArgumentException(
-					"Tried to set a mutationRate of "
-							+ mutationRate
-							+ ", but GeneicAlgorithmStrategy requires a mutationRate between 0.0 and 1.0 inclusive.");
+			throw new IllegalArgumentException("Tried to set a mutationRate of " + mutationRate
+					+ ", but GeneicAlgorithmStrategy requires a mutationRate between 0.0 and 1.0 inclusive.");
 		}
 
 		this.mutationRate = mutationRate;
@@ -239,10 +234,8 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setCrossoverRate(Double crossoverRate) {
 		if (crossoverRate == null || crossoverRate < 0.0 || crossoverRate > 1.0) {
-			throw new IllegalArgumentException(
-					"Tried to set a crossoverRate of "
-							+ crossoverRate
-							+ ", but GeneicAlgorithmStrategy requires a crossoverRate between 0.0 and 1.0 inclusive.");
+			throw new IllegalArgumentException("Tried to set a crossoverRate of " + crossoverRate
+					+ ", but GeneicAlgorithmStrategy requires a crossoverRate between 0.0 and 1.0 inclusive.");
 		}
 
 		this.crossoverRate = crossoverRate;

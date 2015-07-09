@@ -164,14 +164,12 @@ public class Population {
 		for (Chromosome individual : individuals) {
 			this.totalFitness += individual.getFitness();
 
-			if (bestFitIndividual == null
-					|| individual.getFitness() > bestFitIndividual.getFitness()) {
+			if (bestFitIndividual == null || individual.getFitness() > bestFitIndividual.getFitness()) {
 				bestFitIndividual = individual;
 			}
 		}
 
-		Double averageFitness = Double.valueOf(this.totalFitness)
-				/ Double.valueOf(individuals.size());
+		Double averageFitness = Double.valueOf(this.totalFitness) / Double.valueOf(individuals.size());
 
 		if (generationStatistics != null) {
 			generationStatistics.setAverageFitness(averageFitness);
@@ -247,8 +245,8 @@ public class Population {
 	 */
 	public Chromosome removeIndividual(int indexToRemove) {
 		if (indexToRemove < 0 || indexToRemove > this.individuals.size() - 1) {
-			log.error("Tried to remove individual by invalid index " + indexToRemove
-					+ " from population of size " + this.size() + ".  Returning.");
+			log.error("Tried to remove individual by invalid index " + indexToRemove + " from population of size "
+					+ this.size() + ".  Returning.");
 
 			return null;
 		}
@@ -296,8 +294,8 @@ public class Population {
 	 */
 	public void makeIneligibleForReproduction(int index) {
 		if (index < 0 || index > this.individuals.size() - 1) {
-			log.error("Tried to make individual ineligible by invalid index " + index
-					+ " from population of size " + this.size() + ".  Returning.");
+			log.error("Tried to make individual ineligible by invalid index " + index + " from population of size "
+					+ this.size() + ".  Returning.");
 
 			return;
 		}

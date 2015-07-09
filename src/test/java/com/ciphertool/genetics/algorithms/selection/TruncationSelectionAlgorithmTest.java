@@ -110,8 +110,7 @@ public class TruncationSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(55.0), population.getTotalFitness());
 
-		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		int expectedNumberRemoved = 2;
 		assertEquals(expectedNumberRemoved, numberRemoved);
@@ -122,8 +121,7 @@ public class TruncationSelectionAlgorithmTest {
 
 		// Verify that the top-most-fit Chromosomes are the survivors
 		for (int i = 1; i < population.size(); i++) {
-			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(
-					i - 1).getFitness());
+			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(i - 1).getFitness());
 		}
 	}
 
@@ -151,8 +149,7 @@ public class TruncationSelectionAlgorithmTest {
 		assertEquals(14, population.size());
 		assertEquals(new Double(105.0), population.getTotalFitness());
 
-		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		int expectedNumberRemoved = 6;
 		assertEquals(expectedNumberRemoved, numberRemoved);
@@ -163,8 +160,7 @@ public class TruncationSelectionAlgorithmTest {
 
 		// Verify that the top-most-fit Chromosomes are the survivors
 		for (int i = 1; i < population.size(); i++) {
-			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(
-					i - 1).getFitness());
+			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(i - 1).getFitness());
 		}
 	}
 
@@ -180,8 +176,7 @@ public class TruncationSelectionAlgorithmTest {
 		assertEquals(7, population.size());
 		assertEquals(new Double(34.0), population.getTotalFitness());
 
-		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		assertEquals(7, population.size());
@@ -200,8 +195,7 @@ public class TruncationSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(55.0), population.getTotalFitness());
 
-		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		int expectedNumberRemoved = 1;
 		assertEquals(expectedNumberRemoved, numberRemoved);
@@ -212,8 +206,7 @@ public class TruncationSelectionAlgorithmTest {
 
 		// Verify that the top-most-fit Chromosomes are the survivors
 		for (int i = 1; i < population.size(); i++) {
-			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(
-					i - 1).getFitness());
+			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(i - 1).getFitness());
 		}
 	}
 
@@ -227,8 +220,7 @@ public class TruncationSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(55.0), population.getTotalFitness());
 
-		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = truncationSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		int expectedNumberRemoved = 2;
 		assertEquals(expectedNumberRemoved, numberRemoved);
@@ -239,8 +231,7 @@ public class TruncationSelectionAlgorithmTest {
 
 		// Verify that the top-most-fit Chromosomes are the survivors
 		for (int i = 1; i < population.size(); i++) {
-			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(
-					i - 1).getFitness());
+			assertEquals(new Double(i + expectedNumberRemoved), population.getIndividuals().get(i - 1).getFitness());
 		}
 	}
 
@@ -260,8 +251,7 @@ public class TruncationSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		int numberRemoved = truncationSelectionAlgorithm.select(new Population(), maxSurvivors,
-				survivalRate);
+		int numberRemoved = truncationSelectionAlgorithm.select(new Population(), maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		verify(logMock, times(1)).warn(anyString());

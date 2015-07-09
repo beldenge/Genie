@@ -98,8 +98,8 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 		List<Chromosome> childrenToAdd = doConcurrentCrossovers(pairsToCrossover, moms, dads);
 
 		if (childrenToAdd == null || childrenToAdd.isEmpty()) {
-			log.error("No children produced from concurrent crossover execution.  Expected "
-					+ pairsToCrossover + " children.");
+			log.error("No children produced from concurrent crossover execution.  Expected " + pairsToCrossover
+					+ " children.");
 
 			return 0;
 		}

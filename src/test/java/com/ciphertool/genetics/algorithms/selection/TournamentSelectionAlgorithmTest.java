@@ -114,11 +114,9 @@ public class TournamentSelectionAlgorithmTest {
 		TournamentSelectionAlgorithm tournamentSelectionAlgorithm = new TournamentSelectionAlgorithm();
 		tournamentSelectionAlgorithm.setGroupSize(groupSizeToSet);
 
-		Field groupSizeField = ReflectionUtils.findField(TournamentSelectionAlgorithm.class,
-				"groupSize");
+		Field groupSizeField = ReflectionUtils.findField(TournamentSelectionAlgorithm.class, "groupSize");
 		ReflectionUtils.makeAccessible(groupSizeField);
-		Integer groupSizeFromObject = (Integer) ReflectionUtils.getField(groupSizeField,
-				tournamentSelectionAlgorithm);
+		Integer groupSizeFromObject = (Integer) ReflectionUtils.getField(groupSizeField, tournamentSelectionAlgorithm);
 
 		assertSame(groupSizeToSet, groupSizeFromObject);
 	}
@@ -130,8 +128,7 @@ public class TournamentSelectionAlgorithmTest {
 		TournamentSelectionAlgorithm tournamentSelectionAlgorithm = new TournamentSelectionAlgorithm();
 		tournamentSelectionAlgorithm.setGroupSelector(groupSelectorToSet);
 
-		Field groupSelectorField = ReflectionUtils.findField(TournamentSelectionAlgorithm.class,
-				"groupSelector");
+		Field groupSelectorField = ReflectionUtils.findField(TournamentSelectionAlgorithm.class, "groupSelector");
 		ReflectionUtils.makeAccessible(groupSelectorField);
 		Selector groupSelectorFromObject = (Selector) ReflectionUtils.getField(groupSelectorField,
 				tournamentSelectionAlgorithm);
@@ -147,8 +144,7 @@ public class TournamentSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(2, numberRemoved);
 		assertEquals(8, population.size());
@@ -173,8 +169,7 @@ public class TournamentSelectionAlgorithmTest {
 		assertEquals(12, population.size());
 		assertEquals(new Double(60.0), population.getTotalFitness());
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(4, numberRemoved);
 		assertEquals(8, population.size());
@@ -195,8 +190,7 @@ public class TournamentSelectionAlgorithmTest {
 		assertEquals(7, population.size());
 		assertEquals(new Double(35.0), population.getTotalFitness());
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		assertEquals(7, population.size());
@@ -215,8 +209,7 @@ public class TournamentSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(1, numberRemoved);
 		assertEquals(9, population.size());
@@ -235,8 +228,7 @@ public class TournamentSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(2, numberRemoved);
 		assertEquals(8, population.size());
@@ -261,8 +253,7 @@ public class TournamentSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(new Population(), maxSurvivors,
-				survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(new Population(), maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		verify(logMock, times(1)).warn(anyString());
@@ -270,8 +261,7 @@ public class TournamentSelectionAlgorithmTest {
 
 	@Test
 	public void testGetGroupTotalFitness() {
-		Double groupTotalFitness = TournamentSelectionAlgorithm.getGroupTotalFitness(population
-				.getIndividuals());
+		Double groupTotalFitness = TournamentSelectionAlgorithm.getGroupTotalFitness(population.getIndividuals());
 
 		assertEquals(new Double(50.0), groupTotalFitness);
 	}

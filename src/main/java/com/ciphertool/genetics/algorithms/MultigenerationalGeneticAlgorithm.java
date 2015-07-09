@@ -59,8 +59,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		do {
 			proceedWithNextGeneration();
 		} while (!this.stopRequested
-				&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy
-						.getMaxGenerations()));
+				&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy.getMaxGenerations()));
 
 		finish();
 	}
@@ -83,14 +82,12 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	public void finish() {
 		long totalExecutionTime = 0;
 
-		for (GenerationStatistics generationStatistics : this.executionStatistics
-				.getGenerationStatisticsList()) {
+		for (GenerationStatistics generationStatistics : this.executionStatistics.getGenerationStatisticsList()) {
 			totalExecutionTime += generationStatistics.getExecutionTime();
 		}
 
 		log.info("Average generation time is "
-				+ ((System.currentTimeMillis() - totalExecutionTime) / this.generationCount)
-				+ "ms.");
+				+ ((System.currentTimeMillis() - totalExecutionTime) / this.generationCount) + "ms.");
 
 		this.executionStatistics.setEndDateTime(new Date());
 
@@ -104,8 +101,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	public void proceedWithNextGeneration() {
 		this.generationCount++;
 
-		GenerationStatistics generationStatistics = new GenerationStatistics(
-				this.executionStatistics, this.generationCount);
+		GenerationStatistics generationStatistics = new GenerationStatistics(this.executionStatistics,
+				this.generationCount);
 
 		long generationStart = System.currentTimeMillis();
 
@@ -159,8 +156,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		 * children.
 		 */
 		long startBreeding = System.currentTimeMillis();
-		generationStatistics.setNumberRandomlyGenerated(this.population.breed(this.strategy
-				.getPopulationSize()));
+		generationStatistics.setNumberRandomlyGenerated(this.population.breed(this.strategy.getPopulationSize()));
 		if (log.isDebugEnabled()) {
 			log.debug("Breeding took " + (System.currentTimeMillis() - startBreeding) + "ms.");
 		}
@@ -202,15 +198,12 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("Parameter 'mutationRate' must be greater than or equal to zero.");
 		}
 
-		if (strategy.getMaxMutationsPerIndividual() == null
-				|| strategy.getMaxMutationsPerIndividual() < 0) {
-			validationErrors
-					.add("Parameter 'maxMutationsPerIndividual' must be greater than or equal to zero.");
+		if (strategy.getMaxMutationsPerIndividual() == null || strategy.getMaxMutationsPerIndividual() < 0) {
+			validationErrors.add("Parameter 'maxMutationsPerIndividual' must be greater than or equal to zero.");
 		}
 
 		if (strategy.getCrossoverRate() == null || strategy.getCrossoverRate() < 0) {
-			validationErrors
-					.add("Parameter 'crossoverRate' must be greater than or equal to zero.");
+			validationErrors.add("Parameter 'crossoverRate' must be greater than or equal to zero.");
 		}
 
 		if (strategy.getMutateDuringCrossover() == null) {
@@ -218,8 +211,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		}
 
 		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
-			validationErrors
-					.add("Parameter 'maxGenerations' cannot be null and must not equal zero.");
+			validationErrors.add("Parameter 'maxGenerations' cannot be null and must not equal zero.");
 		}
 
 		if (strategy.getCrossoverAlgorithm() == null) {
@@ -256,8 +248,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 	@Override
 	public int select() {
-		return selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(),
-				this.strategy.getSurvivalRate());
+		return selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(), this.strategy
+				.getSurvivalRate());
 	}
 
 	@Override
@@ -335,8 +327,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		 * size (before any other operations made individuals ineligible for
 		 * reproduction) multiplied by the configured mutation rate.
 		 */
-		long mutations = Math.min(Math.round((initialPopulationSize * strategy.getMutationRate())),
-				this.population.size());
+		long mutations = Math.min(Math.round((initialPopulationSize * strategy.getMutationRate())), this.population
+				.size());
 
 		log.debug("Chromosomes to mutate: " + mutations);
 
@@ -344,8 +336,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		for (int i = 0; i < mutations; i++) {
 			mutantIndex = this.population.selectIndex();
-			Chromosome chromosomeToMutate = this.population.getIndividuals().get(mutantIndex)
-					.clone();
+			Chromosome chromosomeToMutate = this.population.getIndividuals().get(mutantIndex).clone();
 
 			/*
 			 * Remove the Chromosome from the population temporarily so that it
@@ -381,8 +372,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		this.population.evaluateFitness(null);
 
-		log.info("Took " + (System.currentTimeMillis() - start)
-				+ "ms to spawn initial population of size " + this.population.size());
+		log.info("Took " + (System.currentTimeMillis() - start) + "ms to spawn initial population of size "
+				+ this.population.size());
 	}
 
 	/**
@@ -396,8 +387,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		this.executionStatisticsDao.insert(this.executionStatistics);
 
-		log.info("Took " + (System.currentTimeMillis() - startInsert)
-				+ "ms to persist statistics to database.");
+		log.info("Took " + (System.currentTimeMillis() - startInsert) + "ms to persist statistics to database.");
 	}
 
 	@Override
@@ -434,22 +424,18 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
 		this.population.setFitnessEvaluator(geneticAlgorithmStrategy.getFitnessEvaluator());
 		this.population.setLifespan(geneticAlgorithmStrategy.getLifespan());
-		this.population.setKnownSolutionFitnessEvaluator(geneticAlgorithmStrategy
-				.getKnownSolutionFitnessEvaluator());
-		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy
-				.getCompareToKnownSolution());
+		this.population.setKnownSolutionFitnessEvaluator(geneticAlgorithmStrategy.getKnownSolutionFitnessEvaluator());
+		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy.getCompareToKnownSolution());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
-		this.crossoverAlgorithm.setMutationAlgorithm(geneticAlgorithmStrategy
-				.getMutationAlgorithm());
-		this.crossoverAlgorithm.setMutateDuringCrossover(geneticAlgorithmStrategy
-				.getMutateDuringCrossover());
+		this.crossoverAlgorithm.setMutationAlgorithm(geneticAlgorithmStrategy.getMutationAlgorithm());
+		this.crossoverAlgorithm.setMutateDuringCrossover(geneticAlgorithmStrategy.getMutateDuringCrossover());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
-		
+
 		if (this.mutationAlgorithm instanceof NonUniformMutationAlgorithm) {
-			((NonUniformMutationAlgorithm) this.mutationAlgorithm).setMaxMutationsPerChromosome(geneticAlgorithmStrategy
-				.getMaxMutationsPerIndividual());
+			((NonUniformMutationAlgorithm) this.mutationAlgorithm)
+					.setMaxMutationsPerChromosome(geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		}
 
 		this.selectionAlgorithm = geneticAlgorithmStrategy.getSelectionAlgorithm();

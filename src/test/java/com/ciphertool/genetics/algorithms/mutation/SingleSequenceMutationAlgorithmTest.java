@@ -87,11 +87,10 @@ public class SingleSequenceMutationAlgorithmTest {
 		SingleSequenceMutationAlgorithm singleSequenceMutationAlgorithm = new SingleSequenceMutationAlgorithm();
 		singleSequenceMutationAlgorithm.setSequenceDao(sequenceDaoToSet);
 
-		Field sequenceDaoField = ReflectionUtils.findField(SingleSequenceMutationAlgorithm.class,
-				"sequenceDao");
+		Field sequenceDaoField = ReflectionUtils.findField(SingleSequenceMutationAlgorithm.class, "sequenceDao");
 		ReflectionUtils.makeAccessible(sequenceDaoField);
-		SequenceDao sequenceDaoFromObject = (SequenceDao) ReflectionUtils.getField(
-				sequenceDaoField, singleSequenceMutationAlgorithm);
+		SequenceDao sequenceDaoFromObject = (SequenceDao) ReflectionUtils.getField(sequenceDaoField,
+				singleSequenceMutationAlgorithm);
 
 		assertSame(sequenceDaoToSet, sequenceDaoFromObject);
 	}
@@ -101,11 +100,10 @@ public class SingleSequenceMutationAlgorithmTest {
 		Integer maxMutationsPerChromosomeToSet = 3;
 
 		SingleSequenceMutationAlgorithm singleSequenceMutationAlgorithm = new SingleSequenceMutationAlgorithm();
-		singleSequenceMutationAlgorithm
-				.setMaxMutationsPerChromosome(maxMutationsPerChromosomeToSet);
+		singleSequenceMutationAlgorithm.setMaxMutationsPerChromosome(maxMutationsPerChromosomeToSet);
 
-		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(
-				SingleSequenceMutationAlgorithm.class, "maxMutationsPerChromosome");
+		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(SingleSequenceMutationAlgorithm.class,
+				"maxMutationsPerChromosome");
 		ReflectionUtils.makeAccessible(maxMutationsPerChromosomeField);
 		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(
 				maxMutationsPerChromosomeField, singleSequenceMutationAlgorithm);
@@ -157,8 +155,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockKeylessChromosome.addGene(mockGene2);
 		originalGenes.add(mockGene2);
 
-		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
-				new MockSequence("x"));
+		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(new MockSequence("x"));
 
 		singleSequenceMutationAlgorithm.mutateChromosome(mockKeylessChromosome);
 
@@ -212,16 +209,15 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("e"));
 		mockKeylessChromosome.addGene(mockGene2);
 
-		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
-				new MockSequence("x"));
+		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(new MockSequence("x"));
 
 		singleSequenceMutationAlgorithm.mutateGene(mockKeylessChromosome, 0);
 
 		// Only one of the letters from the first Gene should be changed
-		assertTrue(("w".equals(mockGene1.getSequences().get(0).getValue()) && !"e".equals(mockGene1
-				.getSequences().get(1).getValue()))
-				|| (!"w".equals(mockGene1.getSequences().get(0).getValue()) && "e".equals(mockGene1
-						.getSequences().get(1).getValue())));
+		assertTrue(("w".equals(mockGene1.getSequences().get(0).getValue()) && !"e".equals(mockGene1.getSequences().get(
+				1).getValue()))
+				|| (!"w".equals(mockGene1.getSequences().get(0).getValue()) && "e".equals(mockGene1.getSequences().get(
+						1).getValue())));
 		assertTrue("s".equals(mockGene2.getSequences().get(0).getValue())
 				&& "m".equals(mockGene2.getSequences().get(1).getValue())
 				&& "i".equals(mockGene2.getSequences().get(2).getValue())
@@ -273,8 +269,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("e"));
 		mockKeylessChromosome.addGene(mockGene2);
 
-		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
-				new MockSequence("x"));
+		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(new MockSequence("x"));
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		availableIndices.add(0);
@@ -336,8 +331,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene2.addSequence(new MockSequence("e"));
 		mockKeylessChromosome.addGene(mockGene2);
 
-		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(
-				new MockSequence("x"));
+		when(sequenceDaoMock.findRandomSequence(any(Gene.class), anyInt())).thenReturn(new MockSequence("x"));
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		availableIndices.add(1);
@@ -446,8 +440,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene.addSequence(new MockSequence("l"));
 		mockGene.addSequence(new MockSequence("e"));
 
-		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenReturn(
-				new MockSequence("x"));
+		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenReturn(new MockSequence("x"));
 
 		singleSequenceMutationAlgorithm.mutateSequence(mockGene, 4);
 
@@ -491,12 +484,11 @@ public class SingleSequenceMutationAlgorithmTest {
 		MockSequence sequenceToReplace = new MockSequence("e");
 		mockGene.addSequence(sequenceToReplace);
 
-		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenAnswer(
-				new Answer<MockSequence>() {
-					public MockSequence answer(InvocationOnMock invocation) throws Throwable {
-						return new MockSequence("e");
-					}
-				});
+		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenAnswer(new Answer<MockSequence>() {
+			public MockSequence answer(InvocationOnMock invocation) throws Throwable {
+				return new MockSequence("e");
+			}
+		});
 		when(logMock.isDebugEnabled()).thenReturn(true);
 
 		singleSequenceMutationAlgorithm.mutateSequence(mockGene, 4);
@@ -522,8 +514,7 @@ public class SingleSequenceMutationAlgorithmTest {
 		mockGene.addSequence(new MockSequence("l"));
 		mockGene.addSequence(new MockSequence("e"));
 
-		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenReturn(
-				new MockSequence("x"));
+		when(sequenceDaoMock.findRandomSequence(same(mockGene), anyInt())).thenReturn(new MockSequence("x"));
 
 		singleSequenceMutationAlgorithm.mutateRandomSequence(mockGene);
 

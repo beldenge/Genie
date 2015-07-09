@@ -66,11 +66,10 @@ public class ExecutionStatisticsDaoTest {
 		ExecutionStatisticsDao executionStatisticsDao = new ExecutionStatisticsDao();
 		executionStatisticsDao.setSessionFactory(sessionFactoryMock);
 
-		Field sessionFactoryField = ReflectionUtils.findField(ExecutionStatisticsDao.class,
-				"sessionFactory");
+		Field sessionFactoryField = ReflectionUtils.findField(ExecutionStatisticsDao.class, "sessionFactory");
 		ReflectionUtils.makeAccessible(sessionFactoryField);
-		SessionFactory sessionFactoryFromObject = (SessionFactory) ReflectionUtils.getField(
-				sessionFactoryField, executionStatisticsDao);
+		SessionFactory sessionFactoryFromObject = (SessionFactory) ReflectionUtils.getField(sessionFactoryField,
+				executionStatisticsDao);
 
 		assertSame(sessionFactoryMock, sessionFactoryFromObject);
 	}

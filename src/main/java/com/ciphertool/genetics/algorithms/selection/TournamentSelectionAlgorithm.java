@@ -66,8 +66,8 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		int numberRemoved = (int) (initialPopulationSize - numSurvivors);
 
 		if (log.isDebugEnabled()) {
-			log.debug(numberRemoved + " individuals to be removed from population of size "
-					+ initialPopulationSize + " and survival rate of " + survivalRate + ".");
+			log.debug(numberRemoved + " individuals to be removed from population of size " + initialPopulationSize
+					+ " and survival rate of " + survivalRate + ".");
 		}
 
 		List<Chromosome> survivors = new ArrayList<Chromosome>();

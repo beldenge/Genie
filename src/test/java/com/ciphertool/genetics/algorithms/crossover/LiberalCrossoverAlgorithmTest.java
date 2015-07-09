@@ -56,11 +56,9 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 		liberalCrossoverAlgorithm.setGeneDao(geneDaoToSet);
 
-		Field geneDaoField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class,
-				"geneDao");
+		Field geneDaoField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class, "geneDao");
 		ReflectionUtils.makeAccessible(geneDaoField);
-		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(
-				geneDaoField, liberalCrossoverAlgorithm);
+		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(geneDaoField, liberalCrossoverAlgorithm);
 
 		assertSame(geneDaoToSet, geneDaoFromObject);
 	}
@@ -86,8 +84,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 		liberalCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorToSet);
 
-		Field fitnessEvaluatorField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class,
-				"fitnessEvaluator");
+		Field fitnessEvaluatorField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class, "fitnessEvaluator");
 		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
 		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
 				fitnessEvaluatorField, liberalCrossoverAlgorithm);
@@ -103,11 +100,10 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 		liberalCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class,
-				"mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class, "mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils
-				.getField(mutationAlgorithmField, liberalCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
+				mutationAlgorithmField, liberalCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -119,11 +115,11 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 		liberalCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(
-				LiberalCrossoverAlgorithm.class, "mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(LiberalCrossoverAlgorithm.class,
+				"mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(
-				mutateDuringCrossoverField, liberalCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
+				liberalCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}
@@ -148,8 +144,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(1.0, -1.0, -1.0,
-				-1.0, -1.0, 1.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(1.0, -1.0, -1.0, -1.0, -1.0, 1.0);
 		liberalCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
@@ -275,8 +270,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(1.0, -1.0, -1.0,
-				-1.0, -1.0, 1.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(1.0, -1.0, -1.0, -1.0, -1.0, 1.0);
 		liberalCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
@@ -322,8 +316,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(1.0, -1.0, -1.0,
-				-1.0, -1.0, 1.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(1.0, -1.0, -1.0, -1.0, -1.0, 1.0);
 		liberalCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		MutationAlgorithm mockMutationAlgorithm = mock(MutationAlgorithm.class);
@@ -477,8 +470,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-1.0, -1.0, 1.0,
-				-1.0, -1.0, -1.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-1.0, -1.0, 1.0, -1.0, -1.0, -1.0);
 		liberalCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);
@@ -533,8 +525,7 @@ public class LiberalCrossoverAlgorithmTest extends CrossoverAlgorithmTestBase {
 		LiberalCrossoverAlgorithm liberalCrossoverAlgorithm = new LiberalCrossoverAlgorithm();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-1.0, 1.0, -1.0,
-				-1.0, -1.0, -1.0);
+		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(-1.0, 1.0, -1.0, -1.0, -1.0, -1.0);
 		liberalCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
 		liberalCrossoverAlgorithm.setMutationAlgorithm(null);

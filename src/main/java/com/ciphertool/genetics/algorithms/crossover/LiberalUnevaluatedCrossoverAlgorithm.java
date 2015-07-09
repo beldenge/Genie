@@ -71,8 +71,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 		 * Make sure we don't exceed parentB's index, or else we will get an
 		 * IndexOutOfBoundsException
 		 */
-		while (childGeneIndex < child.getGenes().size()
-				&& childGeneIndex < parentB.getGenes().size()) {
+		while (childGeneIndex < child.getGenes().size() && childGeneIndex < parentB.getGenes().size()) {
 			attemptToReplaceGeneInChild(childGeneIndex, child, parentB);
 
 			childGeneIndex++;
@@ -99,8 +98,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 		return child;
 	}
 
-	protected void attemptToReplaceGeneInChild(int childGeneIndex, KeylessChromosome child,
-			KeylessChromosome parent) {
+	protected void attemptToReplaceGeneInChild(int childGeneIndex, KeylessChromosome child, KeylessChromosome parent) {
 		/*
 		 * Flip a coin to see if the current Gene should be replaced
 		 */

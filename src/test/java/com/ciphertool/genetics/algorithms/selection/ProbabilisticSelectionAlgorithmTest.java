@@ -108,8 +108,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());
 
-		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(2, numberRemoved);
 		assertEquals(8, population.size());
@@ -142,8 +141,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(14, population.size());
 		assertEquals(new Double(70.0), population.getTotalFitness());
 
-		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(6, numberRemoved);
 		assertEquals(8, population.size());
@@ -164,8 +162,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(7, population.size());
 		assertEquals(new Double(35.0), population.getTotalFitness());
 
-		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		assertEquals(7, population.size());
@@ -184,8 +181,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());
 
-		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(1, numberRemoved);
 		assertEquals(9, population.size());
@@ -204,8 +200,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		assertEquals(10, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());
 
-		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors,
-				survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(population, maxSurvivors, survivalRate);
 
 		assertEquals(2, numberRemoved);
 		assertEquals(8, population.size());
@@ -219,8 +214,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		int numberRemoved = probabilisticSelectionAlgorithm
-				.select(null, maxSurvivors, survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(null, maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		verify(logMock, times(1)).warn(anyString());
@@ -231,8 +225,7 @@ public class ProbabilisticSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		int numberRemoved = probabilisticSelectionAlgorithm.select(new Population(), maxSurvivors,
-				survivalRate);
+		int numberRemoved = probabilisticSelectionAlgorithm.select(new Population(), maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		verify(logMock, times(1)).warn(anyString());

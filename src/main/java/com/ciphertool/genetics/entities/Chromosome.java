@@ -19,7 +19,6 @@
 
 package com.ciphertool.genetics.entities;
 
-
 public interface Chromosome extends Cloneable {
 
 	/**

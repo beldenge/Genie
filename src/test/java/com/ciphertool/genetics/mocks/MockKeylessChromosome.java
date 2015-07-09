@@ -188,7 +188,7 @@ public class MockKeylessChromosome implements KeylessChromosome {
 
 	@Override
 	public String toString() {
-		return "MockKeylessChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness
-				+ ", genes=" + genes + "]";
+		return "MockKeylessChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness + ", genes="
+				+ genes + "]";
 	}
 }

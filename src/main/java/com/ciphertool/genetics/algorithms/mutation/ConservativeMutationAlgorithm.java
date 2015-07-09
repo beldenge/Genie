@@ -47,8 +47,7 @@ public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorith
 		 * Choose a random number of mutations constrained by the configurable
 		 * max and the total number of genes
 		 */
-		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome
-				.getGenes().size())) + 1;
+		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		for (int i = 0; i < chromosome.getGenes().size(); i++) {
@@ -98,8 +97,7 @@ public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorith
 	protected void mutateGene(KeylessChromosome chromosome, int index) {
 		if (index > chromosome.getGenes().size() - 1) {
 			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
-					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size()
-					+ ".  Cannot continue.");
+					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size() + ".  Cannot continue.");
 
 			return;
 		}
@@ -119,8 +117,7 @@ public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorith
 			if (attempts >= MAX_FIND_ATTEMPTS) {
 				if (log.isDebugEnabled()) {
 					log.debug("Unable to find a different Gene of length " + ((VariableLengthGene) oldGene).size()
-							+ " for Gene " + oldGene + " after " + attempts
-							+ " attempts.  Not performing mutation.");
+							+ " for Gene " + oldGene + " after " + attempts + " attempts.  Not performing mutation.");
 				}
 
 				return;

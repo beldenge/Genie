@@ -56,9 +56,9 @@ public class KeylessChromosomeHelperTest {
 	public void resetMocks() {
 		reset(geneDaoMock);
 
-		when(geneDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(createRandomGene(5),
-				createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5),
-				createRandomGene(5), createRandomGene(5));
+		when(geneDaoMock.findRandomGene(any(Chromosome.class)))
+				.thenReturn(createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5),
+						createRandomGene(5), createRandomGene(5), createRandomGene(5));
 	}
 
 	@Test
@@ -68,8 +68,7 @@ public class KeylessChromosomeHelperTest {
 
 		Field geneDaoField = ReflectionUtils.findField(KeylessChromosomeHelper.class, "geneDao");
 		ReflectionUtils.makeAccessible(geneDaoField);
-		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(
-				geneDaoField, keylessChromosomeHelper);
+		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(geneDaoField, keylessChromosomeHelper);
 
 		assertSame(geneDaoMock, geneDaoFromObject);
 	}
