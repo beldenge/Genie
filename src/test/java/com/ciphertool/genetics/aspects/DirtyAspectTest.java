@@ -111,8 +111,7 @@ public class DirtyAspectTest {
 		}
 
 		/*
-		 * No assertions necessary. We just need to ensure that no exception is
-		 * thrown
+		 * No assertions necessary. We just need to ensure that no exception is thrown
 		 */
 	}
 
@@ -133,8 +132,7 @@ public class DirtyAspectTest {
 		}
 
 		/*
-		 * No assertions necessary. We just need to ensure that no exception is
-		 * thrown
+		 * No assertions necessary. We just need to ensure that no exception is thrown
 		 */
 	}
 
@@ -157,8 +155,7 @@ public class DirtyAspectTest {
 		}
 
 		/*
-		 * No assertions necessary. We just need to ensure that no exception is
-		 * thrown
+		 * No assertions necessary. We just need to ensure that no exception is thrown
 		 */
 	}
 }

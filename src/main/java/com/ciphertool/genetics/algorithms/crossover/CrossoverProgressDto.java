@@ -20,9 +20,8 @@
 package com.ciphertool.genetics.algorithms.crossover;
 
 /**
- * This class is a Data Transformation Object used to hold the index values
- * needed during crossover. This allows these values to be passed in methods and
- * incremented by reference.
+ * This class is a Data Transformation Object used to hold the index values needed during crossover. This allows these
+ * values to be passed in methods and incremented by reference.
  */
 public class CrossoverProgressDto {
 	private int firstChromosomeSequencePosition = 0;

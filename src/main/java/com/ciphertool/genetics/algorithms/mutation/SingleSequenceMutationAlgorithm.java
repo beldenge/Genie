@@ -44,8 +44,7 @@ public class SingleSequenceMutationAlgorithm implements NonUniformMutationAlgori
 		}
 
 		/*
-		 * Choose a random number of mutations constrained by the configurable
-		 * max and the total number of genes
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
@@ -76,8 +75,7 @@ public class SingleSequenceMutationAlgorithm implements NonUniformMutationAlgori
 		}
 
 		/*
-		 * We don't want to reuse an index, so we get one from the List of
-		 * indices which are still available
+		 * We don't want to reuse an index, so we get one from the List of indices which are still available
 		 */
 		int randomIndex = availableIndices.get((int) (Math.random() * availableIndices.size()));
 
@@ -140,8 +138,8 @@ public class SingleSequenceMutationAlgorithm implements NonUniformMutationAlgori
 		int attempts = 0;
 
 		/*
-		 * Loop just in case the value of the new Sequence is the same as the
-		 * existing value, since that would defeat the purpose of the mutation.
+		 * Loop just in case the value of the new Sequence is the same as the existing value, since that would defeat
+		 * the purpose of the mutation.
 		 */
 		do {
 			newSequence = sequenceDao.findRandomSequence(gene, ciphertextIndex);

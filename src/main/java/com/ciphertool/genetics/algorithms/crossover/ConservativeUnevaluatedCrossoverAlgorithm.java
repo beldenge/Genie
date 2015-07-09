@@ -52,9 +52,8 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	}
 
 	/**
-	 * This crossover algorithm does a conservative amount of changes since it
-	 * only replaces genes that begin and end at the exact same sequence
-	 * positions
+	 * This crossover algorithm does a conservative amount of changes since it only replaces genes that begin and end at
+	 * the exact same sequence positions
 	 */
 	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		KeylessChromosome child = (KeylessChromosome) parentA.clone();
@@ -62,14 +61,12 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		/*
-		 * Make sure we don't exceed parentB's index, or else we will get an
-		 * IndexOutOfBoundsException
+		 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 		 */
 		while (crossoverProgressDto.getFirstChromosomeGeneIndex() < child.getGenes().size()
 				&& crossoverProgressDto.getSecondChromosomeGeneIndex() < parentB.getGenes().size()) {
 			/*
-			 * Replace from parentB. We are extra careful here since genes won't
-			 * match exactly with sequence position.
+			 * Replace from parentB. We are extra careful here since genes won't match exactly with sequence position.
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()

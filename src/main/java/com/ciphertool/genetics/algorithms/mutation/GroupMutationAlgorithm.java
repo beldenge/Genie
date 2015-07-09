@@ -45,8 +45,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		}
 
 		/*
-		 * Choose a random number of mutations constrained by the configurable
-		 * max and the total number of genes
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
@@ -58,8 +57,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		int maxGenesToMutate;
 		for (int i = 0; i < numMutations; i++) {
 			/*
-			 * Choose a random number of genes constrained by the static max and
-			 * the total number of genes
+			 * Choose a random number of genes constrained by the static max and the total number of genes
 			 */
 			maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome.getGenes().size())) + 1;
 
@@ -69,8 +67,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	}
 
 	/**
-	 * Performs a genetic mutation of a random Gene group of the supplied
-	 * Chromosome
+	 * Performs a genetic mutation of a random Gene group of the supplied Chromosome
 	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
@@ -87,8 +84,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		}
 
 		/*
-		 * We don't want to reuse an index, so we get one from the List of
-		 * indices which are still available
+		 * We don't want to reuse an index, so we get one from the List of indices which are still available
 		 */
 		int randomAvailableIndex = (int) (Math.random() * availableIndices.size());
 
@@ -98,8 +94,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		Integer numGenesToMutate = 1;
 
 		/*
-		 * If the maxGenesToMutate is more than one, then try to find some more
-		 * by iterating forwards.
+		 * If the maxGenesToMutate is more than one, then try to find some more by iterating forwards.
 		 */
 		if (numGenesToMutate < maxGenesToMutate) {
 			int indicesAddedRight = addRightIndices(availableIndices, randomAvailableIndex, maxGenesToMutate
@@ -108,8 +103,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		}
 
 		/*
-		 * If we still have not been able to find enough indices to reach the
-		 * maxGenesToMutate, then try to find more by iterating backwards.
+		 * If we still have not been able to find enough indices to reach the maxGenesToMutate, then try to find more by
+		 * iterating backwards.
 		 */
 		if (numGenesToMutate < maxGenesToMutate) {
 			int indicesAddedLeft = addLeftIndices(availableIndices, randomAvailableIndex, maxGenesToMutate
@@ -125,8 +120,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	}
 
 	/**
-	 * Add indices to be mutated until we reach the maxGenesToMutate, find
-	 * another gap, or we finally hit the end of the List.
+	 * Add indices to be mutated until we reach the maxGenesToMutate, find another gap, or we finally hit the end of the
+	 * List.
 	 * 
 	 * @param availableIndices
 	 *            the List of availableIndices to mutate
@@ -147,9 +142,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			}
 
 			/*
-			 * Break out of the loop if the next index comes after a gap,
-			 * because we don't want to mutate Genes that have already been
-			 * mutated as part of another group.
+			 * Break out of the loop if the next index comes after a gap, because we don't want to mutate Genes that
+			 * have already been mutated as part of another group.
 			 */
 			if (availableIndices.get(randomAvailableIndex + i + 1) - 1 > availableIndices.get(randomAvailableIndex + i)) {
 				break;
@@ -167,8 +161,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	}
 
 	/**
-	 * Add indices to be mutated until we find another gap, we hit the beginning
-	 * of the List, or we finally find enough indices.
+	 * Add indices to be mutated until we find another gap, we hit the beginning of the List, or we finally find enough
+	 * indices.
 	 * 
 	 * @param availableIndices
 	 *            the List of availableIndices to mutate
@@ -189,9 +183,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			}
 
 			/*
-			 * Break out of the loop if the next index comes after a gap,
-			 * because we don't want to mutate Genes that have already been
-			 * mutated as part of another group.
+			 * Break out of the loop if the next index comes after a gap, because we don't want to mutate Genes that
+			 * have already been mutated as part of another group.
 			 */
 			if (availableIndices.get(randomAvailableIndex - i - 1) + 1 < availableIndices.get(randomAvailableIndex - i)) {
 				break;
@@ -209,9 +202,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	}
 
 	/**
-	 * We need to update the List of available indices by removing the mutated
-	 * indices and incrementing or decrementing the remaining indices based on
-	 * the difference between the number of Genes inserted and removed.
+	 * We need to update the List of available indices by removing the mutated indices and incrementing or decrementing
+	 * the remaining indices based on the difference between the number of Genes inserted and removed.
 	 * 
 	 * @param availableIndices
 	 *            the List of availableIndices to mutate
@@ -241,8 +233,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	}
 
 	/**
-	 * Performs a genetic mutation of a specific Gene group of the supplied
-	 * Chromosome
+	 * Performs a genetic mutation of a specific Gene group of the supplied Chromosome
 	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
@@ -321,8 +312,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	}
 
 	/**
-	 * Insert a sufficient number of random Genes to make up for the Sequences
-	 * removed.
+	 * Insert a sufficient number of random Genes to make up for the Sequences removed.
 	 * 
 	 * @param chromosome
 	 *            to Chromosome to insert Genes into
@@ -355,10 +345,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 
 		for (int i = 0; i < genesToAdd.size(); i++) {
 			/*
-			 * It doesn't matter what order we add the Genes in, since they are
-			 * random, but it should generally perform better if we add them
-			 * towards the end. This way less Sequence indices need to be
-			 * updated.
+			 * It doesn't matter what order we add the Genes in, since they are random, but it should generally perform
+			 * better if we add them towards the end. This way less Sequence indices need to be updated.
 			 */
 			chromosome.insertGene(beginGeneIndex + i, genesToAdd.get(i));
 		}

@@ -551,9 +551,8 @@ public class LiberalMutationAlgorithmTest {
 			liberalMutationAlgorithm.mutateRandomGene(mockKeylessChromosome, availableIndices);
 
 			/*
-			 * If the availableIndices List does not contain the last element,
-			 * we need to repeat, because that does not trigger the specific
-			 * scenario we are testing for.
+			 * If the availableIndices List does not contain the last element, we need to repeat, because that does not
+			 * trigger the specific scenario we are testing for.
 			 */
 		} while (availableIndices.size() > 0 && (availableIndices.get(availableIndices.size() - 1) == 0));
 

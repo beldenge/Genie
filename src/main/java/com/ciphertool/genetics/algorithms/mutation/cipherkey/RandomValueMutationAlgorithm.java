@@ -42,8 +42,7 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 		}
 
 		/*
-		 * Choose a random number of mutations constrained by the configurable
-		 * max and the total number of genes
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 

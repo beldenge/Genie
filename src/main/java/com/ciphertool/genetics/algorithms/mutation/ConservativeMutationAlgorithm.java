@@ -44,8 +44,7 @@ public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorith
 		}
 
 		/*
-		 * Choose a random number of mutations constrained by the configurable
-		 * max and the total number of genes
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
@@ -76,8 +75,7 @@ public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorith
 		}
 
 		/*
-		 * We don't want to reuse an index, so we get one from the List of
-		 * indices which are still available
+		 * We don't want to reuse an index, so we get one from the List of indices which are still available
 		 */
 		int randomIndex = availableIndices.get((int) (Math.random() * availableIndices.size()));
 
@@ -103,8 +101,8 @@ public class ConservativeMutationAlgorithm implements NonUniformMutationAlgorith
 		}
 
 		/*
-		 * Loop just in case the value of the new Gene is the same as the
-		 * existing value, since that would defeat the purpose of the mutation.
+		 * Loop just in case the value of the new Gene is the same as the existing value, since that would defeat the
+		 * purpose of the mutation.
 		 */
 		Gene oldGene = chromosome.getGenes().get(index);
 		Gene newGene = null;

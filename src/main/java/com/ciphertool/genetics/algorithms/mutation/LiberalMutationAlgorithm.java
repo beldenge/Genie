@@ -45,8 +45,7 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		}
 
 		/*
-		 * Choose a random number of mutations constrained by the configurable
-		 * max and the total number of genes
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
 		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
@@ -77,8 +76,7 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		}
 
 		/*
-		 * We don't want to reuse an index, so we get one from the List of
-		 * indices which are still available
+		 * We don't want to reuse an index, so we get one from the List of indices which are still available
 		 */
 		int randomIndex = availableIndices.get((int) (Math.random() * availableIndices.size()));
 
@@ -94,8 +92,8 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		availableIndices.remove(availableIndices.indexOf(randomIndex));
 
 		/*
-		 * If there are less Genes now due to the resizing, then remove those
-		 * from the end of the availableIndices List as well.
+		 * If there are less Genes now due to the resizing, then remove those from the end of the availableIndices List
+		 * as well.
 		 */
 		for (int i = 0; i < difference; i++) {
 			availableIndices.remove(availableIndices.size() - 1);
@@ -119,8 +117,8 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		}
 
 		/*
-		 * Loop just in case the value of the new Gene is the same as the
-		 * existing value, since that would defeat the purpose of the mutation.
+		 * Loop just in case the value of the new Gene is the same as the existing value, since that would defeat the
+		 * purpose of the mutation.
 		 */
 		Gene oldGene = chromosome.getGenes().get(index);
 		Gene newGene = null;

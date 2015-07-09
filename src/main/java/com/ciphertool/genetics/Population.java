@@ -128,8 +128,7 @@ public class Population {
 		int evaluationCount = 0;
 		for (Chromosome individual : individuals) {
 			/*
-			 * Only evaluate individuals that have changed since the last
-			 * evaluation.
+			 * Only evaluate individuals that have changed since the last evaluation.
 			 */
 			if (individual.isEvaluationNeeded()) {
 				evaluationCount++;
@@ -177,9 +176,8 @@ public class Population {
 
 			if (this.compareToKnownSolution) {
 				/*
-				 * We have to clone the best fit individual since the
-				 * knownSolutionFitnessEvaluator sets properties on the
-				 * Chromosome, and we want it to do that in all other cases.
+				 * We have to clone the best fit individual since the knownSolutionFitnessEvaluator sets properties on
+				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
 				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator
@@ -195,24 +193,21 @@ public class Population {
 		int individualsRemoved = 0;
 
 		/*
-		 * We have to iterate backwards since the size will decrement each time
-		 * an individual is removed.
+		 * We have to iterate backwards since the size will decrement each time an individual is removed.
 		 */
 		for (int i = this.individuals.size() - 1; i >= 0; i--) {
 			individual = this.individuals.get(i);
 
 			/*
-			 * A value less than zero represents immortality, so always increase
-			 * the age in that case. Otherwise, only increase the age if this
-			 * individual has more generations to live.
+			 * A value less than zero represents immortality, so always increase the age in that case. Otherwise, only
+			 * increase the age if this individual has more generations to live.
 			 */
 			if (this.lifespan < 0 || individual.getAge() < this.lifespan) {
 				individual.increaseAge();
 			} else {
 				/*
-				 * We have to remove by index in case there is more than one
-				 * Chromosome that is equal, since more than likely the unique
-				 * key will not have been generated from database yet.
+				 * We have to remove by index in case there is more than one Chromosome that is equal, since more than
+				 * likely the unique key will not have been generated from database yet.
 				 */
 				this.removeIndividual(i);
 				individualsRemoved++;
@@ -223,8 +218,8 @@ public class Population {
 	}
 
 	/*
-	 * This method depends on the totalFitness and individuals' fitness being
-	 * accurately maintained. Returns the index of the Chromosome chosen.
+	 * This method depends on the totalFitness and individuals' fitness being accurately maintained. Returns the index
+	 * of the Chromosome chosen.
 	 */
 	public int selectIndex() {
 		return this.selector.getNextIndex(individuals, totalFitness);
@@ -238,8 +233,8 @@ public class Population {
 	}
 
 	/**
-	 * Removes an individual from the population based on its index. This is
-	 * much more efficient than removing by equality.
+	 * Removes an individual from the population based on its index. This is much more efficient than removing by
+	 * equality.
 	 * 
 	 * @param individual
 	 */
@@ -269,8 +264,7 @@ public class Population {
 		this.individuals.add(individual);
 
 		/*
-		 * Only evaluate this individual if it hasn't been evaluated yet by some
-		 * other process.
+		 * Only evaluate this individual if it hasn't been evaluated yet by some other process.
 		 */
 		boolean needsEvaluation = individual.isEvaluationNeeded();
 		if (needsEvaluation) {
@@ -304,8 +298,7 @@ public class Population {
 	}
 
 	/**
-	 * Resets eligibility for all individuals which are currently ineligible for
-	 * reproduction.
+	 * Resets eligibility for all individuals which are currently ineligible for reproduction.
 	 */
 	public void resetEligibility() {
 		for (Chromosome ineligibleIndividual : this.ineligibleForReproduction) {
@@ -324,9 +317,8 @@ public class Population {
 	}
 
 	/**
-	 * Prints every Chromosome in this population in ascending order by fitness.
-	 * Note that a lower fitness value can be a better value depending on the
-	 * strategy.
+	 * Prints every Chromosome in this population in ascending order by fitness. Note that a lower fitness value can be
+	 * a better value depending on the strategy.
 	 */
 	public void printAscending() {
 		this.sortIndividuals();
@@ -407,8 +399,7 @@ public class Population {
 	}
 
 	/**
-	 * This is NOT required. We will not always know the solution. In fact, that
-	 * should be the rare case.
+	 * This is NOT required. We will not always know the solution. In fact, that should be the rare case.
 	 * 
 	 * @param knownSolutionFitnessEvaluator
 	 *            the knownSolutionFitnessEvaluator to set

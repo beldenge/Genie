@@ -57,9 +57,8 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 	}
 
 	/**
-	 * This crossover algorithm does a conservative amount of changes since it
-	 * only replaces genes that begin and end at the exact same sequence
-	 * positions.
+	 * This crossover algorithm does a conservative amount of changes since it only replaces genes that begin and end at
+	 * the exact same sequence positions.
 	 */
 	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		KeylessChromosome child = (KeylessChromosome) parentA.clone();
@@ -67,15 +66,13 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
 
 		/*
-		 * Make sure we don't exceed parentB's index, or else we will get an
-		 * IndexOutOfBoundsException
+		 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 		 */
 		while (crossoverProgressDto.getFirstChromosomeGeneIndex() < child.getGenes().size()
 				&& crossoverProgressDto.getSecondChromosomeGeneIndex() < parentB.getGenes().size()) {
 			/*
-			 * Replace from parentB and reevaluate to see if it improves. We are
-			 * extra careful here since genes won't match exactly with sequence
-			 * position.
+			 * Replace from parentB and reevaluate to see if it improves. We are extra careful here since genes won't
+			 * match exactly with sequence position.
 			 */
 			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
 					.getSecondChromosomeSequencePosition()
@@ -116,8 +113,8 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 		child.setFitness(newFitness);
 
 		/*
-		 * Revert to the original gene if this decreased fitness. It's ok to let
-		 * non-beneficial changes progress, as long as they are not detrimental.
+		 * Revert to the original gene if this decreased fitness. It's ok to let non-beneficial changes progress, as
+		 * long as they are not detrimental.
 		 */
 		if (newFitness < originalFitness) {
 			child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), geneCopy);

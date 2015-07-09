@@ -121,8 +121,7 @@ public class MockKeylessChromosome implements KeylessChromosome {
 	}
 
 	/**
-	 * Convenience method for unit tests. This will not normally be implemented
-	 * this way.
+	 * Convenience method for unit tests. This will not normally be implemented this way.
 	 * 
 	 * @param targetSize
 	 *            the targetSize to set

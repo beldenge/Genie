@@ -118,9 +118,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(-999.0).thenReturn(
 				999.0).thenReturn(-999.0);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		lowestCommonGroupCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
@@ -220,9 +219,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(-999.0).thenReturn(
 				999.0).thenReturn(-999.0);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		lowestCommonGroupCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
@@ -257,9 +255,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(999.0).thenReturn(-999.0).thenReturn(
 				999.0).thenReturn(-999.0);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		lowestCommonGroupCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
@@ -376,9 +373,8 @@ public class LowestCommonGroupCrossoverAlgorithmTest extends CrossoverAlgorithmT
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		lowestCommonGroupCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 

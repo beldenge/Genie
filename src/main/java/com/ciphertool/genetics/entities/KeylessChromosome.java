@@ -35,8 +35,8 @@ public interface KeylessChromosome extends Chromosome {
 	public void addGene(Gene gene);
 
 	/**
-	 * Inserts a Gene at the specified index. Care must be taken to update any
-	 * Sequence indexes which follow the inserted Gene.
+	 * Inserts a Gene at the specified index. Care must be taken to update any Sequence indexes which follow the
+	 * inserted Gene.
 	 * 
 	 * @param index
 	 * @param gene
@@ -44,8 +44,8 @@ public interface KeylessChromosome extends Chromosome {
 	public void insertGene(int index, Gene gene);
 
 	/**
-	 * Removes a Gene at the specified index. Care must be taken to update any
-	 * Sequence indexes which follow the removed Gene.
+	 * Removes a Gene at the specified index. Care must be taken to update any Sequence indexes which follow the removed
+	 * Gene.
 	 * 
 	 * @param index
 	 * @return
@@ -53,9 +53,8 @@ public interface KeylessChromosome extends Chromosome {
 	public Gene removeGene(int index);
 
 	/**
-	 * Replaces a Gene at the specified index. Care must be taken to update any
-	 * Sequence indexes which follow the inserted Gene in case there are a
-	 * different number of Sequences.
+	 * Replaces a Gene at the specified index. Care must be taken to update any Sequence indexes which follow the
+	 * inserted Gene in case there are a different number of Sequences.
 	 * 
 	 * @param index
 	 * @param newGene

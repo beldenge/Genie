@@ -63,8 +63,7 @@ public class CleanAspectTest {
 		}
 
 		/*
-		 * No assertions necessary. We just need to ensure that no exception is
-		 * thrown
+		 * No assertions necessary. We just need to ensure that no exception is thrown
 		 */
 	}
 }

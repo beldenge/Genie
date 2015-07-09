@@ -168,8 +168,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 				ineligibleForReproductionField, population);
 
 		/*
-		 * The population size should be reduced by the number of parents used
-		 * during crossover.
+		 * The population size should be reduced by the number of parents used during crossover.
 		 */
 		assertEquals(40, population.size());
 

@@ -25,8 +25,7 @@ public interface FitnessEvaluator {
 	public Double evaluate(Chromosome chromosome);
 
 	/**
-	 * The source structure against which this genetic algorithm should evaluate
-	 * chromosomes.
+	 * The source structure against which this genetic algorithm should evaluate chromosomes.
 	 * 
 	 * @param obj
 	 *            the Object

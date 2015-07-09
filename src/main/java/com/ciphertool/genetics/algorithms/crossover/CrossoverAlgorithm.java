@@ -27,8 +27,8 @@ import com.ciphertool.genetics.entities.Chromosome;
 public interface CrossoverAlgorithm<T extends Chromosome> {
 
 	/**
-	 * Performs crossover to a List of children by cloning one or both of the
-	 * parents and then selectively replacing Genes from the other parent.
+	 * Performs crossover to a List of children by cloning one or both of the parents and then selectively replacing
+	 * Genes from the other parent.
 	 * 
 	 * @param parentA
 	 *            the first parent

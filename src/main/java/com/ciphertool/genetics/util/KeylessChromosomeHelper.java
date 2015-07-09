@@ -29,26 +29,24 @@ public class KeylessChromosomeHelper {
 	private GeneDao geneDao;
 
 	/**
-	 * Trims or pads the Chromosome in case the new Gene is respectively longer
-	 * or shorter than the old Gene.
+	 * Trims or pads the Chromosome in case the new Gene is respectively longer or shorter than the old Gene.
 	 * 
 	 * @param chromosomeToResize
 	 *            the Chromosome to resize
 	 */
 	public void resizeChromosome(KeylessChromosome chromosomeToResize) {
 		/*
-		 * Pad the end with more Genes in case the new Gene was shorter, causing
-		 * the sequence length to fall below the target length. This should be
-		 * done before truncating in case the Gene we add causes the sequence
-		 * length to fall outside the target length.
+		 * Pad the end with more Genes in case the new Gene was shorter, causing the sequence length to fall below the
+		 * target length. This should be done before truncating in case the Gene we add causes the sequence length to
+		 * fall outside the target length.
 		 */
 		while (chromosomeToResize.actualSize() < chromosomeToResize.targetSize()) {
 			chromosomeToResize.addGene(geneDao.findRandomGene(chromosomeToResize));
 		}
 
 		/*
-		 * Similarly, truncate the last Gene in case the new Gene was longer,
-		 * causing the sequence length to exceed the target length.
+		 * Similarly, truncate the last Gene in case the new Gene was longer, causing the sequence length to exceed the
+		 * target length.
 		 */
 		while (chromosomeToResize.actualSize() > chromosomeToResize.targetSize()) {
 			VariableLengthGene lastGene = (VariableLengthGene) chromosomeToResize.getGenes().get(
@@ -56,14 +54,14 @@ public class KeylessChromosomeHelper {
 
 			if (chromosomeToResize.actualSize() - lastGene.size() >= chromosomeToResize.targetSize()) {
 				/*
-				 * If the last Gene is entirely outside the range of this
-				 * Chromosome's target size, just remove it altogether.
+				 * If the last Gene is entirely outside the range of this Chromosome's target size, just remove it
+				 * altogether.
 				 */
 				chromosomeToResize.removeGene(chromosomeToResize.getGenes().size() - 1);
 			} else {
 				/*
-				 * Assign actual size to a variable so it doesn't have to be
-				 * calculated on every iteration of the for-loop
+				 * Assign actual size to a variable so it doesn't have to be calculated on every iteration of the
+				 * for-loop
 				 */
 				int actualSize = chromosomeToResize.actualSize();
 

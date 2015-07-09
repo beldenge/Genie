@@ -358,8 +358,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertEquals(1, executionStatistics.getGenerationStatisticsList().size());
 
 		/*
-		 * The population size should be reduced by the number of parents used
-		 * during crossover.
+		 * The population size should be reduced by the number of parents used during crossover.
 		 */
 		assertEquals(100, populationMock.size());
 
@@ -423,16 +422,14 @@ public class MultigenerationalGeneticAlgorithmTest {
 		strategyToSet.setLifespan(null);
 
 		/*
-		 * This must be set via reflection because the setter method does its
-		 * own validation
+		 * This must be set via reflection because the setter method does its own validation
 		 */
 		Field survivalRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "survivalRate");
 		ReflectionUtils.makeAccessible(survivalRateField);
 		ReflectionUtils.setField(survivalRateField, strategyToSet, -0.1);
 
 		/*
-		 * This must be set via reflection because the setter method does its
-		 * own validation
+		 * This must be set via reflection because the setter method does its own validation
 		 */
 		Field mutationRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "mutationRate");
 		ReflectionUtils.makeAccessible(mutationRateField);
@@ -441,8 +438,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		strategyToSet.setMaxMutationsPerIndividual(-1);
 
 		/*
-		 * This must be set via reflection because the setter method does its
-		 * own validation
+		 * This must be set via reflection because the setter method does its own validation
 		 */
 		Field crossoverRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "crossoverRate");
 		ReflectionUtils.makeAccessible(crossoverRateField);
@@ -575,8 +571,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertEquals(5, childrenProduced);
 
 		/*
-		 * The population size should be reduced by the number of parents used
-		 * during crossover.
+		 * The population size should be reduced by the number of parents used during crossover.
 		 */
 		assertEquals(40, population.size());
 

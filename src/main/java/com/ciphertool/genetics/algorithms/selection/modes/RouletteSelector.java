@@ -58,8 +58,7 @@ public class RouletteSelector implements Selector {
 			randomIndex -= nextIndividual.getFitness();
 
 			/*
-			 * If we have subtracted everything from randomIndex, then the ball
-			 * has stopped rolling.
+			 * If we have subtracted everything from randomIndex, then the ball has stopped rolling.
 			 */
 			if (randomIndex <= 0) {
 				winningIndex = i;

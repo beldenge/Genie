@@ -370,8 +370,8 @@ public class PopulationTest {
 		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 
 		/*
-		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0
-		 * x 2) + 5.0 + 100.1, since two individuals are re-evaluated
+		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0 x 2) + 5.0 + 100.1, since two
+		 * individuals are re-evaluated
 		 */
 		Double expectedTotalFitness = new Double(305.1);
 
@@ -430,8 +430,8 @@ public class PopulationTest {
 		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 
 		/*
-		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0
-		 * x 2) + 5.0 + 100.1, since two individuals are re-evaluated
+		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0 x 2) + 5.0 + 100.1, since two
+		 * individuals are re-evaluated
 		 */
 		Double expectedTotalFitness = new Double(305.1);
 

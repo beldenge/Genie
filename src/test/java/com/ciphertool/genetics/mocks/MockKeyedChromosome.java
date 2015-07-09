@@ -91,8 +91,7 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 	}
 
 	/**
-	 * Convenience method for unit tests. This will not normally be implemented
-	 * this way.
+	 * Convenience method for unit tests. This will not normally be implemented this way.
 	 * 
 	 * @param targetSize
 	 *            the targetSize to set
@@ -142,14 +141,14 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 		copyChromosome.setEvaluationNeeded(this.needsEvaluation);
 
 		/*
-		 * Since we are copying over the fitness value, we don't need to reset
-		 * the evaluationNeeded flag because the cloned default is correct.
+		 * Since we are copying over the fitness value, we don't need to reset the evaluationNeeded flag because the
+		 * cloned default is correct.
 		 */
 		copyChromosome.setFitness(this.fitness.doubleValue());
 
 		/*
-		 * We don't need to clone the solutionSetId or cipherId as even though
-		 * they are objects, they should remain static.
+		 * We don't need to clone the solutionSetId or cipherId as even though they are objects, they should remain
+		 * static.
 		 */
 
 		Gene nextGene = null;

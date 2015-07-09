@@ -23,9 +23,8 @@ import java.util.List;
 import com.ciphertool.genetics.entities.Chromosome;
 
 /**
- * This class serves as the mode of selecting a fit individual from the
- * population. It is essentially a helper class used by other algorithms, most
- * notably any SelectionAlgorithm implementation.
+ * This class serves as the mode of selecting a fit individual from the population. It is essentially a helper class
+ * used by other algorithms, most notably any SelectionAlgorithm implementation.
  * 
  * @author george
  */

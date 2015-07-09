@@ -109,9 +109,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		int populationSizeBeforeGeneration = this.population.size();
 
 		/*
-		 * Doing the select first improves performance by a ratio of up to (1 -
-		 * survivalRate). It makes more sense as well since only survivors can
-		 * reproduce.
+		 * Doing the select first improves performance by a ratio of up to (1 - survivalRate). It makes more sense as
+		 * well since only survivors can reproduce.
 		 */
 		long startSelect = System.currentTimeMillis();
 		int totalDeaths = select();
@@ -120,9 +119,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		}
 
 		/*
-		 * We want to increase age before children are produced in following
-		 * steps so that the children do not age before having a chance to do
-		 * anything.
+		 * We want to increase age before children are produced in following steps so that the children do not age
+		 * before having a chance to do anything.
 		 */
 		long startAging = System.currentTimeMillis();
 		totalDeaths += this.population.increaseAge();
@@ -150,10 +148,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.resetEligibility();
 
 		/*
-		 * Adds new random solutions to the population to fill back to the
-		 * population size. Ultimately, this should not be necessary, but it is
-		 * here as a failsafe in crossover and mutation do not produce enough
-		 * children.
+		 * Adds new random solutions to the population to fill back to the population size. Ultimately, this should not
+		 * be necessary, but it is here as a failsafe in crossover and mutation do not produce enough children.
 		 */
 		long startBreeding = System.currentTimeMillis();
 		generationStatistics.setNumberRandomlyGenerated(this.population.breed(this.strategy.getPopulationSize()));
@@ -276,8 +272,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 			mom = this.population.getIndividuals().get(momIndex);
 
 			/*
-			 * Remove mom from the population to prevent parents from
-			 * reproducing more than one time per generation.
+			 * Remove mom from the population to prevent parents from reproducing more than one time per generation.
 			 */
 			this.population.makeIneligibleForReproduction(momIndex);
 
@@ -285,16 +280,15 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 			dad = this.population.getIndividuals().get(dadIndex);
 
 			/*
-			 * Remove dad from the population to prevent parents from
-			 * reproducing more than one time per generation.
+			 * Remove dad from the population to prevent parents from reproducing more than one time per generation.
 			 */
 			this.population.makeIneligibleForReproduction(dadIndex);
 
 			children = crossoverAlgorithm.crossover(mom, dad);
 
 			/*
-			 * Add children after all crossover operations are completed so that
-			 * children are not inadvertently breeding immediately after birth.
+			 * Add children after all crossover operations are completed so that children are not inadvertently breeding
+			 * immediately after birth.
 			 */
 			childrenToAdd.addAll(children);
 		}
@@ -308,10 +302,9 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 	protected long determinePairsToCrossover(long initialPopulationSize) {
 		/*
-		 * We have to round down to protect against
-		 * ArrayIndexOutOfBoundsException in edge cases. Also choose the minimum
-		 * between the current population size and the calculated number of
-		 * pairs in case there are not enough eligible individuals.
+		 * We have to round down to protect against ArrayIndexOutOfBoundsException in edge cases. Also choose the
+		 * minimum between the current population size and the calculated number of pairs in case there are not enough
+		 * eligible individuals.
 		 */
 		return Math.min((long) (initialPopulationSize * strategy.getCrossoverRate()),
 				((long) (this.population.size() / 2)));
@@ -322,10 +315,9 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		int mutantIndex = -1;
 
 		/*
-		 * Set the number of mutations to perform to be the lesser of the
-		 * current eligible population size and the total initial population
-		 * size (before any other operations made individuals ineligible for
-		 * reproduction) multiplied by the configured mutation rate.
+		 * Set the number of mutations to perform to be the lesser of the current eligible population size and the total
+		 * initial population size (before any other operations made individuals ineligible for reproduction) multiplied
+		 * by the configured mutation rate.
 		 */
 		long mutations = Math.min(Math.round((initialPopulationSize * strategy.getMutationRate())), this.population
 				.size());
@@ -339,15 +331,13 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 			Chromosome chromosomeToMutate = this.population.getIndividuals().get(mutantIndex).clone();
 
 			/*
-			 * Remove the Chromosome from the population temporarily so that it
-			 * is not re-selected by the next spin of the roulette wheel. Add it
-			 * to a List to be re-added after all mutations are complete.
+			 * Remove the Chromosome from the population temporarily so that it is not re-selected by the next spin of
+			 * the roulette wheel. Add it to a List to be re-added after all mutations are complete.
 			 */
 			this.population.makeIneligibleForReproduction(mutantIndex);
 
 			/*
-			 * Mutate a gene within the Chromosome. The original Chromosome has
-			 * been cloned.
+			 * Mutate a gene within the Chromosome. The original Chromosome has been cloned.
 			 */
 			mutationAlgorithm.mutateChromosome(chromosomeToMutate);
 			children.add(chromosomeToMutate);

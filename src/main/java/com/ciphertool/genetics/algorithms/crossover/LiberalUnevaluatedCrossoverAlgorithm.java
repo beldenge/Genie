@@ -59,8 +59,8 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 	}
 
 	/**
-	 * This crossover algorithm does a liberal amount of changes since it
-	 * replaces genes regardless of their begin and end sequence positions
+	 * This crossover algorithm does a liberal amount of changes since it replaces genes regardless of their begin and
+	 * end sequence positions
 	 */
 	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		KeylessChromosome child = (KeylessChromosome) parentA.clone();
@@ -68,8 +68,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 		int childGeneIndex = 0;
 
 		/*
-		 * Make sure we don't exceed parentB's index, or else we will get an
-		 * IndexOutOfBoundsException
+		 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 		 */
 		while (childGeneIndex < child.getGenes().size() && childGeneIndex < parentB.getGenes().size()) {
 			attemptToReplaceGeneInChild(childGeneIndex, child, parentB);
@@ -78,8 +77,7 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 		}
 
 		/*
-		 * Trim the Chromosome in case it ends with too many sequences due to
-		 * the nature of this algorithm
+		 * Trim the Chromosome in case it ends with too many sequences due to the nature of this algorithm
 		 */
 		keylessChromosomeHelper.resizeChromosome(child);
 

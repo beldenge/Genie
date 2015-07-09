@@ -36,9 +36,8 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 	private RandomListElementSelector randomListElementSelector;
 
 	/**
-	 * This crossover algorithm finds all the points where both parent
-	 * Chromosomes can safely be split in half without splitting a Gene, and
-	 * then picks one of those at random as the centromere for crossover.
+	 * This crossover algorithm finds all the points where both parent Chromosomes can safely be split in half without
+	 * splitting a Gene, and then picks one of those at random as the centromere for crossover.
 	 * 
 	 * @see com.ciphertool.genetics.algorithms.crossover.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome,
 	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
@@ -59,8 +58,7 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 		}
 
 		/*
-		 * Casting to int will truncate the number, giving us an index we can
-		 * safely use against lists.
+		 * Casting to int will truncate the number, giving us an index we can safely use against lists.
 		 */
 		int centromere = potentialCentromeres.get(randomListElementSelector
 				.selectRandomListElement(potentialCentromeres));
@@ -102,8 +100,8 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 		}
 
 		/*
-		 * Insert cloned parent Genes into child. insertCount works as an offset
-		 * so that the Genes are inserted in the correct order.
+		 * Insert cloned parent Genes into child. insertCount works as an offset so that the Genes are inserted in the
+		 * correct order.
 		 */
 		for (int j = parentBeginGeneIndex; j < parentB.getGenes().size(); j++) {
 			child.addGene(parentB.getGenes().get(j).clone());
@@ -122,8 +120,7 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 	}
 
 	/**
-	 * Finds the index of the Gene beginning at the Sequence specified by
-	 * centromere.
+	 * Finds the index of the Gene beginning at the Sequence specified by centromere.
 	 * 
 	 * @param chromosome
 	 *            the Chromosome to check
@@ -137,9 +134,8 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 
 		do {
 			/*
-			 * We want to advance the geneIndex before checking the sequenceId,
-			 * since a centromere cannot exist at the first Gene (at index zero)
-			 * anyway.
+			 * We want to advance the geneIndex before checking the sequenceId, since a centromere cannot exist at the
+			 * first Gene (at index zero) anyway.
 			 */
 			geneIndex++;
 
@@ -156,12 +152,10 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 	}
 
 	/*
-	 * Build a list of potential centromeres to use later for actual crossover.
-	 * This should be all the Sequences which fall at the end of a Gene, so that
-	 * the crossover will not happen in the middle of a Gene.
+	 * Build a list of potential centromeres to use later for actual crossover. This should be all the Sequences which
+	 * fall at the end of a Gene, so that the crossover will not happen in the middle of a Gene.
 	 * 
-	 * Make sure we don't exceed parentB's index, or else we will get an
-	 * IndexOutOfBoundsException
+	 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 	 */
 	protected static List<Integer> findPotentialCentromeres(KeylessChromosome mom, KeylessChromosome dad) {
 		CrossoverProgressDto crossoverProgressDto = new CrossoverProgressDto();
@@ -171,10 +165,9 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 		while (crossoverProgressDto.getFirstChromosomeGeneIndex() < mom.getGenes().size()
 				&& crossoverProgressDto.getSecondChromosomeGeneIndex() < dad.getGenes().size()) {
 			/*
-			 * Advance the indexes depending on which Gene's sequence is
-			 * greater. We advance them before checking whether it is a
-			 * potential centromere because a centromere cannot exist at the
-			 * first Gene (at index zero) anyway.
+			 * Advance the indexes depending on which Gene's sequence is greater. We advance them before checking
+			 * whether it is a potential centromere because a centromere cannot exist at the first Gene (at index zero)
+			 * anyway.
 			 */
 			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, mom, dad);
 
@@ -183,9 +176,8 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 			if ((momGeneEndSequence == crossoverProgressDto.getSecondChromosomeSequencePosition())
 					&& (momGeneEndSequence < mom.targetSize() - 1)) {
 				/*
-				 * Add to the potentialCentromeres list if the end of each Gene
-				 * has the same Sequence index AND this is not the last Sequence
-				 * of the Chromosome.
+				 * Add to the potentialCentromeres list if the end of each Gene has the same Sequence index AND this is
+				 * not the last Sequence of the Chromosome.
 				 */
 				potentialCentromeres.add(momGeneEndSequence);
 			}

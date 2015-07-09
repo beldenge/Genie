@@ -117,9 +117,8 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
@@ -217,9 +216,8 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
@@ -252,9 +250,8 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 
@@ -371,9 +368,8 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		/*
-		 * We do not need to stub out the evaluate() method because the fitness
-		 * value defaults to zero, and this algorithm allows replacements where
-		 * the fitness is equal
+		 * We do not need to stub out the evaluate() method because the fitness value defaults to zero, and this
+		 * algorithm allows replacements where the fitness is equal
 		 */
 		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorMock);
 

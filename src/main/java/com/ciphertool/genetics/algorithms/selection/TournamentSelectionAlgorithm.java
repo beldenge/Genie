@@ -38,14 +38,12 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	private Integer groupSize;
 
 	/*
-	 * Performs selection by creating groups of Chromosomes and running
-	 * tournaments upon each of them.
+	 * Performs selection by creating groups of Chromosomes and running tournaments upon each of them.
 	 * 
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm#select
-	 * (com.ciphertool.genetics.Population, int, double)
+	 * @see com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm#select (com.ciphertool.genetics.Population,
+	 * int, double)
 	 */
 	@Override
 	public int select(Population population, int maxSurvivors, double survivalRate) {
@@ -58,9 +56,8 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		int initialPopulationSize = population.size();
 
 		/*
-		 * We must use maxIndividuals instead of the current population size in
-		 * case the current population size is larger than the maximum
-		 * specified.
+		 * We must use maxIndividuals instead of the current population size in case the current population size is
+		 * larger than the maximum specified.
 		 */
 		long numSurvivors = Math.min(Math.round(maxSurvivors * survivalRate), population.size());
 		int numberRemoved = (int) (initialPopulationSize - numSurvivors);
@@ -83,8 +80,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 			}
 
 			/*
-			 * We have to relate the index from the tournament group back to the
-			 * index of the overall population
+			 * We have to relate the index from the tournament group back to the index of the overall population
 			 */
 			randomIndividuals = new ArrayList<Chromosome>();
 			randomIndividuals.addAll(group.keySet());
@@ -96,8 +92,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 		}
 
 		/*
-		 * Reset the population by clearing it and then adding back all the
-		 * survivors.
+		 * Reset the population by clearing it and then adding back all the survivors.
 		 */
 		population.clearIndividuals();
 
@@ -115,8 +110,8 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	}
 
 	/**
-	 * This method is needed for Selector modes which require the total fitness
-	 * of the List of individuals in order to select from them.
+	 * This method is needed for Selector modes which require the total fitness of the List of individuals in order to
+	 * select from them.
 	 * 
 	 * @param group
 	 *            the group of Chromosomes

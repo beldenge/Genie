@@ -60,8 +60,8 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 	}
 
 	/**
-	 * This crossover algorithm does a liberal amount of changes since it
-	 * replaces genes regardless of their begin and end sequence positions
+	 * This crossover algorithm does a liberal amount of changes since it replaces genes regardless of their begin and
+	 * end sequence positions
 	 */
 	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		KeylessChromosome child = (KeylessChromosome) parentA.clone();
@@ -69,8 +69,7 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 		int childGeneIndex = 0;
 
 		/*
-		 * Make sure we don't exceed parentB's index, or else we will get an
-		 * IndexOutOfBoundsException
+		 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 		 */
 		while (childGeneIndex < child.getGenes().size() && childGeneIndex < parentB.getGenes().size()) {
 			attemptToReplaceGeneInChild(childGeneIndex, child, parentB);
@@ -79,8 +78,7 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 		}
 
 		/*
-		 * Trim the Chromosome in case it ends with too many sequences due to
-		 * the nature of this algorithm
+		 * Trim the Chromosome in case it ends with too many sequences due to the nature of this algorithm
 		 */
 		keylessChromosomeHelper.resizeChromosome(child);
 
@@ -112,8 +110,7 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 		child.replaceGene(childGeneIndex, parent.getGenes().get(childGeneIndex).clone());
 
 		/*
-		 * Add Genes to the end in case the Chromosome has too few sequences due
-		 * to the replacement
+		 * Add Genes to the end in case the Chromosome has too few sequences due to the replacement
 		 */
 		while (child.actualSize() < child.targetSize()) {
 			child.addGene(geneDao.findRandomGene(child));
@@ -123,8 +120,8 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 		child.setFitness(newFitness);
 
 		/*
-		 * Revert to the original gene if this decreased fitness. It's ok to let
-		 * non-beneficial changes progress, as long as they are not detrimental.
+		 * Revert to the original gene if this decreased fitness. It's ok to let non-beneficial changes progress, as
+		 * long as they are not detrimental.
 		 */
 		if (newFitness < originalFitness) {
 			child.replaceGene(childGeneIndex, geneCopy);

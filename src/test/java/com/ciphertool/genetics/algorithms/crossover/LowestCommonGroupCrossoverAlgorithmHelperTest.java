@@ -87,10 +87,9 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent, 1);
 
 		/*
-		 * This is 8 instead of 6 because the offset makes the sequence position
-		 * advance by the size of the third Gene. This is not how it would
-		 * actually work in a 'real' execution of the method but is correct for
-		 * testing purposes.
+		 * This is 8 instead of 6 because the offset makes the sequence position advance by the size of the third Gene.
+		 * This is not how it would actually work in a 'real' execution of the method but is correct for testing
+		 * purposes.
 		 */
 		assertEquals(8, crossoverProgressDto.getFirstChromosomeSequencePosition());
 		assertEquals(8, crossoverProgressDto.getSecondChromosomeSequencePosition());

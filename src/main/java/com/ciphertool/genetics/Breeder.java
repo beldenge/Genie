@@ -25,8 +25,7 @@ public interface Breeder {
 	public Chromosome breed();
 
 	/**
-	 * The source structure for which this genetic algorithm should generate
-	 * chromosomes.
+	 * The source structure for which this genetic algorithm should generate chromosomes.
 	 * 
 	 * @param obj
 	 *            the Object

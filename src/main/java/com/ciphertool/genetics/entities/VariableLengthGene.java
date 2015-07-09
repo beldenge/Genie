@@ -35,8 +35,8 @@ public interface VariableLengthGene extends Gene {
 	public void addSequence(Sequence sequence);
 
 	/**
-	 * Inserts a Sequence at the specified index. Care must be taken to update
-	 * any Sequence indexes which follow the inserted Sequence.
+	 * Inserts a Sequence at the specified index. Care must be taken to update any Sequence indexes which follow the
+	 * inserted Sequence.
 	 * 
 	 * @param index
 	 * @param sequence
@@ -44,8 +44,8 @@ public interface VariableLengthGene extends Gene {
 	public void insertSequence(int index, Sequence sequence);
 
 	/**
-	 * Removes a Sequence at the specified index. Care must be taken to update
-	 * any Sequence indexes which follow the removed Sequence.
+	 * Removes a Sequence at the specified index. Care must be taken to update any Sequence indexes which follow the
+	 * removed Sequence.
 	 * 
 	 * @param sequence
 	 */
@@ -60,8 +60,7 @@ public interface VariableLengthGene extends Gene {
 	public void replaceSequence(int index, Sequence newSequence);
 
 	/**
-	 * Return the size of this Gene, measured as the number of sequences making
-	 * up this Gene.
+	 * Return the size of this Gene, measured as the number of sequences making up this Gene.
 	 */
 	public int size();
 }

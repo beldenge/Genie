@@ -26,15 +26,13 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 
 	/*
-	 * Performs selection by simply dropping all of the individuals that fall
-	 * below the survival rate, based on fitness. So only the most fit
-	 * individuals will survive.
+	 * Performs selection by simply dropping all of the individuals that fall below the survival rate, based on fitness.
+	 * So only the most fit individuals will survive.
 	 * 
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm#select
-	 * (com.ciphertool.genetics.Population, int, double)
+	 * @see com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm#select (com.ciphertool.genetics.Population,
+	 * int, double)
 	 */
 	@Override
 	public int select(Population population, int maxSurvivors, double survivalRate) {
@@ -58,9 +56,8 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 
 		for (int i = survivorIndex - 1; i >= 0; i--) {
 			/*
-			 * The List is sorted in ascending order in terms of fitness, where
-			 * higher fitness value may or may not be preferred depending on the
-			 * comparator used.
+			 * The List is sorted in ascending order in terms of fitness, where higher fitness value may or may not be
+			 * preferred depending on the comparator used.
 			 */
 			population.removeIndividual(i);
 		}

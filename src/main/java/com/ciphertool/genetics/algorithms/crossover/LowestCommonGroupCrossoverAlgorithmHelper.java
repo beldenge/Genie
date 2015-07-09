@@ -47,8 +47,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 					.getSecondChromosomeEndGeneIndex());
 
 			/*
-			 * To avoid IndexOutOfBoundsException, first check that the Gene
-			 * index hasn't been exceeded.
+			 * To avoid IndexOutOfBoundsException, first check that the Gene index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < firstChromosomeSize) {
 				crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(((VariableLengthGene) first.getGenes()
@@ -56,8 +55,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			}
 
 			/*
-			 * To avoid IndexOutOfBoundsException, first check that the Gene
-			 * index hasn't been exceeded.
+			 * To avoid IndexOutOfBoundsException, first check that the Gene index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getSecondChromosomeEndGeneIndex() < secondChromosomeSize) {
 				crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(((VariableLengthGene) second.getGenes()
@@ -68,8 +66,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			crossoverProgressDto.advanceSecondChromosomeEndGeneIndexBy(1);
 
 			/*
-			 * To avoid IndexOutOfBoundsException, first check that the Gene
-			 * index hasn't been exceeded.
+			 * To avoid IndexOutOfBoundsException, first check that the Gene index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getSecondChromosomeEndGeneIndex() < secondChromosomeSize) {
 				crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(((VariableLengthGene) second.getGenes()
@@ -79,8 +76,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelper {
 			crossoverProgressDto.advanceFirstChromosomeEndGeneIndexBy(1);
 
 			/*
-			 * To avoid IndexOutOfBoundsException, first check that the Gene
-			 * index hasn't been exceeded.
+			 * To avoid IndexOutOfBoundsException, first check that the Gene index hasn't been exceeded.
 			 */
 			if (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < firstChromosomeSize) {
 				crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(((VariableLengthGene) first.getGenes()

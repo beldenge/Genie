@@ -19,8 +19,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	private TaskExecutor taskExecutor;
 
 	/**
-	 * A concurrent task for performing a crossover of two parent Chromosomes,
-	 * producing one child Chromosome.
+	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
 	protected class CrossoverTask implements Callable<List<Chromosome>> {
 
@@ -93,9 +92,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		List<Chromosome> dads = new ArrayList<Chromosome>();
 
 		/*
-		 * We first remove all the parent Chromosomes since the children are
-		 * guaranteed to be at least as fit. This also prevents parents from
-		 * reproducing more than one time per generation.
+		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit. This also
+		 * prevents parents from reproducing more than one time per generation.
 		 */
 		for (int i = 0; i < initialPopulationSize; i++) {
 			momIndex = this.population.selectIndex();
@@ -133,8 +131,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		Chromosome dad = null;
 
 		/*
-		 * Execute each crossover concurrently. Parents should produce two
-		 * children, but this is not necessarily always guaranteed.
+		 * Execute each crossover concurrently. Parents should produce two children, but this is not necessarily always
+		 * guaranteed.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			mom = moms.get(i);
@@ -146,16 +144,12 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		}
 
 		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
-		/*
-		 * Add the result of each FutureTask to the population since it
-		 * represents a new child Chromosome.
-		 */
+		// Add the result of each FutureTask to the population since it represents a new child Chromosome.
 		for (FutureTask<List<Chromosome>> future : futureTasks) {
 			try {
 				/*
-				 * Add children after all crossover operations are completed so
-				 * that children are not inadvertently breeding immediately
-				 * after birth.
+				 * Add children after all crossover operations are completed so that children are not inadvertently
+				 * breeding immediately after birth.
 				 */
 				childrenToAdd.addAll(future.get());
 			} catch (InterruptedException ie) {
@@ -170,16 +164,14 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 
 	@Override
 	public int mutate(int initialPopulationSize) {
-		// Do nothing. We are testing a Genetic Algorithm which has no separate
-		// "Mutate" step.
+		// Do nothing. We are testing a Genetic Algorithm which has no separate "Mutate" step.
 
 		return 0;
 	}
 
 	@Override
 	public int select() {
-		// Do nothing. We are testing a Genetic Algorithm which has no separate
-		// "Select" step.
+		// Do nothing. We are testing a Genetic Algorithm which has no separate "Select" step.
 
 		return 0;
 	}

@@ -22,8 +22,7 @@ import com.ciphertool.genetics.Population;
 
 public interface SelectionAlgorithm {
 	/**
-	 * Performs natural selection against the supplied Population, modifying it
-	 * by reference.
+	 * Performs natural selection against the supplied Population, modifying it by reference.
 	 * 
 	 * @param population
 	 *            the population to select upon

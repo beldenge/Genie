@@ -24,8 +24,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 public interface NonUniformMutationAlgorithm<T extends Chromosome> extends MutationAlgorithm<T> {
 	/**
 	 * @param maxMutationsPerChromosome
-	 *            the maximum number of mutations to perform on the given
-	 *            individual
+	 *            the maximum number of mutations to perform on the given individual
 	 */
 	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome);
 }

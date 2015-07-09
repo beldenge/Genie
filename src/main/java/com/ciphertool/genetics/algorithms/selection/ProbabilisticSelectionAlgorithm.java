@@ -33,14 +33,12 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 	private static Selector selector = new RouletteSelector();
 
 	/*
-	 * Performs selection by giving each individual a probabilistic chance of
-	 * survival, weighted by its fitness.
+	 * Performs selection by giving each individual a probabilistic chance of survival, weighted by its fitness.
 	 * 
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm#select
-	 * (com.ciphertool.genetics.Population, int, double)
+	 * @see com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm#select (com.ciphertool.genetics.Population,
+	 * int, double)
 	 */
 	@Override
 	public int select(Population population, int maxSurvivors, double survivalRate) {
@@ -53,9 +51,8 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		int initialPopulationSize = population.size();
 
 		/*
-		 * We must use maxIndividuals instead of the current population size in
-		 * case the current population size is larger than the maximum
-		 * specified.
+		 * We must use maxIndividuals instead of the current population size in case the current population size is
+		 * larger than the maximum specified.
 		 */
 		long numSurvivors = Math.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
 		int numberRemoved = (int) (initialPopulationSize - numSurvivors);
@@ -74,8 +71,7 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 		}
 
 		/*
-		 * Reset the population by clearing it and then adding back all the
-		 * survivors.
+		 * Reset the population by clearing it and then adding back all the survivors.
 		 */
 		population.clearIndividuals();
 

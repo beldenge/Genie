@@ -36,8 +36,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 	private TaskExecutor taskExecutor;
 
 	/**
-	 * A concurrent task for performing a crossover of two parent Chromosomes,
-	 * producing one child Chromosome.
+	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
 	protected class CrossoverTask implements Callable<List<Chromosome>> {
 
@@ -81,9 +80,8 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 		List<Chromosome> dads = new ArrayList<Chromosome>();
 
 		/*
-		 * We first remove all the parent Chromosomes since the children are
-		 * guaranteed to be at least as fit. This also prevents parents from
-		 * reproducing more than one time per generation.
+		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit. This also
+		 * prevents parents from reproducing more than one time per generation.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			momIndex = this.population.selectIndex();
@@ -120,8 +118,8 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 		Chromosome dad = null;
 
 		/*
-		 * Execute each crossover concurrently. Parents should produce two
-		 * children, but this is not necessarily always guaranteed.
+		 * Execute each crossover concurrently. Parents should produce two children, but this is not necessarily always
+		 * guaranteed.
 		 */
 		for (int i = 0; i < pairsToCrossover; i++) {
 			mom = moms.get(i);
@@ -134,15 +132,13 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 
 		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 		/*
-		 * Add the result of each FutureTask to the population since it
-		 * represents a new child Chromosome.
+		 * Add the result of each FutureTask to the population since it represents a new child Chromosome.
 		 */
 		for (FutureTask<List<Chromosome>> future : futureTasks) {
 			try {
 				/*
-				 * Add children after all crossover operations are completed so
-				 * that children are not inadvertently breeding immediately
-				 * after birth.
+				 * Add children after all crossover operations are completed so that children are not inadvertently
+				 * breeding immediately after birth.
 				 */
 				childrenToAdd.addAll(future.get());
 			} catch (InterruptedException ie) {

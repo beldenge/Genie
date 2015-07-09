@@ -57,9 +57,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 	}
 
 	/**
-	 * This crossover algorithm does a conservative amount of changes since it
-	 * only replaces genes that begin and end at the exact same sequence
-	 * positions
+	 * This crossover algorithm does a conservative amount of changes since it only replaces genes that begin and end at
+	 * the exact same sequence positions
 	 */
 	protected KeylessChromosome performCrossover(KeylessChromosome parentA, KeylessChromosome parentB) {
 		KeylessChromosome child = (KeylessChromosome) parentA.clone();
@@ -74,8 +73,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 				.size());
 
 		/*
-		 * Make sure we don't exceed parentB's index, or else we will get an
-		 * IndexOutOfBoundsException
+		 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 		 */
 		while (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < child.getGenes().size()
 				&& crossoverProgressDto.getSecondChromosomeEndGeneIndex() < parentBSize) {
@@ -103,8 +101,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 	}
 
 	/**
-	 * Replace from parentB and reevaluate to see if it improves. We are extra
-	 * careful here since genes won't match exactly with sequence position.
+	 * Replace from parentB and reevaluate to see if it improves. We are extra careful here since genes won't match
+	 * exactly with sequence position.
 	 * 
 	 * @param crossoverProgressDto
 	 *            the LowestCommonGroupCrossoverProgressDto
@@ -134,8 +132,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 		}
 
 		/*
-		 * Insert cloned parent Genes into child. insertCount works as an offset
-		 * so that the Genes are inserted in the correct order.
+		 * Insert cloned parent Genes into child. insertCount works as an offset so that the Genes are inserted in the
+		 * correct order.
 		 */
 		int insertCount = 0;
 		for (int j = parentBeginGeneIndex; j <= parentEndGeneIndex; j++) {
@@ -148,8 +146,8 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 		child.setFitness(newFitness);
 
 		/*
-		 * Revert to the original gene if this decreased fitness. It's ok to let
-		 * non-beneficial changes progress, as long as they are not detrimental.
+		 * Revert to the original gene if this decreased fitness. It's ok to let non-beneficial changes progress, as
+		 * long as they are not detrimental.
 		 */
 		if (newFitness < originalFitness) {
 			/*
@@ -162,8 +160,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 			/*
 			 * Insert the child Gene copies back into the child.
 			 * 
-			 * TODO: It's faster to remove from the end of the List because no
-			 * elements need to shift
+			 * TODO: It's faster to remove from the end of the List because no elements need to shift
 			 */
 			for (int i = childBeginGeneIndex; i <= childEndGeneIndex; i++) {
 				child.insertGene(i, childGeneCopies.remove(0));
@@ -177,10 +174,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 			return 0;
 		} else {
 			/*
-			 * Offset child gene indices by the number of Genes inserted from
-			 * parentB, since the number of Genes inserted from parentB could be
-			 * different than the number of Genes removed from child. The result
-			 * can be either positive or negative.
+			 * Offset child gene indices by the number of Genes inserted from parentB, since the number of Genes
+			 * inserted from parentB could be different than the number of Genes removed from child. The result can be
+			 * either positive or negative.
 			 */
 			return (parentEndGeneIndex - parentBeginGeneIndex) - (childEndGeneIndex - childBeginGeneIndex);
 		}
