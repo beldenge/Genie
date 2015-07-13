@@ -82,7 +82,7 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 		Object randomKey = keys[generator.nextInt(keys.length)];
 
 		// Replace that map value with a randomly generated Gene
-		chromosome.putGene((Object) randomKey, geneDao.findRandomGene(chromosome));
+		chromosome.replaceGene((Object) randomKey, geneDao.findRandomGene(chromosome));
 
 		// Remove the key so that it is not used for mutation again
 		availableIndices.remove(randomKey);
