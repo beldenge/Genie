@@ -19,6 +19,8 @@
 
 package com.ciphertool.genetics.algorithms.mutation;
 
+import com.ciphertool.genetics.algorithms.mutation.cipherkey.RandomValueMutationAlgorithm;
+
 public enum MutationAlgorithmType {
 	LIBERAL("Liberal", LiberalMutationAlgorithm.class,
 			"This will mutate genes by index regardless of starting position and end position"),
@@ -26,7 +28,9 @@ public enum MutationAlgorithmType {
 			"This will mutate genes, only replacing them with genes that match on starting position and end position"),
 	GROUP("Group", GroupMutationAlgorithm.class, "This mutates groups of genes instead of individual genes"),
 	SINGLE_SEQUENCE("Single Sequence", SingleSequenceMutationAlgorithm.class,
-			"This will mutate a single sequence of a specified gene");
+			"This will mutate a single sequence of a specified gene"),
+	RANDOM_VALUE("Random Value", RandomValueMutationAlgorithm.class,
+			"This will mutate a single sequence of a specified gene at random");
 
 	private String displayName;
 	@SuppressWarnings("rawtypes")

@@ -19,6 +19,8 @@
 
 package com.ciphertool.genetics.algorithms.crossover;
 
+import com.ciphertool.genetics.algorithms.crossover.cipherkey.RandomCentromereCrossoverAlgorithm;
+
 public enum CrossoverAlgorithmType {
 	LIBERAL("Liberal", LiberalCrossoverAlgorithm.class,
 			"This will crossover words by index regardless of starting position and end position"),
@@ -41,7 +43,9 @@ public enum CrossoverAlgorithmType {
 			LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 			"This will crossover groups of words that match on starting position and end position.  It produces child Chromosomes regardless of whether they are better fit."),
 	CONSERVATIVE_SINGLE_POINT("Conservative Single Point", ConservativeSinglePointCrossoverAlgorithm.class,
-			"This will crossover from a common centromere position determined somewhat randomly");
+			"This will crossover from a common centromere position determined somewhat randomly"),
+	RANDOM_CENTROMERE("Random Centromere", RandomCentromereCrossoverAlgorithm.class,
+			"This will crossover from a random centromere position");
 
 	private String displayName;
 	@SuppressWarnings("rawtypes")

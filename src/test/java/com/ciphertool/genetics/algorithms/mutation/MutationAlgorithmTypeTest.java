@@ -23,15 +23,18 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.ciphertool.genetics.algorithms.mutation.cipherkey.RandomValueMutationAlgorithm;
+
 public class MutationAlgorithmTypeTest {
 
 	@Test
 	public void testTypes() {
-		assertEquals(4, MutationAlgorithmType.values().length);
+		assertEquals(5, MutationAlgorithmType.values().length);
 
 		assertEquals(ConservativeMutationAlgorithm.class, MutationAlgorithmType.CONSERVATIVE.getType());
 		assertEquals(GroupMutationAlgorithm.class, MutationAlgorithmType.GROUP.getType());
 		assertEquals(LiberalMutationAlgorithm.class, MutationAlgorithmType.LIBERAL.getType());
 		assertEquals(SingleSequenceMutationAlgorithm.class, MutationAlgorithmType.SINGLE_SEQUENCE.getType());
+		assertEquals(RandomValueMutationAlgorithm.class, MutationAlgorithmType.RANDOM_VALUE.getType());
 	}
 }

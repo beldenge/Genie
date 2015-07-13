@@ -76,4 +76,15 @@ public interface Chromosome extends Cloneable {
 	 *            the evaluationNeeded value to set
 	 */
 	public void setEvaluationNeeded(boolean evaluationNeeded);
+
+	/**
+	 * @return the solutionSetId
+	 */
+	public Integer getSolutionSetId();
+
+	/**
+	 * @param solutionSetId
+	 *            the solutionSetId to set
+	 */
+	public void setSolutionSetId(Integer solutionSetId);
 }

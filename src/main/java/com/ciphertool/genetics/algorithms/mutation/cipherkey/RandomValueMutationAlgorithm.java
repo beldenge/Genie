@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.algorithms.mutation.cipherkey;
 
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -48,9 +49,14 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 
 		Set<Object> availableKeys = chromosome.getGenes().keySet();
 
+		Set<Object> modifiableKeys = new HashSet<Object>();
+		for (Object key : availableKeys) {
+			modifiableKeys.add(key);
+		}
+
 		for (int i = 0; i < numMutations; i++) {
 			// Keep track of the mutated keys
-			mutateRandomGene(chromosome, availableKeys);
+			mutateRandomGene(chromosome, modifiableKeys);
 		}
 	}
 
@@ -76,7 +82,7 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 		Object randomKey = keys[generator.nextInt(keys.length)];
 
 		// Replace that map value with a randomly generated Gene
-		chromosome.getGenes().put((Object) randomKey, geneDao.findRandomGene(chromosome));
+		chromosome.putGene((Object) randomKey, geneDao.findRandomGene(chromosome));
 
 		// Remove the key so that it is not used for mutation again
 		availableIndices.remove(randomKey);

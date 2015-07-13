@@ -190,4 +190,14 @@ public class MockKeylessChromosome implements KeylessChromosome {
 		return "MockKeylessChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness + ", genes="
 				+ genes + "]";
 	}
+
+	@Override
+	public Integer getSolutionSetId() {
+		throw new UnsupportedOperationException("Method not yet implemented.");
+	}
+
+	@Override
+	public void setSolutionSetId(Integer solutionSetId) {
+		throw new UnsupportedOperationException("Method not yet implemented.");
+	}
 }

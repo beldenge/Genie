@@ -72,7 +72,7 @@ public class RandomCentromereCrossoverAlgorithm implements CrossoverAlgorithm<Ke
 						+ ", but no such key was found.  Cannot continue.");
 			}
 
-			child.getGenes().put(nextKey, parentB.getGenes().get(nextKey).clone());
+			child.putGene(nextKey, parentB.getGenes().get(nextKey).clone());
 		}
 
 		if (mutateDuringCrossover) {
