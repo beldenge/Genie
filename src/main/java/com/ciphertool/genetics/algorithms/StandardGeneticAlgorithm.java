@@ -98,9 +98,18 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		 */
 		for (int i = 0; i < initialPopulationSize; i++) {
 			momIndex = this.population.selectIndex();
-			moms.add(this.population.getIndividuals().get(momIndex));
-
 			dadIndex = this.population.selectIndex();
+
+			if (momIndex == dadIndex) {
+				/*
+				 * There is no point in crossing over identical parents, because the result would essentially be
+				 * duplicating that parent in the population
+				 */
+				i--;
+				continue;
+			}
+
+			moms.add(this.population.getIndividuals().get(momIndex));
 			dads.add(this.population.getIndividuals().get(dadIndex));
 		}
 

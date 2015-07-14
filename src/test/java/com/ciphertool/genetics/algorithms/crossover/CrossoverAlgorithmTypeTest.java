@@ -24,7 +24,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import com.ciphertool.genetics.algorithms.crossover.cipherkey.RandomCentromereCrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.cipherkey.RandomSinglePointCrossoverAlgorithm;
 
 public class CrossoverAlgorithmTypeTest {
 	@Test
@@ -41,6 +41,6 @@ public class CrossoverAlgorithmTypeTest {
 		assertSame(LowestCommonGroupCrossoverAlgorithm.class, CrossoverAlgorithmType.LOWEST_COMMON_GROUP.getType());
 		assertSame(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 				CrossoverAlgorithmType.LOWEST_COMMON_GROUP_UNEVALUATED.getType());
-		assertSame(RandomCentromereCrossoverAlgorithm.class, CrossoverAlgorithmType.RANDOM_CENTROMERE.getType());
+		assertSame(RandomSinglePointCrossoverAlgorithm.class, CrossoverAlgorithmType.RANDOM_SINGLE_POINT.getType());
 	}
 }

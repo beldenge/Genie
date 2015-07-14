@@ -28,7 +28,7 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
-public class RandomCentromereCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
+public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 
