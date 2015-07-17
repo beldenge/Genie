@@ -19,6 +19,7 @@
 package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +36,7 @@ public class RandomSelector implements Selector {
 			return -1;
 		}
 
-		int randomIndex = (int) (Math.random() * individuals.size());
+		int randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * individuals.size());
 
 		return randomIndex;
 	}

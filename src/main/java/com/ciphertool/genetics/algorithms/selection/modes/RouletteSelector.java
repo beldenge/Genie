@@ -19,6 +19,7 @@
 package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.log4j.Logger;
 
@@ -41,7 +42,7 @@ public class RouletteSelector implements Selector {
 			return -1;
 		}
 
-		long randomIndex = (int) (Math.random() * totalFitness);
+		long randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * totalFitness);
 
 		int winningIndex = -1;
 		Chromosome nextIndividual = null;

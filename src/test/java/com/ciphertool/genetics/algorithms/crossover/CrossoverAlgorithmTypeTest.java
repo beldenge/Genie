@@ -24,12 +24,13 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
+import com.ciphertool.genetics.algorithms.crossover.cipherkey.EqualOpportunityGeneCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.crossover.cipherkey.RandomSinglePointCrossoverAlgorithm;
 
 public class CrossoverAlgorithmTypeTest {
 	@Test
 	public void testTypes() {
-		assertEquals(8, CrossoverAlgorithmType.values().length);
+		assertEquals(9, CrossoverAlgorithmType.values().length);
 
 		assertSame(ConservativeCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE.getType());
 		assertSame(ConservativeSinglePointCrossoverAlgorithm.class, CrossoverAlgorithmType.CONSERVATIVE_SINGLE_POINT
@@ -42,5 +43,6 @@ public class CrossoverAlgorithmTypeTest {
 		assertSame(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
 				CrossoverAlgorithmType.LOWEST_COMMON_GROUP_UNEVALUATED.getType());
 		assertSame(RandomSinglePointCrossoverAlgorithm.class, CrossoverAlgorithmType.RANDOM_SINGLE_POINT.getType());
+		assertSame(EqualOpportunityGeneCrossoverAlgorithm.class, CrossoverAlgorithmType.EQUAL_OPPORTUNITY.getType());
 	}
 }

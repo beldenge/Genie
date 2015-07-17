@@ -20,6 +20,7 @@ package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -50,7 +51,7 @@ public class TournamentSelector implements Selector {
 		Collections.sort(individuals, fitnessComparator);
 
 		for (int i = 0; i < individuals.size(); i++) {
-			if (Math.random() <= selectionAccuracy) {
+			if (ThreadLocalRandom.current().nextDouble() <= selectionAccuracy) {
 				return i;
 			}
 		}

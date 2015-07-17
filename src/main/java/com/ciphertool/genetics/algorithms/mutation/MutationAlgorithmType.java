@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.algorithms.mutation;
 
 import com.ciphertool.genetics.algorithms.mutation.cipherkey.RandomValueMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.cipherkey.StandardMutationAlgorithm;
 
 public enum MutationAlgorithmType {
 	LIBERAL("Liberal", LiberalMutationAlgorithm.class,
@@ -30,7 +31,9 @@ public enum MutationAlgorithmType {
 	SINGLE_SEQUENCE("Single Sequence", SingleSequenceMutationAlgorithm.class,
 			"This will mutate a single sequence of a specified gene"),
 	RANDOM_VALUE("Random Value", RandomValueMutationAlgorithm.class,
-			"This will mutate a single sequence of a specified gene at random");
+			"This will mutate a single sequence of a specified gene at random"),
+	STANDARD("Standard", StandardMutationAlgorithm.class,
+			"This will loop over all Genes with a chance to mutate each Gene");
 
 	private String displayName;
 	@SuppressWarnings("rawtypes")

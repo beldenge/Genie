@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.util;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomListElementSelector {
 	/**
@@ -29,6 +30,6 @@ public class RandomListElementSelector {
 	 * @return a random element from the supplied List.
 	 */
 	public Integer selectRandomListElement(List<? extends Object> list) {
-		return (int) (Math.random() * list.size());
+		return (int) (ThreadLocalRandom.current().nextDouble() * list.size());
 	}
 }

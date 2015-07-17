@@ -119,6 +119,25 @@ public class Population {
 	}
 
 	/**
+	 * A concurrent task for evaluating the fitness of a Chromosome.
+	 */
+	protected class KnownSolutionEvaluatorTask implements Callable<Void> {
+
+		private Chromosome chromosome;
+
+		public KnownSolutionEvaluatorTask(Chromosome chromosome) {
+			this.chromosome = chromosome;
+		}
+
+		@Override
+		public Void call() throws Exception {
+			knownSolutionFitnessEvaluator.evaluate(this.chromosome);
+
+			return null;
+		}
+	}
+
+	/**
 	 * This method executes all the fitness evaluations concurrently.
 	 */
 	protected void doConcurrentFitnessEvaluations() {
@@ -321,6 +340,28 @@ public class Population {
 	 * a better value depending on the strategy.
 	 */
 	public void printAscending() {
+
+		if (knownSolutionFitnessEvaluator != null && compareToKnownSolution) {
+			List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
+			FutureTask<Void> futureTask = null;
+
+			for (Chromosome individual : individuals) {
+				futureTask = new FutureTask<Void>(new KnownSolutionEvaluatorTask(individual));
+				futureTasks.add(futureTask);
+				this.taskExecutor.execute(futureTask);
+			}
+
+			for (FutureTask<Void> future : futureTasks) {
+				try {
+					future.get();
+				} catch (InterruptedException ie) {
+					log.error("Caught InterruptedException while waiting for EvaluatorTask ", ie);
+				} catch (ExecutionException ee) {
+					log.error("Caught ExecutionException while waiting for EvaluatorTask ", ee);
+				}
+			}
+		}
+
 		this.sortIndividuals();
 
 		int fitnessIndex = this.size();

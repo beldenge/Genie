@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.algorithms.crossover;
 
+import com.ciphertool.genetics.algorithms.crossover.cipherkey.EqualOpportunityGeneCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.crossover.cipherkey.RandomSinglePointCrossoverAlgorithm;
 
 public enum CrossoverAlgorithmType {
@@ -45,7 +46,9 @@ public enum CrossoverAlgorithmType {
 	CONSERVATIVE_SINGLE_POINT("Conservative Single Point", ConservativeSinglePointCrossoverAlgorithm.class,
 			"This will crossover from a common centromere position determined somewhat randomly"),
 	RANDOM_SINGLE_POINT("Random Single Point", RandomSinglePointCrossoverAlgorithm.class,
-			"This will crossover from a random centromere position");
+			"This will crossover from a random centromere position"),
+	EQUAL_OPPORTUNITY("Equal Opportunity", EqualOpportunityGeneCrossoverAlgorithm.class,
+			"This will give each Gene an equal chance of being crossed over");
 
 	private String displayName;
 	@SuppressWarnings("rawtypes")

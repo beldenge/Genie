@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.entities.Sequence;
+import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class MockGene implements VariableLengthGene {
 
 	private Chromosome chromosome;
 	private List<Sequence> sequences = new ArrayList<Sequence>();
+
+	private boolean hasMatch;
 
 	@Override
 	public int size() {
@@ -120,5 +122,15 @@ public class MockGene implements VariableLengthGene {
 	@Override
 	public String toString() {
 		return "MockGene [sequences=" + sequences + "]";
+	}
+
+	@Override
+	public boolean hasMatch() {
+		return this.hasMatch;
+	}
+
+	@Override
+	public void setHasMatch(boolean hasMatch) {
+		this.hasMatch = hasMatch;
 	}
 }

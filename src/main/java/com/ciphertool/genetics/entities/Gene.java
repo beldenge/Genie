@@ -34,4 +34,15 @@ public interface Gene extends Cloneable {
 	 * @return the Chromosome that this Gene is a part of
 	 */
 	public Chromosome getChromosome();
+
+	/**
+	 * @return whether this Gene matches that of a known solution
+	 */
+	public boolean hasMatch();
+
+	/**
+	 * @param hasMatch
+	 *            the hasMatch to set
+	 */
+	public void setHasMatch(boolean hasMatch);
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -92,6 +93,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		List<Chromosome> moms = new ArrayList<Chromosome>();
 		List<Chromosome> dads = new ArrayList<Chromosome>();
 
+		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
+
 		/*
 		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit. This also
 		 * prevents parents from reproducing more than one time per generation.
@@ -99,6 +102,14 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		for (int i = 0; i < initialPopulationSize; i++) {
 			momIndex = this.population.selectIndex();
 			dadIndex = this.population.selectIndex();
+
+			if (ThreadLocalRandom.current().nextDouble() > strategy.getCrossoverRate()) {
+				childrenToAdd.add(this.population.getIndividuals().get(momIndex).clone());
+				childrenToAdd.add(this.population.getIndividuals().get(dadIndex).clone());
+
+				// Skipping crossover
+				continue;
+			}
 
 			if (momIndex == dadIndex) {
 				/*
@@ -113,7 +124,10 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			dads.add(this.population.getIndividuals().get(dadIndex));
 		}
 
-		List<Chromosome> childrenToAdd = doConcurrentCrossovers(initialPopulationSize, moms, dads);
+		List<Chromosome> crossoverResults = doConcurrentCrossovers(moms, dads);
+		if (crossoverResults != null && !crossoverResults.isEmpty()) {
+			childrenToAdd.addAll(crossoverResults);
+		}
 
 		if (childrenToAdd == null || childrenToAdd.size() < initialPopulationSize) {
 			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size())
@@ -132,8 +146,13 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		return (int) childrenToAdd.size();
 	}
 
-	protected List<Chromosome> doConcurrentCrossovers(long pairsToCrossover, List<Chromosome> moms,
-			List<Chromosome> dads) {
+	protected List<Chromosome> doConcurrentCrossovers(List<Chromosome> moms, List<Chromosome> dads) {
+		if (moms.size() != dads.size()) {
+			throw new IllegalStateException(
+					"Attempted to perform crossover on the population, but there are not an equal number of moms and dads.  Something is wrong.  Moms: "
+							+ moms.size() + ", Dads:  " + dads.size());
+		}
+
 		List<FutureTask<List<Chromosome>>> futureTasks = new ArrayList<FutureTask<List<Chromosome>>>();
 		FutureTask<List<Chromosome>> futureTask = null;
 
@@ -144,7 +163,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		 * Execute each crossover concurrently. Parents should produce two children, but this is not necessarily always
 		 * guaranteed.
 		 */
-		for (int i = 0; i < pairsToCrossover; i++) {
+		for (int i = 0; i < moms.size(); i++) {
 			mom = moms.get(i);
 			dad = dads.get(i);
 

@@ -21,6 +21,7 @@ package com.ciphertool.genetics.algorithms.mutation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -47,7 +48,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
-		int numMutations = (int) (Math.random() * Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
+		int numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutationsPerChromosome,
+				chromosome.getGenes().size())) + 1;
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		for (int i = 0; i < chromosome.getGenes().size(); i++) {
@@ -59,7 +61,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			/*
 			 * Choose a random number of genes constrained by the static max and the total number of genes
 			 */
-			maxGenesToMutate = (int) (Math.random() * Math.min(MAX_GENES_PER_GROUP, chromosome.getGenes().size())) + 1;
+			maxGenesToMutate = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(MAX_GENES_PER_GROUP,
+					chromosome.getGenes().size())) + 1;
 
 			// Keep track of the mutated indices
 			mutateRandomGeneGroup(chromosome, availableIndices, maxGenesToMutate);
@@ -86,7 +89,7 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 		/*
 		 * We don't want to reuse an index, so we get one from the List of indices which are still available
 		 */
-		int randomAvailableIndex = (int) (Math.random() * availableIndices.size());
+		int randomAvailableIndex = (int) (ThreadLocalRandom.current().nextDouble() * availableIndices.size());
 
 		Integer beginIndex = availableIndices.get(randomAvailableIndex);
 
