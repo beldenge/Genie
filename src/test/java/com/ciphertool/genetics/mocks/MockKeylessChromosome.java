@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ciphertool.genetics.annotations.Clean;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
@@ -199,5 +200,10 @@ public class MockKeylessChromosome implements KeylessChromosome {
 	@Override
 	public void setSolutionSetId(Integer solutionSetId) {
 		throw new UnsupportedOperationException("Method not yet implemented.");
+	}
+
+	@Override
+	public double similarityTo(Chromosome other) {
+		return 0;
 	}
 }

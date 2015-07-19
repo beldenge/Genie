@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.ciphertool.genetics.annotations.Clean;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
@@ -197,5 +198,10 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 	@Override
 	public void setSolutionSetId(Integer solutionSetId) {
 		throw new UnsupportedOperationException("Method not yet implemented.");
+	}
+
+	@Override
+	public double similarityTo(Chromosome other) {
+		return 0;
 	}
 }

@@ -248,7 +248,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).breed(eq(populationSize));
-		verify(populationMock, times(1)).evaluateFitness(null);
+		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(1)).size();
 		verifyNoMoreInteractions(populationMock);
 	}
@@ -774,7 +774,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).breed(eq(populationSize));
-		verify(populationMock, times(1)).evaluateFitness(null);
+		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(1)).size();
 		verifyNoMoreInteractions(populationMock);
 	}

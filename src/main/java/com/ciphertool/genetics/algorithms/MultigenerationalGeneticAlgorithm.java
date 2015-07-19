@@ -359,16 +359,23 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	protected void spawnInitialPopulation() {
+		GenerationStatistics generationStatistics = new GenerationStatistics(this.executionStatistics,
+				this.generationCount);
+
 		long start = System.currentTimeMillis();
 
 		this.population.clearIndividuals();
 
 		this.population.breed(strategy.getPopulationSize());
 
-		this.population.evaluateFitness(null);
+		this.population.evaluateFitness(generationStatistics);
 
-		log.info("Took " + (System.currentTimeMillis() - start) + "ms to spawn initial population of size "
-				+ this.population.size());
+		long executionTime = System.currentTimeMillis() - start;
+		generationStatistics.setExecutionTime(executionTime);
+
+		log.info("Took " + executionTime + "ms to spawn initial population of size " + this.population.size());
+
+		log.info(generationStatistics);
 	}
 
 	/**

@@ -87,4 +87,11 @@ public interface Chromosome extends Cloneable {
 	 *            the solutionSetId to set
 	 */
 	public void setSolutionSetId(Integer solutionSetId);
+
+	/**
+	 * @param other
+	 *            the other Chromosome
+	 * @return the percentage similarity between this Chromosome and other
+	 */
+	public double similarityTo(Chromosome other);
 }

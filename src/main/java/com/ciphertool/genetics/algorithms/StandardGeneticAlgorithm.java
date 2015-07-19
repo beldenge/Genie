@@ -120,8 +120,11 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 				continue;
 			}
 
-			moms.add(this.population.getIndividuals().get(momIndex));
-			dads.add(this.population.getIndividuals().get(dadIndex));
+			Chromosome mom = this.population.getIndividuals().get(momIndex);
+			Chromosome dad = this.population.getIndividuals().get(dadIndex);
+
+			moms.add(mom);
+			dads.add(dad);
 		}
 
 		List<Chromosome> crossoverResults = doConcurrentCrossovers(moms, dads);
