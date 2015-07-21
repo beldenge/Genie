@@ -282,6 +282,8 @@ public class Population {
 	public boolean addIndividual(Chromosome individual) {
 		this.individuals.add(individual);
 
+		individual.setPopulation(this);
+
 		/*
 		 * Only evaluate this individual if it hasn't been evaluated yet by some other process.
 		 */
@@ -300,6 +302,8 @@ public class Population {
 	 */
 	public void addIndividualAsIneligible(Chromosome individual) {
 		this.ineligibleForReproduction.add(individual);
+
+		individual.setPopulation(this);
 	}
 
 	/**

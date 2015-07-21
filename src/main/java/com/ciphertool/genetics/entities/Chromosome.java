@@ -19,6 +19,8 @@
 
 package com.ciphertool.genetics.entities;
 
+import com.ciphertool.genetics.Population;
+
 public interface Chromosome extends Cloneable {
 
 	/**
@@ -94,4 +96,15 @@ public interface Chromosome extends Cloneable {
 	 * @return the percentage similarity between this Chromosome and other
 	 */
 	public double similarityTo(Chromosome other);
+
+	/**
+	 * @return this Chromosome's Population
+	 */
+	public Population getPopulation();
+
+	/**
+	 * @param population
+	 *            the population to set
+	 */
+	public void setPopulation(Population population);
 }

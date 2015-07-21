@@ -22,6 +22,7 @@ package com.ciphertool.genetics.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.annotations.Clean;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
@@ -35,6 +36,7 @@ public class MockKeylessChromosome implements KeylessChromosome {
 	private Integer targetSize = 0;
 	private int age = 0;
 	private int numberOfChildren = 0;
+	private Population population;
 
 	@Override
 	public List<Gene> getGenes() {
@@ -205,5 +207,22 @@ public class MockKeylessChromosome implements KeylessChromosome {
 	@Override
 	public double similarityTo(Chromosome other) {
 		return 0;
+	}
+
+	/**
+	 * @return the population
+	 */
+	@Override
+	public Population getPopulation() {
+		return population;
+	}
+
+	/**
+	 * @param population
+	 *            the population to set
+	 */
+	@Override
+	public void setPopulation(Population population) {
+		this.population = population;
 	}
 }
