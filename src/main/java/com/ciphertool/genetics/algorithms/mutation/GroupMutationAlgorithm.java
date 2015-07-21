@@ -397,4 +397,9 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
 		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Group";
+	}
 }

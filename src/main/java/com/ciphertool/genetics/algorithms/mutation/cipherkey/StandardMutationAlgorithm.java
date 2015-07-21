@@ -62,4 +62,9 @@ public class StandardMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 	public void setGeneDao(GeneDao geneDao) {
 		this.geneDao = geneDao;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Standard";
+	}
 }

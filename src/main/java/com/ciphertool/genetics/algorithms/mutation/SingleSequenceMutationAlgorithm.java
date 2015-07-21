@@ -175,4 +175,9 @@ public class SingleSequenceMutationAlgorithm implements NonUniformMutationAlgori
 	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
 		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Single Sequence";
+	}
 }

@@ -50,4 +50,9 @@ public class AlphaSelector implements Selector {
 
 		return (bestFitIndex != null) ? bestFitIndex : -1;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Alpha";
+	}
 }

@@ -17,21 +17,8 @@
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.selection.modes;
+package com.ciphertool.genetics.entities;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
-public class SelectorTypeTest {
-
-	@Test
-	public void testTypes() {
-		assertEquals(4, SelectorType.values().length);
-
-		assertEquals(AlphaSelector.class, SelectorType.ALPHA.getType());
-		assertEquals(RandomSelector.class, SelectorType.RANDOM.getType());
-		assertEquals(RouletteSelector.class, SelectorType.ROULETTE.getType());
-		assertEquals(TournamentSelector.class, SelectorType.TOURNAMENT.getType());
-	}
+public interface Selectable {
+	public String getDisplayName();
 }

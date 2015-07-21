@@ -19,8 +19,9 @@
 package com.ciphertool.genetics.algorithms.selection;
 
 import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.entities.Selectable;
 
-public interface SelectionAlgorithm {
+public interface SelectionAlgorithm extends Selectable {
 	/**
 	 * Performs natural selection against the supplied Population, modifying it by reference.
 	 * 

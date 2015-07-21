@@ -211,4 +211,9 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 	public void setRandomListElementSelector(RandomListElementSelector randomListElementSelector) {
 		this.randomListElementSelector = randomListElementSelector;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Conservative Single Point";
+	}
 }

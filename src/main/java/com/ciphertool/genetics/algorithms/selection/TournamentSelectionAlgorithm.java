@@ -144,4 +144,9 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	public void setGroupSelector(Selector groupSelector) {
 		this.groupSelector = groupSelector;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Tournament";
+	}
 }

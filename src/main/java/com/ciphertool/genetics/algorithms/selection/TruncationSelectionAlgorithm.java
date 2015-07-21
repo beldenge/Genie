@@ -64,4 +64,9 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 
 		return survivorIndex;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Truncation";
+	}
 }

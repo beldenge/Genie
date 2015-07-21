@@ -87,4 +87,9 @@ public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 
 		return numberRemoved;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Probabilistic";
+	}
 }

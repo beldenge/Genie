@@ -40,4 +40,9 @@ public class RandomSelector implements Selector {
 
 		return randomIndex;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Random";
+	}
 }

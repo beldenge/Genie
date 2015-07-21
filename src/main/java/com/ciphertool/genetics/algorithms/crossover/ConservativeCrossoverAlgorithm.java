@@ -153,4 +153,9 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Conservative";
+	}
 }

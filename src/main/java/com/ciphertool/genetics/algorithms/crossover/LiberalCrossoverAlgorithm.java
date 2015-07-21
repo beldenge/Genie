@@ -182,4 +182,9 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Liberal";
+	}
 }

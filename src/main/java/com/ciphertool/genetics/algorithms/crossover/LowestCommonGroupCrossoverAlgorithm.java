@@ -209,4 +209,9 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Lowest Common Groups";
+	}
 }

@@ -112,4 +112,9 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Conservative Unevaluated";
+	}
 }

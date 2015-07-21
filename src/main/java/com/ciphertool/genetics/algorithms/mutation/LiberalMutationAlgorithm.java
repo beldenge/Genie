@@ -166,4 +166,9 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
 		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Liberal";
+	}
 }

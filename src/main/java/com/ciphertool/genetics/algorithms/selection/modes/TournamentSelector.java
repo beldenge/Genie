@@ -73,4 +73,9 @@ public class TournamentSelector implements Selector {
 
 		this.selectionAccuracy = selectionAccuracy;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Tournament";
+	}
 }

@@ -99,4 +99,9 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 	public void setCoin(Coin coin) {
 		this.coin = coin;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Equal Opportunity";
+	}
 }

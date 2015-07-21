@@ -70,4 +70,9 @@ public class RouletteSelector implements Selector {
 
 		return winningIndex;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Roulette";
+	}
 }

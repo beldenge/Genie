@@ -153,4 +153,9 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 	public void setCoin(Coin coin) {
 		this.coin = coin;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Liberal Unevaluated";
+	}
 }

@@ -177,4 +177,9 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	public void setCoin(Coin coin) {
 		this.coin = coin;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Lowest Common Group Unevaluated";
+	}
 }

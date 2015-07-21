@@ -23,8 +23,9 @@ import java.util.List;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Selectable;
 
-public interface CrossoverAlgorithm<T extends Chromosome> {
+public interface CrossoverAlgorithm<T extends Chromosome> extends Selectable {
 
 	/**
 	 * Performs crossover to a List of children by cloning one or both of the parents and then selectively replacing

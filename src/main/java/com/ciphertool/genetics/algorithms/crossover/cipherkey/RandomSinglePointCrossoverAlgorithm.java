@@ -99,4 +99,9 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return "Random Single Point";
+	}
 }
