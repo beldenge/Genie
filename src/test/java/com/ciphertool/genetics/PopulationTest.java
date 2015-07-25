@@ -285,7 +285,7 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testDoConcurrentFitnessEvaluations() {
+	public void testDoConcurrentFitnessEvaluations() throws InterruptedException {
 		Population population = new Population();
 		population.setTaskExecutor(taskExecutor);
 
@@ -327,7 +327,7 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testEvaluateFitness() {
+	public void testEvaluateFitness() throws InterruptedException {
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 
 		Population population = new Population();
@@ -382,7 +382,7 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testEvaluateFitnessCompareToKnownSolution() {
+	public void testEvaluateFitnessCompareToKnownSolution() throws InterruptedException {
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 
 		Population population = new Population();
@@ -443,7 +443,7 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testIncreaseAge() {
+	public void testIncreaseAge() throws InterruptedException {
 		Population population = new Population();
 		population.setLifespan(5);
 
@@ -471,7 +471,7 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testIncreaseAgeIndefinitely() {
+	public void testIncreaseAgeIndefinitely() throws InterruptedException {
 		Population population = new Population();
 		population.setLifespan(-1);
 

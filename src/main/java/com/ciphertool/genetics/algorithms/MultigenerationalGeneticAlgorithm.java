@@ -47,7 +47,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	@SuppressWarnings("rawtypes")
 	protected MutationAlgorithm mutationAlgorithm;
 	protected SelectionAlgorithm selectionAlgorithm;
-	private boolean stopRequested;
+	protected boolean stopRequested;
 	private ExecutionStatisticsDao executionStatisticsDao;
 	protected int generationCount = 0;
 	protected ExecutionStatistics executionStatistics;
@@ -57,25 +57,33 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 	@Override
 	public void evolveAutonomously() {
-		initialize();
+		try {
+			initialize();
 
-		do {
-			proceedWithNextGeneration();
-		} while (!this.stopRequested
-				&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy.getMaxGenerations()));
+			do {
+				proceedWithNextGeneration();
+			} while (!this.stopRequested
+					&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy
+							.getMaxGenerations()));
+		} catch (InterruptedException ie) {
+			log.info(ie.getMessage());
+
+			this.population.recoverFromBackup();
+		}
 
 		finish();
 	}
 
 	@Override
-	public void initialize() {
+	public void initialize() throws InterruptedException {
 		validateParameters();
 
 		this.generationCount = 0;
 
-		this.spawnInitialPopulation();
-
 		this.stopRequested = false;
+		this.population.setStopRequested(false);
+
+		this.spawnInitialPopulation();
 
 		Date startDate = new Date();
 		this.executionStatistics = new ExecutionStatistics(startDate, this.strategy);
@@ -101,7 +109,9 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	}
 
 	@Override
-	public void proceedWithNextGeneration() {
+	public void proceedWithNextGeneration() throws InterruptedException {
+		this.population.backupIndividuals();
+
 		this.generationCount++;
 
 		GenerationStatistics generationStatistics = new GenerationStatistics(this.executionStatistics,
@@ -253,7 +263,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public int crossover(int initialPopulationSize) {
+	public int crossover(int initialPopulationSize) throws InterruptedException {
 		if (this.population.size() < 2) {
 			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
 
@@ -272,6 +282,10 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 		for (int i = 0; i < pairsToCrossover; i++) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during crossover.");
+			}
+
 			momIndex = this.population.selectIndex();
 			mom = this.population.getIndividuals().get(momIndex);
 
@@ -316,7 +330,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public int mutate(int initialPopulationSize) {
+	public int mutate(int initialPopulationSize) throws InterruptedException {
 		int mutantIndex = -1;
 
 		/*
@@ -332,6 +346,10 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		List<Chromosome> children = new ArrayList<Chromosome>();
 
 		for (int i = 0; i < mutations; i++) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during mutation.");
+			}
+
 			mutantIndex = this.population.selectIndex();
 			Chromosome chromosomeToMutate = this.population.getIndividuals().get(mutantIndex).clone();
 
@@ -358,7 +376,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		return (int) mutations;
 	}
 
-	protected void spawnInitialPopulation() {
+	protected void spawnInitialPopulation() throws InterruptedException {
 		GenerationStatistics generationStatistics = new GenerationStatistics(this.executionStatistics,
 				this.generationCount);
 
@@ -395,6 +413,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	@Override
 	public void requestStop() {
 		this.stopRequested = true;
+
+		this.population.requestStop();
 	}
 
 	/**

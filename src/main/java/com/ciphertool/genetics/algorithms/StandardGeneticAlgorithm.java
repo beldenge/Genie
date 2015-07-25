@@ -40,7 +40,9 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	}
 
 	@Override
-	public void proceedWithNextGeneration() {
+	public void proceedWithNextGeneration() throws InterruptedException {
+		this.population.backupIndividuals();
+
 		this.generationCount++;
 
 		GenerationStatistics generationStatistics = new GenerationStatistics(this.executionStatistics,
@@ -70,15 +72,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}
 
-	/*
-	 * Crossover algorithm utilizing Roulette Wheel Selection
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
-	 */
 	@Override
-	public int crossover(int initialPopulationSize) {
+	public int crossover(int initialPopulationSize) throws InterruptedException {
 		if (this.population.size() < 2) {
 			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
 
@@ -100,6 +95,9 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		 * prevents parents from reproducing more than one time per generation.
 		 */
 		for (int i = 0; i < initialPopulationSize; i++) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during crossover.");
+			}
 			momIndex = this.population.selectIndex();
 			dadIndex = this.population.selectIndex();
 
@@ -143,13 +141,19 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		this.population.clearIndividuals();
 
 		for (Chromosome child : childrenToAdd) {
+			if (stopRequested) {
+				throw new InterruptedException(
+						"Stop requested while adding individuals back to the population after crossover");
+			}
+
 			this.population.addIndividual(child);
 		}
 
 		return (int) childrenToAdd.size();
 	}
 
-	protected List<Chromosome> doConcurrentCrossovers(List<Chromosome> moms, List<Chromosome> dads) {
+	protected List<Chromosome> doConcurrentCrossovers(List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException {
 		if (moms.size() != dads.size()) {
 			throw new IllegalStateException(
 					"Attempted to perform crossover on the population, but there are not an equal number of moms and dads.  Something is wrong.  Moms: "
@@ -178,6 +182,10 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 		// Add the result of each FutureTask to the population since it represents a new child Chromosome.
 		for (FutureTask<List<Chromosome>> future : futureTasks) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during conccurrent crossovers");
+			}
+
 			try {
 				/*
 				 * Add children after all crossover operations are completed so that children are not inadvertently

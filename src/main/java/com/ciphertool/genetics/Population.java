@@ -40,6 +40,7 @@ public class Population {
 	private Logger log = Logger.getLogger(getClass());
 	private Breeder breeder;
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
+	private List<Chromosome> backup = new ArrayList<Chromosome>();
 	private List<Chromosome> ineligibleForReproduction = new ArrayList<Chromosome>();
 	private FitnessEvaluator fitnessEvaluator;
 	private FitnessComparator fitnessComparator;
@@ -50,6 +51,7 @@ public class Population {
 	private FitnessEvaluator knownSolutionFitnessEvaluator;
 	private static final boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
 	private Boolean compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
+	protected boolean stopRequested;
 
 	public Population() {
 	}
@@ -81,6 +83,10 @@ public class Population {
 		}
 
 		for (FutureTask<Chromosome> future : futureTasks) {
+			if (stopRequested) {
+				return individualsAdded;
+			}
+
 			try {
 				this.addIndividual(future.get());
 
@@ -139,8 +145,11 @@ public class Population {
 
 	/**
 	 * This method executes all the fitness evaluations concurrently.
+	 * 
+	 * @throws InterruptedException
+	 *             if stop is requested
 	 */
-	protected void doConcurrentFitnessEvaluations() {
+	protected void doConcurrentFitnessEvaluations() throws InterruptedException {
 		List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
 		FutureTask<Void> futureTask = null;
 
@@ -162,6 +171,10 @@ public class Population {
 		}
 
 		for (FutureTask<Void> future : futureTasks) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during concurrent fitness evaluations.");
+			}
+
 			try {
 				future.get();
 			} catch (InterruptedException ie) {
@@ -172,7 +185,7 @@ public class Population {
 		}
 	}
 
-	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) {
+	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException {
 		this.doConcurrentFitnessEvaluations();
 
 		this.totalFitness = 0.0;
@@ -207,7 +220,7 @@ public class Population {
 		return bestFitIndividual;
 	}
 
-	public int increaseAge() {
+	public int increaseAge() throws InterruptedException {
 		Chromosome individual = null;
 		int individualsRemoved = 0;
 
@@ -215,6 +228,10 @@ public class Population {
 		 * We have to iterate backwards since the size will decrement each time an individual is removed.
 		 */
 		for (int i = this.individuals.size() - 1; i >= 0; i--) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during age increase.");
+			}
+
 			individual = this.individuals.get(i);
 
 			/*
@@ -270,10 +287,34 @@ public class Population {
 		return this.individuals.remove(indexToRemove);
 	}
 
+	public void recoverFromBackup() {
+		if (this.backup == null || this.backup.isEmpty()) {
+			log.info("Attempted to recover from backup, but backup was empty.  Nothing to do.");
+
+			return;
+		}
+
+		clearIndividuals();
+
+		addAllIndividuals(this.backup);
+	}
+
+	public void backupIndividuals() {
+		this.backup.clear();
+
+		this.backup.addAll(this.individuals);
+	}
+
 	public void clearIndividuals() {
 		this.individuals.clear();
 
 		this.totalFitness = 0.0;
+	}
+
+	public void addAllIndividuals(List<Chromosome> individuals) {
+		for (Chromosome individual : individuals) {
+			addIndividual(individual);
+		}
 	}
 
 	/**
@@ -380,6 +421,18 @@ public class Population {
 	 */
 	public Double getTotalFitness() {
 		return totalFitness;
+	}
+
+	public void requestStop() {
+		this.stopRequested = true;
+	}
+
+	/**
+	 * @param stopRequested
+	 *            the stopRequested to set
+	 */
+	public void setStopRequested(boolean stopRequested) {
+		this.stopRequested = stopRequested;
 	}
 
 	/**

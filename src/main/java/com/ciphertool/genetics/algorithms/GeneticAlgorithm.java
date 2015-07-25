@@ -24,19 +24,19 @@ import com.ciphertool.genetics.Population;
 
 public interface GeneticAlgorithm {
 
-	public void evolveAutonomously();
+	public void evolveAutonomously() throws InterruptedException;
 
-	public void initialize();
+	public void initialize() throws InterruptedException;
 
 	public void finish();
 
-	public void proceedWithNextGeneration();
+	public void proceedWithNextGeneration() throws InterruptedException;
 
 	public int select();
 
-	public int crossover(int populationSizeBeforeReproduction);
+	public int crossover(int populationSizeBeforeReproduction) throws InterruptedException;
 
-	public int mutate(int populationSizeBeforeReproduction);
+	public int mutate(int populationSizeBeforeReproduction) throws InterruptedException;
 
 	public Population getPopulation();
 

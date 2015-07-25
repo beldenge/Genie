@@ -169,7 +169,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@SuppressWarnings("rawtypes")
 	@Test
-	public void testInitialize() {
+	public void testInitialize() throws InterruptedException {
 		Date beforeInitialize = new Date();
 
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
@@ -250,6 +250,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(populationMock, times(1)).breed(eq(populationSize));
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(1)).size();
+		verify(populationMock, times(1)).setStopRequested(false);
 		verifyNoMoreInteractions(populationMock);
 	}
 
@@ -286,7 +287,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testProceedWithNextGeneration() {
+	public void testProceedWithNextGeneration() throws InterruptedException {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
 		int initialPopulationSize = 100;
@@ -372,6 +373,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(selectionAlgorithmMock, times(1)).select(same(populationMock), eq(populationSize), eq(survivalRate));
 		verifyNoMoreInteractions(selectionAlgorithmMock);
 
+		verify(populationMock, times(1)).backupIndividuals();
 		verify(populationMock, times(30)).selectIndex();
 		verify(populationMock, times(30)).getIndividuals();
 		verify(populationMock, times(30)).makeIneligibleForReproduction(index);
@@ -521,7 +523,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testCrossover() {
+	public void testCrossover() throws InterruptedException {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
 		Population population = new Population();
@@ -588,7 +590,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testCrossover_SmallPopulation() {
+	public void testCrossover_SmallPopulation() throws InterruptedException {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
 		Population population = new Population();
@@ -674,7 +676,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
-	public void testMutate() {
+	public void testMutate() throws InterruptedException {
 		int initialPopulationSize = 100;
 		int index = 0;
 
@@ -715,7 +717,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
-	public void testMutate_SmallPopulation() {
+	public void testMutate_SmallPopulation() throws InterruptedException {
 		int initialPopulationSize = 100;
 		int actualPopulationSize = 25;
 		int index = 0;
@@ -756,7 +758,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	}
 
 	@Test
-	public void testSpawnInitialPopulation() {
+	public void testSpawnInitialPopulation() throws InterruptedException {
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
 		int populationSize = 100;
 		strategyToSet.setPopulationSize(populationSize);
@@ -801,6 +803,9 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testRequestStop() {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
+		Population populationMock = mock(Population.class);
+		multigenerationalGeneticAlgorithm.setPopulation(populationMock);
+
 		Field stopRequestedField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "stopRequested");
 		ReflectionUtils.makeAccessible(stopRequestedField);
 		boolean stopRequestedFromObject = (boolean) ReflectionUtils.getField(stopRequestedField,
@@ -813,6 +818,8 @@ public class MultigenerationalGeneticAlgorithmTest {
 		stopRequestedFromObject = (boolean) ReflectionUtils.getField(stopRequestedField,
 				multigenerationalGeneticAlgorithm);
 
+		verify(populationMock, times(1)).requestStop();
+		verifyNoMoreInteractions(populationMock);
 		assertEquals(true, stopRequestedFromObject);
 	}
 }
