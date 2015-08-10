@@ -26,12 +26,14 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.util.Coin;
 
 public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
+	private int maxGenerations;
 
 	private Coin coin;
 
@@ -49,6 +51,8 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 		// The Chromosome could be null if it's identical to one of its parents
 		if (child != null) {
 			children.add(child);
+			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
+					.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
@@ -103,5 +107,14 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 	@Override
 	public String getDisplayName() {
 		return "Equal Opportunity";
+	}
+
+	/**
+	 * @param maxGenerations
+	 *            the maxGenerations to set
+	 */
+	@Required
+	public void setMaxGenerations(int maxGenerations) {
+		this.maxGenerations = maxGenerations;
 	}
 }

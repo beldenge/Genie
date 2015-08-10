@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.annotations.Clean;
+import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
@@ -224,5 +225,20 @@ public class MockKeylessChromosome implements KeylessChromosome {
 	@Override
 	public void setPopulation(Population population) {
 		this.population = population;
+	}
+
+	@Override
+	public Ancestry getAncestry() {
+		throw new UnsupportedOperationException("Method getAncestry() not implemented");
+	}
+
+	@Override
+	public void setAncestry(Ancestry ancestry) {
+		throw new UnsupportedOperationException("Method setAncestry() not implemented");
+	}
+
+	@Override
+	public String getId() {
+		throw new UnsupportedOperationException("Method getId() not implemented");
 	}
 }

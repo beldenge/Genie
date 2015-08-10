@@ -23,6 +23,8 @@ import com.ciphertool.genetics.Population;
 
 public interface Chromosome extends Cloneable {
 
+	public String getId();
+
 	/**
 	 * @return
 	 */
@@ -107,4 +109,15 @@ public interface Chromosome extends Cloneable {
 	 *            the population to set
 	 */
 	public void setPopulation(Population population);
+
+	/**
+	 * @return the ancestry
+	 */
+	public Ancestry getAncestry();
+
+	/**
+	 * @param ancestry
+	 *            the ancestry to set
+	 */
+	public void setAncestry(Ancestry ancestry);
 }

@@ -7,6 +7,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
@@ -16,8 +18,19 @@ import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
-
+	private Integer generationsToSkip;
+	private Integer generationsToKeep;
 	private TaskExecutor taskExecutor;
+	private boolean verifyAncestry;
+
+	@PostConstruct
+	public void verifyParameters() {
+		if (verifyAncestry && (generationsToSkip == null || generationsToKeep == null)) {
+			throw new IllegalStateException(
+					"When verifyAncestry is set to true, both generationsToSkip and generationsToSkip must be set.  generationsToSkip="
+							+ generationsToSkip + ", generationsToKeep=" + generationsToKeep);
+		}
+	}
 
 	/**
 	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
@@ -121,6 +134,17 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			Chromosome mom = this.population.getIndividuals().get(momIndex);
 			Chromosome dad = this.population.getIndividuals().get(dadIndex);
 
+			if (verifyAncestry && this.generationCount > this.generationsToKeep && mom.getAncestry() != null
+					&& dad.getAncestry() != null
+					&& !mom.getAncestry().sharesLineageWith(dad.getAncestry(), generationsToSkip)) {
+				/*
+				 * The idea is to make sure that individuals which share too much ancestry (i.e. immediate family
+				 * members) or not enough ancestry (i.e. different species) cannot reproduce.
+				 */
+				i--;
+				continue;
+			}
+
 			moms.add(mom);
 			dads.add(dad);
 		}
@@ -223,5 +247,30 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	@Required
 	public void setTaskExecutor(TaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
+	}
+
+	/**
+	 * @param generationsToSkip
+	 *            the generationsToSkip to set
+	 */
+	public void setGenerationsToSkip(int generationsToSkip) {
+		this.generationsToSkip = generationsToSkip;
+	}
+
+	/**
+	 * @param generationsToKeep
+	 *            the generationsToKeep to set
+	 */
+	public void setGenerationsToKeep(int generationsToKeep) {
+		this.generationsToKeep = generationsToKeep;
+	}
+
+	/**
+	 * @param verifyAncestry
+	 *            the verifyAncestry to set
+	 */
+	@Required
+	public void setVerifyAncestry(boolean verifyAncestry) {
+		this.verifyAncestry = verifyAncestry;
 	}
 }

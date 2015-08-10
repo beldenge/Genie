@@ -24,13 +24,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
+	private int maxGenerations;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -46,6 +50,8 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 		// The Chromosome could be null if it's identical to one of its parents
 		if (child != null) {
 			children.add(child);
+			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
+					.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
@@ -103,5 +109,14 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 	@Override
 	public String getDisplayName() {
 		return "Random Single Point";
+	}
+
+	/**
+	 * @param maxGenerations
+	 *            the maxGenerations to set
+	 */
+	@Required
+	public void setMaxGenerations(int maxGenerations) {
+		this.maxGenerations = maxGenerations;
 	}
 }
