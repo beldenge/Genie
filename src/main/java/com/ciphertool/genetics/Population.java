@@ -47,6 +47,7 @@ public class Population {
 	private Selector selector;
 	private Double totalFitness = 0.0;
 	private TaskExecutor taskExecutor;
+	private ChromosomePrinter chromosomePrinter;
 	private int lifespan;
 	private FitnessEvaluator knownSolutionFitnessEvaluator;
 	private static final boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
@@ -411,7 +412,7 @@ public class Population {
 
 		int fitnessIndex = this.size();
 		for (Chromosome individual : this.individuals) {
-			log.info("Chromosome " + fitnessIndex + ": " + individual);
+			log.info("Chromosome " + fitnessIndex + ": " + chromosomePrinter.print(individual));
 			fitnessIndex--;
 		}
 	}
@@ -514,5 +515,14 @@ public class Population {
 	 */
 	public void setCompareToKnownSolution(Boolean compareToKnownSolution) {
 		this.compareToKnownSolution = compareToKnownSolution;
+	}
+
+	/**
+	 * @param chromosomePrinter
+	 *            the chromosomePrinter to set
+	 */
+	@Required
+	public void setChromosomePrinter(ChromosomePrinter chromosomePrinter) {
+		this.chromosomePrinter = chromosomePrinter;
 	}
 }

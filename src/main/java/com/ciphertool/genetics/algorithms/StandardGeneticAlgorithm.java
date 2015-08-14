@@ -77,6 +77,12 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
 		}
 
+		long startEntropyCalculation = System.currentTimeMillis();
+		generationStatistics.setEntropy(calculateEntropy());
+		if (log.isDebugEnabled()) {
+			log.debug("Entropy calculation took " + (System.currentTimeMillis() - startEntropyCalculation) + "ms.");
+		}
+
 		long executionTime = (System.currentTimeMillis() - generationStart);
 		generationStatistics.setExecutionTime(executionTime);
 

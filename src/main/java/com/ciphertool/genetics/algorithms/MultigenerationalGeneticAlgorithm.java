@@ -21,7 +21,9 @@ package com.ciphertool.genetics.algorithms;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
@@ -35,6 +37,7 @@ import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
@@ -83,10 +86,10 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		this.stopRequested = false;
 		this.population.setStopRequested(false);
 
-		this.spawnInitialPopulation();
-
 		Date startDate = new Date();
 		this.executionStatistics = new ExecutionStatistics(startDate, this.strategy);
+
+		this.spawnInitialPopulation();
 	}
 
 	@Override
@@ -388,12 +391,84 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		this.population.evaluateFitness(generationStatistics);
 
+		generationStatistics.setEntropy(calculateEntropy());
+
 		long executionTime = System.currentTimeMillis() - start;
 		generationStatistics.setExecutionTime(executionTime);
 
 		log.info("Took " + executionTime + "ms to spawn initial population of size " + this.population.size());
 
 		log.info(generationStatistics);
+
+		this.executionStatistics.addGenerationStatistics(generationStatistics);
+	}
+
+	@SuppressWarnings("rawtypes")
+	public double calculateEntropy() {
+		if (!(this.population.getIndividuals().get(0) instanceof KeyedChromosome)) {
+			throw new UnsupportedOperationException(
+					"Calculation of entropy is currently only supported for KeyedChromosome types.");
+		}
+
+		Map<Object, Map<Object, Integer>> symbolCounts = new HashMap<Object, Map<Object, Integer>>();
+
+		// Count occurrences of each Gene value
+		for (Chromosome chromosome : this.population.getIndividuals()) {
+			for (Object key : ((KeyedChromosome) chromosome).getGenes().keySet()) {
+				if (!symbolCounts.containsKey(key)) {
+					symbolCounts.put(key, new HashMap<Object, Integer>());
+				}
+
+				Object geneValue = ((KeyedChromosome) chromosome).getGenes().get(key);
+
+				if (!symbolCounts.get(key).containsKey(geneValue)) {
+					symbolCounts.get(key).put(geneValue, 0);
+				}
+
+				symbolCounts.get(key).put(geneValue, symbolCounts.get(key).get(geneValue) + 1);
+			}
+		}
+
+		Map<Object, Map<Object, Double>> symbolProbabilities = new HashMap<Object, Map<Object, Double>>();
+
+		double populationSize = (double) this.population.getIndividuals().size();
+
+		// Calculate probability of each Gene value
+		for (Object key : symbolCounts.keySet()) {
+			for (Object geneValue : symbolCounts.get(key).keySet()) {
+				if (!symbolProbabilities.containsKey(key)) {
+					symbolProbabilities.put(key, new HashMap<Object, Double>());
+				}
+
+				symbolProbabilities.get(key).put(geneValue,
+						((double) symbolCounts.get(key).get(geneValue) / populationSize));
+			}
+		}
+
+		int base = symbolCounts.keySet().size();
+
+		double totalEntropy = 0.0;
+		double entropyForSymbol;
+		double probability = 0.0;
+
+		// Calculate the entropy of each Gene independently, and add it to the total entropy value
+		for (Object key : symbolProbabilities.keySet()) {
+			entropyForSymbol = 0.0;
+
+			for (Object geneValue : symbolProbabilities.get(key).keySet()) {
+				probability = symbolProbabilities.get(key).get(geneValue);
+				entropyForSymbol += (probability * logBase(probability, base));
+			}
+
+			totalEntropy += (-1.0 * entropyForSymbol);
+		}
+
+		// return the average entropy among the symbols
+		return totalEntropy / (double) symbolProbabilities.keySet().size();
+	}
+
+	private static double logBase(double num, int base) {
+		return (Math.log(num) / Math.log(base));
 	}
 
 	/**

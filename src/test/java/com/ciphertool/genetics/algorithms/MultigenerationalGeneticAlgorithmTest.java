@@ -57,6 +57,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class MultigenerationalGeneticAlgorithmTest {
@@ -198,6 +199,11 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		Population populationMock = mock(Population.class);
 
+		// Setting the individuals to something non-empty so the calculateEntropy() method won't fail
+		List<Chromosome> individuals = new ArrayList<Chromosome>();
+		individuals.add(new MockKeyedChromosome());
+		when(populationMock.getIndividuals()).thenReturn(individuals);
+
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 		multigenerationalGeneticAlgorithm.setPopulation(populationMock);
 
@@ -251,6 +257,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(1)).size();
 		verify(populationMock, times(1)).setStopRequested(false);
+		verify(populationMock, times(3)).getIndividuals();
 		verifyNoMoreInteractions(populationMock);
 	}
 
@@ -765,8 +772,19 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		Population populationMock = mock(Population.class);
 
+		// Setting the individuals to something non-empty so the calculateEntropy() method won't fail
+		List<Chromosome> individuals = new ArrayList<Chromosome>();
+		individuals.add(new MockKeyedChromosome());
+		when(populationMock.getIndividuals()).thenReturn(individuals);
+
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 		multigenerationalGeneticAlgorithm.setPopulation(populationMock);
+
+		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class,
+				"executionStatistics");
+		ReflectionUtils.makeAccessible(executionStatisticsField);
+		ReflectionUtils
+				.setField(executionStatisticsField, multigenerationalGeneticAlgorithm, new ExecutionStatistics());
 
 		Field strategyField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "strategy");
 		ReflectionUtils.makeAccessible(strategyField);
@@ -778,6 +796,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(populationMock, times(1)).breed(eq(populationSize));
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(1)).size();
+		verify(populationMock, times(3)).getIndividuals();
 		verifyNoMoreInteractions(populationMock);
 	}
 

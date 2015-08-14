@@ -29,7 +29,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -61,19 +60,22 @@ public class GenerationStatistics implements Serializable {
 	@Column(name = "average_fitness")
 	private double averageFitness;
 
+	@Column(name = "entropy")
+	private double entropy;
+
 	@Column(name = "known_solution_proximity", nullable = true)
 	private Double knownSolutionProximity;
 
-	@Transient
+	@Column(name = "num_mutations")
 	private int numberOfMutations;
 
-	@Transient
+	@Column(name = "num_crossovers")
 	private int numberOfCrossovers;
 
-	@Transient
+	@Column(name = "num_generated")
 	private int numberRandomlyGenerated;
 
-	@Transient
+	@Column(name = "num_selected")
 	private int numberSelectedOut;
 
 	/**
@@ -184,6 +186,21 @@ public class GenerationStatistics implements Serializable {
 	}
 
 	/**
+	 * @return the entropy
+	 */
+	public double getEntropy() {
+		return entropy;
+	}
+
+	/**
+	 * @param entropy
+	 *            the entropy to set
+	 */
+	public void setEntropy(double entropy) {
+		this.entropy = entropy;
+	}
+
+	/**
 	 * @return the knownSolutionProximity
 	 */
 	public Double getKnownSolutionProximity() {
@@ -267,11 +284,17 @@ public class GenerationStatistics implements Serializable {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		temp = Double.doubleToLongBits(bestFitness);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(entropy);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((executionStatistics == null) ? 0 : executionStatistics.hashCode());
 		result = prime * result + (int) (executionTime ^ (executionTime >>> 32));
 		result = prime * result + generation;
-		result = prime * result + ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
+		result = prime * result + numberOfCrossovers;
+		result = prime * result + numberOfMutations;
+		result = prime * result + numberRandomlyGenerated;
+		result = prime * result + numberSelectedOut;
 		return result;
 	}
 
@@ -283,7 +306,7 @@ public class GenerationStatistics implements Serializable {
 		if (obj == null) {
 			return false;
 		}
-		if (getClass() != obj.getClass()) {
+		if (!(obj instanceof GenerationStatistics)) {
 			return false;
 		}
 		GenerationStatistics other = (GenerationStatistics) obj;
@@ -291,6 +314,9 @@ public class GenerationStatistics implements Serializable {
 			return false;
 		}
 		if (Double.doubleToLongBits(bestFitness) != Double.doubleToLongBits(other.bestFitness)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(entropy) != Double.doubleToLongBits(other.entropy)) {
 			return false;
 		}
 		if (executionStatistics == null) {
@@ -306,6 +332,13 @@ public class GenerationStatistics implements Serializable {
 		if (generation != other.generation) {
 			return false;
 		}
+		if (id == null) {
+			if (other.id != null) {
+				return false;
+			}
+		} else if (!id.equals(other.id)) {
+			return false;
+		}
 		if (knownSolutionProximity == null) {
 			if (other.knownSolutionProximity != null) {
 				return false;
@@ -313,11 +346,16 @@ public class GenerationStatistics implements Serializable {
 		} else if (!knownSolutionProximity.equals(other.knownSolutionProximity)) {
 			return false;
 		}
-		if (id == null) {
-			if (other.id != null) {
-				return false;
-			}
-		} else if (!id.equals(other.id)) {
+		if (numberOfCrossovers != other.numberOfCrossovers) {
+			return false;
+		}
+		if (numberOfMutations != other.numberOfMutations) {
+			return false;
+		}
+		if (numberRandomlyGenerated != other.numberRandomlyGenerated) {
+			return false;
+		}
+		if (numberSelectedOut != other.numberSelectedOut) {
 			return false;
 		}
 		return true;
@@ -330,7 +368,8 @@ public class GenerationStatistics implements Serializable {
 
 		return "[generation=" + generation + ", executionTime=" + executionTime + ", averageFitness="
 				+ String.format("%1$,.2f", averageFitness) + ", bestFitness=" + String.format("%1$,.2f", bestFitness)
-				+ proximity + ", deaths=" + numberSelectedOut + ", crossovers=" + numberOfCrossovers + ", mutations="
-				+ numberOfMutations + ", newSpawns=" + numberRandomlyGenerated + "]";
+				+ ", entropy=" + entropy + proximity + ", deaths=" + numberSelectedOut + ", crossovers="
+				+ numberOfCrossovers + ", mutations=" + numberOfMutations + ", newSpawns=" + numberRandomlyGenerated
+				+ "]";
 	}
 }
