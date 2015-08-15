@@ -21,6 +21,7 @@ package com.ciphertool.genetics;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
@@ -113,6 +114,10 @@ public class GeneticAlgorithmStrategy {
 		}
 
 		this.mutationAlgorithm = mutationAlgorithm;
+
+		if (mutationAlgorithm instanceof EvaluatedMutationAlgorithm) {
+			((EvaluatedMutationAlgorithm) this.mutationAlgorithm).setFitnessEvaluator(this.fitnessEvaluator);
+		}
 
 		this.selectionAlgorithm = selectionAlgorithm;
 		this.selector = selector;

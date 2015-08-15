@@ -212,6 +212,11 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 
 	@Override
 	public String getDisplayName() {
-		return "Lowest Common Groups";
+		return "Lowest Common Group";
+	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
 	}
 }

@@ -187,4 +187,9 @@ public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<Ke
 	public String getDisplayName() {
 		return "Liberal";
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }

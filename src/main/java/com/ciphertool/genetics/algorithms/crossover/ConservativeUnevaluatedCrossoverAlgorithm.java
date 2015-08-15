@@ -117,4 +117,9 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 	public String getDisplayName() {
 		return "Conservative Unevaluated";
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }

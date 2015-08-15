@@ -50,4 +50,9 @@ public interface CrossoverAlgorithm<T extends Chromosome> extends Selectable {
 	 *            whether to mutate during crossover
 	 */
 	public void setMutateDuringCrossover(boolean mutateDuringCrossover);
+
+	/**
+	 * @return the number of offspring this CrossoverAlgorithm will generate
+	 */
+	public int numberOfOffspring();
 }

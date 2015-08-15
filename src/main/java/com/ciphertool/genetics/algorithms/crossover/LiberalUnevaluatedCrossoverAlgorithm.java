@@ -158,4 +158,9 @@ public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<
 	public String getDisplayName() {
 		return "Liberal Unevaluated";
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }

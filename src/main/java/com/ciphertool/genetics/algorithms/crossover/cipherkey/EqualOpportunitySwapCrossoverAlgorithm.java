@@ -21,8 +21,6 @@ package com.ciphertool.genetics.algorithms.crossover.cipherkey;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Required;
 
@@ -30,11 +28,14 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
+import com.ciphertool.genetics.util.Coin;
 
-public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
+public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 	private int maxGenerations;
+
+	private Coin coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -43,13 +44,10 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
-
-		KeyedChromosome<Object> child = performCrossover(parentA, parentB);
+		List<KeyedChromosome<Object>> children = performCrossover(parentA, parentB);
 
 		// The Chromosome could be null if it's identical to one of its parents
-		if (child != null) {
-			children.add(child);
+		for (KeyedChromosome<Object> child : children) {
 			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
 					.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
@@ -60,32 +58,28 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 	}
 
 	@SuppressWarnings("unchecked")
-	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		Random generator = new Random();
-		Set<Object> availableKeys = parentA.getGenes().keySet();
-		Object[] keys = availableKeys.toArray();
+	protected List<KeyedChromosome<Object>> performCrossover(KeyedChromosome<Object> parentA,
+			KeyedChromosome<Object> parentB) {
+		KeyedChromosome<Object> childA = (KeyedChromosome<Object>) parentA.clone();
+		KeyedChromosome<Object> childB = (KeyedChromosome<Object>) parentB.clone();
 
-		// Get a random map key
-		int randomIndex = generator.nextInt(keys.length);
-
-		// Replace all the Genes from the map key to the end of the array
-		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
-		for (int i = 0; i <= randomIndex; i++) {
-			Object nextKey = (Object) keys[i];
-
-			if (null == parentB.getGenes().get(nextKey)) {
-				throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
-						+ ", but no such key was found.  Cannot continue.");
+		for (Object key : parentA.getGenes().keySet()) {
+			if (coin.flip()) {
+				childA.replaceGene(key, parentB.getGenes().get(key).clone());
+				childB.replaceGene(key, parentA.getGenes().get(key).clone());
 			}
-
-			child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
 		}
 
 		if (mutateDuringCrossover) {
-			mutationAlgorithm.mutateChromosome(child);
+			mutationAlgorithm.mutateChromosome(childA);
+			mutationAlgorithm.mutateChromosome(childB);
 		}
 
-		return child;
+		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
+		children.add(childA);
+		children.add(childB);
+
+		return children;
 	}
 
 	/**
@@ -106,9 +100,18 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 
+	/**
+	 * @param coin
+	 *            the coin to set
+	 */
+	@Required
+	public void setCoin(Coin coin) {
+		this.coin = coin;
+	}
+
 	@Override
 	public String getDisplayName() {
-		return "Random Single Point";
+		return "Equal Opportunity Swap";
 	}
 
 	/**
@@ -122,6 +125,6 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 
 	@Override
 	public int numberOfOffspring() {
-		return 1;
+		return 2;
 	}
 }

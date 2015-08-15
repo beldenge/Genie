@@ -21,20 +21,26 @@ package com.ciphertool.genetics.algorithms.crossover.cipherkey;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.util.Coin;
 
-public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
+public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
+		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
+	private static final int MAX_ATTEMPTS = 100;
+
+	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 	private int maxGenerations;
+
+	private Coin coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -61,25 +67,27 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 
 	@SuppressWarnings("unchecked")
 	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		Random generator = new Random();
-		Set<Object> availableKeys = parentA.getGenes().keySet();
-		Object[] keys = availableKeys.toArray();
+		KeyedChromosome<Object> child;
+		double originalFitness = parentA.getFitness();
+		int attempts = 0;
 
-		// Get a random map key
-		int randomIndex = generator.nextInt(keys.length);
+		do {
+			attempts++;
+			child = (KeyedChromosome<Object>) parentA.clone();
 
-		// Replace all the Genes from the map key to the end of the array
-		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
-		for (int i = 0; i <= randomIndex; i++) {
-			Object nextKey = (Object) keys[i];
-
-			if (null == parentB.getGenes().get(nextKey)) {
-				throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
-						+ ", but no such key was found.  Cannot continue.");
+			for (Object key : parentA.getGenes().keySet()) {
+				if (coin.flip()) {
+					child.replaceGene(key, parentB.getGenes().get(key).clone());
+				}
 			}
 
-			child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
-		}
+			if (attempts >= MAX_ATTEMPTS) {
+				// revert crossover
+				child = (KeyedChromosome<Object>) parentA.clone();
+
+				break;
+			}
+		} while (fitnessEvaluator.evaluate(child) < originalFitness);
 
 		if (mutateDuringCrossover) {
 			mutationAlgorithm.mutateChromosome(child);
@@ -106,9 +114,18 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 
+	/**
+	 * @param coin
+	 *            the coin to set
+	 */
+	@Required
+	public void setCoin(Coin coin) {
+		this.coin = coin;
+	}
+
 	@Override
 	public String getDisplayName() {
-		return "Random Single Point";
+		return "Equal Opportunity Guaranteed";
 	}
 
 	/**
@@ -118,6 +135,16 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 	@Required
 	public void setMaxGenerations(int maxGenerations) {
 		this.maxGenerations = maxGenerations;
+	}
+
+	/**
+	 * @param fitnessEvaluator
+	 *            the fitnessEvaluator to set
+	 */
+	@Required
+	@Override
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
+		this.fitnessEvaluator = fitnessEvaluator;
 	}
 
 	@Override

@@ -182,4 +182,9 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithm implements Crossover
 	public String getDisplayName() {
 		return "Lowest Common Group Unevaluated";
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }

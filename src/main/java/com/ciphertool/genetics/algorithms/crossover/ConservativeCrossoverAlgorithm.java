@@ -158,4 +158,9 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 	public String getDisplayName() {
 		return "Conservative";
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }

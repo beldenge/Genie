@@ -19,7 +19,10 @@
 
 package com.ciphertool.genetics.algorithms.mutation.cipherkey;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Required;
@@ -31,11 +34,10 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
+public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
 	private int maxAttempts = 100;
-
-	private Double mutationRate;
+	private int maxMutations = 10;
 
 	private GeneDao geneDao;
 
@@ -43,41 +45,49 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
-		if (mutationRate == null) {
-			throw new IllegalStateException("The mutationRate cannot be null.");
+		/*
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
+		 */
+		int numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutations, chromosome
+				.getGenes().size())) + 1;
+
+		double originalFitness = chromosome.getFitness();
+
+		List<Object> availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
+		Map<Object, Gene> originalGenes = new HashMap<Object, Gene>();
+		for (int i = 0; i < numMutations; i++) {
+			/*
+			 * We don't want to reuse an index, so we get one from the List of indices which are still available
+			 */
+			int randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * availableKeys.size());
+			Object randomKey = availableKeys.get(randomIndex);
+			originalGenes.put(randomKey, chromosome.getGenes().get(randomKey));
+			availableKeys.remove(randomIndex);
 		}
 
-		Set<Object> keys = chromosome.getGenes().keySet();
+		int attempts = 0;
+		do {
+			attempts++;
 
-		for (Object key : keys) {
-			if (ThreadLocalRandom.current().nextDouble() <= mutationRate) {
-				int attempts = 0;
-
-				Gene originalGene = chromosome.getGenes().get(key);
-				double originalFitness = chromosome.getFitness();
-
-				do {
-					attempts++;
-
-					// Replace that map value with a randomly generated Gene
-					chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
-
-					if (attempts >= maxAttempts) {
-						// Revert the mutation
-						chromosome.replaceGene(key, originalGene);
-
-						break;
-					}
-
-					// Test if the replacement is better, otherwise continue looping
-				} while (fitnessEvaluator.evaluate(chromosome) < originalFitness);
+			for (Object key : originalGenes.keySet()) {
+				// Replace that map value with a randomly generated Gene
+				chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
 			}
-		}
+
+			if (attempts >= maxAttempts) {
+				// revert the mutations
+				for (Object key : originalGenes.keySet()) {
+					chromosome.replaceGene(key, originalGenes.get(key));
+				}
+
+				break;
+			}
+		} while (fitnessEvaluator.evaluate(chromosome) < originalFitness);
 	}
 
 	@Override
 	public void setMutationRate(Double mutationRate) {
-		this.mutationRate = mutationRate;
+		// Not used
 	}
 
 	/**
@@ -108,8 +118,17 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 		this.maxAttempts = maxAttempts;
 	}
 
+	/**
+	 * @param maxMutations
+	 *            the maxMutations to set
+	 */
+	@Required
+	public void setMaxMutations(int maxMutations) {
+		this.maxMutations = maxMutations;
+	}
+
 	@Override
 	public String getDisplayName() {
-		return "Standard Guaranteed Fitness";
+		return "Multiple Guaranteed Fitness";
 	}
 }

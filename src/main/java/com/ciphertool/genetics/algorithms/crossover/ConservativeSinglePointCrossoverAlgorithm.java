@@ -216,4 +216,9 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 	public String getDisplayName() {
 		return "Conservative Single Point";
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }

@@ -117,4 +117,9 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 	public void setMaxGenerations(int maxGenerations) {
 		this.maxGenerations = maxGenerations;
 	}
+
+	@Override
+	public int numberOfOffspring() {
+		return 1;
+	}
 }
