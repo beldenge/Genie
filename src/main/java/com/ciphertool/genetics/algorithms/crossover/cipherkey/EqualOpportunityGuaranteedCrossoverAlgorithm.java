@@ -22,6 +22,7 @@ package com.ciphertool.genetics.algorithms.crossover.cipherkey;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
@@ -33,7 +34,9 @@ import com.ciphertool.genetics.util.Coin;
 
 public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private static final int MAX_ATTEMPTS = 100;
+	private Logger log = Logger.getLogger(getClass());
+
+	private int maxAttempts;
 
 	private FitnessEvaluator fitnessEvaluator;
 	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
@@ -81,9 +84,12 @@ public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 				}
 			}
 
-			if (attempts >= MAX_ATTEMPTS) {
+			if (attempts >= maxAttempts) {
 				// revert crossover
 				child = (KeyedChromosome<Object>) parentA.clone();
+
+				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
+						+ " attempts.  Returning clone of first parent.");
 
 				break;
 			}
@@ -150,5 +156,14 @@ public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 	@Override
 	public int numberOfOffspring() {
 		return 1;
+	}
+
+	/**
+	 * @param maxAttempts
+	 *            the maxAttempts to set
+	 */
+	@Required
+	public void setMaxAttempts(int maxAttempts) {
+		this.maxAttempts = maxAttempts;
 	}
 }

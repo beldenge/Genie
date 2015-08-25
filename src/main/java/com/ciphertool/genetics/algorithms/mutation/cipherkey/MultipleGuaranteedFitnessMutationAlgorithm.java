@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
@@ -36,6 +37,8 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
+	private Logger log = Logger.getLogger(getClass());
+
 	private int maxAttempts = 100;
 	private int maxMutations = 10;
 
@@ -45,44 +48,52 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
-		/*
-		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
-		 */
-		int numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutations, chromosome
-				.getGenes().size())) + 1;
-
 		double originalFitness = chromosome.getFitness();
+		double mutationFitness = 0.0;
 
-		List<Object> availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
-		Map<Object, Gene> originalGenes = new HashMap<Object, Gene>();
-		for (int i = 0; i < numMutations; i++) {
-			/*
-			 * We don't want to reuse an index, so we get one from the List of indices which are still available
-			 */
-			int randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * availableKeys.size());
-			Object randomKey = availableKeys.get(randomIndex);
-			originalGenes.put(randomKey, chromosome.getGenes().get(randomKey));
-			availableKeys.remove(randomIndex);
-		}
-
+		List<Object> availableKeys;
+		Map<Object, Gene> originalGenes;
+		int numMutations;
 		int attempts = 0;
-		do {
-			attempts++;
+		for (; attempts < maxAttempts; attempts++) {
+			/*
+			 * Choose a random number of mutations constrained by the configurable max and the total number of genes
+			 */
+			numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutations, chromosome
+					.getGenes().size())) + 1;
+
+			availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
+			originalGenes = new HashMap<Object, Gene>();
+			for (int i = 0; i < numMutations; i++) {
+				/*
+				 * We don't want to reuse an index, so we get one from the List of indices which are still available
+				 */
+				int randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * availableKeys.size());
+				Object randomKey = availableKeys.get(randomIndex);
+				originalGenes.put(randomKey, chromosome.getGenes().get(randomKey));
+				availableKeys.remove(randomIndex);
+			}
 
 			for (Object key : originalGenes.keySet()) {
 				// Replace that map value with a randomly generated Gene
 				chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
 			}
 
-			if (attempts >= maxAttempts) {
+			mutationFitness = fitnessEvaluator.evaluate(chromosome);
+			if (mutationFitness <= originalFitness) {
 				// revert the mutations
 				for (Object key : originalGenes.keySet()) {
 					chromosome.replaceGene(key, originalGenes.get(key));
 				}
+			} else {
+				chromosome.setFitness(mutationFitness);
 
-				break;
+				return;
 			}
-		} while (fitnessEvaluator.evaluate(chromosome) < originalFitness);
+		}
+
+		log.debug("Unable to find guaranteed better fitness via mutation after " + attempts
+				+ " attempts.  Returning clone of parent.");
 	}
 
 	@Override

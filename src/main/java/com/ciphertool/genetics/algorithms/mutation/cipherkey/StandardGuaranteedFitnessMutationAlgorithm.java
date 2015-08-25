@@ -22,6 +22,7 @@ package com.ciphertool.genetics.algorithms.mutation.cipherkey;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
@@ -33,6 +34,8 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
+	private Logger log = Logger.getLogger(getClass());
+
 	private int maxAttempts = 100;
 
 	private Double mutationRate;
@@ -65,6 +68,9 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 					if (attempts >= maxAttempts) {
 						// Revert the mutation
 						chromosome.replaceGene(key, originalGene);
+
+						log.debug("Unable to find guaranteed better fitness via mutation after " + maxAttempts
+								+ " attempts.  Returning clone of parent.");
 
 						break;
 					}
