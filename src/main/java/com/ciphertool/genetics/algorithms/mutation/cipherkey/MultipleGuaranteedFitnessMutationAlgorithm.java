@@ -39,8 +39,9 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
 	private Logger log = Logger.getLogger(getClass());
 
-	private int maxAttempts = 100;
-	private int maxMutations = 10;
+	private int maxAttempts;
+	private int maxMutations;
+	private double mutationCountFactor;
 
 	private GeneDao geneDao;
 
@@ -59,8 +60,7 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 			/*
 			 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 			 */
-			numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutations, chromosome
-					.getGenes().size())) + 1;
+			numMutations = getNumMutations(chromosome);
 
 			availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
 			originalGenes = new HashMap<Object, Gene>();
@@ -94,6 +94,18 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 
 		log.debug("Unable to find guaranteed better fitness via mutation after " + attempts
 				+ " attempts.  Returning clone of parent.");
+	}
+
+	protected int getNumMutations(KeyedChromosome<Object> chromosome) {
+		int max = Math.min(maxMutations, chromosome.getGenes().size());
+
+		for (int i = 1; i <= max; i++) {
+			if (ThreadLocalRandom.current().nextDouble() < mutationCountFactor) {
+				return i;
+			}
+		}
+
+		return 1;
 	}
 
 	@Override
@@ -136,6 +148,14 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	@Required
 	public void setMaxMutations(int maxMutations) {
 		this.maxMutations = maxMutations;
+	}
+
+	/**
+	 * @param mutationCountFactor
+	 *            the mutationCountFactor to set
+	 */
+	public void setMutationCountFactor(double mutationCountFactor) {
+		this.mutationCountFactor = mutationCountFactor;
 	}
 
 	@Override
