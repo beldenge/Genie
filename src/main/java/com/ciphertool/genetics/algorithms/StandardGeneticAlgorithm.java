@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
@@ -22,6 +23,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	private Integer generationsToKeep;
 	private TaskExecutor taskExecutor;
 	private boolean verifyAncestry;
+	private AtomicInteger mutations = new AtomicInteger(0);
 
 	@PostConstruct
 	public void verifyParameters() {
@@ -52,6 +54,34 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		}
 	}
 
+	/**
+	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
+	 */
+	protected class MutationTask implements Callable<Void> {
+
+		private Chromosome chromosome;
+
+		public MutationTask(Chromosome chromosome) {
+			this.chromosome = chromosome;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Void call() throws Exception {
+			Chromosome original = chromosome.clone();
+
+			/*
+			 * Mutate a gene within the Chromosome. The original Chromosome has been cloned.
+			 */
+			mutationAlgorithm.mutateChromosome(chromosome);
+
+			if (!chromosome.equals(original)) {
+				mutations.incrementAndGet();
+			}
+			return null;
+		}
+	}
+
 	@Override
 	public void proceedWithNextGeneration() throws InterruptedException {
 		this.population.backupIndividuals();
@@ -69,6 +99,12 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
 		if (log.isDebugEnabled()) {
 			log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
+		}
+
+		long startMutation = System.currentTimeMillis();
+		generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
+		if (log.isDebugEnabled()) {
+			log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
 		}
 
 		long startEvaluation = System.currentTimeMillis();
@@ -213,7 +249,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		// Add the result of each FutureTask to the population since it represents a new child Chromosome.
 		for (FutureTask<List<Chromosome>> future : futureTasks) {
 			if (stopRequested) {
-				throw new InterruptedException("Stop requested during conccurrent crossovers");
+				throw new InterruptedException("Stop requested during concurrent crossovers");
 			}
 
 			try {
@@ -233,10 +269,36 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	}
 
 	@Override
-	public int mutate(int initialPopulationSize) {
-		// Do nothing. We are testing a Genetic Algorithm which has no separate "Mutate" step.
+	public int mutate(int initialPopulationSize) throws InterruptedException {
+		List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
+		FutureTask<Void> futureTask = null;
 
-		return 0;
+		mutations.set(0);
+
+		/*
+		 * Execute each mutation concurrently.
+		 */
+		for (Chromosome chromosome : this.population.getIndividuals()) {
+			futureTask = new FutureTask<Void>(new MutationTask(chromosome));
+			futureTasks.add(futureTask);
+			this.taskExecutor.execute(futureTask);
+		}
+
+		for (FutureTask<Void> future : futureTasks) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during mutation");
+			}
+
+			try {
+				future.get();
+			} catch (InterruptedException ie) {
+				log.error("Caught InterruptedException while waiting for MutationTask ", ie);
+			} catch (ExecutionException ee) {
+				log.error("Caught ExecutionException while waiting for MutationTask ", ee);
+			}
+		}
+
+		return mutations.get();
 	}
 
 	@Override

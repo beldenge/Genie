@@ -97,11 +97,28 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		long totalExecutionTime = 0;
 
 		for (GenerationStatistics generationStatistics : this.executionStatistics.getGenerationStatisticsList()) {
+			if (generationStatistics.getGeneration() == 0) {
+				// This is the initial spawning of the population, which will potentially skew the average
+				continue;
+			}
+
 			totalExecutionTime += generationStatistics.getExecutionTime();
 		}
 
-		log.info("Average generation time is "
-				+ ((System.currentTimeMillis() - totalExecutionTime) / this.generationCount) + "ms.");
+		long averageExecutionTime = 0;
+
+		if (this.generationCount > 1) {
+			/*
+			 * We subtract 1 from the generation count because the zeroth generation is just the initial spawning of the
+			 * population. And, we add one to the result because the remainder from division is truncated due to use of
+			 * primitive type long, and we want to round up.
+			 */
+			averageExecutionTime = (totalExecutionTime / (this.generationCount - 1)) + 1;
+		} else {
+			averageExecutionTime = totalExecutionTime;
+		}
+
+		log.info("Average generation time is " + averageExecutionTime + "ms.");
 
 		this.executionStatistics.setEndDateTime(new Date());
 
