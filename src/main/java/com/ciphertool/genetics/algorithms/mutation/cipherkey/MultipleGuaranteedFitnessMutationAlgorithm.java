@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.MutationHelper;
 import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.Gene;
@@ -40,10 +41,10 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	private Logger log = Logger.getLogger(getClass());
 
 	private int maxAttempts;
-	private int maxMutations;
-	private double mutationCountFactor;
 
 	private GeneDao geneDao;
+
+	private MutationHelper mutationHelper;
 
 	private FitnessEvaluator fitnessEvaluator;
 
@@ -60,7 +61,7 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 			/*
 			 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 			 */
-			numMutations = getNumMutations(chromosome);
+			numMutations = mutationHelper.getNumMutations(chromosome.getGenes().size());
 
 			availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
 			originalGenes = new HashMap<Object, Gene>();
@@ -94,18 +95,6 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 
 		log.debug("Unable to find guaranteed better fitness via mutation after " + attempts
 				+ " attempts.  Returning clone of parent.");
-	}
-
-	protected int getNumMutations(KeyedChromosome<Object> chromosome) {
-		int max = Math.min(maxMutations, chromosome.getGenes().size());
-
-		for (int i = 1; i <= max; i++) {
-			if (ThreadLocalRandom.current().nextDouble() < mutationCountFactor) {
-				return i;
-			}
-		}
-
-		return 1;
 	}
 
 	@Override
@@ -142,20 +131,12 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	}
 
 	/**
-	 * @param maxMutations
-	 *            the maxMutations to set
+	 * @param mutationHelper
+	 *            the mutationHelper to set
 	 */
 	@Required
-	public void setMaxMutations(int maxMutations) {
-		this.maxMutations = maxMutations;
-	}
-
-	/**
-	 * @param mutationCountFactor
-	 *            the mutationCountFactor to set
-	 */
-	public void setMutationCountFactor(double mutationCountFactor) {
-		this.mutationCountFactor = mutationCountFactor;
+	public void setMutationHelper(MutationHelper mutationHelper) {
+		this.mutationHelper = mutationHelper;
 	}
 
 	@Override

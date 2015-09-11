@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.MutationHelper;
 import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.Gene;
@@ -36,8 +37,7 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
-	private int maxMutations;
-	private double mutationCountFactor;
+	private MutationHelper mutationHelper;
 
 	private GeneDao geneDao;
 
@@ -50,7 +50,7 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
-		numMutations = getNumMutations(chromosome);
+		numMutations = mutationHelper.getNumMutations(chromosome.getGenes().size());
 
 		availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
 		originalGenes = new HashMap<Object, Gene>();
@@ -70,18 +70,6 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 		}
 	}
 
-	protected int getNumMutations(KeyedChromosome<Object> chromosome) {
-		int max = Math.min(maxMutations, chromosome.getGenes().size());
-
-		for (int i = 1; i <= max; i++) {
-			if (ThreadLocalRandom.current().nextDouble() < mutationCountFactor) {
-				return i;
-			}
-		}
-
-		return 1;
-	}
-
 	@Override
 	public void setMutationRate(Double mutationRate) {
 		// Not used
@@ -96,30 +84,22 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 		this.geneDao = geneDao;
 	}
 
-	/**
-	 * @param maxMutations
-	 *            the maxMutations to set
-	 */
-	@Required
-	public void setMaxMutations(int maxMutations) {
-		this.maxMutations = maxMutations;
+	@Override
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
+		// Not needed for this implementation
 	}
 
 	/**
-	 * @param mutationCountFactor
-	 *            the mutationCountFactor to set
+	 * @param mutationHelper
+	 *            the mutationHelper to set
 	 */
-	public void setMutationCountFactor(double mutationCountFactor) {
-		this.mutationCountFactor = mutationCountFactor;
+	@Required
+	public void setMutationHelper(MutationHelper mutationHelper) {
+		this.mutationHelper = mutationHelper;
 	}
 
 	@Override
 	public String getDisplayName() {
 		return "Multiple";
-	}
-
-	@Override
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		// Not needed for this implementation
 	}
 }
