@@ -24,6 +24,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	private TaskExecutor taskExecutor;
 	private boolean verifyAncestry;
 	private AtomicInteger mutations = new AtomicInteger(0);
+	private int elitism;
 
 	@PostConstruct
 	public void verifyParameters() {
@@ -149,7 +150,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit. This also
 		 * prevents parents from reproducing more than one time per generation.
 		 */
-		for (int i = 0; i < initialPopulationSize / this.crossoverAlgorithm.numberOfOffspring(); i++) {
+		for (int i = 0; i < (initialPopulationSize - elitism) / this.crossoverAlgorithm.numberOfOffspring(); i++) {
 			if (stopRequested) {
 				throw new InterruptedException("Stop requested during crossover.");
 			}
@@ -196,7 +197,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			childrenToAdd.addAll(crossoverResults);
 		}
 
-		if (childrenToAdd == null || childrenToAdd.size() < initialPopulationSize) {
+		if (childrenToAdd == null || (childrenToAdd.size() + elitism) < initialPopulationSize) {
 			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size())
 					+ " children produced from concurrent crossover execution.  Expected " + initialPopulationSize
 					+ " children.");
@@ -204,7 +205,24 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			return ((null == childrenToAdd) ? 0 : childrenToAdd.size());
 		}
 
+		List<Chromosome> eliteIndividuals = new ArrayList<Chromosome>();
+
+		this.population.sortIndividuals();
+
+		for (int i = this.population.size() - 1; i >= this.population.size() - elitism; i--) {
+			eliteIndividuals.add(this.population.getIndividuals().get(i));
+		}
+
 		this.population.clearIndividuals();
+
+		for (Chromosome elite : eliteIndividuals) {
+			if (stopRequested) {
+				throw new InterruptedException(
+						"Stop requested while adding individuals back to the population after crossover");
+			}
+
+			this.population.addIndividual(elite);
+		}
 
 		for (Chromosome child : childrenToAdd) {
 			if (stopRequested) {
@@ -275,11 +293,13 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 
 		mutations.set(0);
 
+		this.population.sortIndividuals();
+
 		/*
 		 * Execute each mutation concurrently.
 		 */
-		for (Chromosome chromosome : this.population.getIndividuals()) {
-			futureTask = new FutureTask<Void>(new MutationTask(chromosome));
+		for (int i = this.population.size() - elitism - 1; i >= 0; i--) {
+			futureTask = new FutureTask<Void>(new MutationTask(this.population.getIndividuals().get(i)));
 			futureTasks.add(futureTask);
 			this.taskExecutor.execute(futureTask);
 		}
@@ -340,5 +360,14 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	@Required
 	public void setVerifyAncestry(boolean verifyAncestry) {
 		this.verifyAncestry = verifyAncestry;
+	}
+
+	/**
+	 * @param elitism
+	 *            the elitism to set
+	 */
+	@Required
+	public void setElitism(int elitism) {
+		this.elitism = elitism;
 	}
 }
