@@ -26,7 +26,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.selection.modes.RandomSelector;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
@@ -46,7 +46,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 	 * int, double)
 	 */
 	@Override
-	public int select(Population population, int maxSurvivors, double survivalRate) {
+	public int select(StandardPopulation population, int maxSurvivors, double survivalRate) {
 		if (population == null || population.getIndividuals().isEmpty()) {
 			log.warn("Attempted to perform selection on null or empty population.  Cannot continue.");
 

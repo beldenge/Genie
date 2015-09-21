@@ -43,7 +43,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
@@ -120,7 +120,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		ConcurrentMultigenerationalGeneticAlgorithm concurrentMultigenerationalGeneticAlgorithm = new ConcurrentMultigenerationalGeneticAlgorithm();
 		concurrentMultigenerationalGeneticAlgorithm.setTaskExecutor(taskExecutor);
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
@@ -156,7 +156,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, concurrentMultigenerationalGeneticAlgorithm, strategy);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
 				ineligibleForReproductionField, population);
@@ -188,7 +188,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 	public void testCrossover_SmallPopulation() {
 		ConcurrentMultigenerationalGeneticAlgorithm concurrentMultigenerationalGeneticAlgorithm = new ConcurrentMultigenerationalGeneticAlgorithm();
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		Chromosome chromosome = new MockKeylessChromosome();
 		population.addIndividual(chromosome);
@@ -202,7 +202,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm,
 				crossoverAlgorithmMock);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
 				ineligibleForReproductionField, population);

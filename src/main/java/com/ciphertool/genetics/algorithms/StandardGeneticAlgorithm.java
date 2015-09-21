@@ -1,3 +1,22 @@
+/**
+ * Copyright 2015 George Belden
+ * 
+ * This file is part of ZodiacGenetics.
+ * 
+ * ZodiacGenetics is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * ZodiacGenetics is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.ciphertool.genetics.algorithms;
 
 import java.util.ArrayList;
@@ -147,8 +166,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
 
 		/*
-		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit. This also
-		 * prevents parents from reproducing more than one time per generation.
+		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit.
 		 */
 		for (int i = 0; i < (initialPopulationSize - elitism) / this.crossoverAlgorithm.numberOfOffspring(); i++) {
 			if (stopRequested) {

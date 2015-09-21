@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
@@ -44,7 +45,7 @@ import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
 	protected GeneticAlgorithmStrategy strategy;
-	protected Population population;
+	protected StandardPopulation population;
 	@SuppressWarnings("rawtypes")
 	protected CrossoverAlgorithm crossoverAlgorithm;
 	@SuppressWarnings("rawtypes")
@@ -512,7 +513,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	/**
 	 * @return the population
 	 */
-	public Population getPopulation() {
+	@Override
+	public StandardPopulation getPopulation() {
 		return population;
 	}
 
@@ -523,12 +525,13 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	@Override
 	public void setPopulation(Population population) {
-		this.population = population;
+		this.population = (StandardPopulation) population;
 	}
 
 	/**
 	 * @return the strategy
 	 */
+	@Override
 	public GeneticAlgorithmStrategy getStrategy() {
 		return strategy;
 	}

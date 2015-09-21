@@ -70,7 +70,7 @@ public class PopulationTest {
 
 	@Test
 	public void testSetGeneticStructure() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		MockBreeder mockBreeder = new MockBreeder();
 		population.setBreeder(mockBreeder);
@@ -78,7 +78,7 @@ public class PopulationTest {
 		Object geneticStructure = new Object();
 		population.setGeneticStructure(geneticStructure);
 
-		Field breederField = ReflectionUtils.findField(Population.class, "breeder");
+		Field breederField = ReflectionUtils.findField(StandardPopulation.class, "breeder");
 		ReflectionUtils.makeAccessible(breederField);
 		MockBreeder breederFromObject = (MockBreeder) ReflectionUtils.getField(breederField, population);
 
@@ -91,12 +91,12 @@ public class PopulationTest {
 
 	@Test
 	public void testSetBreeder() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		MockBreeder mockBreeder = new MockBreeder();
 		population.setBreeder(mockBreeder);
 
-		Field breederField = ReflectionUtils.findField(Population.class, "breeder");
+		Field breederField = ReflectionUtils.findField(StandardPopulation.class, "breeder");
 		ReflectionUtils.makeAccessible(breederField);
 		MockBreeder breederFromObject = (MockBreeder) ReflectionUtils.getField(breederField, population);
 
@@ -105,13 +105,13 @@ public class PopulationTest {
 
 	@Test
 	public void testSetFitnessEvaluator() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
-		Field fitnessEvaluatorField = ReflectionUtils.findField(Population.class, "fitnessEvaluator");
+		Field fitnessEvaluatorField = ReflectionUtils.findField(StandardPopulation.class, "fitnessEvaluator");
 		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
 		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
 				fitnessEvaluatorField, population);
@@ -121,12 +121,12 @@ public class PopulationTest {
 
 	@Test
 	public void testSetFitnessComparator() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		AscendingFitnessComparator ascendingFitnessComparator = new AscendingFitnessComparator();
 		population.setFitnessComparator(ascendingFitnessComparator);
 
-		Field fitnessComparatorField = ReflectionUtils.findField(Population.class, "fitnessComparator");
+		Field fitnessComparatorField = ReflectionUtils.findField(StandardPopulation.class, "fitnessComparator");
 		ReflectionUtils.makeAccessible(fitnessComparatorField);
 		AscendingFitnessComparator fitnessComparatorFromObject = (AscendingFitnessComparator) ReflectionUtils.getField(
 				fitnessComparatorField, population);
@@ -136,12 +136,12 @@ public class PopulationTest {
 
 	@Test
 	public void testSetTaskExecutor() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		TaskExecutor taskExecutor = mock(TaskExecutor.class);
 		population.setTaskExecutor(taskExecutor);
 
-		Field taskExecutorField = ReflectionUtils.findField(Population.class, "taskExecutor");
+		Field taskExecutorField = ReflectionUtils.findField(StandardPopulation.class, "taskExecutor");
 		ReflectionUtils.makeAccessible(taskExecutorField);
 		TaskExecutor taskExecutorFromObject = (TaskExecutor) ReflectionUtils.getField(taskExecutorField, population);
 
@@ -150,12 +150,12 @@ public class PopulationTest {
 
 	@Test
 	public void testSetSelector() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		Selector selector = mock(Selector.class);
 		population.setSelector(selector);
 
-		Field selectorField = ReflectionUtils.findField(Population.class, "selector");
+		Field selectorField = ReflectionUtils.findField(StandardPopulation.class, "selector");
 		ReflectionUtils.makeAccessible(selectorField);
 		Selector selectorFromObject = (Selector) ReflectionUtils.getField(selectorField, population);
 
@@ -164,12 +164,12 @@ public class PopulationTest {
 
 	@Test
 	public void testSetLifespan() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		int lifespanToSet = 25;
 		population.setLifespan(lifespanToSet);
 
-		Field lifespanField = ReflectionUtils.findField(Population.class, "lifespan");
+		Field lifespanField = ReflectionUtils.findField(StandardPopulation.class, "lifespan");
 		ReflectionUtils.makeAccessible(lifespanField);
 		int lifespanFromObject = (int) ReflectionUtils.getField(lifespanField, population);
 
@@ -178,13 +178,13 @@ public class PopulationTest {
 
 	@Test
 	public void testSetKnownSolutionFitnessEvaluator() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		FitnessEvaluator knownSolutionFitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		when(knownSolutionFitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorMock);
 
-		Field knownSolutionFitnessEvaluatorField = ReflectionUtils.findField(Population.class,
+		Field knownSolutionFitnessEvaluatorField = ReflectionUtils.findField(StandardPopulation.class,
 				"knownSolutionFitnessEvaluator");
 		ReflectionUtils.makeAccessible(knownSolutionFitnessEvaluatorField);
 		FitnessEvaluator knownSolutionFitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
@@ -195,12 +195,12 @@ public class PopulationTest {
 
 	@Test
 	public void testSetCompareToKnownSolution() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		Boolean compareToKnownSolution = true;
 		population.setCompareToKnownSolution(compareToKnownSolution);
 
-		Field compareToKnownSolutionField = ReflectionUtils.findField(Population.class, "compareToKnownSolution");
+		Field compareToKnownSolutionField = ReflectionUtils.findField(StandardPopulation.class, "compareToKnownSolution");
 		ReflectionUtils.makeAccessible(compareToKnownSolutionField);
 		Boolean compareToKnownSolutionFromObject = (Boolean) ReflectionUtils.getField(compareToKnownSolutionField,
 				population);
@@ -210,9 +210,9 @@ public class PopulationTest {
 
 	@Test
 	public void testSetCompareToKnownSolutionDefault() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
-		Field compareToKnownSolutionField = ReflectionUtils.findField(Population.class, "compareToKnownSolution");
+		Field compareToKnownSolutionField = ReflectionUtils.findField(StandardPopulation.class, "compareToKnownSolution");
 		ReflectionUtils.makeAccessible(compareToKnownSolutionField);
 		Boolean compareToKnownSolutionFromObject = (Boolean) ReflectionUtils.getField(compareToKnownSolutionField,
 				population);
@@ -222,8 +222,8 @@ public class PopulationTest {
 
 	@Test
 	public void testGeneratorTask() {
-		Population population = new Population();
-		Population.GeneratorTask generatorTask = population.new GeneratorTask();
+		StandardPopulation population = new StandardPopulation();
+		StandardPopulation.GeneratorTask generatorTask = population.new GeneratorTask();
 
 		MockKeylessChromosome chromosomeToReturn = new MockKeylessChromosome();
 		Breeder mockBreeder = mock(Breeder.class);
@@ -242,7 +242,7 @@ public class PopulationTest {
 
 	@Test
 	public void testBreed() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setTaskExecutor(taskExecutor);
 
 		int expectedPopulationSize = 10;
@@ -264,14 +264,14 @@ public class PopulationTest {
 
 	@Test
 	public void testEvaluatorTask() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		MockKeylessChromosome chromosomeToEvaluate = new MockKeylessChromosome();
 
 		FitnessEvaluator mockEvaluator = mock(FitnessEvaluator.class);
 		Double fitnessToReturn = new Double(101.0);
 		when(mockEvaluator.evaluate(same(chromosomeToEvaluate))).thenReturn(fitnessToReturn);
 
-		Population.EvaluatorTask evaluatorTask = population.new EvaluatorTask(chromosomeToEvaluate);
+		StandardPopulation.EvaluatorTask evaluatorTask = population.new EvaluatorTask(chromosomeToEvaluate);
 		population.setFitnessEvaluator(mockEvaluator);
 
 		Void fitnessReturned = null;
@@ -286,7 +286,7 @@ public class PopulationTest {
 
 	@Test
 	public void testDoConcurrentFitnessEvaluations() throws InterruptedException {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setTaskExecutor(taskExecutor);
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
@@ -330,7 +330,7 @@ public class PopulationTest {
 	public void testEvaluateFitness() throws InterruptedException {
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setTaskExecutor(taskExecutor);
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
@@ -385,7 +385,7 @@ public class PopulationTest {
 	public void testEvaluateFitnessCompareToKnownSolution() throws InterruptedException {
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setTaskExecutor(taskExecutor);
 		population.setCompareToKnownSolution(true);
 
@@ -444,7 +444,7 @@ public class PopulationTest {
 
 	@Test
 	public void testIncreaseAge() throws InterruptedException {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setLifespan(5);
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
@@ -472,7 +472,7 @@ public class PopulationTest {
 
 	@Test
 	public void testIncreaseAgeIndefinitely() throws InterruptedException {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setLifespan(-1);
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
@@ -502,7 +502,7 @@ public class PopulationTest {
 
 	@Test
 	public void testSelectIndex() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		int indexToReturn = 7;
 
@@ -516,7 +516,7 @@ public class PopulationTest {
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testIndividualsUnmodifiable() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.addIndividual(mock(Chromosome.class));
 		population.addIndividual(mock(Chromosome.class));
 		population.addIndividual(mock(Chromosome.class));
@@ -527,13 +527,13 @@ public class PopulationTest {
 
 	@Test
 	public void getNullIndividuals() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		assertNotNull(population.getIndividuals());
 	}
 
 	@Test
 	public void testAddIndividual() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setTaskExecutor(taskExecutor);
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
@@ -572,7 +572,7 @@ public class PopulationTest {
 
 	@Test
 	public void testRemoveIndividual() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
 		chromosome1.setFitness(5.0);
@@ -602,7 +602,7 @@ public class PopulationTest {
 
 	@Test
 	public void testClearIndividuals() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
 		chromosome1.setFitness(5.0);
@@ -625,9 +625,9 @@ public class PopulationTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testAddIndividualAsIneligible() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
@@ -673,9 +673,9 @@ public class PopulationTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testMakeIneligibleForReproduction() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
@@ -725,9 +725,9 @@ public class PopulationTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testResetEligibility() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
@@ -777,7 +777,7 @@ public class PopulationTest {
 
 	@Test
 	public void testSize() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setTaskExecutor(taskExecutor);
 
 		// This is needed to avoid a NullPointerException on fitnessEvaluator
@@ -798,7 +798,7 @@ public class PopulationTest {
 
 	@Test
 	public void testSortIndividuals() {
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		population.setFitnessComparator(new AscendingFitnessComparator());
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();

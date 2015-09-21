@@ -16,22 +16,47 @@
  * You should have received a copy of the GNU General Public License along with
  * ZodiacGenetics. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.ciphertool.genetics.algorithms.selection;
 
-import com.ciphertool.genetics.StandardPopulation;
-import com.ciphertool.genetics.entities.Selectable;
+package com.ciphertool.genetics;
 
-public interface SelectionAlgorithm extends Selectable {
+import com.ciphertool.genetics.entities.Chromosome;
+
+public class SpatialChromosomeWrapper {
+	private int xPos;
+	private int yPos;
+
+	private Chromosome chromosome;
+
 	/**
-	 * Performs natural selection against the supplied Population, modifying it by reference.
-	 * 
-	 * @param population
-	 *            the population to select upon
-	 * @param maxSurvivors
-	 *            the maximum number of individuals allowed in the population
-	 * @param survivalRate
-	 *            the percentage of individuals to survive
-	 * @return the number of individuals selected out (i.e. did not survive)
+	 * @param xPos
+	 * @param yPos
+	 * @param chromosome
 	 */
-	public int select(StandardPopulation population, int maxSurvivors, double survivalRate);
+	public SpatialChromosomeWrapper(int xPos, int yPos, Chromosome chromosome) {
+		super();
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.chromosome = chromosome;
+	}
+
+	/**
+	 * @return the xPos
+	 */
+	public int getXPos() {
+		return xPos;
+	}
+
+	/**
+	 * @return the yPos
+	 */
+	public int getYPos() {
+		return yPos;
+	}
+
+	/**
+	 * @return the chromosome
+	 */
+	public Chromosome getChromosome() {
+		return chromosome;
+	}
 }

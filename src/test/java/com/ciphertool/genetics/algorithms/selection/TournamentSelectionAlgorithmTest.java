@@ -36,14 +36,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.algorithms.selection.modes.TournamentSelector;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class TournamentSelectionAlgorithmTest {
 	private static Logger logMock;
-	private static Population population;
+	private static StandardPopulation population;
 	private static TournamentSelectionAlgorithm tournamentSelectionAlgorithm;
 
 	@BeforeClass
@@ -62,7 +62,7 @@ public class TournamentSelectionAlgorithmTest {
 
 	@Before
 	public void resetDependencies() {
-		population = new Population();
+		population = new StandardPopulation();
 
 		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
 		chromosome1.setFitness(5.0);
@@ -253,7 +253,7 @@ public class TournamentSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		int numberRemoved = tournamentSelectionAlgorithm.select(new Population(), maxSurvivors, survivalRate);
+		int numberRemoved = tournamentSelectionAlgorithm.select(new StandardPopulation(), maxSurvivors, survivalRate);
 
 		assertEquals(0, numberRemoved);
 		verify(logMock, times(1)).warn(anyString());

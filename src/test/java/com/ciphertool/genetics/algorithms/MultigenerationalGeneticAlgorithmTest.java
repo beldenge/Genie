@@ -46,7 +46,7 @@ import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
@@ -65,12 +65,12 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@Test
 	public void testSetPopulation() {
-		Population populationToSet = mock(Population.class);
+		StandardPopulation populationToSet = mock(StandardPopulation.class);
 
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 		multigenerationalGeneticAlgorithm.setPopulation(populationToSet);
 
-		Population populationFromObject = multigenerationalGeneticAlgorithm.getPopulation();
+		StandardPopulation populationFromObject = multigenerationalGeneticAlgorithm.getPopulation();
 
 		assertSame(populationToSet, populationFromObject);
 	}
@@ -96,7 +96,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testSetStrategy() {
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 		NonUniformMutationAlgorithm mutationAlgorithmMock = mock(NonUniformMutationAlgorithm.class);
 		SelectionAlgorithm selectionAlgorithmMock = mock(SelectionAlgorithm.class);
@@ -197,7 +197,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		strategyToSet.setSelectionAlgorithm(mock(SelectionAlgorithm.class));
 		strategyToSet.setSelector(mock(Selector.class));
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 
 		// Setting the individuals to something non-empty so the calculateEntropy() method won't fail
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
@@ -304,7 +304,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		double mutationRate = 0.1;
 		double crossoverRate = 0.1;
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 		for (int i = 0; i < initialPopulationSize; i++) {
@@ -504,7 +504,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		int populationSize = 100;
 		double survivalRate = 0.9;
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		multigenerationalGeneticAlgorithm.setPopulation(population);
 
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
@@ -533,7 +533,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testCrossover() throws InterruptedException {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
@@ -568,7 +568,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(strategyField);
 		ReflectionUtils.setField(strategyField, multigenerationalGeneticAlgorithm, strategy);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
 				ineligibleForReproductionField, population);
@@ -600,7 +600,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testCrossover_SmallPopulation() throws InterruptedException {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
-		Population population = new Population();
+		StandardPopulation population = new StandardPopulation();
 
 		Chromosome chromosome = new MockKeylessChromosome();
 		population.addIndividual(chromosome);
@@ -613,7 +613,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Field ineligibleForReproductionField = ReflectionUtils.findField(Population.class, "ineligibleForReproduction");
+		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
 				ineligibleForReproductionField, population);
@@ -638,7 +638,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testDeterminePairsToCrossover() {
 		int initialPopulationSize = 100;
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 		when(populationMock.size()).thenReturn(initialPopulationSize);
 
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
@@ -662,7 +662,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		int initialPopulationSize = 100;
 		int actualPopulationSize = 50;
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 		when(populationMock.size()).thenReturn(actualPopulationSize);
 
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
@@ -687,7 +687,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		int initialPopulationSize = 100;
 		int index = 0;
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 		when(populationMock.selectIndex()).thenReturn(index);
 		when(populationMock.getIndividuals()).thenReturn(Arrays.asList(mock(Chromosome.class)));
 		when(populationMock.size()).thenReturn(initialPopulationSize);
@@ -729,7 +729,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		int actualPopulationSize = 25;
 		int index = 0;
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 		when(populationMock.selectIndex()).thenReturn(index);
 		when(populationMock.getIndividuals()).thenReturn(Arrays.asList(mock(Chromosome.class)));
 		when(populationMock.size()).thenReturn(actualPopulationSize);
@@ -770,7 +770,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		int populationSize = 100;
 		strategyToSet.setPopulationSize(populationSize);
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 
 		// Setting the individuals to something non-empty so the calculateEntropy() method won't fail
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
@@ -822,7 +822,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testRequestStop() {
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
 
-		Population populationMock = mock(Population.class);
+		StandardPopulation populationMock = mock(StandardPopulation.class);
 		multigenerationalGeneticAlgorithm.setPopulation(populationMock);
 
 		Field stopRequestedField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "stopRequested");

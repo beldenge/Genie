@@ -20,7 +20,7 @@ package com.ciphertool.genetics.algorithms.selection;
 
 import org.apache.log4j.Logger;
 
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.StandardPopulation;
 
 public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 	private Logger log = Logger.getLogger(getClass());
@@ -35,7 +35,7 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 	 * int, double)
 	 */
 	@Override
-	public int select(Population population, int maxSurvivors, double survivalRate) {
+	public int select(StandardPopulation population, int maxSurvivors, double survivalRate) {
 		if (population == null || population.getIndividuals().isEmpty()) {
 			log.warn("Attempted to perform selection on null or empty population.  Cannot continue.");
 
