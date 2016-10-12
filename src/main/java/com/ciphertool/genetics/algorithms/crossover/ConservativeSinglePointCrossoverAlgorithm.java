@@ -38,9 +38,6 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 	/**
 	 * This crossover algorithm finds all the points where both parent Chromosomes can safely be split in half without
 	 * splitting a Gene, and then picks one of those at random as the centromere for crossover.
-	 * 
-	 * @see com.ciphertool.genetics.algorithms.crossover.zodiacengine.genetic.CrossoverAlgorithm#crossover(com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome,
-	 *      com.ciphertool.genetics.entities.zodiacengine.genetic.Chromosome)
 	 */
 	@Override
 	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {

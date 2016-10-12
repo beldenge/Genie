@@ -57,10 +57,6 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 
 	/*
 	 * Crossover algorithm utilizing Roulette Wheel Selection
-	 * 
-	 * (non-Javadoc)
-	 * 
-	 * @see com.ciphertool.zodiacengine.genetic.GeneticAlgorithm#crossover()
 	 */
 	@Override
 	public int crossover(int initialPopulationSize) {
