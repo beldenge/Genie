@@ -41,7 +41,7 @@ public class GenerationStatisticsTest {
 
 	@Test
 	public void testSetId() {
-		Integer idToSet = 123;
+		String idToSet = "123";
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 		generationStatistics.setId(idToSet);
 
@@ -140,9 +140,9 @@ public class GenerationStatisticsTest {
 
 	@Test
 	public void testEquals() {
-		Integer baseId = 123;
+		String baseId = "123";
 		ExecutionStatistics baseExecutionStatistics = new ExecutionStatistics();
-		baseExecutionStatistics.setId(1);
+		baseExecutionStatistics.setId("1");
 		int baseGeneration = 1;
 		long baseExecutionTime = 999;
 		double baseBestFitness = 99.9;
@@ -169,7 +169,7 @@ public class GenerationStatisticsTest {
 		assertEquals(base, generationStatisticsEqualToBase);
 
 		GenerationStatistics generationStatisticsWithDifferentId = new GenerationStatistics();
-		generationStatisticsWithDifferentId.setId(54321);
+		generationStatisticsWithDifferentId.setId("54321");
 		generationStatisticsWithDifferentId.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentId.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentId.setExecutionTime(baseExecutionTime);
@@ -181,7 +181,7 @@ public class GenerationStatisticsTest {
 		GenerationStatistics generationStatisticsWithDifferentExecutionStatistics = new GenerationStatistics();
 		generationStatisticsWithDifferentExecutionStatistics.setId(baseId);
 		ExecutionStatistics differentExecutionStatistics = new ExecutionStatistics();
-		differentExecutionStatistics.setId(2);
+		differentExecutionStatistics.setId("2");
 		generationStatisticsWithDifferentExecutionStatistics.setExecutionStatistics(differentExecutionStatistics);
 		generationStatisticsWithDifferentExecutionStatistics.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentExecutionStatistics.setExecutionTime(baseExecutionTime);

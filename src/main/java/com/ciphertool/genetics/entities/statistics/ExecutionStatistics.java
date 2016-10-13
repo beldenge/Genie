@@ -25,70 +25,40 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.NaturalId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 
-@Entity
-@Table(name = "execution_stats")
+@Document(collection = "executionStats")
 public class ExecutionStatistics implements Serializable {
 	private static final long serialVersionUID = 8148209145996293339L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
+	private String id;
 
-	@NaturalId
-	@Column(name = "start_date")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date startDateTime;
 
-	@Column(name = "end_date")
-	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDateTime;
 
-	@Column(name = "population_size")
 	private Integer populationSize;
 
-	@Column(name = "lifespan")
 	private Integer lifespan;
 
-	@Column(name = "survival_rate")
 	private Double survivalRate;
 
-	@Column(name = "mutation_rate")
 	private Double mutationRate;
 
-	@Column(name = "crossover_rate")
 	private Double crossoverRate;
 
-	@Column(name = "crossover_algorithm")
-	@Enumerated(EnumType.STRING)
 	private String crossoverAlgorithm;
 
-	@Column(name = "fitness_evaluator")
 	private String fitnessEvaluator;
 
-	@Column(name = "mutation_algorithm")
-	@Enumerated(EnumType.STRING)
 	private String mutationAlgorithm;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "executionStatistics", cascade = CascadeType.ALL)
+	@DBRef
 	private List<GenerationStatistics> generationStatisticsList = new ArrayList<GenerationStatistics>();
 
 	/**
@@ -120,7 +90,7 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the id
 	 */
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -128,7 +98,7 @@ public class ExecutionStatistics implements Serializable {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -20,20 +20,16 @@
 package com.ciphertool.genetics.dao;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Required;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.mongodb.core.MongoOperations;
 
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 
 public class ExecutionStatisticsDao {
 	private Logger log = Logger.getLogger(getClass());
 
-	private SessionFactory sessionFactory;
+	private MongoOperations mongoOperations;
 
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean insert(ExecutionStatistics executionStatistics) {
 		if (executionStatistics == null) {
 			log.warn("Attempted to insert null ExecutionStatistics.  Returning.");
@@ -41,13 +37,13 @@ public class ExecutionStatisticsDao {
 			return false;
 		}
 
-		Session session = sessionFactory.getCurrentSession();
-		session.persist(executionStatistics);
+		mongoOperations.insert(executionStatistics);
+
 		return true;
 	}
 
 	@Required
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public void setMongoTemplate(MongoOperations mongoOperations) {
+		this.mongoOperations = mongoOperations;
 	}
 }

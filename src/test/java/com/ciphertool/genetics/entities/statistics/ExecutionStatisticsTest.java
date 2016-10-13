@@ -70,7 +70,7 @@ public class ExecutionStatisticsTest {
 
 	@Test
 	public void testSetId() {
-		Integer idToSet = 123;
+		String idToSet = "123";
 		ExecutionStatistics executionStatistics = new ExecutionStatistics();
 		executionStatistics.setId(idToSet);
 
@@ -234,7 +234,7 @@ public class ExecutionStatisticsTest {
 		assertEquals(base, executionStatisticsEqualToBase);
 
 		ExecutionStatistics executionStatisticsWithDifferentId = new ExecutionStatistics(baseStartDate, baseStrategy);
-		executionStatisticsWithDifferentId.setId(54321);
+		executionStatisticsWithDifferentId.setId("54321");
 		assertFalse(base.equals(executionStatisticsWithDifferentId));
 
 		Calendar cal = Calendar.getInstance();

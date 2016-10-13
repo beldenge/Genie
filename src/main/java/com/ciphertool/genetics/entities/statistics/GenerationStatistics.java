@@ -21,61 +21,38 @@ package com.ciphertool.genetics.entities.statistics;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import org.hibernate.annotations.NaturalId;
-
-@Entity
-@Table(name = "generation_stats")
+@Document(collection = "generationStats")
 public class GenerationStatistics implements Serializable {
 	private static final long serialVersionUID = 5751129649317222013L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
+	private String id;
 
-	@NaturalId
-	@ManyToOne
-	@JoinColumn(name = "execution_id")
+	@DBRef
 	private ExecutionStatistics executionStatistics;
 
-	@NaturalId
-	@Column(name = "generation")
 	private int generation;
 
-	@Column(name = "execution_time")
 	private long executionTime;
 
-	@Column(name = "best_fitness")
 	private double bestFitness;
 
-	@Column(name = "average_fitness")
 	private double averageFitness;
 
-	@Column(name = "entropy")
 	private double entropy;
 
-	@Column(name = "known_solution_proximity", nullable = true)
 	private Double knownSolutionProximity;
 
-	@Column(name = "num_mutations")
 	private int numberOfMutations;
 
-	@Column(name = "num_crossovers")
 	private int numberOfCrossovers;
 
-	@Column(name = "num_generated")
 	private int numberRandomlyGenerated;
 
-	@Column(name = "num_selected")
 	private int numberSelectedOut;
 
 	/**
@@ -98,7 +75,7 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the id
 	 */
-	public Integer getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -106,7 +83,7 @@ public class GenerationStatistics implements Serializable {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(Integer id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
