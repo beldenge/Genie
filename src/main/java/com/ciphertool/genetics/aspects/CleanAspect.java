@@ -18,17 +18,18 @@
  */
 package com.ciphertool.genetics.aspects;
 
-import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
 @Aspect
 public class CleanAspect {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@After("methodsMarkedWithAtClean()")
 	public void afterMethodsMarkedWithAtClean(JoinPoint jp) throws Throwable {

@@ -24,7 +24,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
@@ -32,7 +33,7 @@ import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm<KeyedChromosome<Object>> {
-	private static Logger log = Logger.getLogger(RandomValueMutationAlgorithm.class);
+	private static Logger log = LoggerFactory.getLogger(RandomValueMutationAlgorithm.class);
 
 	private GeneDao geneDao;
 	private Integer maxMutationsPerChromosome;

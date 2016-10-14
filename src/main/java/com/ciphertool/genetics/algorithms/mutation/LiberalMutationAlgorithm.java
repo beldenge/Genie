@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneDao;
@@ -32,7 +33,7 @@ import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
-	private static Logger log = Logger.getLogger(LiberalMutationAlgorithm.class);
+	private static Logger log = LoggerFactory.getLogger(LiberalMutationAlgorithm.class);
 	private GeneDao geneDao;
 	private KeylessChromosomeHelper keylessChromosomeHelper;
 	private Integer maxMutationsPerChromosome;

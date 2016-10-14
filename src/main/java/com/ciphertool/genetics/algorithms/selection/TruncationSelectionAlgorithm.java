@@ -18,12 +18,13 @@
  */
 package com.ciphertool.genetics.algorithms.selection;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ciphertool.genetics.StandardPopulation;
 
 public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	/*
 	 * Performs selection by simply dropping all of the individuals that fall below the survival rate, based on fitness.

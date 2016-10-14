@@ -18,11 +18,12 @@
  */
 package com.ciphertool.genetics.aspects;
 
-import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
@@ -30,7 +31,7 @@ import com.ciphertool.genetics.entities.Sequence;
 
 @Aspect
 public class DirtyAspect {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Before("methodsMarkedWithAtDirty()")
 	public void beforeMethodsMarkedWithAtDirty(JoinPoint jp) throws Throwable {

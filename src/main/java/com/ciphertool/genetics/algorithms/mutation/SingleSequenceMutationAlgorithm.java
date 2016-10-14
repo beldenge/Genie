@@ -23,7 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.SequenceDao;
@@ -32,7 +33,7 @@ import com.ciphertool.genetics.entities.Sequence;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class SingleSequenceMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
-	private static Logger log = Logger.getLogger(SingleSequenceMutationAlgorithm.class);
+	private static Logger log = LoggerFactory.getLogger(SingleSequenceMutationAlgorithm.class);
 	private SequenceDao sequenceDao;
 	private Integer maxMutationsPerChromosome;
 

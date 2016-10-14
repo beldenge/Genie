@@ -22,7 +22,8 @@ package com.ciphertool.genetics.algorithms.crossover;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.KeylessChromosome;
@@ -30,7 +31,7 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.util.RandomListElementSelector;
 
 public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
-	private static Logger log = Logger.getLogger(ConservativeSinglePointCrossoverAlgorithm.class);
+	private static Logger log = LoggerFactory.getLogger(ConservativeSinglePointCrossoverAlgorithm.class);
 	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
 	private boolean mutateDuringCrossover = false;
 	private RandomListElementSelector randomListElementSelector;

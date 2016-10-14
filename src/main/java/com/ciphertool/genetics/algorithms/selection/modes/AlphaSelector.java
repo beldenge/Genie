@@ -20,12 +20,13 @@ package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class AlphaSelector implements Selector {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {

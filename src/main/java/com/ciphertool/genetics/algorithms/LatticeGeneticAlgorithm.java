@@ -32,7 +32,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
@@ -51,6 +52,8 @@ import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
+	private Logger log = LoggerFactory.getLogger(getClass());
+
 	private GeneticAlgorithmStrategy strategy;
 	private LatticePopulation population;
 	@SuppressWarnings("rawtypes")
@@ -61,7 +64,6 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 	private ExecutionStatisticsDao executionStatisticsDao;
 	private int generationCount = 0;
 	private ExecutionStatistics executionStatistics;
-	private Logger log = Logger.getLogger(getClass());
 	private Integer generationsToSkip;
 	private Integer generationsToKeep;
 	private TaskExecutor taskExecutor;
@@ -201,7 +203,7 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 
 		log.info("Took " + executionTime + "ms to spawn initial population of size " + this.population.size());
 
-		log.info(generationStatistics);
+		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}
@@ -304,7 +306,7 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 		long executionTime = (System.currentTimeMillis() - generationStart);
 		generationStatistics.setExecutionTime(executionTime);
 
-		log.info(generationStatistics);
+		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}

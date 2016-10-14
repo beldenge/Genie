@@ -29,7 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
@@ -37,7 +38,8 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
+
 	private Integer generationsToSkip;
 	private Integer generationsToKeep;
 	private TaskExecutor taskExecutor;
@@ -142,7 +144,7 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		long executionTime = (System.currentTimeMillis() - generationStart);
 		generationStatistics.setExecutionTime(executionTime);
 
-		log.info(generationStatistics);
+		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}

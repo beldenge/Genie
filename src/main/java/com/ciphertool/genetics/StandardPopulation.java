@@ -26,7 +26,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
@@ -37,7 +38,7 @@ import com.ciphertool.genetics.fitness.FitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class StandardPopulation implements Population {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 	private Breeder breeder;
 	private List<Chromosome> individuals = new ArrayList<Chromosome>();
 	private List<Chromosome> backup = new ArrayList<Chromosome>();

@@ -25,14 +25,15 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class ConcurrentMultigenerationalGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 	private TaskExecutor taskExecutor;
 
 	/**

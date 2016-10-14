@@ -42,10 +42,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.dao.GeneDao;

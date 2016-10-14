@@ -22,7 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.entities.Chromosome;
@@ -30,7 +31,7 @@ import com.ciphertool.genetics.fitness.DescendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessComparator;
 
 public class TournamentSelector implements Selector {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 	private Double selectionAccuracy;
 	private static FitnessComparator fitnessComparator = new DescendingFitnessComparator();
 

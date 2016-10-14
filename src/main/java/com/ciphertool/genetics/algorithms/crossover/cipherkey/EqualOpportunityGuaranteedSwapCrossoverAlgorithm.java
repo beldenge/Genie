@@ -22,7 +22,8 @@ package com.ciphertool.genetics.algorithms.crossover.cipherkey;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
@@ -34,7 +35,7 @@ import com.ciphertool.genetics.util.Coin;
 
 public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private int maxAttempts;
 

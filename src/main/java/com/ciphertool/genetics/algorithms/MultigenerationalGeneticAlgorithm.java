@@ -25,7 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
@@ -43,7 +44,8 @@ import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
+
 	protected GeneticAlgorithmStrategy strategy;
 	protected StandardPopulation population;
 	@SuppressWarnings("rawtypes")
@@ -200,7 +202,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		long executionTime = (System.currentTimeMillis() - generationStart);
 		generationStatistics.setExecutionTime(executionTime);
 
-		log.info(generationStatistics);
+		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}
@@ -416,7 +418,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		log.info("Took " + executionTime + "ms to spawn initial population of size " + this.population.size());
 
-		log.info(generationStatistics);
+		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}

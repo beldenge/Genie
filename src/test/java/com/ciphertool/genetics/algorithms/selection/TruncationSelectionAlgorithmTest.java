@@ -29,10 +29,10 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import java.lang.reflect.Field;
 
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.StandardPopulation;

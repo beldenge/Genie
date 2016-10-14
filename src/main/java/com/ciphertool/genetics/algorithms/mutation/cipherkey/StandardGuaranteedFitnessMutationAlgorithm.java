@@ -22,7 +22,8 @@ package com.ciphertool.genetics.algorithms.mutation.cipherkey;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
@@ -34,7 +35,7 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private int maxAttempts = 100;
 

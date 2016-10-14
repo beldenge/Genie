@@ -19,14 +19,15 @@
 
 package com.ciphertool.genetics.dao;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.mongodb.core.MongoOperations;
 
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 
 public class ExecutionStatisticsDao {
-	private Logger log = Logger.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
 	private MongoOperations mongoOperations;
 
