@@ -54,11 +54,9 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
 		conservativeCrossoverAlgorithm.setFitnessEvaluator(fitnessEvaluatorToSet);
 
-		Field fitnessEvaluatorField = ReflectionUtils.findField(ConservativeCrossoverAlgorithm.class,
-				"fitnessEvaluator");
+		Field fitnessEvaluatorField = ReflectionUtils.findField(ConservativeCrossoverAlgorithm.class, "fitnessEvaluator");
 		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
-		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
-				fitnessEvaluatorField, conservativeCrossoverAlgorithm);
+		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(fitnessEvaluatorField, conservativeCrossoverAlgorithm);
 
 		assertSame(fitnessEvaluatorToSet, fitnessEvaluatorFromObject);
 	}
@@ -71,11 +69,9 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
 		conservativeCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(ConservativeCrossoverAlgorithm.class,
-				"mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(ConservativeCrossoverAlgorithm.class, "mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
-				mutationAlgorithmField, conservativeCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(mutationAlgorithmField, conservativeCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -87,11 +83,9 @@ public class ConservativeCrossoverAlgorithmTest extends CrossoverAlgorithmTestBa
 		ConservativeCrossoverAlgorithm conservativeCrossoverAlgorithm = new ConservativeCrossoverAlgorithm();
 		conservativeCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(ConservativeCrossoverAlgorithm.class,
-				"mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(ConservativeCrossoverAlgorithm.class, "mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
-				conservativeCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField, conservativeCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}

@@ -31,9 +31,9 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<KeylessChromosome> {
-	private FitnessEvaluator fitnessEvaluator;
-	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
+	private FitnessEvaluator						fitnessEvaluator;
+	private MutationAlgorithm<KeylessChromosome>	mutationAlgorithm;
+	private boolean									mutateDuringCrossover	= false;
 
 	@Override
 	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
@@ -74,11 +74,8 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 			 * Replace from parentB and reevaluate to see if it improves. We are extra careful here since genes won't
 			 * match exactly with sequence position.
 			 */
-			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
-					.getSecondChromosomeSequencePosition()
-					&& (((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()))
-							.size() == ((VariableLengthGene) parentB.getGenes().get(
-							crossoverProgressDto.getSecondChromosomeGeneIndex())).size())) {
+			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto.getSecondChromosomeSequencePosition()
+					&& (((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size() == ((VariableLengthGene) parentB.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())).size())) {
 				attemptToReplaceGeneInChild(crossoverProgressDto, child, parentB);
 			}
 
@@ -100,14 +97,12 @@ public class ConservativeCrossoverAlgorithm implements EvaluatedCrossoverAlgorit
 		return child;
 	}
 
-	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto, KeylessChromosome child,
-			KeylessChromosome parentB) {
+	protected void attemptToReplaceGeneInChild(CrossoverProgressDto crossoverProgressDto, KeylessChromosome child, KeylessChromosome parentB) {
 		Gene geneCopy = child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()).clone();
 
 		double originalFitness = child.getFitness();
 
-		child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
-				crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
+		child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 
 		double newFitness = fitnessEvaluator.evaluate(child);
 		child.setFitness(newFitness);

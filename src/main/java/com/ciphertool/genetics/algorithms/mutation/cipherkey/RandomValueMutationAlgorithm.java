@@ -33,10 +33,10 @@ import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm<KeyedChromosome<Object>> {
-	private static Logger log = LoggerFactory.getLogger(RandomValueMutationAlgorithm.class);
+	private static Logger	log	= LoggerFactory.getLogger(RandomValueMutationAlgorithm.class);
 
-	private GeneDao geneDao;
-	private Integer maxMutationsPerChromosome;
+	private GeneDao			geneDao;
+	private Integer			maxMutationsPerChromosome;
 
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
@@ -47,8 +47,8 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
-		int numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutationsPerChromosome,
-				chromosome.getGenes().size())) + 1;
+		int numMutations = (int) (ThreadLocalRandom.current().nextDouble()
+				* Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
 		Set<Object> availableKeys = chromosome.getGenes().keySet();
 

@@ -34,8 +34,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
-		crossoverProgressDto
-				.setSecondChromosomeSequencePosition(((VariableLengthGene) parent.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parent.getGenes().get(0)).size());
 
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent, 0);
 
@@ -81,8 +80,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
-		crossoverProgressDto
-				.setSecondChromosomeSequencePosition(((VariableLengthGene) parent.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parent.getGenes().get(0)).size());
 
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent, 1);
 
@@ -106,8 +104,7 @@ public class LowestCommonGroupCrossoverAlgorithmHelperTest extends CrossoverAlgo
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
-		crossoverProgressDto
-				.setSecondChromosomeSequencePosition(((VariableLengthGene) parent.getGenes().get(0)).size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parent.getGenes().get(0)).size());
 
 		LowestCommonGroupCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent, -1);
 

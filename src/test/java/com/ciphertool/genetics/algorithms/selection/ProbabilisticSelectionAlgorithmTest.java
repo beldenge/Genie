@@ -39,9 +39,9 @@ import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class ProbabilisticSelectionAlgorithmTest {
-	private static Logger logMock;
-	private static StandardPopulation population;
-	private static ProbabilisticSelectionAlgorithm probabilisticSelectionAlgorithm;
+	private static Logger							logMock;
+	private static StandardPopulation				population;
+	private static ProbabilisticSelectionAlgorithm	probabilisticSelectionAlgorithm;
 
 	@BeforeClass
 	public static void setUp() {

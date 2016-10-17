@@ -56,10 +56,10 @@ import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class SingleSequenceMutationAlgorithmTest {
-	private final static int MAX_MUTATIONS = 2;
-	private static Logger logMock;
-	private static SingleSequenceMutationAlgorithm singleSequenceMutationAlgorithm;
-	private static SequenceDao sequenceDaoMock;
+	private final static int						MAX_MUTATIONS	= 2;
+	private static Logger							logMock;
+	private static SingleSequenceMutationAlgorithm	singleSequenceMutationAlgorithm;
+	private static SequenceDao						sequenceDaoMock;
 
 	@BeforeClass
 	public static void setUp() {
@@ -89,8 +89,7 @@ public class SingleSequenceMutationAlgorithmTest {
 
 		Field sequenceDaoField = ReflectionUtils.findField(SingleSequenceMutationAlgorithm.class, "sequenceDao");
 		ReflectionUtils.makeAccessible(sequenceDaoField);
-		SequenceDao sequenceDaoFromObject = (SequenceDao) ReflectionUtils.getField(sequenceDaoField,
-				singleSequenceMutationAlgorithm);
+		SequenceDao sequenceDaoFromObject = (SequenceDao) ReflectionUtils.getField(sequenceDaoField, singleSequenceMutationAlgorithm);
 
 		assertSame(sequenceDaoToSet, sequenceDaoFromObject);
 	}
@@ -102,11 +101,9 @@ public class SingleSequenceMutationAlgorithmTest {
 		SingleSequenceMutationAlgorithm singleSequenceMutationAlgorithm = new SingleSequenceMutationAlgorithm();
 		singleSequenceMutationAlgorithm.setMaxMutationsPerChromosome(maxMutationsPerChromosomeToSet);
 
-		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(SingleSequenceMutationAlgorithm.class,
-				"maxMutationsPerChromosome");
+		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(SingleSequenceMutationAlgorithm.class, "maxMutationsPerChromosome");
 		ReflectionUtils.makeAccessible(maxMutationsPerChromosomeField);
-		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(
-				maxMutationsPerChromosomeField, singleSequenceMutationAlgorithm);
+		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(maxMutationsPerChromosomeField, singleSequenceMutationAlgorithm);
 
 		assertSame(maxMutationsPerChromosomeToSet, maxMutationsPerChromosomeFromObject);
 	}
@@ -214,10 +211,10 @@ public class SingleSequenceMutationAlgorithmTest {
 		singleSequenceMutationAlgorithm.mutateGene(mockKeylessChromosome, 0);
 
 		// Only one of the letters from the first Gene should be changed
-		assertTrue(("w".equals(mockGene1.getSequences().get(0).getValue()) && !"e".equals(mockGene1.getSequences().get(
-				1).getValue()))
-				|| (!"w".equals(mockGene1.getSequences().get(0).getValue()) && "e".equals(mockGene1.getSequences().get(
-						1).getValue())));
+		assertTrue(("w".equals(mockGene1.getSequences().get(0).getValue())
+				&& !"e".equals(mockGene1.getSequences().get(1).getValue()))
+				|| (!"w".equals(mockGene1.getSequences().get(0).getValue())
+						&& "e".equals(mockGene1.getSequences().get(1).getValue())));
 		assertTrue("s".equals(mockGene2.getSequences().get(0).getValue())
 				&& "m".equals(mockGene2.getSequences().get(1).getValue())
 				&& "i".equals(mockGene2.getSequences().get(2).getValue())

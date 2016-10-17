@@ -20,10 +20,10 @@
 package com.ciphertool.genetics.entities;
 
 public class Ancestry {
-	private String dad;
-	private String mom;
-	private Ancestry maternal;
-	private Ancestry paternal;
+	private String		dad;
+	private String		mom;
+	private Ancestry	maternal;
+	private Ancestry	paternal;
 
 	public Ancestry(String dad, String mom, Ancestry maternal, Ancestry paternal, int generationsToKeep) {
 		this.dad = dad;
@@ -65,27 +65,22 @@ public class Ancestry {
 	}
 
 	public boolean sharesLineageWith(Ancestry other, int generationsToSkip) {
-		if (generationsToSkip > 0
-				&& (other.mom.equals(this.mom) || other.mom.equals(this.dad) || other.dad.equals(this.dad) || other.dad
-						.equals(this.mom))) {
+		if (generationsToSkip > 0 && (other.mom.equals(this.mom) || other.mom.equals(this.dad)
+				|| other.dad.equals(this.dad) || other.dad.equals(this.mom))) {
 			// These two lineages don't branch far enough
 			return false;
 		}
-		if (generationsToSkip <= 0
-				&& (other.mom.equals(this.mom) || other.mom.equals(this.dad) || other.dad.equals(this.dad) || other.dad
-						.equals(this.mom))) {
+		if (generationsToSkip <= 0 && (other.mom.equals(this.mom) || other.mom.equals(this.dad)
+				|| other.dad.equals(this.dad) || other.dad.equals(this.mom))) {
 			return true;
 		} else {
 			generationsToSkip--;
 
-			return this.maternal != null
-					&& this.paternal != null
-					&& other.maternal != null
-					&& other.paternal != null
+			return this.maternal != null && this.paternal != null && other.maternal != null && other.paternal != null
 					&& (other.maternal.sharesLineageWith(this.maternal, generationsToSkip)
 							|| other.maternal.sharesLineageWith(this.paternal, generationsToSkip)
-							|| other.paternal.sharesLineageWith(this.paternal, generationsToSkip) || other.paternal
-								.sharesLineageWith(this.maternal, generationsToSkip));
+							|| other.paternal.sharesLineageWith(this.paternal, generationsToSkip)
+							|| other.paternal.sharesLineageWith(this.maternal, generationsToSkip));
 		}
 	}
 }

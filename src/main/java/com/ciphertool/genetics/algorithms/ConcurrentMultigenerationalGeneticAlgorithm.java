@@ -33,16 +33,16 @@ import org.springframework.core.task.TaskExecutor;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class ConcurrentMultigenerationalGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private TaskExecutor taskExecutor;
+	private Logger			log	= LoggerFactory.getLogger(getClass());
+	private TaskExecutor	taskExecutor;
 
 	/**
 	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
 	protected class CrossoverTask implements Callable<List<Chromosome>> {
 
-		private Chromosome mom;
-		private Chromosome dad;
+		private Chromosome	mom;
+		private Chromosome	dad;
 
 		public CrossoverTask(Chromosome mom, Chromosome dad) {
 			this.mom = mom;
@@ -107,8 +107,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithm extends Multigeneration
 		return (int) pairsToCrossover;
 	}
 
-	protected List<Chromosome> doConcurrentCrossovers(long pairsToCrossover, List<Chromosome> moms,
-			List<Chromosome> dads) {
+	protected List<Chromosome> doConcurrentCrossovers(long pairsToCrossover, List<Chromosome> moms, List<Chromosome> dads) {
 		List<FutureTask<List<Chromosome>>> futureTasks = new ArrayList<FutureTask<List<Chromosome>>>();
 		FutureTask<List<Chromosome>> futureTask = null;
 

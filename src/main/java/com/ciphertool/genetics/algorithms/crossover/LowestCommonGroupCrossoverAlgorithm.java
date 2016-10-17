@@ -31,9 +31,9 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<KeylessChromosome> {
-	private FitnessEvaluator fitnessEvaluator;
-	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
+	private FitnessEvaluator						fitnessEvaluator;
+	private MutationAlgorithm<KeylessChromosome>	mutationAlgorithm;
+	private boolean									mutateDuringCrossover	= false;
 
 	@Override
 	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
@@ -69,16 +69,14 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 		LowestCommonGroupCrossoverProgressDto crossoverProgressDto = new LowestCommonGroupCrossoverProgressDto();
 
 		crossoverProgressDto.setFirstChromosomeSequencePosition(((VariableLengthGene) child.getGenes().get(0)).size());
-		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0))
-				.size());
+		crossoverProgressDto.setSecondChromosomeSequencePosition(((VariableLengthGene) parentB.getGenes().get(0)).size());
 
 		/*
 		 * Make sure we don't exceed parentB's index, or else we will get an IndexOutOfBoundsException
 		 */
 		while (crossoverProgressDto.getFirstChromosomeEndGeneIndex() < child.getGenes().size()
 				&& crossoverProgressDto.getSecondChromosomeEndGeneIndex() < parentBSize) {
-			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
-					.getSecondChromosomeSequencePosition()) {
+			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto.getSecondChromosomeSequencePosition()) {
 				geneOffset = attemptToReplaceGeneGroupInChild(crossoverProgressDto, child, parentB);
 			}
 
@@ -112,8 +110,7 @@ public class LowestCommonGroupCrossoverAlgorithm implements EvaluatedCrossoverAl
 	 *            the parent Chromosome
 	 * @return the geneOffset
 	 */
-	protected int attemptToReplaceGeneGroupInChild(LowestCommonGroupCrossoverProgressDto crossoverProgressDto,
-			KeylessChromosome child, KeylessChromosome parentB) {
+	protected int attemptToReplaceGeneGroupInChild(LowestCommonGroupCrossoverProgressDto crossoverProgressDto, KeylessChromosome child, KeylessChromosome parentB) {
 		int childBeginGeneIndex = crossoverProgressDto.getFirstChromosomeBeginGeneIndex();
 		int childEndGeneIndex = crossoverProgressDto.getFirstChromosomeEndGeneIndex();
 		int parentBeginGeneIndex = crossoverProgressDto.getSecondChromosomeBeginGeneIndex();

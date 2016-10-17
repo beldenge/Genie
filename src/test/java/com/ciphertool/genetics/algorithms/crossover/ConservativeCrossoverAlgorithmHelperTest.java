@@ -36,10 +36,8 @@ public class ConservativeCrossoverAlgorithmHelperTest extends CrossoverAlgorithm
 
 		ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parent);
 
-		assertEquals(((VariableLengthGene) child.getGenes().get(0)).size(), crossoverProgressDto
-				.getFirstChromosomeSequencePosition());
-		assertEquals(((VariableLengthGene) parent.getGenes().get(0)).size(), crossoverProgressDto
-				.getSecondChromosomeSequencePosition());
+		assertEquals(((VariableLengthGene) child.getGenes().get(0)).size(), crossoverProgressDto.getFirstChromosomeSequencePosition());
+		assertEquals(((VariableLengthGene) parent.getGenes().get(0)).size(), crossoverProgressDto.getSecondChromosomeSequencePosition());
 		assertEquals(1, crossoverProgressDto.getSecondChromosomeGeneIndex());
 		assertEquals(1, crossoverProgressDto.getFirstChromosomeGeneIndex());
 

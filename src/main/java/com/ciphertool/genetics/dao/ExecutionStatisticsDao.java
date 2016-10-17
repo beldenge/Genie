@@ -27,9 +27,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 
 public class ExecutionStatisticsDao {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger			log	= LoggerFactory.getLogger(getClass());
 
-	private MongoOperations mongoOperations;
+	private MongoOperations	mongoOperations;
 
 	public boolean insert(ExecutionStatistics executionStatistics) {
 		if (executionStatistics == null) {

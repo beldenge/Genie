@@ -28,10 +28,10 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class MockGene implements VariableLengthGene {
 
-	private Chromosome chromosome;
-	private List<Sequence> sequences = new ArrayList<Sequence>();
+	private Chromosome		chromosome;
+	private List<Sequence>	sequences	= new ArrayList<Sequence>();
 
-	private boolean hasMatch;
+	private boolean			hasMatch;
 
 	@Override
 	public int size() {

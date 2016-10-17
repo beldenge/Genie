@@ -32,9 +32,9 @@ import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
-	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
-	private int maxGenerations;
+	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
+	private boolean										mutateDuringCrossover	= false;
+	private int											maxGenerations;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -50,8 +50,8 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 		// The Chromosome could be null if it's identical to one of its parents
 		if (child != null) {
 			children.add(child);
-			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
-					.getAncestry(), maxGenerations));
+			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
+					parentB.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}

@@ -42,8 +42,8 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class TournamentSelectorTest {
-	private static TournamentSelector tournamentSelector;
-	private static Logger logMock;
+	private static TournamentSelector	tournamentSelector;
+	private static Logger				logMock;
 
 	@BeforeClass
 	public static void setUp() {

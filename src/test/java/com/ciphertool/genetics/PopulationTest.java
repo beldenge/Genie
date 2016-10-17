@@ -55,8 +55,8 @@ import com.ciphertool.genetics.mocks.MockBreeder;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class PopulationTest {
-	private static ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-	private static final double DEFAULT_FITNESS_VALUE = 100.0;
+	private static ThreadPoolTaskExecutor	taskExecutor			= new ThreadPoolTaskExecutor();
+	private static final double				DEFAULT_FITNESS_VALUE	= 100.0;
 
 	@BeforeClass
 	public static void setUp() {
@@ -113,8 +113,7 @@ public class PopulationTest {
 
 		Field fitnessEvaluatorField = ReflectionUtils.findField(StandardPopulation.class, "fitnessEvaluator");
 		ReflectionUtils.makeAccessible(fitnessEvaluatorField);
-		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
-				fitnessEvaluatorField, population);
+		FitnessEvaluator fitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(fitnessEvaluatorField, population);
 
 		assertSame(fitnessEvaluatorMock, fitnessEvaluatorFromObject);
 	}
@@ -128,8 +127,7 @@ public class PopulationTest {
 
 		Field fitnessComparatorField = ReflectionUtils.findField(StandardPopulation.class, "fitnessComparator");
 		ReflectionUtils.makeAccessible(fitnessComparatorField);
-		AscendingFitnessComparator fitnessComparatorFromObject = (AscendingFitnessComparator) ReflectionUtils.getField(
-				fitnessComparatorField, population);
+		AscendingFitnessComparator fitnessComparatorFromObject = (AscendingFitnessComparator) ReflectionUtils.getField(fitnessComparatorField, population);
 
 		assertSame(ascendingFitnessComparator, fitnessComparatorFromObject);
 	}
@@ -184,11 +182,9 @@ public class PopulationTest {
 		when(knownSolutionFitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorMock);
 
-		Field knownSolutionFitnessEvaluatorField = ReflectionUtils.findField(StandardPopulation.class,
-				"knownSolutionFitnessEvaluator");
+		Field knownSolutionFitnessEvaluatorField = ReflectionUtils.findField(StandardPopulation.class, "knownSolutionFitnessEvaluator");
 		ReflectionUtils.makeAccessible(knownSolutionFitnessEvaluatorField);
-		FitnessEvaluator knownSolutionFitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(
-				knownSolutionFitnessEvaluatorField, population);
+		FitnessEvaluator knownSolutionFitnessEvaluatorFromObject = (FitnessEvaluator) ReflectionUtils.getField(knownSolutionFitnessEvaluatorField, population);
 
 		assertSame(knownSolutionFitnessEvaluatorMock, knownSolutionFitnessEvaluatorFromObject);
 	}
@@ -202,8 +198,7 @@ public class PopulationTest {
 
 		Field compareToKnownSolutionField = ReflectionUtils.findField(StandardPopulation.class, "compareToKnownSolution");
 		ReflectionUtils.makeAccessible(compareToKnownSolutionField);
-		Boolean compareToKnownSolutionFromObject = (Boolean) ReflectionUtils.getField(compareToKnownSolutionField,
-				population);
+		Boolean compareToKnownSolutionFromObject = (Boolean) ReflectionUtils.getField(compareToKnownSolutionField, population);
 
 		assertSame(compareToKnownSolution, compareToKnownSolutionFromObject);
 	}
@@ -214,8 +209,7 @@ public class PopulationTest {
 
 		Field compareToKnownSolutionField = ReflectionUtils.findField(StandardPopulation.class, "compareToKnownSolution");
 		ReflectionUtils.makeAccessible(compareToKnownSolutionField);
-		Boolean compareToKnownSolutionFromObject = (Boolean) ReflectionUtils.getField(compareToKnownSolutionField,
-				population);
+		Boolean compareToKnownSolutionFromObject = (Boolean) ReflectionUtils.getField(compareToKnownSolutionField, population);
 
 		assertEquals(false, compareToKnownSolutionFromObject);
 	}
@@ -376,8 +370,8 @@ public class PopulationTest {
 		Double expectedTotalFitness = new Double(305.1);
 
 		assertEquals(expectedTotalFitness, population.getTotalFitness());
-		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(generationStatistics
-				.getAverageFitness()));
+		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(
+				generationStatistics.getAverageFitness()));
 		assertEquals(new Double(100.1), new Double(generationStatistics.getBestFitness()));
 	}
 
@@ -436,8 +430,8 @@ public class PopulationTest {
 		Double expectedTotalFitness = new Double(305.1);
 
 		assertEquals(expectedTotalFitness, population.getTotalFitness());
-		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(generationStatistics
-				.getAverageFitness()));
+		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(
+				generationStatistics.getAverageFitness()));
 		assertEquals(new Double(100.1), new Double(generationStatistics.getBestFitness()));
 		assertEquals(new Double(DEFAULT_FITNESS_VALUE), generationStatistics.getKnownSolutionProximity());
 	}
@@ -649,8 +643,7 @@ public class PopulationTest {
 		verifyZeroInteractions(fitnessEvaluatorMock);
 		assertEquals(0, population.size());
 
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
-				ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
 		assertEquals(1, ineligibleForReproductionFromObject.size());
 		assertSame(chromosomeEvaluationNeeded, ineligibleForReproductionFromObject.get(0));
 
@@ -664,8 +657,7 @@ public class PopulationTest {
 		verifyZeroInteractions(fitnessEvaluatorMock);
 		assertEquals(0, population.size());
 
-		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
-				ineligibleForReproductionField, population);
+		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
 		assertEquals(2, ineligibleForReproductionFromObject.size());
 		assertSame(chromosomeEvaluationNotNeeded, ineligibleForReproductionFromObject.get(1));
 	}
@@ -700,8 +692,7 @@ public class PopulationTest {
 		assertSame(chromosome2, population.getIndividuals().get(0));
 
 		// Validate ineligible List
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
-				ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
 		assertEquals(1, ineligibleForReproductionFromObject.size());
 		assertSame(chromosome1, ineligibleForReproductionFromObject.get(0));
 
@@ -713,8 +704,7 @@ public class PopulationTest {
 		assertEquals(0, population.size());
 
 		// Validate ineligible List
-		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
-				ineligibleForReproductionField, population);
+		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
 		assertEquals(2, ineligibleForReproductionFromObject.size());
 		assertSame(chromosome2, ineligibleForReproductionFromObject.get(1));
 
@@ -749,16 +739,14 @@ public class PopulationTest {
 		chromosomeEvaluationNotNeeded.setFitness(5.0);
 		population.addIndividualAsIneligible(chromosomeEvaluationNotNeeded);
 
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
-				ineligibleForReproductionField, population);
+		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
 
 		// Validate - this shouldn't affect the individuals List
 		assertEquals(new Double(0.0), population.getTotalFitness());
 		verifyZeroInteractions(fitnessEvaluatorMock);
 		assertEquals(0, population.size());
 
-		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(
-				ineligibleForReproductionField, population);
+		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
 		assertEquals(2, ineligibleForReproductionFromObject.size());
 		assertSame(chromosomeEvaluationNeeded, ineligibleForReproductionFromObject.get(0));
 		assertSame(chromosomeEvaluationNotNeeded, ineligibleForReproductionFromObject.get(1));

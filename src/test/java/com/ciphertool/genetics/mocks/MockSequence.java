@@ -24,9 +24,9 @@ import com.ciphertool.genetics.entities.Sequence;
 
 public class MockSequence implements Sequence {
 
-	private Gene gene;
-	private String value;
-	private Integer sequenceId = 1;
+	private Gene	gene;
+	private String	value;
+	private Integer	sequenceId	= 1;
 
 	public MockSequence() {
 	}

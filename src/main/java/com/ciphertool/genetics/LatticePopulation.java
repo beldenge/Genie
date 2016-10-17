@@ -38,23 +38,23 @@ import com.ciphertool.genetics.fitness.FitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class LatticePopulation implements Population {
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private Breeder breeder;
-	private Chromosome[][] individuals;
-	private Chromosome[][] backup;
-	private FitnessEvaluator fitnessEvaluator;
-	private FitnessComparator fitnessComparator;
-	private Selector selector;
-	private Double totalFitness = 0.0;
-	private TaskExecutor taskExecutor;
-	private ChromosomePrinter chromosomePrinter;
-	private int lifespan;
-	private FitnessEvaluator knownSolutionFitnessEvaluator;
-	private static final boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
-	private Boolean compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
-	private boolean stopRequested;
-	private int latticeRows;
-	private int latticeColumns;
+	private Logger					log									= LoggerFactory.getLogger(getClass());
+	private Breeder					breeder;
+	private Chromosome[][]			individuals;
+	private Chromosome[][]			backup;
+	private FitnessEvaluator		fitnessEvaluator;
+	private FitnessComparator		fitnessComparator;
+	private Selector				selector;
+	private Double					totalFitness						= 0.0;
+	private TaskExecutor			taskExecutor;
+	private ChromosomePrinter		chromosomePrinter;
+	private int						lifespan;
+	private FitnessEvaluator		knownSolutionFitnessEvaluator;
+	private static final boolean	COMPARE_TO_KNOWN_SOLUTION_DEFAULT	= false;
+	private Boolean					compareToKnownSolution				= COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
+	private boolean					stopRequested;
+	private int						latticeRows;
+	private int						latticeColumns;
 
 	public LatticePopulation() {
 	}
@@ -63,8 +63,8 @@ public class LatticePopulation implements Population {
 	 * A concurrent task for adding a brand new Chromosome to the population.
 	 */
 	protected class GeneratorTask implements Callable<SpatialChromosomeWrapper> {
-		private int xPos;
-		private int yPos;
+		private int	xPos;
+		private int	yPos;
 
 		public GeneratorTask(int xPos, int yPos) {
 			this.xPos = xPos;
@@ -214,8 +214,7 @@ public class LatticePopulation implements Population {
 				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
-				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator
-						.evaluate(bestFitClone));
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone));
 			}
 		}
 

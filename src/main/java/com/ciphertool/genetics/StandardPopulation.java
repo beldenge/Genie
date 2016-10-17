@@ -38,22 +38,22 @@ import com.ciphertool.genetics.fitness.FitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class StandardPopulation implements Population {
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private Breeder breeder;
-	private List<Chromosome> individuals = new ArrayList<Chromosome>();
-	private List<Chromosome> backup = new ArrayList<Chromosome>();
-	private List<Chromosome> ineligibleForReproduction = new ArrayList<Chromosome>();
-	private FitnessEvaluator fitnessEvaluator;
-	private FitnessComparator fitnessComparator;
-	private Selector selector;
-	private Double totalFitness = 0.0;
-	private TaskExecutor taskExecutor;
-	private ChromosomePrinter chromosomePrinter;
-	private int lifespan;
-	private FitnessEvaluator knownSolutionFitnessEvaluator;
-	private static final boolean COMPARE_TO_KNOWN_SOLUTION_DEFAULT = false;
-	private Boolean compareToKnownSolution = COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
-	private boolean stopRequested;
+	private Logger					log									= LoggerFactory.getLogger(getClass());
+	private Breeder					breeder;
+	private List<Chromosome>		individuals							= new ArrayList<Chromosome>();
+	private List<Chromosome>		backup								= new ArrayList<Chromosome>();
+	private List<Chromosome>		ineligibleForReproduction			= new ArrayList<Chromosome>();
+	private FitnessEvaluator		fitnessEvaluator;
+	private FitnessComparator		fitnessComparator;
+	private Selector				selector;
+	private Double					totalFitness						= 0.0;
+	private TaskExecutor			taskExecutor;
+	private ChromosomePrinter		chromosomePrinter;
+	private int						lifespan;
+	private FitnessEvaluator		knownSolutionFitnessEvaluator;
+	private static final boolean	COMPARE_TO_KNOWN_SOLUTION_DEFAULT	= false;
+	private Boolean					compareToKnownSolution				= COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
+	private boolean					stopRequested;
 
 	public StandardPopulation() {
 	}
@@ -215,8 +215,7 @@ public class StandardPopulation implements Population {
 				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
-				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator
-						.evaluate(bestFitClone));
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone));
 			}
 		}
 

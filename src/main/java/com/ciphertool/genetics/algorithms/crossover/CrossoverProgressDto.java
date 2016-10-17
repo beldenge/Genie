@@ -24,10 +24,10 @@ package com.ciphertool.genetics.algorithms.crossover;
  * values to be passed in methods and incremented by reference.
  */
 public class CrossoverProgressDto {
-	private int firstChromosomeSequencePosition = 0;
-	private int secondChromosomeSequencePosition = 0;
-	private int firstChromosomeGeneIndex = 0;
-	private int secondChromosomeGeneIndex = 0;
+	private int	firstChromosomeSequencePosition		= 0;
+	private int	secondChromosomeSequencePosition	= 0;
+	private int	firstChromosomeGeneIndex			= 0;
+	private int	secondChromosomeGeneIndex			= 0;
 
 	public CrossoverProgressDto() {
 	}

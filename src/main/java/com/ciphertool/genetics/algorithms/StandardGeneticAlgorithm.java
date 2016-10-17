@@ -38,14 +38,14 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger			log			= LoggerFactory.getLogger(getClass());
 
-	private Integer generationsToSkip;
-	private Integer generationsToKeep;
-	private TaskExecutor taskExecutor;
-	private boolean verifyAncestry;
-	private AtomicInteger mutations = new AtomicInteger(0);
-	private int elitism;
+	private Integer			generationsToSkip;
+	private Integer			generationsToKeep;
+	private TaskExecutor	taskExecutor;
+	private boolean			verifyAncestry;
+	private AtomicInteger	mutations	= new AtomicInteger(0);
+	private int				elitism;
 
 	@PostConstruct
 	public void verifyParameters() {
@@ -61,8 +61,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	 */
 	protected class CrossoverTask implements Callable<List<Chromosome>> {
 
-		private Chromosome mom;
-		private Chromosome dad;
+		private Chromosome	mom;
+		private Chromosome	dad;
 
 		public CrossoverTask(Chromosome mom, Chromosome dad) {
 			this.mom = mom;

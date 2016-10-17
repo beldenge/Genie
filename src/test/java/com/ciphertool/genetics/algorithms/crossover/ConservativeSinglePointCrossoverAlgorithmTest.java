@@ -54,11 +54,9 @@ public class ConservativeSinglePointCrossoverAlgorithmTest extends CrossoverAlgo
 		ConservativeSinglePointCrossoverAlgorithm conservativeSinglePointCrossoverAlgorithm = new ConservativeSinglePointCrossoverAlgorithm();
 		conservativeSinglePointCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(ConservativeSinglePointCrossoverAlgorithm.class,
-				"mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(ConservativeSinglePointCrossoverAlgorithm.class, "mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
-				mutationAlgorithmField, conservativeSinglePointCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(mutationAlgorithmField, conservativeSinglePointCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -70,11 +68,9 @@ public class ConservativeSinglePointCrossoverAlgorithmTest extends CrossoverAlgo
 		ConservativeSinglePointCrossoverAlgorithm conservativeSinglePointCrossoverAlgorithm = new ConservativeSinglePointCrossoverAlgorithm();
 		conservativeSinglePointCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(ConservativeSinglePointCrossoverAlgorithm.class,
-				"mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(ConservativeSinglePointCrossoverAlgorithm.class, "mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
-				conservativeSinglePointCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField, conservativeSinglePointCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}
@@ -85,11 +81,9 @@ public class ConservativeSinglePointCrossoverAlgorithmTest extends CrossoverAlgo
 		ConservativeSinglePointCrossoverAlgorithm conservativeSinglePointCrossoverAlgorithm = new ConservativeSinglePointCrossoverAlgorithm();
 		conservativeSinglePointCrossoverAlgorithm.setRandomListElementSelector(randomListElementSelectorToSet);
 
-		Field randomListElementSelectorField = ReflectionUtils.findField(
-				ConservativeSinglePointCrossoverAlgorithm.class, "randomListElementSelector");
+		Field randomListElementSelectorField = ReflectionUtils.findField(ConservativeSinglePointCrossoverAlgorithm.class, "randomListElementSelector");
 		ReflectionUtils.makeAccessible(randomListElementSelectorField);
-		RandomListElementSelector randomListElementSelectorFromObject = (RandomListElementSelector) ReflectionUtils
-				.getField(randomListElementSelectorField, conservativeSinglePointCrossoverAlgorithm);
+		RandomListElementSelector randomListElementSelectorFromObject = (RandomListElementSelector) ReflectionUtils.getField(randomListElementSelectorField, conservativeSinglePointCrossoverAlgorithm);
 
 		assertSame(randomListElementSelectorToSet, randomListElementSelectorFromObject);
 	}
@@ -359,8 +353,7 @@ public class ConservativeSinglePointCrossoverAlgorithmTest extends CrossoverAlgo
 
 		KeylessChromosome mom = getMom();
 		KeylessChromosome dad = getDad();
-		List<Integer> potentialCentromeres = ConservativeSinglePointCrossoverAlgorithm.findPotentialCentromeres(mom,
-				dad);
+		List<Integer> potentialCentromeres = ConservativeSinglePointCrossoverAlgorithm.findPotentialCentromeres(mom, dad);
 
 		assertEquals(expectedCentromeres, potentialCentromeres);
 	}

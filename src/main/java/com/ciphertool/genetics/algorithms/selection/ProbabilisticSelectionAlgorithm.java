@@ -30,8 +30,8 @@ import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private static Selector selector = new RouletteSelector();
+	private Logger			log			= LoggerFactory.getLogger(getClass());
+	private static Selector	selector	= new RouletteSelector();
 
 	/*
 	 * Performs selection by giving each individual a probabilistic chance of survival, weighted by its fitness.

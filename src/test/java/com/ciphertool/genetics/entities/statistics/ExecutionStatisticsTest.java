@@ -51,12 +51,9 @@ public class ExecutionStatisticsTest {
 		assertSame(strategy.getSurvivalRate(), executionStatistics.getSurvivalRate());
 		assertSame(strategy.getMutationRate(), executionStatistics.getMutationRate());
 		assertSame(strategy.getCrossoverRate(), executionStatistics.getCrossoverRate());
-		assertEquals(strategy.getCrossoverAlgorithm().getClass().getSimpleName(), executionStatistics
-				.getCrossoverAlgorithm());
-		assertEquals(strategy.getFitnessEvaluator().getClass().getSimpleName(), executionStatistics
-				.getFitnessEvaluator());
-		assertEquals(strategy.getMutationAlgorithm().getClass().getSimpleName(), executionStatistics
-				.getMutationAlgorithm());
+		assertEquals(strategy.getCrossoverAlgorithm().getClass().getSimpleName(), executionStatistics.getCrossoverAlgorithm());
+		assertEquals(strategy.getFitnessEvaluator().getClass().getSimpleName(), executionStatistics.getFitnessEvaluator());
+		assertEquals(strategy.getMutationAlgorithm().getClass().getSimpleName(), executionStatistics.getMutationAlgorithm());
 
 		// Test that we don't run into NPE if the complex arguments are null
 		strategy.setCrossoverAlgorithm(null);

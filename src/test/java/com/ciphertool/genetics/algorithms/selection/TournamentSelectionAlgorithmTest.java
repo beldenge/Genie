@@ -42,9 +42,9 @@ import com.ciphertool.genetics.algorithms.selection.modes.TournamentSelector;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class TournamentSelectionAlgorithmTest {
-	private static Logger logMock;
-	private static StandardPopulation population;
-	private static TournamentSelectionAlgorithm tournamentSelectionAlgorithm;
+	private static Logger						logMock;
+	private static StandardPopulation			population;
+	private static TournamentSelectionAlgorithm	tournamentSelectionAlgorithm;
 
 	@BeforeClass
 	public static void setUp() {
@@ -130,8 +130,7 @@ public class TournamentSelectionAlgorithmTest {
 
 		Field groupSelectorField = ReflectionUtils.findField(TournamentSelectionAlgorithm.class, "groupSelector");
 		ReflectionUtils.makeAccessible(groupSelectorField);
-		Selector groupSelectorFromObject = (Selector) ReflectionUtils.getField(groupSelectorField,
-				tournamentSelectionAlgorithm);
+		Selector groupSelectorFromObject = (Selector) ReflectionUtils.getField(groupSelectorField, tournamentSelectionAlgorithm);
 
 		assertSame(groupSelectorToSet, groupSelectorFromObject);
 	}

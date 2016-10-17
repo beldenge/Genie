@@ -64,12 +64,12 @@ import com.ciphertool.genetics.mocks.MockSequence;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalMutationAlgorithmTest {
-	private final static int MAX_MUTATIONS = 2;
-	private static Logger logMock;
-	private static LiberalMutationAlgorithm liberalMutationAlgorithm;
-	private static VariableLengthGeneDao geneDaoMock;
-	private static VariableLengthGeneDao geneDaoMockForChromosomeHelper;
-	private static KeylessChromosomeHelper chromosomeHelperSpy;
+	private final static int				MAX_MUTATIONS	= 2;
+	private static Logger					logMock;
+	private static LiberalMutationAlgorithm	liberalMutationAlgorithm;
+	private static VariableLengthGeneDao	geneDaoMock;
+	private static VariableLengthGeneDao	geneDaoMockForChromosomeHelper;
+	private static KeylessChromosomeHelper	chromosomeHelperSpy;
 
 	@BeforeClass
 	public static void setUp() {
@@ -118,11 +118,9 @@ public class LiberalMutationAlgorithmTest {
 		LiberalMutationAlgorithm liberalMutationAlgorithm = new LiberalMutationAlgorithm();
 		liberalMutationAlgorithm.setChromosomeHelper(chromosomeHelperToSet);
 
-		Field chromosomeHelperField = ReflectionUtils.findField(LiberalMutationAlgorithm.class,
-				"keylessChromosomeHelper");
+		Field chromosomeHelperField = ReflectionUtils.findField(LiberalMutationAlgorithm.class, "keylessChromosomeHelper");
 		ReflectionUtils.makeAccessible(chromosomeHelperField);
-		KeylessChromosomeHelper chromosomeHelperFromObject = (KeylessChromosomeHelper) ReflectionUtils.getField(
-				chromosomeHelperField, liberalMutationAlgorithm);
+		KeylessChromosomeHelper chromosomeHelperFromObject = (KeylessChromosomeHelper) ReflectionUtils.getField(chromosomeHelperField, liberalMutationAlgorithm);
 
 		assertSame(chromosomeHelperToSet, chromosomeHelperFromObject);
 	}
@@ -134,11 +132,9 @@ public class LiberalMutationAlgorithmTest {
 		LiberalMutationAlgorithm liberalMutationAlgorithm = new LiberalMutationAlgorithm();
 		liberalMutationAlgorithm.setMaxMutationsPerChromosome(maxMutationsPerChromosomeToSet);
 
-		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(LiberalMutationAlgorithm.class,
-				"maxMutationsPerChromosome");
+		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(LiberalMutationAlgorithm.class, "maxMutationsPerChromosome");
 		ReflectionUtils.makeAccessible(maxMutationsPerChromosomeField);
-		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(
-				maxMutationsPerChromosomeField, liberalMutationAlgorithm);
+		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(maxMutationsPerChromosomeField, liberalMutationAlgorithm);
 
 		assertSame(maxMutationsPerChromosomeToSet, maxMutationsPerChromosomeFromObject);
 	}
@@ -190,8 +186,7 @@ public class LiberalMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("x"));
 		mockGeneToReturn.addSequence(new MockSequence("y"));
 		mockGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneDaoMock.findRandomGene(same(mockKeylessChromosome))).thenReturn(mockGeneToReturn.clone(),
-				mockGeneToReturn.clone());
+		when(geneDaoMock.findRandomGene(same(mockKeylessChromosome))).thenReturn(mockGeneToReturn.clone(), mockGeneToReturn.clone());
 
 		liberalMutationAlgorithm.mutateChromosome(mockKeylessChromosome);
 
@@ -230,8 +225,7 @@ public class LiberalMutationAlgorithmTest {
 		mockGeneToReturn.addSequence(new MockSequence("x"));
 		mockGeneToReturn.addSequence(new MockSequence("y"));
 		mockGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneDaoMock.findRandomGene(same(mockKeylessChromosome))).thenReturn(mockGeneToReturn.clone(),
-				mockGeneToReturn.clone());
+		when(geneDaoMock.findRandomGene(same(mockKeylessChromosome))).thenReturn(mockGeneToReturn.clone(), mockGeneToReturn.clone());
 
 		assertEquals(3, mockGene1.size());
 		assertEquals(3, mockGene2.size());
@@ -274,14 +268,12 @@ public class LiberalMutationAlgorithmTest {
 		MockGene mockGeneToReturn = new MockGene();
 		mockGeneToReturn.addSequence(new MockSequence("w"));
 		mockGeneToReturn.addSequence(new MockSequence("x"));
-		when(geneDaoMock.findRandomGene(same(mockKeylessChromosome))).thenReturn(mockGeneToReturn.clone(),
-				mockGeneToReturn.clone());
+		when(geneDaoMock.findRandomGene(same(mockKeylessChromosome))).thenReturn(mockGeneToReturn.clone(), mockGeneToReturn.clone());
 
 		MockGene fillerGeneToReturn = new MockGene();
 		fillerGeneToReturn.addSequence(new MockSequence("y"));
 		fillerGeneToReturn.addSequence(new MockSequence("z"));
-		when(geneDaoMockForChromosomeHelper.findRandomGene(same(mockKeylessChromosome))).thenReturn(
-				fillerGeneToReturn.clone(), fillerGeneToReturn.clone());
+		when(geneDaoMockForChromosomeHelper.findRandomGene(same(mockKeylessChromosome))).thenReturn(fillerGeneToReturn.clone(), fillerGeneToReturn.clone());
 
 		assertEquals(2, mockKeylessChromosome.getGenes().size());
 
@@ -292,8 +284,7 @@ public class LiberalMutationAlgorithmTest {
 		assertEquals(new Integer(6), mockKeylessChromosome.actualSize());
 		// The last Sequence(s) should always be from the
 		// KeylessChromosomeHelper
-		assertEquals("y", ((VariableLengthGene) mockKeylessChromosome.getGenes().get(2)).getSequences().get(0)
-				.getValue());
+		assertEquals("y", ((VariableLengthGene) mockKeylessChromosome.getGenes().get(2)).getSequences().get(0).getValue());
 		verify(geneDaoMock, atLeast(1)).findRandomGene(same(mockKeylessChromosome));
 		verify(geneDaoMock, atMost(2)).findRandomGene(same(mockKeylessChromosome));
 		verify(geneDaoMockForChromosomeHelper, atLeast(1)).findRandomGene(same(mockKeylessChromosome));
@@ -435,10 +426,10 @@ public class LiberalMutationAlgorithmTest {
 		/*
 		 * Only one Gene should be mutated.
 		 */
-		assertTrue((mockGene1 == mockKeylessChromosome.getGenes().get(0) && mockGeneToReturn == mockKeylessChromosome
-				.getGenes().get(1))
-				|| (mockGeneToReturn == mockKeylessChromosome.getGenes().get(0) && mockGene2 == mockKeylessChromosome
-						.getGenes().get(1)));
+		assertTrue((mockGene1 == mockKeylessChromosome.getGenes().get(0)
+				&& mockGeneToReturn == mockKeylessChromosome.getGenes().get(1))
+				|| (mockGeneToReturn == mockKeylessChromosome.getGenes().get(0)
+						&& mockGene2 == mockKeylessChromosome.getGenes().get(1)));
 		assertEquals(1, availableIndices.size());
 		assertTrue(availableIndices.get(0) == 0 || availableIndices.get(0) == 1);
 		verify(geneDaoMock, times(1)).findRandomGene(same(mockKeylessChromosome));

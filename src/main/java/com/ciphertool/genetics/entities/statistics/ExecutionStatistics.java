@@ -33,33 +33,33 @@ import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 
 @Document(collection = "executionStats")
 public class ExecutionStatistics implements Serializable {
-	private static final long serialVersionUID = 8148209145996293339L;
+	private static final long			serialVersionUID			= 8148209145996293339L;
 
 	@Id
-	private String id;
+	private String						id;
 
-	private Date startDateTime;
+	private Date						startDateTime;
 
-	private Date endDateTime;
+	private Date						endDateTime;
 
-	private Integer populationSize;
+	private Integer						populationSize;
 
-	private Integer lifespan;
+	private Integer						lifespan;
 
-	private Double survivalRate;
+	private Double						survivalRate;
 
-	private Double mutationRate;
+	private Double						mutationRate;
 
-	private Double crossoverRate;
+	private Double						crossoverRate;
 
-	private String crossoverAlgorithm;
+	private String						crossoverAlgorithm;
 
-	private String fitnessEvaluator;
+	private String						fitnessEvaluator;
 
-	private String mutationAlgorithm;
+	private String						mutationAlgorithm;
 
 	@DBRef
-	private List<GenerationStatistics> generationStatisticsList = new ArrayList<GenerationStatistics>();
+	private List<GenerationStatistics>	generationStatisticsList	= new ArrayList<GenerationStatistics>();
 
 	/**
 	 * Default no-args constructor
@@ -79,12 +79,9 @@ public class ExecutionStatistics implements Serializable {
 		this.survivalRate = strategy.getSurvivalRate();
 		this.mutationRate = strategy.getMutationRate();
 		this.crossoverRate = strategy.getCrossoverRate();
-		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy.getCrossoverAlgorithm()
-				.getClass().getSimpleName() : null;
-		this.fitnessEvaluator = (strategy.getFitnessEvaluator() != null) ? strategy.getFitnessEvaluator().getClass()
-				.getSimpleName() : null;
-		this.mutationAlgorithm = (strategy.getMutationAlgorithm() != null) ? strategy.getMutationAlgorithm().getClass()
-				.getSimpleName() : null;
+		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy.getCrossoverAlgorithm().getClass().getSimpleName() : null;
+		this.fitnessEvaluator = (strategy.getFitnessEvaluator() != null) ? strategy.getFitnessEvaluator().getClass().getSimpleName() : null;
+		this.mutationAlgorithm = (strategy.getMutationAlgorithm() != null) ? strategy.getMutationAlgorithm().getClass().getSimpleName() : null;
 	}
 
 	/**

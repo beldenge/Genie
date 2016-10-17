@@ -56,8 +56,7 @@ public class LiberalUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgorithm
 
 		Field geneDaoField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class, "geneDao");
 		ReflectionUtils.makeAccessible(geneDaoField);
-		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(geneDaoField,
-				liberalUnevaluatedCrossoverAlgorithm);
+		GeneDao geneDaoFromObject = (GeneDao) ReflectionUtils.getField(geneDaoField, liberalUnevaluatedCrossoverAlgorithm);
 
 		assertSame(geneDaoToSet, geneDaoFromObject);
 	}
@@ -68,11 +67,9 @@ public class LiberalUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgorithm
 		LiberalUnevaluatedCrossoverAlgorithm liberalUnevaluatedCrossoverAlgorithm = new LiberalUnevaluatedCrossoverAlgorithm();
 		liberalUnevaluatedCrossoverAlgorithm.setChromosomeHelper(chromosomeHelperToSet);
 
-		Field chromosomeHelperField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class,
-				"keylessChromosomeHelper");
+		Field chromosomeHelperField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class, "keylessChromosomeHelper");
 		ReflectionUtils.makeAccessible(chromosomeHelperField);
-		KeylessChromosomeHelper chromosomeHelperFromObject = (KeylessChromosomeHelper) ReflectionUtils.getField(
-				chromosomeHelperField, liberalUnevaluatedCrossoverAlgorithm);
+		KeylessChromosomeHelper chromosomeHelperFromObject = (KeylessChromosomeHelper) ReflectionUtils.getField(chromosomeHelperField, liberalUnevaluatedCrossoverAlgorithm);
 
 		assertSame(chromosomeHelperToSet, chromosomeHelperFromObject);
 	}
@@ -85,11 +82,9 @@ public class LiberalUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgorithm
 		LiberalUnevaluatedCrossoverAlgorithm liberalUnevaluatedCrossoverAlgorithm = new LiberalUnevaluatedCrossoverAlgorithm();
 		liberalUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class,
-				"mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class, "mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
-				mutationAlgorithmField, liberalUnevaluatedCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(mutationAlgorithmField, liberalUnevaluatedCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -101,11 +96,9 @@ public class LiberalUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgorithm
 		LiberalUnevaluatedCrossoverAlgorithm liberalUnevaluatedCrossoverAlgorithm = new LiberalUnevaluatedCrossoverAlgorithm();
 		liberalUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class,
-				"mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(LiberalUnevaluatedCrossoverAlgorithm.class, "mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
-				liberalUnevaluatedCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField, liberalUnevaluatedCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}

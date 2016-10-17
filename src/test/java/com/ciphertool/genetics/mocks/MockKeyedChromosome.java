@@ -30,13 +30,13 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class MockKeyedChromosome implements KeyedChromosome<Object> {
-	private boolean needsEvaluation;
-	private Double fitness = 0.0;
-	private Map<Object, Gene> genes = new HashMap<Object, Gene>();
-	private Integer targetSize = 0;
-	private int age = 0;
-	private int numberOfChildren = 0;
-	private Population population;
+	private boolean				needsEvaluation;
+	private Double				fitness				= 0.0;
+	private Map<Object, Gene>	genes				= new HashMap<Object, Gene>();
+	private Integer				targetSize			= 0;
+	private int					age					= 0;
+	private int					numberOfChildren	= 0;
+	private Population			population;
 
 	@Override
 	public Map<Object, Gene> getGenes() {

@@ -22,8 +22,8 @@ package com.ciphertool.genetics.util;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Coin {
-	public static final Boolean HEADS = true;
-	public static final Boolean TAILS = false;
+	public static final Boolean	HEADS	= true;
+	public static final Boolean	TAILS	= false;
 
 	/**
 	 * @return a random boolean representing the result a coin flip

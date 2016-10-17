@@ -35,15 +35,15 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger				log			= LoggerFactory.getLogger(getClass());
 
-	private int maxAttempts = 100;
+	private int					maxAttempts	= 100;
 
-	private Double mutationRate;
+	private Double				mutationRate;
 
-	private GeneDao geneDao;
+	private GeneDao				geneDao;
 
-	private FitnessEvaluator fitnessEvaluator;
+	private FitnessEvaluator	fitnessEvaluator;
 
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {

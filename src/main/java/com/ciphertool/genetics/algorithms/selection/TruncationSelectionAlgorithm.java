@@ -47,8 +47,8 @@ public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 
 		int initialPopulationSize = population.size();
 
-		int survivorIndex = initialPopulationSize
-				- (int) Math.min(Math.round(maxSurvivors * survivalRate), initialPopulationSize);
+		int survivorIndex = initialPopulationSize - (int) Math.min(Math.round(maxSurvivors
+				* survivalRate), initialPopulationSize);
 
 		if (log.isDebugEnabled()) {
 			log.debug(survivorIndex + " individuals to be removed from population of size " + population.size()

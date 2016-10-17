@@ -27,33 +27,33 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "generationStats")
 public class GenerationStatistics implements Serializable {
-	private static final long serialVersionUID = 5751129649317222013L;
+	private static final long	serialVersionUID	= 5751129649317222013L;
 
 	@Id
-	private String id;
+	private String				id;
 
 	@DBRef
-	private ExecutionStatistics executionStatistics;
+	private ExecutionStatistics	executionStatistics;
 
-	private int generation;
+	private int					generation;
 
-	private long executionTime;
+	private long				executionTime;
 
-	private double bestFitness;
+	private double				bestFitness;
 
-	private double averageFitness;
+	private double				averageFitness;
 
-	private double entropy;
+	private double				entropy;
 
-	private Double knownSolutionProximity;
+	private Double				knownSolutionProximity;
 
-	private int numberOfMutations;
+	private int					numberOfMutations;
 
-	private int numberOfCrossovers;
+	private int					numberOfCrossovers;
 
-	private int numberRandomlyGenerated;
+	private int					numberRandomlyGenerated;
 
-	private int numberSelectedOut;
+	private int					numberSelectedOut;
 
 	/**
 	 * Default no-args constructor

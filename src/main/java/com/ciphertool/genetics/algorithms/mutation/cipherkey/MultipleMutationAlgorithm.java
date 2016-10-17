@@ -37,9 +37,9 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>>,
 		EvaluatedMutationAlgorithm<KeyedChromosome<Object>> {
-	private MutationHelper mutationHelper;
+	private MutationHelper	mutationHelper;
 
-	private GeneDao geneDao;
+	private GeneDao			geneDao;
 
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {

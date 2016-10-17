@@ -33,12 +33,12 @@ import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
-	private static Logger log = LoggerFactory.getLogger(LiberalMutationAlgorithm.class);
-	private GeneDao geneDao;
-	private KeylessChromosomeHelper keylessChromosomeHelper;
-	private Integer maxMutationsPerChromosome;
+	private static Logger			log					= LoggerFactory.getLogger(LiberalMutationAlgorithm.class);
+	private GeneDao					geneDao;
+	private KeylessChromosomeHelper	keylessChromosomeHelper;
+	private Integer					maxMutationsPerChromosome;
 
-	private static final int MAX_FIND_ATTEMPTS = 1000;
+	private static final int		MAX_FIND_ATTEMPTS	= 1000;
 
 	@Override
 	public void mutateChromosome(KeylessChromosome chromosome) {
@@ -49,8 +49,8 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 		 */
-		int numMutations = (int) (ThreadLocalRandom.current().nextDouble() * Math.min(maxMutationsPerChromosome,
-				chromosome.getGenes().size())) + 1;
+		int numMutations = (int) (ThreadLocalRandom.current().nextDouble()
+				* Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
 
 		List<Integer> availableIndices = new ArrayList<Integer>();
 		for (int i = 0; i < chromosome.getGenes().size(); i++) {
@@ -81,8 +81,8 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 		/*
 		 * We don't want to reuse an index, so we get one from the List of indices which are still available
 		 */
-		int randomIndex = availableIndices.get((int) (ThreadLocalRandom.current().nextDouble() * availableIndices
-				.size()));
+		int randomIndex = availableIndices.get((int) (ThreadLocalRandom.current().nextDouble()
+				* availableIndices.size()));
 
 		mutateGene(chromosome, randomIndex);
 

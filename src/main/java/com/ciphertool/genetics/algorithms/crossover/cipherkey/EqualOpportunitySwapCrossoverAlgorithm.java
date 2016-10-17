@@ -31,11 +31,11 @@ import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.util.Coin;
 
 public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
-	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
-	private int maxGenerations;
+	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
+	private boolean										mutateDuringCrossover	= false;
+	private int											maxGenerations;
 
-	private Coin coin;
+	private Coin										coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -48,8 +48,8 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 
 		// The Chromosome could be null if it's identical to one of its parents
 		for (KeyedChromosome<Object> child : children) {
-			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
-					.getAncestry(), maxGenerations));
+			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
+					parentB.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
@@ -58,8 +58,7 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<KeyedChromosome<Object>> performCrossover(KeyedChromosome<Object> parentA,
-			KeyedChromosome<Object> parentB) {
+	protected List<KeyedChromosome<Object>> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
 		KeyedChromosome<Object> childA = (KeyedChromosome<Object>) parentA.clone();
 		KeyedChromosome<Object> childB = (KeyedChromosome<Object>) parentB.clone();
 

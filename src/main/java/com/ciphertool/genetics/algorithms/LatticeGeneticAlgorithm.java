@@ -52,23 +52,23 @@ import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger						log				= LoggerFactory.getLogger(getClass());
 
-	private GeneticAlgorithmStrategy strategy;
-	private LatticePopulation population;
+	private GeneticAlgorithmStrategy	strategy;
+	private LatticePopulation			population;
 	@SuppressWarnings("rawtypes")
-	private CrossoverAlgorithm crossoverAlgorithm;
+	private CrossoverAlgorithm			crossoverAlgorithm;
 	@SuppressWarnings("rawtypes")
-	private MutationAlgorithm mutationAlgorithm;
-	private boolean stopRequested;
-	private ExecutionStatisticsDao executionStatisticsDao;
-	private int generationCount = 0;
-	private ExecutionStatistics executionStatistics;
-	private Integer generationsToSkip;
-	private Integer generationsToKeep;
-	private TaskExecutor taskExecutor;
-	private boolean verifyAncestry;
-	private AtomicInteger mutations = new AtomicInteger(0);
+	private MutationAlgorithm			mutationAlgorithm;
+	private boolean						stopRequested;
+	private ExecutionStatisticsDao		executionStatisticsDao;
+	private int							generationCount	= 0;
+	private ExecutionStatistics			executionStatistics;
+	private Integer						generationsToSkip;
+	private Integer						generationsToKeep;
+	private TaskExecutor				taskExecutor;
+	private boolean						verifyAncestry;
+	private AtomicInteger				mutations		= new AtomicInteger(0);
 
 	@PostConstruct
 	public void verifyParameters() {
@@ -86,9 +86,8 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 
 			do {
 				proceedWithNextGeneration();
-			} while (!this.stopRequested
-					&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy
-							.getMaxGenerations()));
+			} while (!this.stopRequested && (this.strategy.getMaxGenerations() < 0
+					|| this.generationCount < this.strategy.getMaxGenerations()));
 		} catch (InterruptedException ie) {
 			log.info(ie.getMessage());
 
@@ -212,10 +211,10 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
 	protected class CrossoverTask implements Callable<List<SpatialChromosomeWrapper>> {
-		private int xPos;
-		private int yPos;
-		private Chromosome mom;
-		private Chromosome dad;
+		private int			xPos;
+		private int			yPos;
+		private Chromosome	mom;
+		private Chromosome	dad;
 
 		public CrossoverTask(Chromosome mom, Chromosome dad, int xPos, int yPos) {
 			this.mom = mom;
@@ -345,8 +344,8 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 				dad = parents.get(1);
 
 				if (ThreadLocalRandom.current().nextDouble() > strategy.getCrossoverRate()) {
-					childrenToAdd.add(new SpatialChromosomeWrapper(x, y, this.population.getIndividualsAsArray()[x][y]
-							.clone()));
+					childrenToAdd.add(new SpatialChromosomeWrapper(x, y,
+							this.population.getIndividualsAsArray()[x][y].clone()));
 
 					// Skipping crossover
 					continue;
@@ -403,8 +402,8 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 		return (int) childrenToAdd.size();
 	}
 
-	protected List<SpatialChromosomeWrapper> doConcurrentCrossovers(
-			List<FutureTask<List<SpatialChromosomeWrapper>>> futureTasks) throws InterruptedException {
+	protected List<SpatialChromosomeWrapper> doConcurrentCrossovers(List<FutureTask<List<SpatialChromosomeWrapper>>> futureTasks)
+			throws InterruptedException {
 		/*
 		 * Execute each crossover concurrently. Parents should produce two children, but this is not necessarily always
 		 * guaranteed.
@@ -515,8 +514,8 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 					symbolProbabilities.put(key, new HashMap<Object, Double>());
 				}
 
-				symbolProbabilities.get(key).put(geneValue,
-						((double) symbolCounts.get(key).get(geneValue) / populationSize));
+				symbolProbabilities.get(key).put(geneValue, ((double) symbolCounts.get(key).get(geneValue)
+						/ populationSize));
 			}
 		}
 
@@ -619,13 +618,11 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 
 		if (this.mutationAlgorithm instanceof UniformMutationAlgorithm) {
-			((UniformMutationAlgorithm) this.mutationAlgorithm).setMutationRate(geneticAlgorithmStrategy
-					.getMutationRate());
+			((UniformMutationAlgorithm) this.mutationAlgorithm).setMutationRate(geneticAlgorithmStrategy.getMutationRate());
 		}
 
 		if (this.mutationAlgorithm instanceof NonUniformMutationAlgorithm) {
-			((NonUniformMutationAlgorithm) this.mutationAlgorithm)
-					.setMaxMutationsPerChromosome(geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
+			((NonUniformMutationAlgorithm) this.mutationAlgorithm).setMaxMutationsPerChromosome(geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		}
 
 		this.strategy = geneticAlgorithmStrategy;

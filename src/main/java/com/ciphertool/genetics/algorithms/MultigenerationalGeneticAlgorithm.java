@@ -44,19 +44,19 @@ import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 
 public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger						log				= LoggerFactory.getLogger(getClass());
 
-	protected GeneticAlgorithmStrategy strategy;
-	protected StandardPopulation population;
+	protected GeneticAlgorithmStrategy	strategy;
+	protected StandardPopulation		population;
 	@SuppressWarnings("rawtypes")
-	protected CrossoverAlgorithm crossoverAlgorithm;
+	protected CrossoverAlgorithm		crossoverAlgorithm;
 	@SuppressWarnings("rawtypes")
-	protected MutationAlgorithm mutationAlgorithm;
-	protected SelectionAlgorithm selectionAlgorithm;
-	protected boolean stopRequested;
-	private ExecutionStatisticsDao executionStatisticsDao;
-	protected int generationCount = 0;
-	protected ExecutionStatistics executionStatistics;
+	protected MutationAlgorithm			mutationAlgorithm;
+	protected SelectionAlgorithm		selectionAlgorithm;
+	protected boolean					stopRequested;
+	private ExecutionStatisticsDao		executionStatisticsDao;
+	protected int						generationCount	= 0;
+	protected ExecutionStatistics		executionStatistics;
 
 	public MultigenerationalGeneticAlgorithm() {
 	}
@@ -68,9 +68,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 			do {
 				proceedWithNextGeneration();
-			} while (!this.stopRequested
-					&& (this.strategy.getMaxGenerations() < 0 || this.generationCount < this.strategy
-							.getMaxGenerations()));
+			} while (!this.stopRequested && (this.strategy.getMaxGenerations() < 0
+					|| this.generationCount < this.strategy.getMaxGenerations()));
 		} catch (InterruptedException ie) {
 			log.info(ie.getMessage());
 
@@ -280,8 +279,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 	@Override
 	public int select() {
-		return selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(), this.strategy
-				.getSurvivalRate());
+		return selectionAlgorithm.select(this.population, this.strategy.getPopulationSize(), this.strategy.getSurvivalRate());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -347,8 +345,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		 * minimum between the current population size and the calculated number of pairs in case there are not enough
 		 * eligible individuals.
 		 */
-		return Math.min((long) (initialPopulationSize * strategy.getCrossoverRate()),
-				((long) (this.population.size() / 2)));
+		return Math.min((long) (initialPopulationSize * strategy.getCrossoverRate()), ((long) (this.population.size()
+				/ 2)));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -361,8 +359,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		 * initial population size (before any other operations made individuals ineligible for reproduction) multiplied
 		 * by the configured mutation rate.
 		 */
-		long mutations = Math.min(Math.round((initialPopulationSize * strategy.getMutationRate())), this.population
-				.size());
+		long mutations = Math.min(Math.round((initialPopulationSize
+				* strategy.getMutationRate())), this.population.size());
 
 		log.debug("Chromosomes to mutate: " + mutations);
 
@@ -460,8 +458,8 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 					symbolProbabilities.put(key, new HashMap<Object, Double>());
 				}
 
-				symbolProbabilities.get(key).put(geneValue,
-						((double) symbolCounts.get(key).get(geneValue) / populationSize));
+				symbolProbabilities.get(key).put(geneValue, ((double) symbolCounts.get(key).get(geneValue)
+						/ populationSize));
 			}
 		}
 
@@ -554,13 +552,11 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 
 		if (this.mutationAlgorithm instanceof UniformMutationAlgorithm) {
-			((UniformMutationAlgorithm) this.mutationAlgorithm).setMutationRate(geneticAlgorithmStrategy
-					.getMutationRate());
+			((UniformMutationAlgorithm) this.mutationAlgorithm).setMutationRate(geneticAlgorithmStrategy.getMutationRate());
 		}
 
 		if (this.mutationAlgorithm instanceof NonUniformMutationAlgorithm) {
-			((NonUniformMutationAlgorithm) this.mutationAlgorithm)
-					.setMaxMutationsPerChromosome(geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
+			((NonUniformMutationAlgorithm) this.mutationAlgorithm).setMaxMutationsPerChromosome(geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		}
 
 		this.selectionAlgorithm = geneticAlgorithmStrategy.getSelectionAlgorithm();

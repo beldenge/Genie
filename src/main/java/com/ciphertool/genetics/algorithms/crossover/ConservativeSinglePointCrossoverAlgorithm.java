@@ -31,10 +31,10 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 import com.ciphertool.genetics.util.RandomListElementSelector;
 
 public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
-	private static Logger log = LoggerFactory.getLogger(ConservativeSinglePointCrossoverAlgorithm.class);
-	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
-	private RandomListElementSelector randomListElementSelector;
+	private static Logger							log						= LoggerFactory.getLogger(ConservativeSinglePointCrossoverAlgorithm.class);
+	private MutationAlgorithm<KeylessChromosome>	mutationAlgorithm;
+	private boolean									mutateDuringCrossover	= false;
+	private RandomListElementSelector				randomListElementSelector;
 
 	/**
 	 * This crossover algorithm finds all the points where both parent Chromosomes can safely be split in half without
@@ -58,8 +58,7 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 		/*
 		 * Casting to int will truncate the number, giving us an index we can safely use against lists.
 		 */
-		int centromere = potentialCentromeres.get(randomListElementSelector
-				.selectRandomListElement(potentialCentromeres));
+		int centromere = potentialCentromeres.get(randomListElementSelector.selectRandomListElement(potentialCentromeres));
 
 		List<KeylessChromosome> children = new ArrayList<KeylessChromosome>();
 
@@ -142,8 +141,7 @@ public class ConservativeSinglePointCrossoverAlgorithm implements CrossoverAlgor
 						+ " but no Gene was found.  This is indicative of a bad centromere.");
 			}
 
-			nextSequenceIndex = ((VariableLengthGene) chromosome.getGenes().get(geneIndex)).getSequences().get(0)
-					.getSequenceId();
+			nextSequenceIndex = ((VariableLengthGene) chromosome.getGenes().get(geneIndex)).getSequences().get(0).getSequenceId();
 		} while (nextSequenceIndex != centromere);
 
 		return geneIndex;

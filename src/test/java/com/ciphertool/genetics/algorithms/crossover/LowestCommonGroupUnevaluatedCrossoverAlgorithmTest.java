@@ -52,8 +52,7 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 
 		Field coinField = ReflectionUtils.findField(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "coin");
 		ReflectionUtils.makeAccessible(coinField);
-		Coin coinFromObject = (Coin) ReflectionUtils
-				.getField(coinField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
+		Coin coinFromObject = (Coin) ReflectionUtils.getField(coinField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
 
 		assertSame(coinToSet, coinFromObject);
 	}
@@ -66,11 +65,9 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class,
-				"mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
-				mutationAlgorithmField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(mutationAlgorithmField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -82,11 +79,9 @@ public class LowestCommonGroupUnevaluatedCrossoverAlgorithmTest extends Crossove
 		LowestCommonGroupUnevaluatedCrossoverAlgorithm lowestCommonGroupUnevaluatedCrossoverAlgorithm = new LowestCommonGroupUnevaluatedCrossoverAlgorithm();
 		lowestCommonGroupUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(
-				LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(LowestCommonGroupUnevaluatedCrossoverAlgorithm.class, "mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
-				lowestCommonGroupUnevaluatedCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField, lowestCommonGroupUnevaluatedCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}

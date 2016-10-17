@@ -29,9 +29,9 @@ import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class StandardMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>> {
-	private Double mutationRate;
+	private Double	mutationRate;
 
-	private GeneDao geneDao;
+	private GeneDao	geneDao;
 
 	@Override
 	public void mutateChromosome(KeyedChromosome<Object> chromosome) {

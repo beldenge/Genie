@@ -22,10 +22,10 @@ package com.ciphertool.genetics;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class SpatialChromosomeWrapper {
-	private int xPos;
-	private int yPos;
+	private int			xPos;
+	private int			yPos;
 
-	private Chromosome chromosome;
+	private Chromosome	chromosome;
 
 	/**
 	 * @param xPos

@@ -35,16 +35,16 @@ import com.ciphertool.genetics.util.Coin;
 
 public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger										log						= LoggerFactory.getLogger(getClass());
 
-	private int maxAttempts;
+	private int											maxAttempts;
 
-	private FitnessEvaluator fitnessEvaluator;
-	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
-	private int maxGenerations;
+	private FitnessEvaluator							fitnessEvaluator;
+	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
+	private boolean										mutateDuringCrossover	= false;
+	private int											maxGenerations;
 
-	private Coin coin;
+	private Coin										coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -60,8 +60,8 @@ public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 		// The Chromosome could be null if it's identical to one of its parents
 		if (child != null) {
 			children.add(child);
-			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
-					.getAncestry(), maxGenerations));
+			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
+					parentB.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}

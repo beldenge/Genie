@@ -24,8 +24,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.springframework.beans.factory.annotation.Required;
 
 public class MutationHelper {
-	private int maxMutations;
-	private double mutationCountFactor;
+	private int		maxMutations;
+	private double	mutationCountFactor;
 
 	public int getNumMutations(int numGenes) {
 		int max = Math.min(maxMutations, numGenes);

@@ -31,13 +31,13 @@ import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class MockKeylessChromosome implements KeylessChromosome {
-	private boolean needsEvaluation;
-	private Double fitness = 0.0;
-	private List<Gene> genes = new ArrayList<Gene>();
-	private Integer targetSize = 0;
-	private int age = 0;
-	private int numberOfChildren = 0;
-	private Population population;
+	private boolean		needsEvaluation;
+	private Double		fitness				= 0.0;
+	private List<Gene>	genes				= new ArrayList<Gene>();
+	private Integer		targetSize			= 0;
+	private int			age					= 0;
+	private int			numberOfChildren	= 0;
+	private Population	population;
 
 	@Override
 	public List<Gene> getGenes() {
@@ -191,8 +191,8 @@ public class MockKeylessChromosome implements KeylessChromosome {
 
 	@Override
 	public String toString() {
-		return "MockKeylessChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness + ", genes="
-				+ genes + "]";
+		return "MockKeylessChromosome [needsEvaluation=" + needsEvaluation + ", fitness=" + fitness + ", genes=" + genes
+				+ "]";
 	}
 
 	@Override

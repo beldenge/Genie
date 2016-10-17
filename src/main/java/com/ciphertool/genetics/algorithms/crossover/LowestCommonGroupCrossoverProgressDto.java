@@ -24,12 +24,12 @@ package com.ciphertool.genetics.algorithms.crossover;
  * values to be passed in methods and incremented by reference.
  */
 public class LowestCommonGroupCrossoverProgressDto {
-	private int firstChromosomeSequencePosition = 0;
-	private int secondChromosomeSequencePosition = 0;
-	private int firstChromosomeBeginGeneIndex = 0;
-	private int secondChromosomeBeginGeneIndex = 0;
-	private int firstChromosomeEndGeneIndex = 0;
-	private int secondChromosomeEndGeneIndex = 0;
+	private int	firstChromosomeSequencePosition		= 0;
+	private int	secondChromosomeSequencePosition	= 0;
+	private int	firstChromosomeBeginGeneIndex		= 0;
+	private int	secondChromosomeBeginGeneIndex		= 0;
+	private int	firstChromosomeEndGeneIndex			= 0;
+	private int	secondChromosomeEndGeneIndex		= 0;
 
 	public LowestCommonGroupCrossoverProgressDto() {
 	}

@@ -41,8 +41,8 @@ import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 import com.ciphertool.genetics.mocks.MockSequence;
 
 public class KeylessChromosomeHelperTest {
-	private static KeylessChromosomeHelper keylessChromosomeHelper;
-	private static GeneDao geneDaoMock;
+	private static KeylessChromosomeHelper	keylessChromosomeHelper;
+	private static GeneDao					geneDaoMock;
 
 	@BeforeClass
 	public static void setUp() {
@@ -56,9 +56,7 @@ public class KeylessChromosomeHelperTest {
 	public void resetMocks() {
 		reset(geneDaoMock);
 
-		when(geneDaoMock.findRandomGene(any(Chromosome.class)))
-				.thenReturn(createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5),
-						createRandomGene(5), createRandomGene(5), createRandomGene(5));
+		when(geneDaoMock.findRandomGene(any(Chromosome.class))).thenReturn(createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5), createRandomGene(5));
 	}
 
 	@Test

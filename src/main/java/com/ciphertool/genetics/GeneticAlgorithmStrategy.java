@@ -28,24 +28,24 @@ import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategy {
-	private Object geneticStructure;
-	private Integer populationSize;
-	private Integer lifespan;
-	private Double survivalRate;
-	private Double mutationRate;
-	private Integer maxMutationsPerIndividual;
-	private Double crossoverRate;
-	private Boolean mutateDuringCrossover;
-	private Integer maxGenerations;
+	private Object				geneticStructure;
+	private Integer				populationSize;
+	private Integer				lifespan;
+	private Double				survivalRate;
+	private Double				mutationRate;
+	private Integer				maxMutationsPerIndividual;
+	private Double				crossoverRate;
+	private Boolean				mutateDuringCrossover;
+	private Integer				maxGenerations;
 	@SuppressWarnings("rawtypes")
-	private CrossoverAlgorithm crossoverAlgorithm;
-	private FitnessEvaluator fitnessEvaluator;
+	private CrossoverAlgorithm	crossoverAlgorithm;
+	private FitnessEvaluator	fitnessEvaluator;
 	@SuppressWarnings("rawtypes")
-	private MutationAlgorithm mutationAlgorithm;
-	private SelectionAlgorithm selectionAlgorithm;
-	private Selector selector;
-	private FitnessEvaluator knownSolutionFitnessEvaluator;
-	private Boolean compareToKnownSolution;
+	private MutationAlgorithm	mutationAlgorithm;
+	private SelectionAlgorithm	selectionAlgorithm;
+	private Selector			selector;
+	private FitnessEvaluator	knownSolutionFitnessEvaluator;
+	private Boolean				compareToKnownSolution;
 
 	/**
 	 * Default no-args constructor

@@ -56,10 +56,10 @@ import com.ciphertool.genetics.mocks.MockGene;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class RandomValueMutationAlgorithmTest {
-	private final static int MAX_MUTATIONS = 2;
-	private static Logger logMock;
-	private static RandomValueMutationAlgorithm randomValueMutationAlgorithm;
-	private static GeneDao geneDaoMock;
+	private final static int					MAX_MUTATIONS	= 2;
+	private static Logger						logMock;
+	private static RandomValueMutationAlgorithm	randomValueMutationAlgorithm;
+	private static GeneDao						geneDaoMock;
 
 	@BeforeClass
 	public static void setUp() {
@@ -101,11 +101,9 @@ public class RandomValueMutationAlgorithmTest {
 		RandomValueMutationAlgorithm randomValueMutationAlgorithm = new RandomValueMutationAlgorithm();
 		randomValueMutationAlgorithm.setMaxMutationsPerChromosome(maxMutationsPerChromosomeToSet);
 
-		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(RandomValueMutationAlgorithm.class,
-				"maxMutationsPerChromosome");
+		Field maxMutationsPerChromosomeField = ReflectionUtils.findField(RandomValueMutationAlgorithm.class, "maxMutationsPerChromosome");
 		ReflectionUtils.makeAccessible(maxMutationsPerChromosomeField);
-		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(
-				maxMutationsPerChromosomeField, randomValueMutationAlgorithm);
+		Integer maxMutationsPerChromosomeFromObject = (Integer) ReflectionUtils.getField(maxMutationsPerChromosomeField, randomValueMutationAlgorithm);
 
 		assertSame(maxMutationsPerChromosomeToSet, maxMutationsPerChromosomeFromObject);
 	}
@@ -172,10 +170,10 @@ public class RandomValueMutationAlgorithmTest {
 		/*
 		 * Only one Gene should be mutated.
 		 */
-		assertTrue((mockGene1 == mockKeyedChromosome.getGenes().get("1") && mockGeneToReturn == mockKeyedChromosome
-				.getGenes().get("2"))
-				|| (mockGeneToReturn == mockKeyedChromosome.getGenes().get("1") && mockGene2 == mockKeyedChromosome
-						.getGenes().get("2")));
+		assertTrue((mockGene1 == mockKeyedChromosome.getGenes().get("1")
+				&& mockGeneToReturn == mockKeyedChromosome.getGenes().get("2"))
+				|| (mockGeneToReturn == mockKeyedChromosome.getGenes().get("1")
+						&& mockGene2 == mockKeyedChromosome.getGenes().get("2")));
 		assertEquals(1, availableIndices.size());
 		assertTrue(availableIndices.toArray()[0] == "1" || availableIndices.toArray()[0] == "2");
 		verify(geneDaoMock, times(1)).findRandomGene(same(mockKeyedChromosome));

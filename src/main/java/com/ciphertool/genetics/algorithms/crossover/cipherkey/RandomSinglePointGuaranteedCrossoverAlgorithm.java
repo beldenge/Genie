@@ -36,13 +36,13 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger										log						= LoggerFactory.getLogger(getClass());
 
-	private int maxAttempts;
-	private MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
-	private int maxGenerations;
-	private FitnessEvaluator fitnessEvaluator;
+	private int											maxAttempts;
+	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
+	private boolean										mutateDuringCrossover	= false;
+	private int											maxGenerations;
+	private FitnessEvaluator							fitnessEvaluator;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -58,8 +58,8 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 		// The Chromosome could be null if it's identical to one of its parents
 		if (child != null) {
 			children.add(child);
-			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(), parentB
-					.getAncestry(), maxGenerations));
+			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
+					parentB.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}

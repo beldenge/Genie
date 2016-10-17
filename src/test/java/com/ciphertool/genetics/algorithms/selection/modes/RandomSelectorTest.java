@@ -42,8 +42,8 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class RandomSelectorTest {
-	private static RandomSelector randomSelector;
-	private static Logger logMock;
+	private static RandomSelector	randomSelector;
+	private static Logger			logMock;
 
 	@BeforeClass
 	public static void setUp() {

@@ -31,11 +31,11 @@ import com.ciphertool.genetics.util.Coin;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
-	private GeneDao geneDao;
-	private KeylessChromosomeHelper keylessChromosomeHelper;
-	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
-	private Coin coin;
+	private GeneDao									geneDao;
+	private KeylessChromosomeHelper					keylessChromosomeHelper;
+	private MutationAlgorithm<KeylessChromosome>	mutationAlgorithm;
+	private boolean									mutateDuringCrossover	= false;
+	private Coin									coin;
 
 	@Override
 	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {

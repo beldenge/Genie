@@ -24,8 +24,7 @@ import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class ConservativeCrossoverAlgorithmHelper {
 
-	protected static void advanceIndexes(CrossoverProgressDto crossoverProgressDto, KeylessChromosome first,
-			KeylessChromosome second) {
+	protected static void advanceIndexes(CrossoverProgressDto crossoverProgressDto, KeylessChromosome first, KeylessChromosome second) {
 
 		if (crossoverProgressDto.getFirstChromosomeGeneIndex() >= first.getGenes().size()
 				|| crossoverProgressDto.getSecondChromosomeGeneIndex() >= second.getGenes().size()) {
@@ -33,20 +32,16 @@ public class ConservativeCrossoverAlgorithmHelper {
 			return;
 		}
 
-		int firstGeneSize = ((VariableLengthGene) first.getGenes().get(
-				crossoverProgressDto.getFirstChromosomeGeneIndex())).size();
-		int secondGeneSize = ((VariableLengthGene) second.getGenes().get(
-				crossoverProgressDto.getSecondChromosomeGeneIndex())).size();
+		int firstGeneSize = ((VariableLengthGene) first.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size();
+		int secondGeneSize = ((VariableLengthGene) second.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())).size();
 
-		if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
-				.getSecondChromosomeSequencePosition()) {
+		if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto.getSecondChromosomeSequencePosition()) {
 			crossoverProgressDto.advanceFirstChromosomeSequencePositionBy(firstGeneSize);
 			crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(secondGeneSize);
 
 			crossoverProgressDto.advanceFirstChromosomeGeneIndexBy(1);
 			crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(1);
-		} else if (crossoverProgressDto.getFirstChromosomeSequencePosition() > crossoverProgressDto
-				.getSecondChromosomeSequencePosition()) {
+		} else if (crossoverProgressDto.getFirstChromosomeSequencePosition() > crossoverProgressDto.getSecondChromosomeSequencePosition()) {
 			crossoverProgressDto.advanceSecondChromosomeSequencePositionBy(secondGeneSize);
 			crossoverProgressDto.advanceSecondChromosomeGeneIndexBy(1);
 		} else {

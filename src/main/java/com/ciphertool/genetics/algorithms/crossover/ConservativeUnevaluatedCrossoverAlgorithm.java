@@ -27,8 +27,8 @@ import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
 
 public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgorithm<KeylessChromosome> {
-	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
+	private MutationAlgorithm<KeylessChromosome>	mutationAlgorithm;
+	private boolean									mutateDuringCrossover	= false;
 
 	@Override
 	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {
@@ -68,13 +68,9 @@ public class ConservativeUnevaluatedCrossoverAlgorithm implements CrossoverAlgor
 			/*
 			 * Replace from parentB. We are extra careful here since genes won't match exactly with sequence position.
 			 */
-			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto
-					.getSecondChromosomeSequencePosition()
-					&& ((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex()))
-							.size() == ((VariableLengthGene) parentB.getGenes().get(
-							crossoverProgressDto.getSecondChromosomeGeneIndex())).size()) {
-				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(
-						crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
+			if (crossoverProgressDto.getFirstChromosomeSequencePosition() == crossoverProgressDto.getSecondChromosomeSequencePosition()
+					&& ((VariableLengthGene) child.getGenes().get(crossoverProgressDto.getFirstChromosomeGeneIndex())).size() == ((VariableLengthGene) parentB.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex())).size()) {
+				child.replaceGene(crossoverProgressDto.getFirstChromosomeGeneIndex(), parentB.getGenes().get(crossoverProgressDto.getSecondChromosomeGeneIndex()).clone());
 			}
 
 			ConservativeCrossoverAlgorithmHelper.advanceIndexes(crossoverProgressDto, child, parentB);

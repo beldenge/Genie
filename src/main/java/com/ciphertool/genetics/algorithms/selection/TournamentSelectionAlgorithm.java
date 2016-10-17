@@ -33,10 +33,10 @@ import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private static Selector randomSelector = new RandomSelector();
-	private Selector groupSelector;
-	private Integer groupSize;
+	private Logger			log				= LoggerFactory.getLogger(getClass());
+	private static Selector	randomSelector	= new RandomSelector();
+	private Selector		groupSelector;
+	private Integer			groupSize;
 
 	/*
 	 * Performs selection by creating groups of Chromosomes and running tournaments upon each of them.
@@ -85,8 +85,7 @@ public class TournamentSelectionAlgorithm implements SelectionAlgorithm {
 			 */
 			randomIndividuals = new ArrayList<Chromosome>();
 			randomIndividuals.addAll(group.keySet());
-			Integer tournamentIndex = groupSelector.getNextIndex(randomIndividuals,
-					getGroupTotalFitness(randomIndividuals));
+			Integer tournamentIndex = groupSelector.getNextIndex(randomIndividuals, getGroupTotalFitness(randomIndividuals));
 			survivorIndex = group.get(randomIndividuals.get(tournamentIndex));
 
 			survivors.add(population.removeIndividual(survivorIndex));

@@ -31,9 +31,9 @@ import com.ciphertool.genetics.fitness.DescendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessComparator;
 
 public class TournamentSelector implements Selector {
-	private Logger log = LoggerFactory.getLogger(getClass());
-	private Double selectionAccuracy;
-	private static FitnessComparator fitnessComparator = new DescendingFitnessComparator();
+	private Logger						log					= LoggerFactory.getLogger(getClass());
+	private Double						selectionAccuracy;
+	private static FitnessComparator	fitnessComparator	= new DescendingFitnessComparator();
 
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {

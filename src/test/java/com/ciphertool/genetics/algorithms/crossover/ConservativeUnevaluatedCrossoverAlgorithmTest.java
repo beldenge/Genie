@@ -51,11 +51,9 @@ public class ConservativeUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgo
 		ConservativeUnevaluatedCrossoverAlgorithm conservativeUnevaluatedCrossoverAlgorithm = new ConservativeUnevaluatedCrossoverAlgorithm();
 		conservativeUnevaluatedCrossoverAlgorithm.setMutationAlgorithm(mutationAlgorithmToSet);
 
-		Field mutationAlgorithmField = ReflectionUtils.findField(ConservativeUnevaluatedCrossoverAlgorithm.class,
-				"mutationAlgorithm");
+		Field mutationAlgorithmField = ReflectionUtils.findField(ConservativeUnevaluatedCrossoverAlgorithm.class, "mutationAlgorithm");
 		ReflectionUtils.makeAccessible(mutationAlgorithmField);
-		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(
-				mutationAlgorithmField, conservativeUnevaluatedCrossoverAlgorithm);
+		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(mutationAlgorithmField, conservativeUnevaluatedCrossoverAlgorithm);
 
 		assertSame(mutationAlgorithmToSet, mutationAlgorithmFromObject);
 	}
@@ -67,11 +65,9 @@ public class ConservativeUnevaluatedCrossoverAlgorithmTest extends CrossoverAlgo
 		ConservativeUnevaluatedCrossoverAlgorithm conservativeUnevaluatedCrossoverAlgorithm = new ConservativeUnevaluatedCrossoverAlgorithm();
 		conservativeUnevaluatedCrossoverAlgorithm.setMutateDuringCrossover(mutateDuringCrossoverToSet);
 
-		Field mutateDuringCrossoverField = ReflectionUtils.findField(ConservativeUnevaluatedCrossoverAlgorithm.class,
-				"mutateDuringCrossover");
+		Field mutateDuringCrossoverField = ReflectionUtils.findField(ConservativeUnevaluatedCrossoverAlgorithm.class, "mutateDuringCrossover");
 		ReflectionUtils.makeAccessible(mutateDuringCrossoverField);
-		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField,
-				conservativeUnevaluatedCrossoverAlgorithm);
+		boolean mutateDuringCrossoverFromObject = (boolean) ReflectionUtils.getField(mutateDuringCrossoverField, conservativeUnevaluatedCrossoverAlgorithm);
 
 		assertEquals(mutateDuringCrossoverToSet, mutateDuringCrossoverFromObject);
 	}

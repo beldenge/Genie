@@ -49,8 +49,8 @@ public class KeylessChromosomeHelper {
 		 * target length.
 		 */
 		while (chromosomeToResize.actualSize() > chromosomeToResize.targetSize()) {
-			VariableLengthGene lastGene = (VariableLengthGene) chromosomeToResize.getGenes().get(
-					chromosomeToResize.getGenes().size() - 1);
+			VariableLengthGene lastGene = (VariableLengthGene) chromosomeToResize.getGenes().get(chromosomeToResize.getGenes().size()
+					- 1);
 
 			if (chromosomeToResize.actualSize() - lastGene.size() >= chromosomeToResize.targetSize()) {
 				/*

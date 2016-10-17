@@ -32,11 +32,11 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
 
 public class LiberalCrossoverAlgorithm implements EvaluatedCrossoverAlgorithm<KeylessChromosome> {
-	private FitnessEvaluator fitnessEvaluator;
-	private GeneDao geneDao;
-	private KeylessChromosomeHelper keylessChromosomeHelper;
-	private MutationAlgorithm<KeylessChromosome> mutationAlgorithm;
-	private boolean mutateDuringCrossover = false;
+	private FitnessEvaluator						fitnessEvaluator;
+	private GeneDao									geneDao;
+	private KeylessChromosomeHelper					keylessChromosomeHelper;
+	private MutationAlgorithm<KeylessChromosome>	mutationAlgorithm;
+	private boolean									mutateDuringCrossover	= false;
 
 	@Override
 	public List<KeylessChromosome> crossover(KeylessChromosome parentA, KeylessChromosome parentB) {

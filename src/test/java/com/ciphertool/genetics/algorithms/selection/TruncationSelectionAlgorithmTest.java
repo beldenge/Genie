@@ -40,9 +40,9 @@ import com.ciphertool.genetics.fitness.AscendingFitnessComparator;
 import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class TruncationSelectionAlgorithmTest {
-	private static Logger logMock;
-	private static StandardPopulation population;
-	private static TruncationSelectionAlgorithm truncationSelectionAlgorithm;
+	private static Logger						logMock;
+	private static StandardPopulation			population;
+	private static TruncationSelectionAlgorithm	truncationSelectionAlgorithm;
 
 	@BeforeClass
 	public static void setUp() {
