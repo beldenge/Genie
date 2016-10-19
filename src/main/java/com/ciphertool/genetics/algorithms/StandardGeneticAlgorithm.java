@@ -170,7 +170,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		/*
 		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit.
 		 */
-		for (int i = 0; i < (initialPopulationSize - elitism) / this.crossoverAlgorithm.numberOfOffspring(); i++) {
+		for (int i = 0; i < Math.max(0, (initialPopulationSize - elitism)
+				/ this.crossoverAlgorithm.numberOfOffspring()); i++) {
 			if (stopRequested) {
 				throw new InterruptedException("Stop requested during crossover.");
 			}
