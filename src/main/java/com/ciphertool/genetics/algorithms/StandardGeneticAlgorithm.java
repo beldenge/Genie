@@ -60,7 +60,6 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
 	protected class CrossoverTask implements Callable<List<Chromosome>> {
-
 		private Chromosome	mom;
 		private Chromosome	dad;
 
@@ -80,7 +79,6 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
 	protected class MutationTask implements Callable<Void> {
-
 		private Chromosome chromosome;
 
 		public MutationTask(Chromosome chromosome) {
