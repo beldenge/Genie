@@ -19,10 +19,11 @@
 
 package com.ciphertool.genetics.entities;
 
+import org.springframework.data.annotation.Transient;
+
 import com.ciphertool.genetics.Population;
 
 public interface Chromosome extends Cloneable {
-
 	public String getId();
 
 	/**
@@ -102,6 +103,7 @@ public interface Chromosome extends Cloneable {
 	/**
 	 * @return this Chromosome's Population
 	 */
+	@Transient
 	public Population getPopulation();
 
 	/**
@@ -113,6 +115,7 @@ public interface Chromosome extends Cloneable {
 	/**
 	 * @return the ancestry
 	 */
+	@Transient
 	public Ancestry getAncestry();
 
 	/**
