@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -36,7 +37,7 @@ public class ExecutionStatistics implements Serializable {
 	private static final long			serialVersionUID			= 8148209145996293339L;
 
 	@Id
-	private String						id;
+	private ObjectId					id							= new ObjectId();
 
 	private Date						startDateTime;
 
@@ -87,16 +88,8 @@ public class ExecutionStatistics implements Serializable {
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public ObjectId getId() {
 		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	/**

@@ -21,6 +21,7 @@ package com.ciphertool.genetics.entities.statistics;
 
 import java.io.Serializable;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -30,7 +31,7 @@ public class GenerationStatistics implements Serializable {
 	private static final long	serialVersionUID	= 5751129649317222013L;
 
 	@Id
-	private String				id;
+	private ObjectId			id					= new ObjectId();
 
 	@DBRef
 	private ExecutionStatistics	executionStatistics;
@@ -75,16 +76,8 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the id
 	 */
-	public String getId() {
+	public ObjectId getId() {
 		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	/**

@@ -26,11 +26,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.junit.Test;
+import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
@@ -63,15 +66,6 @@ public class ExecutionStatisticsTest {
 		assertNull(executionStatistics.getCrossoverAlgorithm());
 		assertNull(executionStatistics.getFitnessEvaluator());
 		assertNull(executionStatistics.getMutationAlgorithm());
-	}
-
-	@Test
-	public void testSetId() {
-		String idToSet = "123";
-		ExecutionStatistics executionStatistics = new ExecutionStatistics();
-		executionStatistics.setId(idToSet);
-
-		assertSame(idToSet, executionStatistics.getId());
 	}
 
 	@Test
@@ -228,10 +222,13 @@ public class ExecutionStatisticsTest {
 		ExecutionStatistics base = new ExecutionStatistics(baseStartDate, baseStrategy);
 
 		ExecutionStatistics executionStatisticsEqualToBase = new ExecutionStatistics(baseStartDate, baseStrategy);
+		Field idField = ReflectionUtils.findField(ExecutionStatistics.class, "id");
+		ReflectionUtils.makeAccessible(idField);
+		ReflectionUtils.setField(idField, executionStatisticsEqualToBase, base.getId());
 		assertEquals(base, executionStatisticsEqualToBase);
 
 		ExecutionStatistics executionStatisticsWithDifferentId = new ExecutionStatistics(baseStartDate, baseStrategy);
-		executionStatisticsWithDifferentId.setId("54321");
+		ReflectionUtils.setField(idField, executionStatisticsWithDifferentId, new ObjectId());
 		assertFalse(base.equals(executionStatisticsWithDifferentId));
 
 		Calendar cal = Calendar.getInstance();
@@ -282,7 +279,9 @@ public class ExecutionStatisticsTest {
 		assertFalse(base.equals(executionStatisticsWithDifferentMutationAlgorithm));
 
 		ExecutionStatistics executionStatisticsWithNullPropertiesA = new ExecutionStatistics();
+		ReflectionUtils.setField(idField, executionStatisticsWithNullPropertiesA, null);
 		ExecutionStatistics executionStatisticsWithNullPropertiesB = new ExecutionStatistics();
+		ReflectionUtils.setField(idField, executionStatisticsWithNullPropertiesB, null);
 		assertEquals(executionStatisticsWithNullPropertiesA, executionStatisticsWithNullPropertiesB);
 	}
 

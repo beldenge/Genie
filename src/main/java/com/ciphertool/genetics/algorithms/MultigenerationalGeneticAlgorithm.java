@@ -38,6 +38,7 @@ import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
+import com.ciphertool.genetics.dao.GenerationStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
@@ -55,6 +56,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	protected SelectionAlgorithm		selectionAlgorithm;
 	protected boolean					stopRequested;
 	private ExecutionStatisticsDao		executionStatisticsDao;
+	private GenerationStatisticsDao		generationStatisticsDao;
 	protected int						generationCount	= 0;
 	protected ExecutionStatistics		executionStatistics;
 
@@ -498,6 +500,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 
 		long startInsert = System.currentTimeMillis();
 
+		this.generationStatisticsDao.insertBatch(this.executionStatistics.getGenerationStatisticsList());
 		this.executionStatisticsDao.insert(this.executionStatistics);
 
 		log.info("Took " + (System.currentTimeMillis() - startInsert) + "ms to persist statistics to database.");
@@ -571,5 +574,14 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setExecutionStatisticsDao(ExecutionStatisticsDao executionStatisticsDao) {
 		this.executionStatisticsDao = executionStatisticsDao;
+	}
+
+	/**
+	 * @param generationStatisticsDao
+	 *            the generationStatisticsDao to set
+	 */
+	@Required
+	public void setGenerationStatisticsDao(GenerationStatisticsDao generationStatisticsDao) {
+		this.generationStatisticsDao = generationStatisticsDao;
 	}
 }

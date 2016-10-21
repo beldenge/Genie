@@ -53,6 +53,7 @@ import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
+import com.ciphertool.genetics.dao.GenerationStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
@@ -247,10 +248,13 @@ public class MultigenerationalGeneticAlgorithmTest {
 	public void testFinish() {
 		Date beforeFinish = new Date();
 
-		ExecutionStatisticsDao executionStatisticsDaoToSet = mock(ExecutionStatisticsDao.class);
-
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
+
+		ExecutionStatisticsDao executionStatisticsDaoToSet = mock(ExecutionStatisticsDao.class);
 		multigenerationalGeneticAlgorithm.setExecutionStatisticsDao(executionStatisticsDaoToSet);
+
+		GenerationStatisticsDao generationStatisticsDaoToSet = mock(GenerationStatisticsDao.class);
+		multigenerationalGeneticAlgorithm.setGenerationStatisticsDao(generationStatisticsDaoToSet);
 
 		ExecutionStatistics executionStatistics = new ExecutionStatistics();
 		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "executionStatistics");
@@ -266,6 +270,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertTrue(executionStatistics.getEndDateTime().getTime() >= beforeFinish.getTime());
 
 		verify(executionStatisticsDaoToSet, times(1)).insert(same(executionStatistics));
+		verify(generationStatisticsDaoToSet, times(1)).insertBatch(anyListOf(GenerationStatistics.class));
 
 		ExecutionStatistics executionStatisticsFromObject = (ExecutionStatistics) ReflectionUtils.getField(executionStatisticsField, multigenerationalGeneticAlgorithm);
 		assertNull(executionStatisticsFromObject);
@@ -762,10 +767,13 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 	@Test
 	public void testPersistStatistics() {
-		ExecutionStatisticsDao executionStatisticsDaoToSet = mock(ExecutionStatisticsDao.class);
-
 		MultigenerationalGeneticAlgorithm multigenerationalGeneticAlgorithm = new MultigenerationalGeneticAlgorithm();
+
+		ExecutionStatisticsDao executionStatisticsDaoToSet = mock(ExecutionStatisticsDao.class);
 		multigenerationalGeneticAlgorithm.setExecutionStatisticsDao(executionStatisticsDaoToSet);
+
+		GenerationStatisticsDao generationStatisticsDaoToSet = mock(GenerationStatisticsDao.class);
+		multigenerationalGeneticAlgorithm.setGenerationStatisticsDao(generationStatisticsDaoToSet);
 
 		ExecutionStatistics executionStatistics = new ExecutionStatistics();
 		Field executionStatisticsField = ReflectionUtils.findField(MultigenerationalGeneticAlgorithm.class, "executionStatistics");
@@ -775,6 +783,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		multigenerationalGeneticAlgorithm.persistStatistics();
 
 		verify(executionStatisticsDaoToSet, times(1)).insert(same(executionStatistics));
+		verify(generationStatisticsDaoToSet, times(1)).insertBatch(anyListOf(GenerationStatistics.class));
 	}
 
 	@Test

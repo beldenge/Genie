@@ -23,7 +23,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 
+import java.lang.reflect.Field;
+
+import org.bson.types.ObjectId;
 import org.junit.Test;
+import org.springframework.util.ReflectionUtils;
 
 public class GenerationStatisticsTest {
 	private static final double TOLERANCE = 0.00001;
@@ -37,15 +41,6 @@ public class GenerationStatisticsTest {
 
 		assertSame(executionStatisticsToSet, generationStatistics.getExecutionStatistics());
 		assertEquals(generationToSet, generationStatistics.getGeneration());
-	}
-
-	@Test
-	public void testSetId() {
-		String idToSet = "123";
-		GenerationStatistics generationStatistics = new GenerationStatistics();
-		generationStatistics.setId(idToSet);
-
-		assertSame(idToSet, generationStatistics.getId());
 	}
 
 	@Test
@@ -140,17 +135,23 @@ public class GenerationStatisticsTest {
 
 	@Test
 	public void testEquals() {
-		String baseId = "123";
+		Field executionStatisticsIdField = ReflectionUtils.findField(ExecutionStatistics.class, "id");
+		ReflectionUtils.makeAccessible(executionStatisticsIdField);
+		Field generationStatisticsIdField = ReflectionUtils.findField(GenerationStatistics.class, "id");
+		ReflectionUtils.makeAccessible(generationStatisticsIdField);
+
 		ExecutionStatistics baseExecutionStatistics = new ExecutionStatistics();
-		baseExecutionStatistics.setId("1");
+		ReflectionUtils.setField(executionStatisticsIdField, baseExecutionStatistics, new ObjectId());
+
 		int baseGeneration = 1;
 		long baseExecutionTime = 999;
 		double baseBestFitness = 99.9;
 		double baseAverageFitness = 49.9;
 		Double baseKnownSolutionProximity = 9.9;
 
+		ObjectId baseId = new ObjectId("1234567890abcdef12345678");
 		GenerationStatistics base = new GenerationStatistics();
-		base.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, base, baseId);
 		base.setExecutionStatistics(baseExecutionStatistics);
 		base.setGeneration(baseGeneration);
 		base.setExecutionTime(baseExecutionTime);
@@ -159,7 +160,7 @@ public class GenerationStatisticsTest {
 		base.setKnownSolutionProximity(baseKnownSolutionProximity);
 
 		GenerationStatistics generationStatisticsEqualToBase = new GenerationStatistics();
-		generationStatisticsEqualToBase.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsEqualToBase, baseId);
 		generationStatisticsEqualToBase.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsEqualToBase.setGeneration(baseGeneration);
 		generationStatisticsEqualToBase.setExecutionTime(baseExecutionTime);
@@ -169,7 +170,7 @@ public class GenerationStatisticsTest {
 		assertEquals(base, generationStatisticsEqualToBase);
 
 		GenerationStatistics generationStatisticsWithDifferentId = new GenerationStatistics();
-		generationStatisticsWithDifferentId.setId("54321");
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentId, new ObjectId());
 		generationStatisticsWithDifferentId.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentId.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentId.setExecutionTime(baseExecutionTime);
@@ -179,9 +180,8 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentId));
 
 		GenerationStatistics generationStatisticsWithDifferentExecutionStatistics = new GenerationStatistics();
-		generationStatisticsWithDifferentExecutionStatistics.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentExecutionStatistics, baseId);
 		ExecutionStatistics differentExecutionStatistics = new ExecutionStatistics();
-		differentExecutionStatistics.setId("2");
 		generationStatisticsWithDifferentExecutionStatistics.setExecutionStatistics(differentExecutionStatistics);
 		generationStatisticsWithDifferentExecutionStatistics.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentExecutionStatistics.setExecutionTime(baseExecutionTime);
@@ -191,7 +191,7 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentExecutionStatistics));
 
 		GenerationStatistics generationStatisticsWithDifferentGeneration = new GenerationStatistics();
-		generationStatisticsWithDifferentGeneration.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentGeneration, baseId);
 		generationStatisticsWithDifferentGeneration.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentGeneration.setGeneration(2);
 		generationStatisticsWithDifferentGeneration.setExecutionTime(baseExecutionTime);
@@ -201,7 +201,7 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentGeneration));
 
 		GenerationStatistics generationStatisticsWithDifferentExecutionTime = new GenerationStatistics();
-		generationStatisticsWithDifferentExecutionTime.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentExecutionTime, baseId);
 		generationStatisticsWithDifferentExecutionTime.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentExecutionTime.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentExecutionTime.setExecutionTime(111);
@@ -211,7 +211,7 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentExecutionTime));
 
 		GenerationStatistics generationStatisticsWithDifferentBestFitness = new GenerationStatistics();
-		generationStatisticsWithDifferentBestFitness.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentBestFitness, baseId);
 		generationStatisticsWithDifferentBestFitness.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentBestFitness.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentBestFitness.setExecutionTime(baseExecutionTime);
@@ -221,7 +221,7 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentBestFitness));
 
 		GenerationStatistics generationStatisticsWithDifferentAverageFitness = new GenerationStatistics();
-		generationStatisticsWithDifferentAverageFitness.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentAverageFitness, baseId);
 		generationStatisticsWithDifferentAverageFitness.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentAverageFitness.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentAverageFitness.setExecutionTime(baseExecutionTime);
@@ -231,7 +231,7 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentAverageFitness));
 
 		GenerationStatistics generationStatisticsWithDifferentKnownSolutionProximity = new GenerationStatistics();
-		generationStatisticsWithDifferentKnownSolutionProximity.setId(baseId);
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentKnownSolutionProximity, baseId);
 		generationStatisticsWithDifferentKnownSolutionProximity.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentKnownSolutionProximity.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentKnownSolutionProximity.setExecutionTime(baseExecutionTime);
@@ -241,7 +241,9 @@ public class GenerationStatisticsTest {
 		assertFalse(base.equals(generationStatisticsWithDifferentKnownSolutionProximity));
 
 		GenerationStatistics generationStatisticsWithNullPropertiesA = new GenerationStatistics();
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithNullPropertiesA, null);
 		GenerationStatistics generationStatisticsWithNullPropertiesB = new GenerationStatistics();
+		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithNullPropertiesB, null);
 		assertEquals(generationStatisticsWithNullPropertiesA, generationStatisticsWithNullPropertiesB);
 	}
 }
