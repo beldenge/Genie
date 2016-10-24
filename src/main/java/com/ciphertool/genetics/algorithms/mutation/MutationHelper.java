@@ -28,6 +28,10 @@ public class MutationHelper {
 	private double	mutationCountFactor;
 
 	public int getNumMutations(int numGenes) {
+		return ThreadLocalRandom.current().nextInt(Math.min(maxMutations, numGenes)) + 1;
+	}
+
+	public int getNumMutationsDistributed(int numGenes) {
 		int max = Math.min(maxMutations, numGenes);
 
 		for (int i = 1; i <= max; i++) {
