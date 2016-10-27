@@ -31,6 +31,7 @@ import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationHelper;
 import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
@@ -42,7 +43,8 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 	private GeneDao			geneDao;
 
 	@Override
-	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
+	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
+		Chromosome original = chromosome.clone();
 		List<Object> availableKeys;
 		Map<Object, Gene> originalGenes;
 		int numMutations;
@@ -68,6 +70,8 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 			// Replace that map value with a randomly generated Gene
 			chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
 		}
+
+		return !original.equals(chromosome);
 	}
 
 	@Override

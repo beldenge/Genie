@@ -50,7 +50,7 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	private FitnessEvaluator	fitnessEvaluator;
 
 	@Override
-	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
+	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
 		double originalFitness = chromosome.getFitness();
 		double mutationFitness = 0.0;
 
@@ -90,12 +90,13 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 			} else {
 				chromosome.setFitness(mutationFitness);
 
-				return;
+				return true;
 			}
 		}
 
 		log.debug("Unable to find guaranteed better fitness via mutation after " + attempts
 				+ " attempts.  Returning clone of parent.");
+		return false;
 	}
 
 	@Override

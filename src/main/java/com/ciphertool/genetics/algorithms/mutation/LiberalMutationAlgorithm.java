@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.GeneDao;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.util.KeylessChromosomeHelper;
@@ -41,10 +42,12 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 	private static final int		MAX_FIND_ATTEMPTS	= 1000;
 
 	@Override
-	public void mutateChromosome(KeylessChromosome chromosome) {
+	public boolean mutateChromosome(KeylessChromosome chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
+
+		Chromosome original = chromosome.clone();
 
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
@@ -61,6 +64,8 @@ public class LiberalMutationAlgorithm implements NonUniformMutationAlgorithm<Key
 			// Keep track of the mutated indices
 			mutateRandomGene(chromosome, availableIndices);
 		}
+
+		return !original.equals(chromosome);
 	}
 
 	/**

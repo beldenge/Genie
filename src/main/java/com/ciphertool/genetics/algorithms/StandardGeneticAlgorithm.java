@@ -88,16 +88,13 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 		@SuppressWarnings("unchecked")
 		@Override
 		public Void call() throws Exception {
-			Chromosome original = chromosome.clone();
-
 			/*
 			 * Mutate a gene within the Chromosome. The original Chromosome has been cloned.
 			 */
-			mutationAlgorithm.mutateChromosome(chromosome);
-
-			if (!chromosome.equals(original)) {
+			if (mutationAlgorithm.mutateChromosome(chromosome)) {
 				mutations.incrementAndGet();
 			}
+
 			return null;
 		}
 	}

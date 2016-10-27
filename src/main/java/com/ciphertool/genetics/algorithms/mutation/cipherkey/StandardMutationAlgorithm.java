@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class StandardMutationAlgorithm implements UniformMutationAlgorithm<KeyedChromosome<Object>> {
@@ -34,11 +35,12 @@ public class StandardMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 	private GeneDao	geneDao;
 
 	@Override
-	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
+	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
 		if (mutationRate == null) {
 			throw new IllegalStateException("The mutationRate cannot be null.");
 		}
 
+		Chromosome original = chromosome.clone();
 		Set<Object> keys = chromosome.getGenes().keySet();
 
 		for (Object key : keys) {
@@ -47,6 +49,8 @@ public class StandardMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 				chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
 			}
 		}
+
+		return !original.equals(chromosome);
 	}
 
 	@Override

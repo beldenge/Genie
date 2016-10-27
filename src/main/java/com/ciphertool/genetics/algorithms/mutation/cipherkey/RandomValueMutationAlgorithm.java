@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm<KeyedChromosome<Object>> {
@@ -39,10 +40,12 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 	private Integer			maxMutationsPerChromosome;
 
 	@Override
-	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
+	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
+
+		Chromosome original = chromosome.clone();
 
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
@@ -61,6 +64,8 @@ public class RandomValueMutationAlgorithm implements NonUniformMutationAlgorithm
 			// Keep track of the mutated keys
 			mutateRandomGene(chromosome, modifiableKeys);
 		}
+
+		return !original.equals(chromosome);
 	}
 
 	/**

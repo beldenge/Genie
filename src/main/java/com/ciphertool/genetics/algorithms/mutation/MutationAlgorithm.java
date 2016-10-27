@@ -28,6 +28,7 @@ public interface MutationAlgorithm<T extends Chromosome> extends Selectable {
 	 * 
 	 * @param chromosome
 	 *            the Chromosome to mutate
+	 * @return whether the mutation was successful
 	 */
-	public void mutateChromosome(T chromosome);
+	public boolean mutateChromosome(T chromosome);
 }

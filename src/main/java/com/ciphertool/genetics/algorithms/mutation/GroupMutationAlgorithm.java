@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.dao.VariableLengthGeneDao;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeylessChromosome;
 import com.ciphertool.genetics.entities.VariableLengthGene;
@@ -41,10 +42,12 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 	private Integer					maxMutationsPerChromosome;
 
 	@Override
-	public void mutateChromosome(KeylessChromosome chromosome) {
+	public boolean mutateChromosome(KeylessChromosome chromosome) {
 		if (maxMutationsPerChromosome == null) {
 			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
 		}
+
+		Chromosome original = chromosome.clone();
 
 		/*
 		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
@@ -68,6 +71,8 @@ public class GroupMutationAlgorithm implements NonUniformMutationAlgorithm<Keyle
 			// Keep track of the mutated indices
 			mutateRandomGeneGroup(chromosome, availableIndices, maxGenesToMutate);
 		}
+
+		return !original.equals(chromosome);
 	}
 
 	/**

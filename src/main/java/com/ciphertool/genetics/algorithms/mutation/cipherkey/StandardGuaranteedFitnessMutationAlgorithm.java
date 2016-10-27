@@ -46,11 +46,12 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	private FitnessEvaluator	fitnessEvaluator;
 
 	@Override
-	public void mutateChromosome(KeyedChromosome<Object> chromosome) {
+	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
 		if (mutationRate == null) {
 			throw new IllegalStateException("The mutationRate cannot be null.");
 		}
 
+		boolean mutated = false;
 		Set<Object> keys = chromosome.getGenes().keySet();
 
 		for (Object key : keys) {
@@ -78,8 +79,14 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 
 					// Test if the replacement is better, otherwise continue looping
 				} while (fitnessEvaluator.evaluate(chromosome) < originalFitness);
+
+				if (attempts < maxAttempts) {
+					mutated = true;
+				}
 			}
 		}
+
+		return mutated;
 	}
 
 	@Override
