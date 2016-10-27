@@ -1,0 +1,190 @@
+/**
+ * Copyright 2015 George Belden
+ * 
+ * This file is part of Genie.
+ * 
+ * Genie is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ * 
+ * Genie is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * Genie. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package com.ciphertool.genetics.algorithms.mutation.keyless;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Required;
+
+import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
+import com.ciphertool.genetics.dao.SequenceDao;
+import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.KeylessChromosome;
+import com.ciphertool.genetics.entities.Sequence;
+import com.ciphertool.genetics.entities.VariableLengthGene;
+
+public class SingleSequenceMutationAlgorithm implements NonUniformMutationAlgorithm<KeylessChromosome> {
+	private static Logger		log					= LoggerFactory.getLogger(SingleSequenceMutationAlgorithm.class);
+	private SequenceDao			sequenceDao;
+	private Integer				maxMutationsPerChromosome;
+
+	private static final int	MAX_FIND_ATTEMPTS	= 1000;
+
+	@Override
+	public boolean mutateChromosome(KeylessChromosome chromosome) {
+		if (maxMutationsPerChromosome == null) {
+			throw new IllegalStateException("The maxMutationsPerChromosome cannot be null.");
+		}
+
+		Chromosome original = chromosome.clone();
+
+		/*
+		 * Choose a random number of mutations constrained by the configurable max and the total number of genes
+		 */
+		int numMutations = (int) (ThreadLocalRandom.current().nextDouble()
+				* Math.min(maxMutationsPerChromosome, chromosome.getGenes().size())) + 1;
+
+		List<Integer> availableIndices = new ArrayList<Integer>();
+		for (int i = 0; i < chromosome.getGenes().size(); i++) {
+			availableIndices.add(i);
+		}
+
+		for (int i = 0; i < numMutations; i++) {
+			// Keep track of the mutated indices
+			mutateRandomGene(chromosome, availableIndices);
+		}
+
+		return !original.equals(chromosome);
+	}
+
+	/**
+	 * Performs a genetic mutation of a random Gene of the supplied Chromosome
+	 * 
+	 * @param chromosome
+	 *            the Chromosome to mutate
+	 * @param availableIndices
+	 *            the List of available indices to mutate
+	 */
+	protected void mutateRandomGene(KeylessChromosome chromosome, List<Integer> availableIndices) {
+		if (availableIndices == null || availableIndices.isEmpty()) {
+			log.warn("List of available indices is null or empty.  Unable to find a Gene to mutate.  Returning null.");
+
+			return;
+		}
+
+		/*
+		 * We don't want to reuse an index, so we get one from the List of indices which are still available
+		 */
+		int randomIndex = availableIndices.get((int) (ThreadLocalRandom.current().nextDouble()
+				* availableIndices.size()));
+
+		mutateGene(chromosome, randomIndex);
+
+		availableIndices.remove(availableIndices.indexOf(randomIndex));
+	}
+
+	/**
+	 * Performs a genetic mutation of a specific Gene of the supplied Chromosome
+	 * 
+	 * @param chromosome
+	 *            the Chromosome to mutate
+	 * @param index
+	 *            the index of the Gene to mutate
+	 */
+	protected void mutateGene(KeylessChromosome chromosome, int index) {
+		if (index > chromosome.getGenes().size() - 1) {
+			log.info("Attempted to mutate a Gene in Chromosome with index of " + index
+					+ " (zero-indexed), but the size is only " + chromosome.getGenes().size() + ".  Cannot continue.");
+
+			return;
+		}
+
+		mutateRandomSequence((VariableLengthGene) chromosome.getGenes().get(index));
+	}
+
+	/**
+	 * Performs a genetic mutation of a random Sequence of the supplied Gene
+	 * 
+	 * @param gene
+	 *            the Gene to mutate
+	 */
+	protected void mutateRandomSequence(VariableLengthGene gene) {
+		int randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * gene.size());
+
+		mutateSequence(gene, randomIndex);
+	}
+
+	/**
+	 * Performs a genetic mutation of a specific Sequence of the supplied Gene
+	 * 
+	 * @param gene
+	 *            the Gene to mutate
+	 * @param index
+	 *            the index of the Sequence to mutate
+	 */
+	protected void mutateSequence(VariableLengthGene gene, int index) {
+		if (index > gene.size() - 1) {
+			log.info("Attempted to mutate a sequence in Gene with index of " + index
+					+ " (zero-indexed), but the size is only " + gene.size() + ".  Cannot continue.");
+
+			return;
+		}
+
+		Sequence oldSequence = gene.getSequences().get(index);
+		Sequence newSequence = null;
+
+		int ciphertextIndex = oldSequence.getSequenceId();
+		int attempts = 0;
+
+		/*
+		 * Loop just in case the value of the new Sequence is the same as the existing value, since that would defeat
+		 * the purpose of the mutation.
+		 */
+		do {
+			newSequence = sequenceDao.findRandomSequence(gene, ciphertextIndex);
+
+			attempts++;
+
+			if (attempts >= MAX_FIND_ATTEMPTS) {
+				if (log.isDebugEnabled()) {
+					log.debug("Unable to find a different value for Sequence " + oldSequence + " after " + attempts
+							+ " attempts.  Breaking out of the loop.");
+				}
+
+				return;
+			}
+		} while (newSequence == null || oldSequence.getValue().equals(newSequence.getValue()));
+
+		gene.replaceSequence(index, newSequence);
+	}
+
+	/**
+	 * @param sequenceDao
+	 *            the sequenceDao to set
+	 */
+	@Required
+	public void setSequenceDao(SequenceDao sequenceDao) {
+		this.sequenceDao = sequenceDao;
+	}
+
+	@Override
+	public void setMaxMutationsPerChromosome(Integer maxMutationsPerChromosome) {
+		this.maxMutationsPerChromosome = maxMutationsPerChromosome;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "Single Sequence";
+	}
+}

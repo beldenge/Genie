@@ -28,10 +28,10 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-import com.ciphertool.genetics.algorithms.crossover.ConservativeCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
-import com.ciphertool.genetics.algorithms.mutation.ConservativeMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.keyless.ConservativeCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.keyless.ConservativeMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.ProbabilisticSelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;
