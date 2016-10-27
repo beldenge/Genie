@@ -17,24 +17,32 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.crossover.keyed;
+package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
-public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
+public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
+		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
+	private Logger										log						= LoggerFactory.getLogger(getClass());
+
+	private int											maxAttempts;
 	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
 	private boolean										mutateDuringCrossover	= false;
 	private int											maxGenerations;
+	private FitnessEvaluator							fitnessEvaluator;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -64,22 +72,41 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 		Random generator = new Random();
 		Set<Object> availableKeys = parentA.getGenes().keySet();
 		Object[] keys = availableKeys.toArray();
+		KeyedChromosome<Object> child;
 
-		// Get a random map key
-		int randomIndex = generator.nextInt(keys.length);
+		double originalFitness = parentA.getFitness();
+		int attempts = 0;
+		int randomIndex;
 
-		// Replace all the Genes from the map key to the end of the array
-		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
-		for (int i = 0; i <= randomIndex; i++) {
-			Object nextKey = (Object) keys[i];
+		do {
+			attempts++;
 
-			if (null == parentB.getGenes().get(nextKey)) {
-				throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
-						+ ", but no such key was found.  Cannot continue.");
+			// Get a random map key
+			randomIndex = generator.nextInt(keys.length);
+
+			// Replace all the Genes from the map key to the end of the array
+			child = (KeyedChromosome<Object>) parentA.clone();
+			for (int i = 0; i <= randomIndex; i++) {
+				Object nextKey = (Object) keys[i];
+
+				if (null == parentB.getGenes().get(nextKey)) {
+					throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
+							+ ", but no such key was found.  Cannot continue.");
+				}
+
+				child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
 			}
 
-			child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
-		}
+			if (attempts >= maxAttempts) {
+				// revert crossover
+				child = (KeyedChromosome<Object>) parentA.clone();
+
+				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
+						+ " attempts.  Returning clone of first parent.");
+
+				break;
+			}
+		} while (fitnessEvaluator.evaluate(child) < originalFitness);
 
 		if (mutateDuringCrossover) {
 			mutationAlgorithm.mutateChromosome(child);
@@ -108,7 +135,7 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 
 	@Override
 	public String getDisplayName() {
-		return "Random Single Point";
+		return "Random Single Point Guaranteed";
 	}
 
 	/**
@@ -120,8 +147,27 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 		this.maxGenerations = maxGenerations;
 	}
 
+	/**
+	 * @param fitnessEvaluator
+	 *            the fitnessEvaluator to set
+	 */
+	@Required
+	@Override
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
+		this.fitnessEvaluator = fitnessEvaluator;
+	}
+
 	@Override
 	public int numberOfOffspring() {
 		return 1;
+	}
+
+	/**
+	 * @param maxAttempts
+	 *            the maxAttempts to set
+	 */
+	@Required
+	public void setMaxAttempts(int maxAttempts) {
+		this.maxAttempts = maxAttempts;
 	}
 }

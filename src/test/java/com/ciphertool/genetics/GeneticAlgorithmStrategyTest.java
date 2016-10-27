@@ -29,9 +29,9 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
-import com.ciphertool.genetics.algorithms.crossover.keyed.EqualOpportunityGeneCrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.impl.EqualOpportunityGeneCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.algorithms.mutation.keyed.MultipleMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.impl.MultipleMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.ProbabilisticSelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;

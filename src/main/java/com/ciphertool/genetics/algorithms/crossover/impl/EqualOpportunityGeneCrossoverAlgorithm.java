@@ -17,29 +17,20 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.crossover.keyed;
+package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.Coin;
 
-public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
-		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private Logger										log						= LoggerFactory.getLogger(getClass());
-
-	private int											maxAttempts;
-
-	private FitnessEvaluator							fitnessEvaluator;
+public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
 	private boolean										mutateDuringCrossover	= false;
 	private int											maxGenerations;
@@ -71,30 +62,13 @@ public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 
 	@SuppressWarnings("unchecked")
 	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		KeyedChromosome<Object> child;
-		double originalFitness = parentA.getFitness();
-		int attempts = 0;
+		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
 
-		do {
-			attempts++;
-			child = (KeyedChromosome<Object>) parentA.clone();
-
-			for (Object key : parentA.getGenes().keySet()) {
-				if (coin.flip()) {
-					child.replaceGene(key, parentB.getGenes().get(key).clone());
-				}
+		for (Object key : parentA.getGenes().keySet()) {
+			if (coin.flip()) {
+				child.replaceGene(key, parentB.getGenes().get(key).clone());
 			}
-
-			if (attempts >= maxAttempts) {
-				// revert crossover
-				child = (KeyedChromosome<Object>) parentA.clone();
-
-				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
-						+ " attempts.  Returning clone of first parent.");
-
-				break;
-			}
-		} while (fitnessEvaluator.evaluate(child) < originalFitness);
+		}
 
 		if (mutateDuringCrossover) {
 			mutationAlgorithm.mutateChromosome(child);
@@ -132,7 +106,7 @@ public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 
 	@Override
 	public String getDisplayName() {
-		return "Equal Opportunity Guaranteed";
+		return "Equal Opportunity";
 	}
 
 	/**
@@ -144,27 +118,8 @@ public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
 		this.maxGenerations = maxGenerations;
 	}
 
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
-	@Required
-	@Override
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		this.fitnessEvaluator = fitnessEvaluator;
-	}
-
 	@Override
 	public int numberOfOffspring() {
 		return 1;
-	}
-
-	/**
-	 * @param maxAttempts
-	 *            the maxAttempts to set
-	 */
-	@Required
-	public void setMaxAttempts(int maxAttempts) {
-		this.maxAttempts = maxAttempts;
 	}
 }

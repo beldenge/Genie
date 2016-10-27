@@ -17,10 +17,12 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.crossover.keyed;
+package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Required;
 
@@ -28,14 +30,11 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
-import com.ciphertool.genetics.util.Coin;
 
-public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
+public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
 	private boolean										mutateDuringCrossover	= false;
 	private int											maxGenerations;
-
-	private Coin										coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -62,12 +61,24 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 
 	@SuppressWarnings("unchecked")
 	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
+		Random generator = new Random();
+		Set<Object> availableKeys = parentA.getGenes().keySet();
+		Object[] keys = availableKeys.toArray();
 
-		for (Object key : parentA.getGenes().keySet()) {
-			if (coin.flip()) {
-				child.replaceGene(key, parentB.getGenes().get(key).clone());
+		// Get a random map key
+		int randomIndex = generator.nextInt(keys.length);
+
+		// Replace all the Genes from the map key to the end of the array
+		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
+		for (int i = 0; i <= randomIndex; i++) {
+			Object nextKey = (Object) keys[i];
+
+			if (null == parentB.getGenes().get(nextKey)) {
+				throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
+						+ ", but no such key was found.  Cannot continue.");
 			}
+
+			child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
 		}
 
 		if (mutateDuringCrossover) {
@@ -95,18 +106,9 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 
-	/**
-	 * @param coin
-	 *            the coin to set
-	 */
-	@Required
-	public void setCoin(Coin coin) {
-		this.coin = coin;
-	}
-
 	@Override
 	public String getDisplayName() {
-		return "Equal Opportunity";
+		return "Random Single Point";
 	}
 
 	/**

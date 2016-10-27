@@ -17,32 +17,25 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.crossover.keyed;
+package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
-import com.ciphertool.genetics.fitness.FitnessEvaluator;
+import com.ciphertool.genetics.util.Coin;
 
-public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
-		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private Logger										log						= LoggerFactory.getLogger(getClass());
-
-	private int											maxAttempts;
+public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
 	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
 	private boolean										mutateDuringCrossover	= false;
 	private int											maxGenerations;
-	private FitnessEvaluator							fitnessEvaluator;
+
+	private Coin										coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
@@ -51,13 +44,10 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
-
-		KeyedChromosome<Object> child = performCrossover(parentA, parentB);
+		List<KeyedChromosome<Object>> children = performCrossover(parentA, parentB);
 
 		// The Chromosome could be null if it's identical to one of its parents
-		if (child != null) {
-			children.add(child);
+		for (KeyedChromosome<Object> child : children) {
 			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
 					parentB.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
@@ -68,51 +58,27 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 	}
 
 	@SuppressWarnings("unchecked")
-	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		Random generator = new Random();
-		Set<Object> availableKeys = parentA.getGenes().keySet();
-		Object[] keys = availableKeys.toArray();
-		KeyedChromosome<Object> child;
+	protected List<KeyedChromosome<Object>> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
+		KeyedChromosome<Object> childA = (KeyedChromosome<Object>) parentA.clone();
+		KeyedChromosome<Object> childB = (KeyedChromosome<Object>) parentB.clone();
 
-		double originalFitness = parentA.getFitness();
-		int attempts = 0;
-		int randomIndex;
-
-		do {
-			attempts++;
-
-			// Get a random map key
-			randomIndex = generator.nextInt(keys.length);
-
-			// Replace all the Genes from the map key to the end of the array
-			child = (KeyedChromosome<Object>) parentA.clone();
-			for (int i = 0; i <= randomIndex; i++) {
-				Object nextKey = (Object) keys[i];
-
-				if (null == parentB.getGenes().get(nextKey)) {
-					throw new IllegalStateException("Expected second parent to have a Gene with key " + nextKey
-							+ ", but no such key was found.  Cannot continue.");
-				}
-
-				child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
+		for (Object key : parentA.getGenes().keySet()) {
+			if (coin.flip()) {
+				childA.replaceGene(key, parentB.getGenes().get(key).clone());
+				childB.replaceGene(key, parentA.getGenes().get(key).clone());
 			}
-
-			if (attempts >= maxAttempts) {
-				// revert crossover
-				child = (KeyedChromosome<Object>) parentA.clone();
-
-				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
-						+ " attempts.  Returning clone of first parent.");
-
-				break;
-			}
-		} while (fitnessEvaluator.evaluate(child) < originalFitness);
-
-		if (mutateDuringCrossover) {
-			mutationAlgorithm.mutateChromosome(child);
 		}
 
-		return child;
+		if (mutateDuringCrossover) {
+			mutationAlgorithm.mutateChromosome(childA);
+			mutationAlgorithm.mutateChromosome(childB);
+		}
+
+		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
+		children.add(childA);
+		children.add(childB);
+
+		return children;
 	}
 
 	/**
@@ -133,9 +99,18 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 
+	/**
+	 * @param coin
+	 *            the coin to set
+	 */
+	@Required
+	public void setCoin(Coin coin) {
+		this.coin = coin;
+	}
+
 	@Override
 	public String getDisplayName() {
-		return "Random Single Point Guaranteed";
+		return "Equal Opportunity Swap";
 	}
 
 	/**
@@ -147,27 +122,8 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 		this.maxGenerations = maxGenerations;
 	}
 
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
-	@Required
-	@Override
-	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
-		this.fitnessEvaluator = fitnessEvaluator;
-	}
-
 	@Override
 	public int numberOfOffspring() {
-		return 1;
-	}
-
-	/**
-	 * @param maxAttempts
-	 *            the maxAttempts to set
-	 */
-	@Required
-	public void setMaxAttempts(int maxAttempts) {
-		this.maxAttempts = maxAttempts;
+		return 2;
 	}
 }

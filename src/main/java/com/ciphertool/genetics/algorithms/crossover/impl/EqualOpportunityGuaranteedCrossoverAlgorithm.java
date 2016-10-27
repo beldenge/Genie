@@ -17,20 +17,29 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.crossover.keyed;
+package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.Coin;
 
-public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
+public class EqualOpportunityGuaranteedCrossoverAlgorithm implements
+		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
+	private Logger										log						= LoggerFactory.getLogger(getClass());
+
+	private int											maxAttempts;
+
+	private FitnessEvaluator							fitnessEvaluator;
 	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
 	private boolean										mutateDuringCrossover	= false;
 	private int											maxGenerations;
@@ -44,10 +53,13 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<KeyedChromosome<Object>> children = performCrossover(parentA, parentB);
+		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
+
+		KeyedChromosome<Object> child = performCrossover(parentA, parentB);
 
 		// The Chromosome could be null if it's identical to one of its parents
-		for (KeyedChromosome<Object> child : children) {
+		if (child != null) {
+			children.add(child);
 			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
 					parentB.getAncestry(), maxGenerations));
 			parentA.increaseNumberOfChildren();
@@ -58,27 +70,37 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<KeyedChromosome<Object>> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		KeyedChromosome<Object> childA = (KeyedChromosome<Object>) parentA.clone();
-		KeyedChromosome<Object> childB = (KeyedChromosome<Object>) parentB.clone();
+	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
+		KeyedChromosome<Object> child;
+		double originalFitness = parentA.getFitness();
+		int attempts = 0;
 
-		for (Object key : parentA.getGenes().keySet()) {
-			if (coin.flip()) {
-				childA.replaceGene(key, parentB.getGenes().get(key).clone());
-				childB.replaceGene(key, parentA.getGenes().get(key).clone());
+		do {
+			attempts++;
+			child = (KeyedChromosome<Object>) parentA.clone();
+
+			for (Object key : parentA.getGenes().keySet()) {
+				if (coin.flip()) {
+					child.replaceGene(key, parentB.getGenes().get(key).clone());
+				}
 			}
-		}
+
+			if (attempts >= maxAttempts) {
+				// revert crossover
+				child = (KeyedChromosome<Object>) parentA.clone();
+
+				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
+						+ " attempts.  Returning clone of first parent.");
+
+				break;
+			}
+		} while (fitnessEvaluator.evaluate(child) < originalFitness);
 
 		if (mutateDuringCrossover) {
-			mutationAlgorithm.mutateChromosome(childA);
-			mutationAlgorithm.mutateChromosome(childB);
+			mutationAlgorithm.mutateChromosome(child);
 		}
 
-		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
-		children.add(childA);
-		children.add(childB);
-
-		return children;
+		return child;
 	}
 
 	/**
@@ -110,7 +132,7 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 
 	@Override
 	public String getDisplayName() {
-		return "Equal Opportunity Swap";
+		return "Equal Opportunity Guaranteed";
 	}
 
 	/**
@@ -122,8 +144,27 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 		this.maxGenerations = maxGenerations;
 	}
 
+	/**
+	 * @param fitnessEvaluator
+	 *            the fitnessEvaluator to set
+	 */
+	@Required
+	@Override
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
+		this.fitnessEvaluator = fitnessEvaluator;
+	}
+
 	@Override
 	public int numberOfOffspring() {
-		return 2;
+		return 1;
+	}
+
+	/**
+	 * @param maxAttempts
+	 *            the maxAttempts to set
+	 */
+	@Required
+	public void setMaxAttempts(int maxAttempts) {
+		this.maxAttempts = maxAttempts;
 	}
 }

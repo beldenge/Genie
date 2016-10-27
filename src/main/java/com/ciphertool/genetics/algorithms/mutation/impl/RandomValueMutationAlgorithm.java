@@ -17,7 +17,7 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.mutation.keyed;
+package com.ciphertool.genetics.algorithms.mutation.impl;
 
 import java.util.HashSet;
 import java.util.Random;

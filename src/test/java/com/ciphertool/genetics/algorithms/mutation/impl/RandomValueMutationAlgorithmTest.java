@@ -17,7 +17,7 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics.algorithms.mutation.keyed;
+package com.ciphertool.genetics.algorithms.mutation.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -48,7 +48,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.springframework.util.ReflectionUtils;
 
-import com.ciphertool.genetics.algorithms.mutation.keyed.RandomValueMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.impl.RandomValueMutationAlgorithm;
 import com.ciphertool.genetics.dao.GeneDao;
 import com.ciphertool.genetics.dao.VariableLengthGeneDao;
 import com.ciphertool.genetics.entities.Chromosome;
