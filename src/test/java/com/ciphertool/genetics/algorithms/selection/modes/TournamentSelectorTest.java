@@ -39,7 +39,7 @@ import org.slf4j.Logger;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.mocks.MockKeylessChromosome;
+import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class TournamentSelectorTest {
 	private static TournamentSelector	tournamentSelector;
@@ -94,16 +94,16 @@ public class TournamentSelectorTest {
 	public void testGetNextIndex() {
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(2.0);
 		individuals.add(chromosome1);
 
 		Double bestFitness = 3.0;
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(bestFitness);
 		individuals.add(chromosome2);
 
-		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
 		chromosome3.setFitness(1.0);
 		individuals.add(chromosome3);
 
@@ -133,16 +133,16 @@ public class TournamentSelectorTest {
 	public void testGetNextIndexWithNullTotalFitness() {
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(2.0);
 		individuals.add(chromosome1);
 
 		Double bestFitness = 3.0;
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(bestFitness);
 		individuals.add(chromosome2);
 
-		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
 		chromosome3.setFitness(1.0);
 		individuals.add(chromosome3);
 

@@ -59,7 +59,6 @@ import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
-import com.ciphertool.genetics.mocks.MockKeylessChromosome;
 
 public class MultigenerationalGeneticAlgorithmTest {
 	private static final double DEFAULT_FITNESS_VALUE = 100.0;
@@ -292,7 +291,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 		for (int i = 0; i < initialPopulationSize; i++) {
-			individuals.add(new MockKeylessChromosome());
+			individuals.add(new MockKeyedChromosome());
 		}
 
 		when(populationMock.selectIndex()).thenReturn(index);
@@ -332,7 +331,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockKeylessChromosome();
+		Chromosome chromosomeToReturn = new MockKeyedChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(Arrays.asList(chromosomeToReturn));
 
 		ExecutionStatistics executionStatistics = new ExecutionStatistics();
@@ -521,7 +520,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		int initialPopulationSize = 50;
 
 		for (int i = 0; i < initialPopulationSize; i++) {
-			population.addIndividual(new MockKeylessChromosome());
+			population.addIndividual(new MockKeyedChromosome());
 		}
 
 		multigenerationalGeneticAlgorithm.setPopulation(population);
@@ -532,7 +531,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, multigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockKeylessChromosome();
+		Chromosome chromosomeToReturn = new MockKeyedChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(Arrays.asList(chromosomeToReturn));
 
 		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
@@ -574,7 +573,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 
 		StandardPopulation population = new StandardPopulation();
 
-		Chromosome chromosome = new MockKeylessChromosome();
+		Chromosome chromosome = new MockKeyedChromosome();
 		population.addIndividual(chromosome);
 		multigenerationalGeneticAlgorithm.setPopulation(population);
 

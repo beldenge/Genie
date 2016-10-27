@@ -52,7 +52,7 @@ import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.AscendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockBreeder;
-import com.ciphertool.genetics.mocks.MockKeylessChromosome;
+import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class PopulationTest {
 	private static ThreadPoolTaskExecutor	taskExecutor			= new ThreadPoolTaskExecutor();
@@ -219,7 +219,7 @@ public class PopulationTest {
 		StandardPopulation population = new StandardPopulation();
 		StandardPopulation.GeneratorTask generatorTask = population.new GeneratorTask();
 
-		MockKeylessChromosome chromosomeToReturn = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeToReturn = new MockKeyedChromosome();
 		Breeder mockBreeder = mock(Breeder.class);
 		when(mockBreeder.breed()).thenReturn(chromosomeToReturn);
 		population.setBreeder(mockBreeder);
@@ -242,9 +242,9 @@ public class PopulationTest {
 		int expectedPopulationSize = 10;
 
 		Breeder breederMock = mock(Breeder.class);
-		MockKeylessChromosome mockKeylessChromosome = new MockKeylessChromosome();
-		mockKeylessChromosome.setFitness(5.0);
-		when(breederMock.breed()).thenReturn(mockKeylessChromosome.clone());
+		MockKeyedChromosome mockKeyedChromosome = new MockKeyedChromosome();
+		mockKeyedChromosome.setFitness(5.0);
+		when(breederMock.breed()).thenReturn(mockKeyedChromosome.clone());
 		population.setBreeder(breederMock);
 
 		assertEquals(0, population.size());
@@ -259,7 +259,7 @@ public class PopulationTest {
 	@Test
 	public void testEvaluatorTask() {
 		StandardPopulation population = new StandardPopulation();
-		MockKeylessChromosome chromosomeToEvaluate = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeToEvaluate = new MockKeyedChromosome();
 
 		FitnessEvaluator mockEvaluator = mock(FitnessEvaluator.class);
 		Double fitnessToReturn = new Double(101.0);
@@ -287,21 +287,21 @@ public class PopulationTest {
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
-		MockKeylessChromosome chromosomeEvaluationNeeded1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded1 = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded1.setFitness(1.0);
 		population.addIndividual(chromosomeEvaluationNeeded1);
 		chromosomeEvaluationNeeded1.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosomeEvaluationNeeded2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded2 = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded2.setFitness(1.0);
 		population.addIndividual(chromosomeEvaluationNeeded2);
 		chromosomeEvaluationNeeded2.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosomeEvaluationNotNeeded1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded1 = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded1.setFitness(1.0);
 		population.addIndividual(chromosomeEvaluationNotNeeded1);
 
-		MockKeylessChromosome chromosomeEvaluationNotNeeded2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded2 = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded2.setFitness(1.0);
 		population.addIndividual(chromosomeEvaluationNotNeeded2);
 
@@ -331,21 +331,21 @@ public class PopulationTest {
 		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setFitnessEvaluator(fitnessEvaluatorMock);
 
-		MockKeylessChromosome chromosomeEvaluationNeeded1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded1 = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded1.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNeeded1);
 		chromosomeEvaluationNeeded1.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosomeEvaluationNeeded2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded2 = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded2.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNeeded2);
 		chromosomeEvaluationNeeded2.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosomeEvaluationNotNeeded1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded1 = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded1.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNotNeeded1);
 
-		MockKeylessChromosome chromosomeEvaluationNotNeeded2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded2 = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded2.setFitness(100.1);
 		population.addIndividual(chromosomeEvaluationNotNeeded2);
 
@@ -391,21 +391,21 @@ public class PopulationTest {
 		when(knownSolutionFitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		population.setKnownSolutionFitnessEvaluator(knownSolutionFitnessEvaluatorMock);
 
-		MockKeylessChromosome chromosomeEvaluationNeeded1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded1 = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded1.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNeeded1);
 		chromosomeEvaluationNeeded1.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosomeEvaluationNeeded2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded2 = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded2.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNeeded2);
 		chromosomeEvaluationNeeded2.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosomeEvaluationNotNeeded1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded1 = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded1.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNotNeeded1);
 
-		MockKeylessChromosome chromosomeEvaluationNotNeeded2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded2 = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded2.setFitness(100.1);
 		population.addIndividual(chromosomeEvaluationNotNeeded2);
 
@@ -441,19 +441,19 @@ public class PopulationTest {
 		StandardPopulation population = new StandardPopulation();
 		population.setLifespan(5);
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setAge(0);
 		population.addIndividual(chromosome1);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setAge(50);
 		population.addIndividual(chromosome2);
 
-		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
 		chromosome3.setAge(5);
 		population.addIndividual(chromosome3);
 
-		MockKeylessChromosome chromosome4 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome4 = new MockKeyedChromosome();
 		chromosome4.setAge(4);
 		population.addIndividual(chromosome4);
 
@@ -469,19 +469,19 @@ public class PopulationTest {
 		StandardPopulation population = new StandardPopulation();
 		population.setLifespan(-1);
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setAge(0);
 		population.addIndividual(chromosome1);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setAge(50);
 		population.addIndividual(chromosome2);
 
-		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
 		chromosome3.setAge(5);
 		population.addIndividual(chromosome3);
 
-		MockKeylessChromosome chromosome4 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome4 = new MockKeyedChromosome();
 		chromosome4.setAge(4);
 		population.addIndividual(chromosome4);
 
@@ -539,7 +539,7 @@ public class PopulationTest {
 		assertEquals(0, population.size());
 
 		// Add a chromosome that needs evaluation
-		MockKeylessChromosome chromosomeEvaluationNeeded = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded.setFitness(5.0);
 		chromosomeEvaluationNeeded.setEvaluationNeeded(true);
 		population.addIndividual(chromosomeEvaluationNeeded);
@@ -552,7 +552,7 @@ public class PopulationTest {
 		assertSame(chromosomeEvaluationNeeded, population.getIndividuals().get(0));
 
 		// Add a chromosome that doesn't need evaluation
-		MockKeylessChromosome chromosomeEvaluationNotNeeded = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded.setFitness(5.0);
 		population.addIndividual(chromosomeEvaluationNotNeeded);
 
@@ -568,12 +568,12 @@ public class PopulationTest {
 	public void testRemoveIndividual() {
 		StandardPopulation population = new StandardPopulation();
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(5.0);
 		population.addIndividual(chromosome1);
 		chromosome1.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(5.0);
 		population.addIndividual(chromosome2);
 
@@ -598,12 +598,12 @@ public class PopulationTest {
 	public void testClearIndividuals() {
 		StandardPopulation population = new StandardPopulation();
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(5.0);
 		population.addIndividual(chromosome1);
 		chromosome1.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(5.0);
 		population.addIndividual(chromosome2);
 
@@ -633,7 +633,7 @@ public class PopulationTest {
 		assertEquals(0, population.size());
 
 		// Add a chromosome that needs evaluation
-		MockKeylessChromosome chromosomeEvaluationNeeded = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded.setFitness(5.0);
 		chromosomeEvaluationNeeded.setEvaluationNeeded(true);
 		population.addIndividualAsIneligible(chromosomeEvaluationNeeded);
@@ -648,7 +648,7 @@ public class PopulationTest {
 		assertSame(chromosomeEvaluationNeeded, ineligibleForReproductionFromObject.get(0));
 
 		// Add a chromosome that doesn't need evaluation
-		MockKeylessChromosome chromosomeEvaluationNotNeeded = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded.setFitness(5.0);
 		population.addIndividualAsIneligible(chromosomeEvaluationNotNeeded);
 
@@ -670,12 +670,12 @@ public class PopulationTest {
 		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
 		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(5.0);
 		population.addIndividual(chromosome1);
 		chromosome1.setEvaluationNeeded(true);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(5.0);
 		population.addIndividual(chromosome2);
 
@@ -729,13 +729,13 @@ public class PopulationTest {
 		assertEquals(0, population.size());
 
 		// Add a chromosome that needs evaluation
-		MockKeylessChromosome chromosomeEvaluationNeeded = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNeeded = new MockKeyedChromosome();
 		chromosomeEvaluationNeeded.setFitness(5.0);
 		chromosomeEvaluationNeeded.setEvaluationNeeded(true);
 		population.addIndividualAsIneligible(chromosomeEvaluationNeeded);
 
 		// Add a chromosome that doesn't need evaluation
-		MockKeylessChromosome chromosomeEvaluationNotNeeded = new MockKeylessChromosome();
+		MockKeyedChromosome chromosomeEvaluationNotNeeded = new MockKeyedChromosome();
 		chromosomeEvaluationNotNeeded.setFitness(5.0);
 		population.addIndividualAsIneligible(chromosomeEvaluationNotNeeded);
 
@@ -775,11 +775,11 @@ public class PopulationTest {
 
 		assertEquals(0, population.size());
 
-		population.addIndividual(new MockKeylessChromosome());
+		population.addIndividual(new MockKeyedChromosome());
 
 		assertEquals(1, population.size());
 
-		population.addIndividual(new MockKeylessChromosome());
+		population.addIndividual(new MockKeyedChromosome());
 
 		assertEquals(2, population.size());
 	}
@@ -789,15 +789,15 @@ public class PopulationTest {
 		StandardPopulation population = new StandardPopulation();
 		population.setFitnessComparator(new AscendingFitnessComparator());
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(3.0);
 		population.addIndividual(chromosome1);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(2.0);
 		population.addIndividual(chromosome2);
 
-		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
 		chromosome3.setFitness(1.0);
 		population.addIndividual(chromosome3);
 

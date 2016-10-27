@@ -29,9 +29,9 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
-import com.ciphertool.genetics.algorithms.crossover.keyless.ConservativeCrossoverAlgorithm;
+import com.ciphertool.genetics.algorithms.crossover.keyed.EqualOpportunityGeneCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.algorithms.mutation.keyless.ConservativeMutationAlgorithm;
+import com.ciphertool.genetics.algorithms.mutation.keyed.MultipleMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.ProbabilisticSelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;
@@ -56,8 +56,8 @@ public class GeneticAlgorithmStrategyTest {
 		Boolean mutateDuringCrossoverToSet = new Boolean(true);
 		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
-		CrossoverAlgorithm crossoverAlgorithmToSet = new ConservativeCrossoverAlgorithm();
-		MutationAlgorithm mutationAlgorithmToSet = new ConservativeMutationAlgorithm();
+		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
+		MutationAlgorithm mutationAlgorithmToSet = new MultipleMutationAlgorithm();
 		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
 		Selector selectorToSet = new RouletteSelector();
 
@@ -98,8 +98,8 @@ public class GeneticAlgorithmStrategyTest {
 		Boolean mutateDuringCrossoverToSet = new Boolean(true);
 		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
-		CrossoverAlgorithm crossoverAlgorithmToSet = new ConservativeCrossoverAlgorithm();
-		MutationAlgorithm mutationAlgorithmToSet = new ConservativeMutationAlgorithm();
+		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
+		MutationAlgorithm mutationAlgorithmToSet = new MultipleMutationAlgorithm();
 		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
 		Selector selectorToSet = new RouletteSelector();
 		FitnessEvaluator knownSolutionFitnessEvaluatorToSet = mock(FitnessEvaluator.class);
@@ -268,7 +268,7 @@ public class GeneticAlgorithmStrategyTest {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSetCrossoverAlgorithm() {
-		CrossoverAlgorithm crossoverAlgorithmToSet = new ConservativeCrossoverAlgorithm();
+		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
 		geneticAlgorithmStrategy.setCrossoverAlgorithm(crossoverAlgorithmToSet);
 
@@ -288,7 +288,7 @@ public class GeneticAlgorithmStrategyTest {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testSetMutationAlgorithm() {
-		MutationAlgorithm mutationAlgorithmToSet = new ConservativeMutationAlgorithm();
+		MutationAlgorithm mutationAlgorithmToSet = new MultipleMutationAlgorithm();
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
 		geneticAlgorithmStrategy.setMutationAlgorithm(mutationAlgorithmToSet);
 

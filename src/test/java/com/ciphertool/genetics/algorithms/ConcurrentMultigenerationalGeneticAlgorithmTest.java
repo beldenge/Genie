@@ -48,7 +48,7 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
-import com.ciphertool.genetics.mocks.MockKeylessChromosome;
+import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 	private static final double				DEFAULT_FITNESS_VALUE	= 100.0;
@@ -82,8 +82,8 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testCrossoverTask() {
-		Chromosome mom = new MockKeylessChromosome();
-		Chromosome dad = new MockKeylessChromosome();
+		Chromosome mom = new MockKeyedChromosome();
+		Chromosome dad = new MockKeyedChromosome();
 
 		ConcurrentMultigenerationalGeneticAlgorithm concurrentMultigenerationalGeneticAlgorithm = new ConcurrentMultigenerationalGeneticAlgorithm();
 		ConcurrentMultigenerationalGeneticAlgorithm.CrossoverTask generatorTask = concurrentMultigenerationalGeneticAlgorithm.new CrossoverTask(
@@ -95,7 +95,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockKeylessChromosome();
+		Chromosome chromosomeToReturn = new MockKeyedChromosome();
 		when(crossoverAlgorithmMock.crossover(same(mom), same(dad))).thenReturn(Arrays.asList(chromosomeToReturn));
 
 		List<Chromosome> chromosomesReturned = null;
@@ -128,7 +128,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		int initialPopulationSize = 50;
 
 		for (int i = 0; i < initialPopulationSize; i++) {
-			population.addIndividual(new MockKeylessChromosome());
+			population.addIndividual(new MockKeyedChromosome());
 		}
 
 		concurrentMultigenerationalGeneticAlgorithm.setPopulation(population);
@@ -139,7 +139,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockKeylessChromosome();
+		Chromosome chromosomeToReturn = new MockKeyedChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(Arrays.asList(chromosomeToReturn));
 
 		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
@@ -181,7 +181,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 
 		StandardPopulation population = new StandardPopulation();
 
-		Chromosome chromosome = new MockKeylessChromosome();
+		Chromosome chromosome = new MockKeyedChromosome();
 		population.addIndividual(chromosome);
 		concurrentMultigenerationalGeneticAlgorithm.setPopulation(population);
 
@@ -222,7 +222,7 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverAlgorithmField);
 		ReflectionUtils.setField(crossoverAlgorithmField, concurrentMultigenerationalGeneticAlgorithm, crossoverAlgorithmMock);
 
-		Chromosome chromosomeToReturn = new MockKeylessChromosome();
+		Chromosome chromosomeToReturn = new MockKeyedChromosome();
 		when(crossoverAlgorithmMock.crossover(any(Chromosome.class), any(Chromosome.class))).thenReturn(Arrays.asList(chromosomeToReturn));
 
 		long pairsToCrossover = 5;
@@ -230,8 +230,8 @@ public class ConcurrentMultigenerationalGeneticAlgorithmTest {
 		List<Chromosome> dads = new ArrayList<Chromosome>();
 
 		for (int i = 0; i < 5; i++) {
-			moms.add(new MockKeylessChromosome());
-			dads.add(new MockKeylessChromosome());
+			moms.add(new MockKeyedChromosome());
+			dads.add(new MockKeyedChromosome());
 		}
 
 		List<Chromosome> childrenReturned = concurrentMultigenerationalGeneticAlgorithm.doConcurrentCrossovers(pairsToCrossover, moms, dads);

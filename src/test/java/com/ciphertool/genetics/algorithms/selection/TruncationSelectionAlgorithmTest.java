@@ -37,7 +37,7 @@ import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.fitness.AscendingFitnessComparator;
-import com.ciphertool.genetics.mocks.MockKeylessChromosome;
+import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class TruncationSelectionAlgorithmTest {
 	private static Logger						logMock;
@@ -59,43 +59,43 @@ public class TruncationSelectionAlgorithmTest {
 		population = new StandardPopulation();
 		population.setFitnessComparator(new AscendingFitnessComparator());
 
-		MockKeylessChromosome chromosome1 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
 		chromosome1.setFitness(3.0);
 		population.addIndividual(chromosome1);
 
-		MockKeylessChromosome chromosome2 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(4.0);
 		population.addIndividual(chromosome2);
 
-		MockKeylessChromosome chromosome3 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
 		chromosome3.setFitness(5.0);
 		population.addIndividual(chromosome3);
 
-		MockKeylessChromosome chromosome4 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome4 = new MockKeyedChromosome();
 		chromosome4.setFitness(1.0);
 		population.addIndividual(chromosome4);
 
-		MockKeylessChromosome chromosome5 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome5 = new MockKeyedChromosome();
 		chromosome5.setFitness(6.0);
 		population.addIndividual(chromosome5);
 
-		MockKeylessChromosome chromosome6 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome6 = new MockKeyedChromosome();
 		chromosome6.setFitness(7.0);
 		population.addIndividual(chromosome6);
 
-		MockKeylessChromosome chromosome7 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome7 = new MockKeyedChromosome();
 		chromosome7.setFitness(8.0);
 		population.addIndividual(chromosome7);
 
-		MockKeylessChromosome chromosome8 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome8 = new MockKeyedChromosome();
 		chromosome8.setFitness(2.0);
 		population.addIndividual(chromosome8);
 
-		MockKeylessChromosome chromosome9 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome9 = new MockKeyedChromosome();
 		chromosome9.setFitness(9.0);
 		population.addIndividual(chromosome9);
 
-		MockKeylessChromosome chromosome10 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome10 = new MockKeyedChromosome();
 		chromosome10.setFitness(10.0);
 		population.addIndividual(chromosome10);
 
@@ -130,19 +130,19 @@ public class TruncationSelectionAlgorithmTest {
 		int maxSurvivors = 10;
 		double survivalRate = 0.8;
 
-		MockKeylessChromosome chromosome11 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome11 = new MockKeyedChromosome();
 		chromosome11.setFitness(11.0);
 		population.addIndividual(chromosome11);
 
-		MockKeylessChromosome chromosome12 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome12 = new MockKeyedChromosome();
 		chromosome12.setFitness(12.0);
 		population.addIndividual(chromosome12);
 
-		MockKeylessChromosome chromosome13 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome13 = new MockKeyedChromosome();
 		chromosome13.setFitness(13.0);
 		population.addIndividual(chromosome13);
 
-		MockKeylessChromosome chromosome14 = new MockKeylessChromosome();
+		MockKeyedChromosome chromosome14 = new MockKeyedChromosome();
 		chromosome14.setFitness(14.0);
 		population.addIndividual(chromosome14);
 
