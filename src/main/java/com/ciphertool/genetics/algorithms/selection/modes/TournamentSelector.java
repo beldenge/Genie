@@ -43,12 +43,6 @@ public class TournamentSelector implements Selector {
 			return -1;
 		}
 
-		if (totalFitness == null) {
-			log.warn("This Selector implementation requires a non-null total fitness.  Unable to continue.");
-
-			return -1;
-		}
-
 		Collections.sort(individuals, fitnessComparator);
 
 		for (int i = 0; i < individuals.size(); i++) {

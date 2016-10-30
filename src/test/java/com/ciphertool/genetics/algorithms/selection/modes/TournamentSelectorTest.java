@@ -148,7 +148,7 @@ public class TournamentSelectorTest {
 
 		int selectedIndex = tournamentSelector.getNextIndex(individuals, null);
 
-		assertEquals(-1, selectedIndex);
-		verify(logMock, times(1)).warn(anyString());
+		assertTrue(selectedIndex > -1);
+		verifyZeroInteractions(logMock);
 	}
 }
