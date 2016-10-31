@@ -43,7 +43,7 @@ public class RouletteSelector implements Selector {
 			return -1;
 		}
 
-		double randomIndex = (ThreadLocalRandom.current().nextDouble() * totalFitness);
+		double randomIndex = totalFitness - (ThreadLocalRandom.current().nextDouble() * totalFitness);
 
 		int winningIndex = -1;
 		Chromosome nextIndividual = null;
