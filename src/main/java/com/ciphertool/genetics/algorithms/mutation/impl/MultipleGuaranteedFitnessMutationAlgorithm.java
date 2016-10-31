@@ -52,51 +52,79 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	@Override
 	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
 		double originalFitness = chromosome.getFitness();
-		double mutationFitness = 0.0;
 
 		List<Object> availableKeys;
-		Map<Object, Gene> originalGenes;
+		Map<Object, Gene> replaced = new HashMap<Object, Gene>();
+		List<Object> randomKeys = new ArrayList<Object>();
 		int numMutations;
+		Gene originalGene;
+		Gene replacement;
+
+		boolean mutated;
 		int attempts = 0;
 		for (; attempts < maxAttempts; attempts++) {
+			mutated = false;
+
 			/*
 			 * Choose a random number of mutations constrained by the configurable max and the total number of genes
 			 */
 			numMutations = mutationHelper.getNumMutations(chromosome.getGenes().size());
 
 			availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
-			originalGenes = new HashMap<Object, Gene>();
+			replaced.clear();
+			randomKeys.clear();
+
 			for (int i = 0; i < numMutations; i++) {
 				/*
 				 * We don't want to reuse an index, so we get one from the List of indices which are still available
 				 */
 				int randomIndex = (int) (ThreadLocalRandom.current().nextDouble() * availableKeys.size());
-				Object randomKey = availableKeys.get(randomIndex);
-				originalGenes.put(randomKey, chromosome.getGenes().get(randomKey));
+
+				randomKeys.add(availableKeys.get(randomIndex));
+
 				availableKeys.remove(randomIndex);
 			}
 
-			for (Object key : originalGenes.keySet()) {
+			for (Object key : randomKeys) {
+				originalGene = chromosome.getGenes().get(key);
+
 				// Replace that map value with a randomly generated Gene
-				chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
+				replacement = geneDao.findRandomGene(chromosome);
+
+				if (!replacement.equals(originalGene)) {
+					replaced.put(key, chromosome.getGenes().get(key));
+
+					chromosome.replaceGene(key, replacement);
+
+					mutated = true;
+				}
 			}
 
-			mutationFitness = fitnessEvaluator.evaluate(chromosome);
-			if (mutationFitness <= originalFitness) {
-				// revert the mutations
-				for (Object key : originalGenes.keySet()) {
-					chromosome.replaceGene(key, originalGenes.get(key));
-				}
-			} else {
-				chromosome.setFitness(mutationFitness);
+			if (mutated) {
+				double fitness = fitnessEvaluator.evaluate(chromosome);
 
-				return true;
+				// Test if the replacement is better, otherwise continue looping
+				if (fitness > originalFitness) {
+					chromosome.setFitness(fitness);
+
+					break;
+				} else {
+					// revert the mutations
+					for (Object key : replaced.keySet()) {
+						chromosome.replaceGene(key, replaced.get(key));
+					}
+				}
 			}
 		}
 
-		log.debug("Unable to find guaranteed better fitness via mutation after " + attempts
-				+ " attempts.  Returning clone of parent.");
-		return false;
+		if (attempts >= maxAttempts) {
+			log.debug("Unable to find guaranteed better fitness via mutation after " + attempts
+					+ " attempts.  Returning clone of parent.");
+
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override

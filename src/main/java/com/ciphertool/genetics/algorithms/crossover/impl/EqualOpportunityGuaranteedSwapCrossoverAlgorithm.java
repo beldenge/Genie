@@ -20,7 +20,9 @@
 package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
+import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.util.Coin;
@@ -68,41 +71,68 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 
 	@SuppressWarnings("unchecked")
 	protected List<KeyedChromosome<Object>> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		KeyedChromosome<Object> childA;
-		KeyedChromosome<Object> childB;
+		KeyedChromosome<Object> childA = (KeyedChromosome<Object>) parentA.clone();
+		KeyedChromosome<Object> childB = (KeyedChromosome<Object>) parentB.clone();
+		Map<Object, Gene> replacedChildA = new HashMap<Object, Gene>();
+		Map<Object, Gene> replacedChildB = new HashMap<Object, Gene>();
 		double originalFitnessA = parentA.getFitness();
 		double originalFitnessB = parentB.getFitness();
+		Gene originalGeneChildA;
+		Gene originalGeneChildB;
+		Gene replacementChildA;
+		Gene replacementChildB;
 
+		boolean crossedOver;
 		int attempts = 0;
-
-		do {
-			attempts++;
-			childA = (KeyedChromosome<Object>) parentA.clone();
-			childB = (KeyedChromosome<Object>) parentB.clone();
+		for (; attempts < maxAttempts; attempts++) {
+			crossedOver = false;
+			replacedChildA.clear();
+			replacedChildB.clear();
 
 			for (Object key : parentA.getGenes().keySet()) {
+				originalGeneChildA = childA.getGenes().get(key);
+				originalGeneChildB = childB.getGenes().get(key);
+				replacementChildA = parentB.getGenes().get(key).clone();
+				replacementChildB = parentA.getGenes().get(key).clone();
+
 				if (coin.flip()) {
-					childA.replaceGene(key, parentB.getGenes().get(key).clone());
-					childB.replaceGene(key, parentA.getGenes().get(key).clone());
+					if (!originalGeneChildA.equals(originalGeneChildB)) {
+						replacedChildA.put(key, originalGeneChildA);
+						replacedChildB.put(key, originalGeneChildB);
+
+						childA.replaceGene(key, replacementChildA);
+						childB.replaceGene(key, replacementChildB);
+
+						crossedOver = true;
+					}
 				}
 			}
 
-			if (attempts >= maxAttempts) {
-				// revert crossover
-				childA = (KeyedChromosome<Object>) parentA.clone();
-				childB = (KeyedChromosome<Object>) parentB.clone();
+			if (crossedOver) {
+				double fitnessChildA = fitnessEvaluator.evaluate(childA);
+				double fitnessChildB = fitnessEvaluator.evaluate(childB);
 
-				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
-						+ " attempts.  Returning clones of parents.");
+				if (fitnessChildA > originalFitnessA && fitnessChildB > originalFitnessB) {
+					childA.setFitness(fitnessChildA);
+					childB.setFitness(fitnessChildB);
 
-				break;
+					break;
+				} else {
+					// revert the crossovers
+					for (Object key : replacedChildA.keySet()) {
+						childA.replaceGene(key, replacedChildA.get(key));
+					}
+
+					for (Object key : replacedChildB.keySet()) {
+						childB.replaceGene(key, replacedChildB.get(key));
+					}
+				}
 			}
-		} while (fitnessEvaluator.evaluate(childA) < originalFitnessA
-				&& fitnessEvaluator.evaluate(childB) < originalFitnessB);
+		}
 
-		if (mutateDuringCrossover) {
-			mutationAlgorithm.mutateChromosome(childA);
-			mutationAlgorithm.mutateChromosome(childB);
+		if (attempts >= maxAttempts) {
+			log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
+					+ " attempts.  Returning clones of parents.");
 		}
 
 		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();

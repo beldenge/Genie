@@ -19,6 +19,8 @@
 
 package com.ciphertool.genetics.algorithms.mutation.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -51,42 +53,61 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 			throw new IllegalStateException("The mutationRate cannot be null.");
 		}
 
-		boolean mutated = false;
 		Set<Object> keys = chromosome.getGenes().keySet();
+		Map<Object, Gene> replaced = new HashMap<Object, Gene>();
+		double originalFitness = chromosome.getFitness();
+		Gene originalGene;
+		Gene replacement;
 
-		for (Object key : keys) {
-			if (ThreadLocalRandom.current().nextDouble() <= mutationRate) {
-				int attempts = 0;
+		boolean mutated;
+		int attempts = 0;
+		for (; attempts < maxAttempts; attempts++) {
+			mutated = false;
+			replaced.clear();
 
-				Gene originalGene = chromosome.getGenes().get(key);
-				double originalFitness = chromosome.getFitness();
+			for (Object key : keys) {
+				if (ThreadLocalRandom.current().nextDouble() <= mutationRate) {
 
-				do {
-					attempts++;
+					originalGene = chromosome.getGenes().get(key);
 
 					// Replace that map value with a randomly generated Gene
-					chromosome.replaceGene(key, geneDao.findRandomGene(chromosome));
+					replacement = geneDao.findRandomGene(chromosome);
 
-					if (attempts >= maxAttempts) {
-						// Revert the mutation
-						chromosome.replaceGene(key, originalGene);
+					if (!replacement.equals(originalGene)) {
+						replaced.put(key, originalGene);
 
-						log.debug("Unable to find guaranteed better fitness via mutation after " + maxAttempts
-								+ " attempts.  Returning clone of parent.");
+						chromosome.replaceGene(key, replacement);
 
-						break;
+						mutated = true;
 					}
+				}
+			}
 
-					// Test if the replacement is better, otherwise continue looping
-				} while (fitnessEvaluator.evaluate(chromosome) < originalFitness);
+			if (mutated) {
+				double fitness = fitnessEvaluator.evaluate(chromosome);
 
-				if (attempts < maxAttempts) {
-					mutated = true;
+				// Test if the replacement is better, otherwise continue looping
+				if (fitness > originalFitness) {
+					chromosome.setFitness(fitness);
+
+					break;
+				} else {
+					// Revert the mutation(s)
+					for (Object key : replaced.keySet()) {
+						chromosome.replaceGene(key, replaced.get(key));
+					}
 				}
 			}
 		}
 
-		return mutated;
+		if (attempts >= maxAttempts) {
+			log.debug("Unable to find guaranteed better fitness via mutation after " + maxAttempts
+					+ " attempts.  Returning clone of parent.");
+
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override

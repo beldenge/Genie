@@ -20,9 +20,10 @@
 package com.ciphertool.genetics.algorithms.crossover.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ import org.springframework.beans.factory.annotation.Required;
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
+import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
@@ -70,22 +72,25 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 	@SuppressWarnings("unchecked")
 	protected KeyedChromosome<Object> performCrossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
 		Random generator = new Random();
-		Set<Object> availableKeys = parentA.getGenes().keySet();
-		Object[] keys = availableKeys.toArray();
-		KeyedChromosome<Object> child;
+		Object[] keys = parentA.getGenes().keySet().toArray();
+		KeyedChromosome<Object> child = (KeyedChromosome<Object>) parentA.clone();
+		Map<Object, Gene> replaced = new HashMap<Object, Gene>();
 
 		double originalFitness = parentA.getFitness();
-		int attempts = 0;
 		int randomIndex;
+		Gene originalGene;
+		Gene replacement;
 
-		do {
-			attempts++;
+		boolean crossedOver;
+		int attempts = 0;
+		for (; attempts < maxAttempts; attempts++) {
+			crossedOver = false;
+			replaced.clear();
 
 			// Get a random map key
 			randomIndex = generator.nextInt(keys.length);
 
 			// Replace all the Genes from the map key to the end of the array
-			child = (KeyedChromosome<Object>) parentA.clone();
 			for (int i = 0; i <= randomIndex; i++) {
 				Object nextKey = (Object) keys[i];
 
@@ -94,22 +99,37 @@ public class RandomSinglePointGuaranteedCrossoverAlgorithm implements
 							+ ", but no such key was found.  Cannot continue.");
 				}
 
-				child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
+				originalGene = child.getGenes().get(nextKey);
+				replacement = parentB.getGenes().get(nextKey).clone();
+
+				if (!replacement.equals(originalGene)) {
+					replaced.put(nextKey, originalGene);
+
+					child.replaceGene(nextKey, replacement);
+
+					crossedOver = true;
+				}
 			}
 
-			if (attempts >= maxAttempts) {
-				// revert crossover
-				child = (KeyedChromosome<Object>) parentA.clone();
+			if (crossedOver) {
+				double fitness = fitnessEvaluator.evaluate(child);
 
-				log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
-						+ " attempts.  Returning clone of first parent.");
+				if (fitness > originalFitness) {
+					child.setFitness(fitness);
 
-				break;
+					break;
+				} else {
+					// revert crossover
+					for (Object key : replaced.keySet()) {
+						child.replaceGene(key, replaced.get(key));
+					}
+				}
 			}
-		} while (fitnessEvaluator.evaluate(child) < originalFitness);
+		}
 
-		if (mutateDuringCrossover) {
-			mutationAlgorithm.mutateChromosome(child);
+		if (attempts >= maxAttempts) {
+			log.debug("Unable to find guaranteed better fitness via crossover after " + maxAttempts
+					+ " attempts.  Returning clone of first parent.");
 		}
 
 		return child;
