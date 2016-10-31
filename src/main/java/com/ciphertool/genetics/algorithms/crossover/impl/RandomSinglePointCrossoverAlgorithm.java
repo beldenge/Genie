@@ -43,7 +43,7 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
 		}
 
-		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
+		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>(1);
 
 		KeyedChromosome<Object> child = performCrossover(parentA, parentB);
 

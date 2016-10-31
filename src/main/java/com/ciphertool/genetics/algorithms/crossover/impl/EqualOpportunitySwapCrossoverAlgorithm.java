@@ -74,7 +74,7 @@ public class EqualOpportunitySwapCrossoverAlgorithm implements CrossoverAlgorith
 			mutationAlgorithm.mutateChromosome(childB);
 		}
 
-		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
+		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>(2);
 		children.add(childA);
 		children.add(childB);
 

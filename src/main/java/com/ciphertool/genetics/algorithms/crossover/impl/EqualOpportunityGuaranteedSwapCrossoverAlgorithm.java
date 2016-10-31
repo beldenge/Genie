@@ -135,7 +135,7 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 					+ " attempts.  Returning clones of parents.");
 		}
 
-		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>();
+		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>(2);
 		children.add(childA);
 		children.add(childB);
 

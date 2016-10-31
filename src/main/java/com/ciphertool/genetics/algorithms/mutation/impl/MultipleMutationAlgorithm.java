@@ -45,8 +45,6 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 	@Override
 	public boolean mutateChromosome(KeyedChromosome<Object> chromosome) {
 		Chromosome original = chromosome.clone();
-		List<Object> availableKeys;
-		Map<Object, Gene> originalGenes;
 		int numMutations;
 
 		/*
@@ -54,8 +52,9 @@ public class MultipleMutationAlgorithm implements UniformMutationAlgorithm<Keyed
 		 */
 		numMutations = mutationHelper.getNumMutations(chromosome.getGenes().size());
 
-		availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
-		originalGenes = new HashMap<Object, Gene>();
+		List<Object> availableKeys = new ArrayList<Object>(chromosome.getGenes().keySet());
+		Map<Object, Gene> originalGenes = new HashMap<Object, Gene>(numMutations);
+
 		for (int i = 0; i < numMutations; i++) {
 			/*
 			 * We don't want to reuse an index, so we get one from the List of indices which are still available
