@@ -53,7 +53,6 @@ public class GeneticAlgorithmStrategyTest {
 		Double mutationRateToSet = new Double(0.05);
 		Integer maxMutationsPerIndividualToSet = new Integer(5);
 		Double crossoverRateToSet = new Double(0.1);
-		Boolean mutateDuringCrossoverToSet = new Boolean(true);
 		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
@@ -63,8 +62,8 @@ public class GeneticAlgorithmStrategyTest {
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(geneticStructureToSet,
 				populationSizeToSet, lifespanToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
-				maxMutationsPerIndividualToSet, crossoverRateToSet, mutateDuringCrossoverToSet, fitnessEvaluatorToSet,
-				crossoverAlgorithmToSet, mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, null, false);
+				maxMutationsPerIndividualToSet, crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet,
+				mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, null, false);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
@@ -74,7 +73,6 @@ public class GeneticAlgorithmStrategyTest {
 		assertSame(mutationRateToSet, geneticAlgorithmStrategy.getMutationRate());
 		assertSame(maxMutationsPerIndividualToSet, geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		assertSame(crossoverRateToSet, geneticAlgorithmStrategy.getCrossoverRate());
-		assertSame(mutateDuringCrossoverToSet, geneticAlgorithmStrategy.getMutateDuringCrossover());
 		assertSame(fitnessEvaluatorToSet, geneticAlgorithmStrategy.getFitnessEvaluator());
 		assertSame(crossoverAlgorithmToSet, geneticAlgorithmStrategy.getCrossoverAlgorithm());
 		assertSame(mutationAlgorithmToSet, geneticAlgorithmStrategy.getMutationAlgorithm());
@@ -95,7 +93,6 @@ public class GeneticAlgorithmStrategyTest {
 		Double mutationRateToSet = new Double(0.05);
 		Integer maxMutationsPerIndividualToSet = new Integer(5);
 		Double crossoverRateToSet = new Double(0.1);
-		Boolean mutateDuringCrossoverToSet = new Boolean(true);
 		FitnessEvaluator fitnessEvaluatorToSet = mock(FitnessEvaluator.class);
 		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
@@ -108,9 +105,9 @@ public class GeneticAlgorithmStrategyTest {
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(geneticStructureToSet,
 				populationSizeToSet, lifespanToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
-				maxMutationsPerIndividualToSet, crossoverRateToSet, mutateDuringCrossoverToSet, fitnessEvaluatorToSet,
-				crossoverAlgorithmToSet, mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet,
-				knownSolutionFitnessEvaluatorToSet, compareToKnownSolutionToSet);
+				maxMutationsPerIndividualToSet, crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet,
+				mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, knownSolutionFitnessEvaluatorToSet,
+				compareToKnownSolutionToSet);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
@@ -120,7 +117,6 @@ public class GeneticAlgorithmStrategyTest {
 		assertSame(mutationRateToSet, geneticAlgorithmStrategy.getMutationRate());
 		assertSame(maxMutationsPerIndividualToSet, geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		assertSame(crossoverRateToSet, geneticAlgorithmStrategy.getCrossoverRate());
-		assertSame(mutateDuringCrossoverToSet, geneticAlgorithmStrategy.getMutateDuringCrossover());
 		assertSame(fitnessEvaluatorToSet, geneticAlgorithmStrategy.getFitnessEvaluator());
 		assertSame(crossoverAlgorithmToSet, geneticAlgorithmStrategy.getCrossoverAlgorithm());
 		assertSame(mutationAlgorithmToSet, geneticAlgorithmStrategy.getMutationAlgorithm());
@@ -245,15 +241,6 @@ public class GeneticAlgorithmStrategyTest {
 		geneticAlgorithmStrategy.setCrossoverRate(crossoverRateToSet);
 
 		assertSame(crossoverRateToSet, geneticAlgorithmStrategy.getCrossoverRate());
-	}
-
-	@Test
-	public void testSetMutateDuringCrossover() {
-		Boolean mutateDuringCrossoverToSet = new Boolean(true);
-		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
-		geneticAlgorithmStrategy.setMutateDuringCrossover(mutateDuringCrossoverToSet);
-
-		assertSame(mutateDuringCrossoverToSet, geneticAlgorithmStrategy.getMutateDuringCrossover());
 	}
 
 	@Test

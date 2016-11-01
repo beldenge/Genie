@@ -145,10 +145,6 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("Parameter 'crossoverRate' must be greater than or equal to zero.");
 		}
 
-		if (strategy.getMutateDuringCrossover() == null) {
-			validationErrors.add("Parameter 'mutateDuringCrossover' cannot be null.");
-		}
-
 		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
 			validationErrors.add("Parameter 'maxGenerations' cannot be null and must not equal zero.");
 		}
@@ -602,7 +598,7 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 		log.info("Took " + (System.currentTimeMillis() - startInsert) + "ms to persist statistics to database.");
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
@@ -612,8 +608,6 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy.getCompareToKnownSolution());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
-		this.crossoverAlgorithm.setMutationAlgorithm(geneticAlgorithmStrategy.getMutationAlgorithm());
-		this.crossoverAlgorithm.setMutateDuringCrossover(geneticAlgorithmStrategy.getMutateDuringCrossover());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 

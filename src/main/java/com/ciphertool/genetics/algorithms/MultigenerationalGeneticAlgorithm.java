@@ -239,10 +239,6 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("Parameter 'crossoverRate' must be greater than or equal to zero.");
 		}
 
-		if (strategy.getMutateDuringCrossover() == null) {
-			validationErrors.add("Parameter 'mutateDuringCrossover' cannot be null.");
-		}
-
 		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
 			validationErrors.add("Parameter 'maxGenerations' cannot be null and must not equal zero.");
 		}
@@ -539,7 +535,7 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		return strategy;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
@@ -549,8 +545,6 @@ public class MultigenerationalGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy.getCompareToKnownSolution());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
-		this.crossoverAlgorithm.setMutationAlgorithm(geneticAlgorithmStrategy.getMutationAlgorithm());
-		this.crossoverAlgorithm.setMutateDuringCrossover(geneticAlgorithmStrategy.getMutateDuringCrossover());
 
 		this.mutationAlgorithm = geneticAlgorithmStrategy.getMutationAlgorithm();
 

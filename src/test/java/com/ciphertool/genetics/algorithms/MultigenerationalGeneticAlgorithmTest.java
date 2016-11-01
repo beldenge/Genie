@@ -89,7 +89,7 @@ public class MultigenerationalGeneticAlgorithmTest {
 		assertSame(executionStatisticsDaoToSet, executionStatisticsDaoFromObject);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	@Test
 	public void testSetStrategy() {
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
@@ -103,7 +103,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 		Object geneticStructure = new Object();
 		int lifeSpan = 10;
 		boolean compareToKnownSolution = true;
-		boolean mutateDuringCrossover = true;
 		int maxMutationsPerIndividual = 5;
 
 		strategyToSet.setGeneticStructure(geneticStructure);
@@ -113,7 +112,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 		strategyToSet.setCompareToKnownSolution(compareToKnownSolution);
 		strategyToSet.setCrossoverAlgorithm(crossoverAlgorithmMock);
 		strategyToSet.setMutationAlgorithm(mutationAlgorithmMock);
-		strategyToSet.setMutateDuringCrossover(mutateDuringCrossover);
 		strategyToSet.setMaxMutationsPerIndividual(maxMutationsPerIndividual);
 		strategyToSet.setSelectionAlgorithm(selectionAlgorithmMock);
 
@@ -133,8 +131,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 		verify(populationMock, times(1)).setCompareToKnownSolution(eq(compareToKnownSolution));
 		verifyNoMoreInteractions(populationMock);
 
-		verify(crossoverAlgorithmMock, times(1)).setMutationAlgorithm(same(mutationAlgorithmMock));
-		verify(crossoverAlgorithmMock, times(1)).setMutateDuringCrossover(eq(mutateDuringCrossover));
 		verifyNoMoreInteractions(crossoverAlgorithmMock);
 
 		verify(mutationAlgorithmMock, times(1)).setMaxMutationsPerChromosome(eq(maxMutationsPerIndividual));
@@ -180,7 +176,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 		strategyToSet.setMutationRate(mutationRate);
 		strategyToSet.setMaxMutationsPerIndividual(0);
 		strategyToSet.setCrossoverRate(crossoverRate);
-		strategyToSet.setMutateDuringCrossover(false);
 		strategyToSet.setMaxGenerations(-1);
 		strategyToSet.setCrossoverAlgorithm(crossoverAlgorithmMock);
 		strategyToSet.setFitnessEvaluator(fitnessEvaluatorMock);
@@ -387,7 +382,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 		strategyToSet.setMutationRate(0.0);
 		strategyToSet.setMaxMutationsPerIndividual(0);
 		strategyToSet.setCrossoverRate(0.0);
-		strategyToSet.setMutateDuringCrossover(false);
 		strategyToSet.setMaxGenerations(-1);
 		strategyToSet.setCrossoverAlgorithm(mock(CrossoverAlgorithm.class));
 		strategyToSet.setFitnessEvaluator(mock(FitnessEvaluator.class));
@@ -432,7 +426,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(crossoverRateField);
 		ReflectionUtils.setField(crossoverRateField, strategyToSet, -0.1);
 
-		strategyToSet.setMutateDuringCrossover(null);
 		strategyToSet.setMaxGenerations(0);
 		strategyToSet.setCrossoverAlgorithm(null);
 		strategyToSet.setFitnessEvaluator(null);
@@ -457,7 +450,6 @@ public class MultigenerationalGeneticAlgorithmTest {
 			expectedMessage += "\n\t-Parameter 'mutationRate' must be greater than or equal to zero.";
 			expectedMessage += "\n\t-Parameter 'maxMutationsPerIndividual' must be greater than or equal to zero.";
 			expectedMessage += "\n\t-Parameter 'crossoverRate' must be greater than or equal to zero.";
-			expectedMessage += "\n\t-Parameter 'mutateDuringCrossover' cannot be null.";
 			expectedMessage += "\n\t-Parameter 'maxGenerations' cannot be null and must not equal zero.";
 			expectedMessage += "\n\t-Parameter 'crossoverAlgorithm' cannot be null.";
 			expectedMessage += "\n\t-Parameter 'fitnessEvaluator' cannot be null.";

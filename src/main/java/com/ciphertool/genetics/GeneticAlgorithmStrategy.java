@@ -35,7 +35,6 @@ public class GeneticAlgorithmStrategy {
 	private Double				mutationRate;
 	private Integer				maxMutationsPerIndividual;
 	private Double				crossoverRate;
-	private Boolean				mutateDuringCrossover;
 	private Integer				maxGenerations;
 	@SuppressWarnings("rawtypes")
 	private CrossoverAlgorithm	crossoverAlgorithm;
@@ -88,10 +87,9 @@ public class GeneticAlgorithmStrategy {
 	@SuppressWarnings("rawtypes")
 	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer lifespan,
 			Integer maxGenerations, Double survivalRate, Double mutationRate, Integer maxMutationsPerIndividual,
-			Double crossoverRate, Boolean mutateDuringCrossover, FitnessEvaluator fitnessEvaluator,
-			CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm,
-			SelectionAlgorithm selectionAlgorithm, Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
-			Boolean compareToKnownSolution) {
+			Double crossoverRate, FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
+			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm, Selector selector,
+			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.lifespan = lifespan;
@@ -102,7 +100,6 @@ public class GeneticAlgorithmStrategy {
 		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
 
 		this.setCrossoverRate(crossoverRate);
-		this.mutateDuringCrossover = mutateDuringCrossover;
 
 		this.fitnessEvaluator = fitnessEvaluator;
 		this.fitnessEvaluator.setGeneticStructure(geneticStructure);
@@ -371,20 +368,5 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setCompareToKnownSolution(Boolean compareToKnownSolution) {
 		this.compareToKnownSolution = compareToKnownSolution;
-	}
-
-	/**
-	 * @return the mutateDuringCrossover
-	 */
-	public Boolean getMutateDuringCrossover() {
-		return mutateDuringCrossover;
-	}
-
-	/**
-	 * @param mutateDuringCrossover
-	 *            the mutateDuringCrossover to set
-	 */
-	public void setMutateDuringCrossover(Boolean mutateDuringCrossover) {
-		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 }

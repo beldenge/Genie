@@ -27,22 +27,14 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
-import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 
 public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<KeyedChromosome<Object>> {
-	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
-	private boolean										mutateDuringCrossover	= false;
-	private int											maxGenerations;
+	private int maxGenerations;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		if (mutateDuringCrossover && mutationAlgorithm == null) {
-			throw new IllegalStateException(
-					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
-		}
-
 		List<KeyedChromosome<Object>> children = new ArrayList<KeyedChromosome<Object>>(1);
 
 		KeyedChromosome<Object> child = performCrossover(parentA, parentB);
@@ -81,29 +73,7 @@ public class RandomSinglePointCrossoverAlgorithm implements CrossoverAlgorithm<K
 			child.replaceGene(nextKey, parentB.getGenes().get(nextKey).clone());
 		}
 
-		if (mutateDuringCrossover) {
-			mutationAlgorithm.mutateChromosome(child);
-		}
-
 		return child;
-	}
-
-	/**
-	 * @param mutationAlgorithm
-	 *            the mutationAlgorithm to set
-	 */
-	@Override
-	public void setMutationAlgorithm(MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm) {
-		this.mutationAlgorithm = mutationAlgorithm;
-	}
-
-	/**
-	 * @param mutateDuringCrossover
-	 *            the mutateDuringCrossover to set
-	 */
-	@Override
-	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
-		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 
 	@Override

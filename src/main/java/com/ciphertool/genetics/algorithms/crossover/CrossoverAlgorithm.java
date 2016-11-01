@@ -21,7 +21,6 @@ package com.ciphertool.genetics.algorithms.crossover;
 
 import java.util.List;
 
-import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Selectable;
 
@@ -38,18 +37,6 @@ public interface CrossoverAlgorithm<T extends Chromosome> extends Selectable {
 	 * @return the List of children Chromosomes produced from the crossover
 	 */
 	public List<T> crossover(T parentA, T parentB);
-
-	/**
-	 * @param mutationAlgorithm
-	 *            the mutationAlgorithm to set
-	 */
-	public void setMutationAlgorithm(MutationAlgorithm<T> mutationAlgorithm);
-
-	/**
-	 * @param mutateDuringCrossover
-	 *            whether to mutate during crossover
-	 */
-	public void setMutateDuringCrossover(boolean mutateDuringCrossover);
 
 	/**
 	 * @return the number of offspring this CrossoverAlgorithm will generate

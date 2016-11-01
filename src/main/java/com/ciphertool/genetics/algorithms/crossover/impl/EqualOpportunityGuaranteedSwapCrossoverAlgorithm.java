@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
-import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
@@ -38,24 +37,17 @@ import com.ciphertool.genetics.util.Coin;
 
 public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 		EvaluatedCrossoverAlgorithm<KeyedChromosome<Object>> {
-	private Logger										log						= LoggerFactory.getLogger(getClass());
+	private Logger				log	= LoggerFactory.getLogger(getClass());
 
-	private int											maxAttempts;
+	private int					maxAttempts;
 
-	private FitnessEvaluator							fitnessEvaluator;
-	private MutationAlgorithm<KeyedChromosome<Object>>	mutationAlgorithm;
-	private boolean										mutateDuringCrossover	= false;
-	private int											maxGenerations;
+	private FitnessEvaluator	fitnessEvaluator;
+	private int					maxGenerations;
 
-	private Coin										coin;
+	private Coin				coin;
 
 	@Override
 	public List<KeyedChromosome<Object>> crossover(KeyedChromosome<Object> parentA, KeyedChromosome<Object> parentB) {
-		if (mutateDuringCrossover && mutationAlgorithm == null) {
-			throw new IllegalStateException(
-					"Unable to perform crossover because the flag to mutate during crossover is set to true, but the MutationAlgorithm is null.");
-		}
-
 		List<KeyedChromosome<Object>> children = performCrossover(parentA, parentB);
 
 		// The Chromosome could be null if it's identical to one of its parents
@@ -140,24 +132,6 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 		children.add(childB);
 
 		return children;
-	}
-
-	/**
-	 * @param mutationAlgorithm
-	 *            the mutationAlgorithm to set
-	 */
-	@Override
-	public void setMutationAlgorithm(MutationAlgorithm<KeyedChromosome<Object>> mutationAlgorithm) {
-		this.mutationAlgorithm = mutationAlgorithm;
-	}
-
-	/**
-	 * @param mutateDuringCrossover
-	 *            the mutateDuringCrossover to set
-	 */
-	@Override
-	public void setMutateDuringCrossover(boolean mutateDuringCrossover) {
-		this.mutateDuringCrossover = mutateDuringCrossover;
 	}
 
 	/**
