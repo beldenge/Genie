@@ -21,6 +21,7 @@ package com.ciphertool.genetics.population;
 
 import java.util.List;
 
+import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
@@ -83,4 +84,10 @@ public interface Population {
 	 *            the targetSize to set
 	 */
 	public void setTargetSize(int targetSize);
+
+	/**
+	 * @param selector
+	 *            the Selector to set
+	 */
+	public void setSelector(Selector selector);
 }

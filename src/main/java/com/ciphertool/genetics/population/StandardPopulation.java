@@ -409,10 +409,7 @@ public class StandardPopulation implements Population {
 		this.taskExecutor = taskExecutor;
 	}
 
-	/**
-	 * @param selector
-	 *            the selector to set
-	 */
+	@Override
 	@Required
 	public void setSelector(Selector selector) {
 		this.selector = selector;

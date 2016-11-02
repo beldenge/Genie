@@ -103,6 +103,7 @@ public class StandardGeneticAlgorithmTest {
 		NonUniformMutationAlgorithm mutationAlgorithmMock = mock(NonUniformMutationAlgorithm.class);
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		FitnessEvaluator knownSolutionFitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		Selector selectorMock = mock(Selector.class);
 		Object geneticStructure = new Object();
 		boolean compareToKnownSolution = true;
 		int maxMutationsPerIndividual = 5;
@@ -116,6 +117,7 @@ public class StandardGeneticAlgorithmTest {
 		strategyToSet.setMutationAlgorithm(mutationAlgorithmMock);
 		strategyToSet.setMaxMutationsPerIndividual(maxMutationsPerIndividual);
 		strategyToSet.setPopulationSize(populationSizeToSet);
+		strategyToSet.setSelector(selectorMock);
 
 		StandardGeneticAlgorithm standardGeneticAlgorithm = new StandardGeneticAlgorithm();
 		standardGeneticAlgorithm.setPopulation(populationMock);
@@ -131,6 +133,7 @@ public class StandardGeneticAlgorithmTest {
 		verify(populationMock, times(1)).setKnownSolutionFitnessEvaluator(same(knownSolutionFitnessEvaluatorMock));
 		verify(populationMock, times(1)).setCompareToKnownSolution(eq(compareToKnownSolution));
 		verify(populationMock, times(1)).setTargetSize(eq(populationSizeToSet));
+		verify(populationMock, times(1)).setSelector(eq(selectorMock));
 		verifyNoMoreInteractions(populationMock);
 
 		verifyNoMoreInteractions(crossoverAlgorithmMock);

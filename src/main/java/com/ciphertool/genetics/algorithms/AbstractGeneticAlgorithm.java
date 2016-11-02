@@ -373,6 +373,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.setKnownSolutionFitnessEvaluator(geneticAlgorithmStrategy.getKnownSolutionFitnessEvaluator());
 		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy.getCompareToKnownSolution());
 		this.population.setTargetSize(geneticAlgorithmStrategy.getPopulationSize());
+		this.population.setSelector(geneticAlgorithmStrategy.getSelector());
 
 		this.crossoverAlgorithm = geneticAlgorithmStrategy.getCrossoverAlgorithm();
 
