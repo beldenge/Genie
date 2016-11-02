@@ -17,7 +17,7 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.population;
 
 import java.util.List;
 

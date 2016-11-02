@@ -35,8 +35,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.springframework.util.ReflectionUtils;
 
-import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
+import com.ciphertool.genetics.population.StandardPopulation;
 
 public class ProbabilisticSelectionAlgorithmTest {
 	private static Logger							logMock;

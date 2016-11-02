@@ -30,8 +30,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
-import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.population.StandardPopulation;
 
 public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	private Logger	log	= LoggerFactory.getLogger(getClass());

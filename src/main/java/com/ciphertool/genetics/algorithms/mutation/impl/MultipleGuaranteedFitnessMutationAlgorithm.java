@@ -148,7 +148,6 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 	 * @param fitnessEvaluator
 	 *            the fitnessEvaluator to set
 	 */
-	@Required
 	@Override
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;

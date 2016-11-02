@@ -53,7 +53,6 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.util.ReflectionUtils;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
-import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
@@ -65,6 +64,7 @@ import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
+import com.ciphertool.genetics.population.StandardPopulation;
 
 public class StandardGeneticAlgorithmTest {
 	@Test

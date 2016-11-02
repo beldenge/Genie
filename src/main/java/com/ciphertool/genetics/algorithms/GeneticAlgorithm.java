@@ -20,7 +20,7 @@
 package com.ciphertool.genetics.algorithms;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.population.Population;
 
 public interface GeneticAlgorithm {
 	public void evolveAutonomously() throws InterruptedException;

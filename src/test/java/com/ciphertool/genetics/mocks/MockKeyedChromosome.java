@@ -22,12 +22,12 @@ package com.ciphertool.genetics.mocks;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.annotations.Clean;
 import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
+import com.ciphertool.genetics.population.Population;
 
 public class MockKeyedChromosome implements KeyedChromosome<Object> {
 	private boolean				needsEvaluation;

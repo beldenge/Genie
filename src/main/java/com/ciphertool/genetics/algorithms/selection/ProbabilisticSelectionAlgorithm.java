@@ -24,10 +24,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.population.StandardPopulation;
 
 public class ProbabilisticSelectionAlgorithm implements SelectionAlgorithm {
 	private Logger			log			= LoggerFactory.getLogger(getClass());

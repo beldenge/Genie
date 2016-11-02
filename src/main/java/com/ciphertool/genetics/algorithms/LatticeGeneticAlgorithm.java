@@ -29,9 +29,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ciphertool.genetics.LatticePopulation;
 import com.ciphertool.genetics.SpatialChromosomeWrapper;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.population.LatticePopulation;
 
 public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	private Logger log = LoggerFactory.getLogger(getClass());

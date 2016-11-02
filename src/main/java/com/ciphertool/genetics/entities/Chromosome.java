@@ -21,7 +21,7 @@ package com.ciphertool.genetics.entities;
 
 import org.springframework.data.annotation.Transient;
 
-import com.ciphertool.genetics.Population;
+import com.ciphertool.genetics.population.Population;
 
 public interface Chromosome extends Cloneable {
 	public String getId();

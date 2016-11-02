@@ -21,7 +21,7 @@ package com.ciphertool.genetics.algorithms.selection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ciphertool.genetics.StandardPopulation;
+import com.ciphertool.genetics.population.StandardPopulation;
 
 public class TruncationSelectionAlgorithm implements SelectionAlgorithm {
 	private Logger log = LoggerFactory.getLogger(getClass());

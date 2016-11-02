@@ -17,7 +17,7 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.population;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -45,6 +45,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.ReflectionUtils;
 
+import com.ciphertool.genetics.Breeder;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
@@ -52,6 +53,7 @@ import com.ciphertool.genetics.fitness.AscendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockBreeder;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
+import com.ciphertool.genetics.population.StandardPopulation;
 
 public class PopulationTest {
 	private static ThreadPoolTaskExecutor	taskExecutor			= new ThreadPoolTaskExecutor();

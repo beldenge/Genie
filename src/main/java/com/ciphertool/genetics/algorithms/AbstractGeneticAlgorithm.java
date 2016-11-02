@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
-import com.ciphertool.genetics.Population;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
@@ -27,6 +26,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
+import com.ciphertool.genetics.population.Population;
 
 public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 	protected Logger					log				= LoggerFactory.getLogger(getClass());

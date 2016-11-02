@@ -17,7 +17,7 @@
  * Genie. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.ciphertool.genetics;
+package com.ciphertool.genetics.population;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.core.task.TaskExecutor;
 
+import com.ciphertool.genetics.Breeder;
+import com.ciphertool.genetics.ChromosomePrinter;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
@@ -385,7 +387,6 @@ public class StandardPopulation implements Population {
 	}
 
 	@Override
-	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
 	}
