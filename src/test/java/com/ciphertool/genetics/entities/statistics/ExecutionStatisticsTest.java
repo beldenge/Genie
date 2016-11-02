@@ -50,7 +50,6 @@ public class ExecutionStatisticsTest {
 
 		assertSame(startDateToSet, executionStatistics.getStartDateTime());
 		assertSame(strategy.getPopulationSize(), executionStatistics.getPopulationSize());
-		assertSame(strategy.getSurvivalRate(), executionStatistics.getSurvivalRate());
 		assertSame(strategy.getMutationRate(), executionStatistics.getMutationRate());
 		assertSame(strategy.getCrossoverRate(), executionStatistics.getCrossoverRate());
 		assertEquals(strategy.getCrossoverAlgorithm().getClass().getSimpleName(), executionStatistics.getCrossoverAlgorithm());
@@ -92,15 +91,6 @@ public class ExecutionStatisticsTest {
 		executionStatistics.setPopulationSize(populationSizeToSet);
 
 		assertSame(populationSizeToSet, executionStatistics.getPopulationSize());
-	}
-
-	@Test
-	public void testSetSurvivalRate() {
-		Double survivalRateToSet = 0.9;
-		ExecutionStatistics executionStatistics = new ExecutionStatistics();
-		executionStatistics.setSurvivalRate(survivalRateToSet);
-
-		assertSame(survivalRateToSet, executionStatistics.getSurvivalRate());
 	}
 
 	@Test
@@ -233,11 +223,6 @@ public class ExecutionStatisticsTest {
 		executionStatisticsWithDifferentPopulationSize.setPopulationSize(999);
 		assertFalse(base.equals(executionStatisticsWithDifferentPopulationSize));
 
-		ExecutionStatistics executionStatisticsWithDifferentSurvivalRate = new ExecutionStatistics(baseStartDate,
-				baseStrategy);
-		executionStatisticsWithDifferentSurvivalRate.setSurvivalRate(1.0);
-		assertFalse(base.equals(executionStatisticsWithDifferentSurvivalRate));
-
 		ExecutionStatistics executionStatisticsWithDifferentMutationRate = new ExecutionStatistics(baseStartDate,
 				baseStrategy);
 		executionStatisticsWithDifferentMutationRate.setMutationRate(1.0);
@@ -273,7 +258,6 @@ public class ExecutionStatisticsTest {
 	@SuppressWarnings("rawtypes")
 	private static GeneticAlgorithmStrategy createGeneticAlgorithmStrategy() {
 		Integer populationSizeToSet = 1000;
-		Double survivalRateToSet = 0.9;
 		Double mutationRateToSet = 0.05;
 		Double crossoverRateToSet = 0.1;
 		CrossoverAlgorithm crossoverAlgorithmToSet = mock(CrossoverAlgorithm.class);
@@ -282,7 +266,6 @@ public class ExecutionStatisticsTest {
 
 		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
 		strategy.setPopulationSize(populationSizeToSet);
-		strategy.setSurvivalRate(survivalRateToSet);
 		strategy.setMutationRate(mutationRateToSet);
 		strategy.setCrossoverRate(crossoverRateToSet);
 		strategy.setCrossoverAlgorithm(crossoverAlgorithmToSet);

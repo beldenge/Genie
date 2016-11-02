@@ -52,6 +52,7 @@ public class StandardPopulation implements Population {
 	private static final boolean	COMPARE_TO_KNOWN_SOLUTION_DEFAULT	= false;
 	private Boolean					compareToKnownSolution				= COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
 	private boolean					stopRequested;
+	private int						targetSize;
 
 	public StandardPopulation() {
 	}
@@ -60,7 +61,6 @@ public class StandardPopulation implements Population {
 	 * A concurrent task for adding a brand new Chromosome to the population.
 	 */
 	protected class GeneratorTask implements Callable<Chromosome> {
-
 		public GeneratorTask() {
 		}
 
@@ -70,12 +70,12 @@ public class StandardPopulation implements Population {
 		}
 	}
 
-	public int breed(Integer maxIndividuals) {
+	public int breed() {
 		List<FutureTask<Chromosome>> futureTasks = new ArrayList<FutureTask<Chromosome>>();
 		FutureTask<Chromosome> futureTask = null;
 
 		int individualsAdded = 0;
-		for (int i = this.individuals.size(); i < maxIndividuals; i++) {
+		for (int i = this.individuals.size(); i < targetSize; i++) {
 			futureTask = new FutureTask<Chromosome>(new GeneratorTask());
 			futureTasks.add(futureTask);
 
@@ -361,22 +361,17 @@ public class StandardPopulation implements Population {
 		return totalFitness;
 	}
 
+	@Override
 	public void requestStop() {
 		this.stopRequested = true;
 	}
 
-	/**
-	 * @param stopRequested
-	 *            the stopRequested to set
-	 */
+	@Override
 	public void setStopRequested(boolean stopRequested) {
 		this.stopRequested = stopRequested;
 	}
 
-	/**
-	 * @param obj
-	 *            the Object to set
-	 */
+	@Override
 	public void setGeneticStructure(Object obj) {
 		this.breeder.setGeneticStructure(obj);
 	}
@@ -389,10 +384,7 @@ public class StandardPopulation implements Population {
 		this.breeder = breeder;
 	}
 
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
+	@Override
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
@@ -425,22 +417,12 @@ public class StandardPopulation implements Population {
 		this.selector = selector;
 	}
 
-	/**
-	 * This is NOT required. We will not always know the solution. In fact, that should be the rare case.
-	 * 
-	 * @param knownSolutionFitnessEvaluator
-	 *            the knownSolutionFitnessEvaluator to set
-	 */
+	@Override
 	public void setKnownSolutionFitnessEvaluator(FitnessEvaluator knownSolutionFitnessEvaluator) {
 		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
 	}
 
-	/**
-	 * This is NOT required.
-	 * 
-	 * @param compareToKnownSolution
-	 *            the compareToKnownSolution to set
-	 */
+	@Override
 	public void setCompareToKnownSolution(Boolean compareToKnownSolution) {
 		this.compareToKnownSolution = compareToKnownSolution;
 	}
@@ -452,5 +434,10 @@ public class StandardPopulation implements Population {
 	@Required
 	public void setChromosomePrinter(ChromosomePrinter chromosomePrinter) {
 		this.chromosomePrinter = chromosomePrinter;
+	}
+
+	@Override
+	public void setTargetSize(int targetSize) {
+		this.targetSize = targetSize;
 	}
 }

@@ -32,8 +32,6 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.crossover.impl.EqualOpportunityGeneCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.impl.MultipleMutationAlgorithm;
-import com.ciphertool.genetics.algorithms.selection.ProbabilisticSelectionAlgorithm;
-import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.RouletteSelector;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
@@ -48,7 +46,6 @@ public class GeneticAlgorithmStrategyTest {
 		Object geneticStructureToSet = new Object();
 		Integer populationSizeToSet = new Integer(500);
 		Integer maxGenerationsToSet = new Integer(1000);
-		Double survivalRateToSet = new Double(0.9);
 		Double mutationRateToSet = new Double(0.05);
 		Integer maxMutationsPerIndividualToSet = new Integer(5);
 		Double crossoverRateToSet = new Double(0.1);
@@ -56,25 +53,22 @@ public class GeneticAlgorithmStrategyTest {
 		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
 		MutationAlgorithm mutationAlgorithmToSet = new MultipleMutationAlgorithm();
-		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
 		Selector selectorToSet = new RouletteSelector();
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(geneticStructureToSet,
-				populationSizeToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
-				maxMutationsPerIndividualToSet, crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet,
-				mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, null, false);
+				populationSizeToSet, maxGenerationsToSet, mutationRateToSet, maxMutationsPerIndividualToSet,
+				crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet, mutationAlgorithmToSet,
+				selectorToSet, null, false);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
 		assertSame(maxGenerationsToSet, geneticAlgorithmStrategy.getMaxGenerations());
-		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
 		assertSame(mutationRateToSet, geneticAlgorithmStrategy.getMutationRate());
 		assertSame(maxMutationsPerIndividualToSet, geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		assertSame(crossoverRateToSet, geneticAlgorithmStrategy.getCrossoverRate());
 		assertSame(fitnessEvaluatorToSet, geneticAlgorithmStrategy.getFitnessEvaluator());
 		assertSame(crossoverAlgorithmToSet, geneticAlgorithmStrategy.getCrossoverAlgorithm());
 		assertSame(mutationAlgorithmToSet, geneticAlgorithmStrategy.getMutationAlgorithm());
-		assertSame(selectionAlgorithmToSet, geneticAlgorithmStrategy.getSelectionAlgorithm());
 		assertSame(selectorToSet, geneticAlgorithmStrategy.getSelector());
 		assertNull(geneticAlgorithmStrategy.getKnownSolutionFitnessEvaluator());
 		assertFalse(geneticAlgorithmStrategy.getCompareToKnownSolution());
@@ -86,7 +80,6 @@ public class GeneticAlgorithmStrategyTest {
 		Object geneticStructureToSet = new Object();
 		Integer populationSizeToSet = new Integer(500);
 		Integer maxGenerationsToSet = new Integer(1000);
-		Double survivalRateToSet = new Double(0.9);
 		Double mutationRateToSet = new Double(0.05);
 		Integer maxMutationsPerIndividualToSet = new Integer(5);
 		Double crossoverRateToSet = new Double(0.1);
@@ -94,29 +87,25 @@ public class GeneticAlgorithmStrategyTest {
 		when(fitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		CrossoverAlgorithm crossoverAlgorithmToSet = new EqualOpportunityGeneCrossoverAlgorithm();
 		MutationAlgorithm mutationAlgorithmToSet = new MultipleMutationAlgorithm();
-		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
 		Selector selectorToSet = new RouletteSelector();
 		FitnessEvaluator knownSolutionFitnessEvaluatorToSet = mock(FitnessEvaluator.class);
 		when(knownSolutionFitnessEvaluatorToSet.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
 		Boolean compareToKnownSolutionToSet = new Boolean(true);
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(geneticStructureToSet,
-				populationSizeToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
-				maxMutationsPerIndividualToSet, crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet,
-				mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, knownSolutionFitnessEvaluatorToSet,
-				compareToKnownSolutionToSet);
+				populationSizeToSet, maxGenerationsToSet, mutationRateToSet, maxMutationsPerIndividualToSet,
+				crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet, mutationAlgorithmToSet,
+				selectorToSet, knownSolutionFitnessEvaluatorToSet, compareToKnownSolutionToSet);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
 		assertSame(maxGenerationsToSet, geneticAlgorithmStrategy.getMaxGenerations());
-		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
 		assertSame(mutationRateToSet, geneticAlgorithmStrategy.getMutationRate());
 		assertSame(maxMutationsPerIndividualToSet, geneticAlgorithmStrategy.getMaxMutationsPerIndividual());
 		assertSame(crossoverRateToSet, geneticAlgorithmStrategy.getCrossoverRate());
 		assertSame(fitnessEvaluatorToSet, geneticAlgorithmStrategy.getFitnessEvaluator());
 		assertSame(crossoverAlgorithmToSet, geneticAlgorithmStrategy.getCrossoverAlgorithm());
 		assertSame(mutationAlgorithmToSet, geneticAlgorithmStrategy.getMutationAlgorithm());
-		assertSame(selectionAlgorithmToSet, geneticAlgorithmStrategy.getSelectionAlgorithm());
 		assertSame(selectorToSet, geneticAlgorithmStrategy.getSelector());
 		assertSame(knownSolutionFitnessEvaluatorToSet, geneticAlgorithmStrategy.getKnownSolutionFitnessEvaluator());
 		assertSame(compareToKnownSolutionToSet, geneticAlgorithmStrategy.getCompareToKnownSolution());
@@ -138,33 +127,6 @@ public class GeneticAlgorithmStrategyTest {
 		geneticAlgorithmStrategy.setPopulationSize(populationSizeToSet);
 
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
-	}
-
-	@Test
-	public void testSetSurvivalRate() {
-		Double survivalRateToSet = new Double(0.9);
-		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
-		geneticAlgorithmStrategy.setSurvivalRate(survivalRateToSet);
-
-		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetSurvivalRateInvalid() {
-		Double survivalRateToSet = new Double(1.1);
-		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
-		geneticAlgorithmStrategy.setSurvivalRate(survivalRateToSet);
-
-		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testSetSurvivalRateNegative() {
-		Double survivalRateToSet = new Double(-0.1);
-		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
-		geneticAlgorithmStrategy.setSurvivalRate(survivalRateToSet);
-
-		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
 	}
 
 	@Test
@@ -267,15 +229,6 @@ public class GeneticAlgorithmStrategyTest {
 		geneticAlgorithmStrategy.setMutationAlgorithm(mutationAlgorithmToSet);
 
 		assertSame(mutationAlgorithmToSet, geneticAlgorithmStrategy.getMutationAlgorithm());
-	}
-
-	@Test
-	public void testSetSelectionAlgorithm() {
-		SelectionAlgorithm selectionAlgorithmToSet = new ProbabilisticSelectionAlgorithm();
-		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
-		geneticAlgorithmStrategy.setSelectionAlgorithm(selectionAlgorithmToSet);
-
-		assertSame(selectionAlgorithmToSet, geneticAlgorithmStrategy.getSelectionAlgorithm());
 	}
 
 	@Test

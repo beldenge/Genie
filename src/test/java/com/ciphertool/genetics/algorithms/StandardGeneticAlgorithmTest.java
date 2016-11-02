@@ -57,7 +57,6 @@ import com.ciphertool.genetics.StandardPopulation;
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.NonUniformMutationAlgorithm;
-import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.dao.GenerationStatisticsDao;
@@ -75,7 +74,7 @@ public class StandardGeneticAlgorithmTest {
 		StandardGeneticAlgorithm standardGeneticAlgorithm = new StandardGeneticAlgorithm();
 		standardGeneticAlgorithm.setPopulation(populationToSet);
 
-		StandardPopulation populationFromObject = standardGeneticAlgorithm.getPopulation();
+		StandardPopulation populationFromObject = (StandardPopulation) standardGeneticAlgorithm.getPopulation();
 
 		assertSame(populationToSet, populationFromObject);
 	}
@@ -102,12 +101,12 @@ public class StandardGeneticAlgorithmTest {
 		StandardPopulation populationMock = mock(StandardPopulation.class);
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
 		NonUniformMutationAlgorithm mutationAlgorithmMock = mock(NonUniformMutationAlgorithm.class);
-		SelectionAlgorithm selectionAlgorithmMock = mock(SelectionAlgorithm.class);
 		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		FitnessEvaluator knownSolutionFitnessEvaluatorMock = mock(FitnessEvaluator.class);
 		Object geneticStructure = new Object();
 		boolean compareToKnownSolution = true;
 		int maxMutationsPerIndividual = 5;
+		int populationSizeToSet = 100;
 
 		strategyToSet.setGeneticStructure(geneticStructure);
 		strategyToSet.setFitnessEvaluator(fitnessEvaluatorMock);
@@ -116,7 +115,7 @@ public class StandardGeneticAlgorithmTest {
 		strategyToSet.setCrossoverAlgorithm(crossoverAlgorithmMock);
 		strategyToSet.setMutationAlgorithm(mutationAlgorithmMock);
 		strategyToSet.setMaxMutationsPerIndividual(maxMutationsPerIndividual);
-		strategyToSet.setSelectionAlgorithm(selectionAlgorithmMock);
+		strategyToSet.setPopulationSize(populationSizeToSet);
 
 		StandardGeneticAlgorithm standardGeneticAlgorithm = new StandardGeneticAlgorithm();
 		standardGeneticAlgorithm.setPopulation(populationMock);
@@ -131,6 +130,7 @@ public class StandardGeneticAlgorithmTest {
 		verify(populationMock, times(1)).setFitnessEvaluator(same(fitnessEvaluatorMock));
 		verify(populationMock, times(1)).setKnownSolutionFitnessEvaluator(same(knownSolutionFitnessEvaluatorMock));
 		verify(populationMock, times(1)).setCompareToKnownSolution(eq(compareToKnownSolution));
+		verify(populationMock, times(1)).setTargetSize(eq(populationSizeToSet));
 		verifyNoMoreInteractions(populationMock);
 
 		verifyNoMoreInteractions(crossoverAlgorithmMock);
@@ -149,12 +149,6 @@ public class StandardGeneticAlgorithmTest {
 		MutationAlgorithm mutationAlgorithmFromObject = (MutationAlgorithm) ReflectionUtils.getField(mutationAlgorithmField, standardGeneticAlgorithm);
 
 		assertSame(mutationAlgorithmMock, mutationAlgorithmFromObject);
-
-		Field selectionAlgorithmField = ReflectionUtils.findField(StandardGeneticAlgorithm.class, "selectionAlgorithm");
-		ReflectionUtils.makeAccessible(selectionAlgorithmField);
-		SelectionAlgorithm selectionAlgorithmFromObject = (SelectionAlgorithm) ReflectionUtils.getField(selectionAlgorithmField, standardGeneticAlgorithm);
-
-		assertSame(selectionAlgorithmMock, selectionAlgorithmFromObject);
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -164,7 +158,6 @@ public class StandardGeneticAlgorithmTest {
 
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
 		int populationSize = 100;
-		double survivalRate = 0.1;
 		double mutationRate = 0.0;
 		double crossoverRate = 0.0;
 		CrossoverAlgorithm crossoverAlgorithmMock = mock(CrossoverAlgorithm.class);
@@ -172,7 +165,6 @@ public class StandardGeneticAlgorithmTest {
 		MutationAlgorithm mutationAlgorithmMock = mock(MutationAlgorithm.class);
 		strategyToSet.setGeneticStructure(new Object());
 		strategyToSet.setPopulationSize(populationSize);
-		strategyToSet.setSurvivalRate(survivalRate);
 		strategyToSet.setMutationRate(mutationRate);
 		strategyToSet.setMaxMutationsPerIndividual(0);
 		strategyToSet.setCrossoverRate(crossoverRate);
@@ -180,7 +172,6 @@ public class StandardGeneticAlgorithmTest {
 		strategyToSet.setCrossoverAlgorithm(crossoverAlgorithmMock);
 		strategyToSet.setFitnessEvaluator(fitnessEvaluatorMock);
 		strategyToSet.setMutationAlgorithm(mutationAlgorithmMock);
-		strategyToSet.setSelectionAlgorithm(mock(SelectionAlgorithm.class));
 		strategyToSet.setSelector(mock(Selector.class));
 
 		StandardPopulation populationMock = mock(StandardPopulation.class);
@@ -221,7 +212,6 @@ public class StandardGeneticAlgorithmTest {
 		assertNotNull(executionStatisticsFromObject);
 		assertTrue(executionStatisticsFromObject.getStartDateTime().getTime() >= beforeInitialize.getTime());
 		assertEquals(populationSize, executionStatisticsFromObject.getPopulationSize().intValue());
-		assertEquals(new Double(survivalRate), executionStatisticsFromObject.getSurvivalRate());
 		assertEquals(new Double(mutationRate), executionStatisticsFromObject.getMutationRate());
 		assertEquals(new Double(crossoverRate), executionStatisticsFromObject.getCrossoverRate());
 		assertEquals(crossoverAlgorithmMock.getClass().getSimpleName(), executionStatisticsFromObject.getCrossoverAlgorithm());
@@ -229,11 +219,11 @@ public class StandardGeneticAlgorithmTest {
 		assertEquals(mutationAlgorithmMock.getClass().getSimpleName(), executionStatisticsFromObject.getMutationAlgorithm());
 
 		verify(populationMock, times(1)).clearIndividuals();
-		verify(populationMock, times(1)).breed(eq(populationSize));
+		verify(populationMock, times(1)).breed();
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
-		verify(populationMock, times(1)).size();
+		verify(populationMock, times(2)).size();
 		verify(populationMock, times(1)).setStopRequested(false);
-		verify(populationMock, times(3)).getIndividuals();
+		verify(populationMock, times(2)).getIndividuals();
 		verifyNoMoreInteractions(populationMock);
 	}
 
@@ -277,7 +267,6 @@ public class StandardGeneticAlgorithmTest {
 		int initialPopulationSize = 100;
 		int populationSize = 100;
 		int index = 0;
-		double survivalRate = 0.9;
 		double mutationRate = 0.1;
 		double crossoverRate = 1.0;
 
@@ -297,7 +286,6 @@ public class StandardGeneticAlgorithmTest {
 
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
 		strategyToSet.setPopulationSize(populationSize);
-		strategyToSet.setSurvivalRate(survivalRate);
 		strategyToSet.setMutationRate(mutationRate);
 		strategyToSet.setCrossoverRate(crossoverRate);
 
@@ -359,9 +347,9 @@ public class StandardGeneticAlgorithmTest {
 
 		verify(populationMock, times(1)).backupIndividuals();
 		verify(populationMock, times(200)).selectIndex();
-		verify(populationMock, times(203)).getIndividuals();
-		verify(populationMock, times(6)).size();
-		verify(populationMock, never()).breed(populationSize);
+		verify(populationMock, times(202)).getIndividuals();
+		verify(populationMock, times(7)).size();
+		verify(populationMock, never()).breed();
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(100)).removeIndividual(anyInt());
 		verify(populationMock, times(200)).addIndividual(any(Chromosome.class));
@@ -384,7 +372,6 @@ public class StandardGeneticAlgorithmTest {
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
 		strategyToSet.setGeneticStructure(new Object());
 		strategyToSet.setPopulationSize(1);
-		strategyToSet.setSurvivalRate(0.1);
 		strategyToSet.setMutationRate(0.0);
 		strategyToSet.setMaxMutationsPerIndividual(0);
 		strategyToSet.setCrossoverRate(0.0);
@@ -392,7 +379,6 @@ public class StandardGeneticAlgorithmTest {
 		strategyToSet.setCrossoverAlgorithm(mock(CrossoverAlgorithm.class));
 		strategyToSet.setFitnessEvaluator(mock(FitnessEvaluator.class));
 		strategyToSet.setMutationAlgorithm(mock(MutationAlgorithm.class));
-		strategyToSet.setSelectionAlgorithm(mock(SelectionAlgorithm.class));
 		strategyToSet.setSelector(mock(Selector.class));
 
 		Field strategyField = ReflectionUtils.findField(StandardGeneticAlgorithm.class, "strategy");
@@ -407,13 +393,6 @@ public class StandardGeneticAlgorithmTest {
 		GeneticAlgorithmStrategy strategyToSet = new GeneticAlgorithmStrategy();
 		strategyToSet.setGeneticStructure(null);
 		strategyToSet.setPopulationSize(0);
-
-		/*
-		 * This must be set via reflection because the setter method does its own validation
-		 */
-		Field survivalRateField = ReflectionUtils.findField(GeneticAlgorithmStrategy.class, "survivalRate");
-		ReflectionUtils.makeAccessible(survivalRateField);
-		ReflectionUtils.setField(survivalRateField, strategyToSet, -0.1);
 
 		/*
 		 * This must be set via reflection because the setter method does its own validation
@@ -435,7 +414,6 @@ public class StandardGeneticAlgorithmTest {
 		strategyToSet.setCrossoverAlgorithm(null);
 		strategyToSet.setFitnessEvaluator(null);
 		strategyToSet.setMutationAlgorithm(null);
-		strategyToSet.setSelectionAlgorithm(null);
 		strategyToSet.setSelector(null);
 
 		Field strategyField = ReflectionUtils.findField(StandardGeneticAlgorithm.class, "strategy");
@@ -450,7 +428,6 @@ public class StandardGeneticAlgorithmTest {
 			String expectedMessage = "Unable to execute genetic algorithm because one or more of the required parameters are missing.  The validation errors are:";
 			expectedMessage += "\n\t-Parameter 'geneticStructure' cannot be null.";
 			expectedMessage += "\n\t-Parameter 'populationSize' must be greater than zero.";
-			expectedMessage += "\n\t-Parameter 'survivalRate' must be greater than zero.";
 			expectedMessage += "\n\t-Parameter 'mutationRate' must be greater than or equal to zero.";
 			expectedMessage += "\n\t-Parameter 'maxMutationsPerIndividual' must be greater than or equal to zero.";
 			expectedMessage += "\n\t-Parameter 'crossoverRate' must be greater than or equal to zero.";
@@ -458,7 +435,6 @@ public class StandardGeneticAlgorithmTest {
 			expectedMessage += "\n\t-Parameter 'crossoverAlgorithm' cannot be null.";
 			expectedMessage += "\n\t-Parameter 'fitnessEvaluator' cannot be null.";
 			expectedMessage += "\n\t-Parameter 'mutationAlgorithm' cannot be null.";
-			expectedMessage += "\n\t-Parameter 'selectionAlgorithm' cannot be null.";
 			expectedMessage += "\n\t-Parameter 'selectorMethod' cannot be null.";
 
 			assertEquals(expectedMessage, ise.getMessage());
@@ -708,10 +684,10 @@ public class StandardGeneticAlgorithmTest {
 		standardGeneticAlgorithm.spawnInitialPopulation();
 
 		verify(populationMock, times(1)).clearIndividuals();
-		verify(populationMock, times(1)).breed(eq(populationSize));
+		verify(populationMock, times(1)).breed();
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
-		verify(populationMock, times(1)).size();
-		verify(populationMock, times(3)).getIndividuals();
+		verify(populationMock, times(2)).size();
+		verify(populationMock, times(2)).getIndividuals();
 		verifyNoMoreInteractions(populationMock);
 	}
 

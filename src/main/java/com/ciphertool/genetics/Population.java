@@ -23,9 +23,12 @@ import java.util.List;
 
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
+import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public interface Population {
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException;
+
+	public int breed();
 
 	public void recoverFromBackup();
 
@@ -38,4 +41,46 @@ public interface Population {
 	public int size();
 
 	public List<Chromosome> getIndividuals();
+
+	public void requestStop();
+
+	/**
+	 * @param geneticStructure
+	 *            the geneticStructure to set
+	 */
+	public void setGeneticStructure(Object geneticStructure);
+
+	/**
+	 * @param fitnessEvaluator
+	 *            the fitnessEvaluator to set
+	 */
+	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
+
+	/**
+	 * This is NOT required. We will not always know the solution. In fact, that should be the rare case.
+	 * 
+	 * @param knownSolutionFitnessEvaluator
+	 *            the knownSolutionFitnessEvaluator to set
+	 */
+	public void setKnownSolutionFitnessEvaluator(FitnessEvaluator knownSolutionFitnessEvaluator);
+
+	/**
+	 * This is NOT required.
+	 * 
+	 * @param compareToKnownSolution
+	 *            the compareToKnownSolution to set
+	 */
+	public void setCompareToKnownSolution(Boolean compareToKnownSolution);
+
+	/**
+	 * @param stopRequested
+	 *            the stopRequested to set
+	 */
+	public void setStopRequested(boolean stopRequested);
+
+	/**
+	 * @param targetSize
+	 *            the targetSize to set
+	 */
+	public void setTargetSize(int targetSize);
 }

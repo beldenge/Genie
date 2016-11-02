@@ -23,14 +23,12 @@ import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.crossover.EvaluatedCrossoverAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.EvaluatedMutationAlgorithm;
 import com.ciphertool.genetics.algorithms.mutation.MutationAlgorithm;
-import com.ciphertool.genetics.algorithms.selection.SelectionAlgorithm;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategy {
 	private Object				geneticStructure;
 	private Integer				populationSize;
-	private Double				survivalRate;
 	private Double				mutationRate;
 	private Integer				maxMutationsPerIndividual;
 	private Double				crossoverRate;
@@ -40,7 +38,6 @@ public class GeneticAlgorithmStrategy {
 	private FitnessEvaluator	fitnessEvaluator;
 	@SuppressWarnings("rawtypes")
 	private MutationAlgorithm	mutationAlgorithm;
-	private SelectionAlgorithm	selectionAlgorithm;
 	private Selector			selector;
 	private FitnessEvaluator	knownSolutionFitnessEvaluator;
 	private Boolean				compareToKnownSolution;
@@ -60,8 +57,6 @@ public class GeneticAlgorithmStrategy {
 	 *            the populationSize to set
 	 * @param maxGenerations
 	 *            the maxGenerations to set
-	 * @param survivalRate
-	 *            the survivalRate to set
 	 * @param mutationRate
 	 *            the mutationRate to set
 	 * @param maxMutationsPerIndividual
@@ -74,8 +69,6 @@ public class GeneticAlgorithmStrategy {
 	 *            the crossoverAlgorithm to set
 	 * @param mutationAlgorithm
 	 *            the mutationAlgorithm to set
-	 * @param selectionAlgorithm
-	 *            the selectionAlgorithm to set
 	 * @param selector
 	 *            the selector to set
 	 * @param knownSolutionFitnessEvaluator
@@ -85,14 +78,13 @@ public class GeneticAlgorithmStrategy {
 	 */
 	@SuppressWarnings("rawtypes")
 	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer maxGenerations,
-			Double survivalRate, Double mutationRate, Integer maxMutationsPerIndividual, Double crossoverRate,
+			Double mutationRate, Integer maxMutationsPerIndividual, Double crossoverRate,
 			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm, Selector selector,
-			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
+			MutationAlgorithm mutationAlgorithm, Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
+			Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.maxGenerations = maxGenerations;
-		this.setSurvivalRate(survivalRate);
 
 		this.setMutationRate(mutationRate);
 		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
@@ -114,7 +106,6 @@ public class GeneticAlgorithmStrategy {
 			((EvaluatedMutationAlgorithm) this.mutationAlgorithm).setFitnessEvaluator(this.fitnessEvaluator);
 		}
 
-		this.selectionAlgorithm = selectionAlgorithm;
 		this.selector = selector;
 
 		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
@@ -152,26 +143,6 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setPopulationSize(Integer populationSize) {
 		this.populationSize = populationSize;
-	}
-
-	/**
-	 * @return the survivalRate
-	 */
-	public Double getSurvivalRate() {
-		return survivalRate;
-	}
-
-	/**
-	 * @param survivalRate
-	 *            the survivalRate to set
-	 */
-	public void setSurvivalRate(Double survivalRate) {
-		if (survivalRate == null || survivalRate < 0.0 || survivalRate > 1.0) {
-			throw new IllegalArgumentException("Tried to set a survivalRate of " + survivalRate
-					+ ", but GeneicAlgorithmStrategy requires a survivalRate between 0.0 and 1.0 inclusive.");
-		}
-
-		this.survivalRate = survivalRate;
 	}
 
 	/**
@@ -291,21 +262,6 @@ public class GeneticAlgorithmStrategy {
 	@SuppressWarnings("rawtypes")
 	public void setMutationAlgorithm(MutationAlgorithm mutationAlgorithm) {
 		this.mutationAlgorithm = mutationAlgorithm;
-	}
-
-	/**
-	 * @return the selectionAlgorithm
-	 */
-	public SelectionAlgorithm getSelectionAlgorithm() {
-		return selectionAlgorithm;
-	}
-
-	/**
-	 * @param selectionAlgorithm
-	 *            the selectionAlgorithm to set
-	 */
-	public void setSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
-		this.selectionAlgorithm = selectionAlgorithm;
 	}
 
 	/**

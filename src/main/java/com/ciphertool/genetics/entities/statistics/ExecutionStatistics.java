@@ -45,8 +45,6 @@ public class ExecutionStatistics implements Serializable {
 
 	private Integer						populationSize;
 
-	private Double						survivalRate;
-
 	private Double						mutationRate;
 
 	private Double						crossoverRate;
@@ -74,7 +72,6 @@ public class ExecutionStatistics implements Serializable {
 		}
 
 		this.populationSize = strategy.getPopulationSize();
-		this.survivalRate = strategy.getSurvivalRate();
 		this.mutationRate = strategy.getMutationRate();
 		this.crossoverRate = strategy.getCrossoverRate();
 		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy.getCrossoverAlgorithm().getClass().getSimpleName() : null;
@@ -132,21 +129,6 @@ public class ExecutionStatistics implements Serializable {
 	 */
 	public void setPopulationSize(Integer populationSize) {
 		this.populationSize = populationSize;
-	}
-
-	/**
-	 * @return the survivalRate
-	 */
-	public Double getSurvivalRate() {
-		return survivalRate;
-	}
-
-	/**
-	 * @param survivalRate
-	 *            the survivalRate to set
-	 */
-	public void setSurvivalRate(Double survivalRate) {
-		this.survivalRate = survivalRate;
 	}
 
 	/**
@@ -260,7 +242,6 @@ public class ExecutionStatistics implements Serializable {
 		result = prime * result + ((mutationRate == null) ? 0 : mutationRate.hashCode());
 		result = prime * result + ((populationSize == null) ? 0 : populationSize.hashCode());
 		result = prime * result + ((startDateTime == null) ? 0 : startDateTime.hashCode());
-		result = prime * result + ((survivalRate == null) ? 0 : survivalRate.hashCode());
 		return result;
 	}
 
@@ -339,21 +320,14 @@ public class ExecutionStatistics implements Serializable {
 		} else if (!startDateTime.equals(other.startDateTime)) {
 			return false;
 		}
-		if (survivalRate == null) {
-			if (other.survivalRate != null) {
-				return false;
-			}
-		} else if (!survivalRate.equals(other.survivalRate)) {
-			return false;
-		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "ExecutionStatistics [id=" + id + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime
-				+ ", populationSize=" + populationSize + ", survivalRate=" + survivalRate + ", mutationRate="
-				+ mutationRate + ", crossoverRate=" + crossoverRate + ", crossoverAlgorithm=" + crossoverAlgorithm
-				+ ", fitnessEvaluator=" + fitnessEvaluator + ", mutationAlgorithm=" + mutationAlgorithm + "]";
+				+ ", populationSize=" + populationSize + ", mutationRate=" + mutationRate + ", crossoverRate="
+				+ crossoverRate + ", crossoverAlgorithm=" + crossoverAlgorithm + ", fitnessEvaluator="
+				+ fitnessEvaluator + ", mutationAlgorithm=" + mutationAlgorithm + "]";
 	}
 }

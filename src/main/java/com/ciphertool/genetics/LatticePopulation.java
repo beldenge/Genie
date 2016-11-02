@@ -494,22 +494,17 @@ public class LatticePopulation implements Population {
 		return totalFitness;
 	}
 
+	@Override
 	public void requestStop() {
 		this.stopRequested = true;
 	}
 
-	/**
-	 * @param stopRequested
-	 *            the stopRequested to set
-	 */
+	@Override
 	public void setStopRequested(boolean stopRequested) {
 		this.stopRequested = stopRequested;
 	}
 
-	/**
-	 * @param obj
-	 *            the Object to set
-	 */
+	@Override
 	public void setGeneticStructure(Object obj) {
 		this.breeder.setGeneticStructure(obj);
 	}
@@ -522,10 +517,7 @@ public class LatticePopulation implements Population {
 		this.breeder = breeder;
 	}
 
-	/**
-	 * @param fitnessEvaluator
-	 *            the fitnessEvaluator to set
-	 */
+	@Override
 	@Required
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
@@ -558,22 +550,12 @@ public class LatticePopulation implements Population {
 		this.selector = selector;
 	}
 
-	/**
-	 * This is NOT required. We will not always know the solution. In fact, that should be the rare case.
-	 * 
-	 * @param knownSolutionFitnessEvaluator
-	 *            the knownSolutionFitnessEvaluator to set
-	 */
+	@Override
 	public void setKnownSolutionFitnessEvaluator(FitnessEvaluator knownSolutionFitnessEvaluator) {
 		this.knownSolutionFitnessEvaluator = knownSolutionFitnessEvaluator;
 	}
 
-	/**
-	 * This is NOT required.
-	 * 
-	 * @param compareToKnownSolution
-	 *            the compareToKnownSolution to set
-	 */
+	@Override
 	public void setCompareToKnownSolution(Boolean compareToKnownSolution) {
 		this.compareToKnownSolution = compareToKnownSolution;
 	}
@@ -601,21 +583,16 @@ public class LatticePopulation implements Population {
 		return latticeColumns;
 	}
 
-	/**
-	 * @param latticeRows
-	 *            the latticeRows to set
-	 */
-	@Required
-	public void setLatticeRows(int latticeRows) {
-		this.latticeRows = latticeRows;
-	}
+	@Override
+	public void setTargetSize(int targetSize) {
+		int sqrt = (int) Math.sqrt(targetSize);
 
-	/**
-	 * @param latticeColumns
-	 *            the latticeColumns to set
-	 */
-	@Required
-	public void setLatticeColumns(int latticeColumns) {
-		this.latticeColumns = latticeColumns;
+		if ((sqrt * sqrt) != targetSize) {
+			throw new IllegalArgumentException("The target population size must have an integer square root for "
+					+ getClass().getSimpleName());
+		}
+
+		this.latticeColumns = sqrt;
+		this.latticeRows = sqrt;
 	}
 }

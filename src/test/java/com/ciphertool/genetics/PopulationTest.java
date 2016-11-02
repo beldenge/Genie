@@ -225,6 +225,7 @@ public class PopulationTest {
 		population.setTaskExecutor(taskExecutor);
 
 		int expectedPopulationSize = 10;
+		population.setTargetSize(expectedPopulationSize);
 
 		Breeder breederMock = mock(Breeder.class);
 		MockKeyedChromosome mockKeyedChromosome = new MockKeyedChromosome();
@@ -235,7 +236,7 @@ public class PopulationTest {
 		assertEquals(0, population.size());
 		assertEquals(new Double(0.0), population.getTotalFitness());
 
-		population.breed(expectedPopulationSize);
+		population.breed();
 
 		assertEquals(expectedPopulationSize, population.size());
 		assertEquals(new Double(50.0), population.getTotalFitness());

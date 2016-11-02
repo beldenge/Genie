@@ -55,4 +55,6 @@ public interface GeneticAlgorithm {
 	 *            the GeneticAlgorithmStrategy to set
 	 */
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy);
+
+	public void spawnInitialPopulation() throws InterruptedException;
 }
