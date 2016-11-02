@@ -170,28 +170,24 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 			if (stopRequested) {
 				throw new InterruptedException("Stop requested during crossover.");
 			}
+
 			momIndex = this.population.selectIndex();
+			// We remove it from the population temporarily to ensure we don't crossover an individual with itself
+			Chromosome mom = this.population.removeIndividual(momIndex);
+
 			dadIndex = this.population.selectIndex();
+			Chromosome dad = this.population.getIndividuals().get(dadIndex);
+			// Add it back to the population and re-sort for the next round of selections
+			this.population.addIndividual(mom);
+			this.population.sortIndividuals();
 
 			if (ThreadLocalRandom.current().nextDouble() > strategy.getCrossoverRate()) {
-				childrenToAdd.add(this.population.getIndividuals().get(momIndex).clone());
-				childrenToAdd.add(this.population.getIndividuals().get(dadIndex).clone());
+				childrenToAdd.add(mom.clone());
+				childrenToAdd.add(dad.clone());
 
 				// Skipping crossover
 				continue;
 			}
-
-			if (momIndex == dadIndex) {
-				/*
-				 * There is no point in crossing over identical parents, because the result would essentially be
-				 * duplicating that parent in the population
-				 */
-				i--;
-				continue;
-			}
-
-			Chromosome mom = this.population.getIndividuals().get(momIndex);
-			Chromosome dad = this.population.getIndividuals().get(dadIndex);
 
 			if (verifyAncestry && this.generationCount > this.generationsToKeep && mom.getAncestry() != null
 					&& dad.getAncestry() != null
@@ -248,6 +244,8 @@ public class StandardGeneticAlgorithm extends MultigenerationalGeneticAlgorithm 
 
 			this.population.addIndividual(child);
 		}
+
+		this.population.sortIndividuals();
 
 		return (int) childrenToAdd.size();
 	}

@@ -43,10 +43,15 @@ public class RouletteSelector implements Selector {
 			return -1;
 		}
 
-		double randomIndex = totalFitness - (ThreadLocalRandom.current().nextDouble() * totalFitness);
+		double randomIndex = ThreadLocalRandom.current().nextDouble() * totalFitness;
 
 		int winningIndex = -1;
 		Chromosome nextIndividual = null;
+
+		if (totalFitness == 0.0) {
+			// If all the individuals have zero fitness, then pick one at random
+			return ThreadLocalRandom.current().nextInt(0, individuals.size());
+		}
 
 		for (int i = 0; i < individuals.size(); i++) {
 			nextIndividual = individuals.get(i);
