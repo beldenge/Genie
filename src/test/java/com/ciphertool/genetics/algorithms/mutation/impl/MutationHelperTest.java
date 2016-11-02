@@ -52,9 +52,5 @@ public class MutationHelperTest {
 
 			assertTrue(numMutations >= 1 && numMutations <= maxMutations);
 		}
-
-		for (Integer mutatonCount : ints.keySet()) {
-			System.out.println(mutatonCount + "=" + ints.get(mutatonCount));
-		}
 	}
 }

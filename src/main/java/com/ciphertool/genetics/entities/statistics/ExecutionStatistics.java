@@ -45,8 +45,6 @@ public class ExecutionStatistics implements Serializable {
 
 	private Integer						populationSize;
 
-	private Integer						lifespan;
-
 	private Double						survivalRate;
 
 	private Double						mutationRate;
@@ -76,7 +74,6 @@ public class ExecutionStatistics implements Serializable {
 		}
 
 		this.populationSize = strategy.getPopulationSize();
-		this.lifespan = strategy.getLifespan();
 		this.survivalRate = strategy.getSurvivalRate();
 		this.mutationRate = strategy.getMutationRate();
 		this.crossoverRate = strategy.getCrossoverRate();
@@ -135,21 +132,6 @@ public class ExecutionStatistics implements Serializable {
 	 */
 	public void setPopulationSize(Integer populationSize) {
 		this.populationSize = populationSize;
-	}
-
-	/**
-	 * @return the lifespan
-	 */
-	public Integer getLifespan() {
-		return lifespan;
-	}
-
-	/**
-	 * @param lifespan
-	 *            the lifespan to set
-	 */
-	public void setLifespan(Integer lifespan) {
-		this.lifespan = lifespan;
 	}
 
 	/**
@@ -274,7 +256,6 @@ public class ExecutionStatistics implements Serializable {
 		result = prime * result + ((endDateTime == null) ? 0 : endDateTime.hashCode());
 		result = prime * result + ((fitnessEvaluator == null) ? 0 : fitnessEvaluator.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((lifespan == null) ? 0 : lifespan.hashCode());
 		result = prime * result + ((mutationAlgorithm == null) ? 0 : mutationAlgorithm.hashCode());
 		result = prime * result + ((mutationRate == null) ? 0 : mutationRate.hashCode());
 		result = prime * result + ((populationSize == null) ? 0 : populationSize.hashCode());
@@ -330,13 +311,6 @@ public class ExecutionStatistics implements Serializable {
 		} else if (!id.equals(other.id)) {
 			return false;
 		}
-		if (lifespan == null) {
-			if (other.lifespan != null) {
-				return false;
-			}
-		} else if (!lifespan.equals(other.lifespan)) {
-			return false;
-		}
 		if (mutationAlgorithm == null) {
 			if (other.mutationAlgorithm != null) {
 				return false;
@@ -378,9 +352,8 @@ public class ExecutionStatistics implements Serializable {
 	@Override
 	public String toString() {
 		return "ExecutionStatistics [id=" + id + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime
-				+ ", populationSize=" + populationSize + ", lifespan=" + lifespan + ", survivalRate=" + survivalRate
-				+ ", mutationRate=" + mutationRate + ", crossoverRate=" + crossoverRate + ", crossoverAlgorithm="
-				+ crossoverAlgorithm + ", fitnessEvaluator=" + fitnessEvaluator + ", mutationAlgorithm="
-				+ mutationAlgorithm + "]";
+				+ ", populationSize=" + populationSize + ", survivalRate=" + survivalRate + ", mutationRate="
+				+ mutationRate + ", crossoverRate=" + crossoverRate + ", crossoverAlgorithm=" + crossoverAlgorithm
+				+ ", fitnessEvaluator=" + fitnessEvaluator + ", mutationAlgorithm=" + mutationAlgorithm + "]";
 	}
 }

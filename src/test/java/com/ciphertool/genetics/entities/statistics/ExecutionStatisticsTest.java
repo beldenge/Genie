@@ -50,7 +50,6 @@ public class ExecutionStatisticsTest {
 
 		assertSame(startDateToSet, executionStatistics.getStartDateTime());
 		assertSame(strategy.getPopulationSize(), executionStatistics.getPopulationSize());
-		assertSame(strategy.getLifespan(), executionStatistics.getLifespan());
 		assertSame(strategy.getSurvivalRate(), executionStatistics.getSurvivalRate());
 		assertSame(strategy.getMutationRate(), executionStatistics.getMutationRate());
 		assertSame(strategy.getCrossoverRate(), executionStatistics.getCrossoverRate());
@@ -93,15 +92,6 @@ public class ExecutionStatisticsTest {
 		executionStatistics.setPopulationSize(populationSizeToSet);
 
 		assertSame(populationSizeToSet, executionStatistics.getPopulationSize());
-	}
-
-	@Test
-	public void testSetLifespan() {
-		Integer lifespanToSet = 25;
-		ExecutionStatistics executionStatistics = new ExecutionStatistics();
-		executionStatistics.setLifespan(lifespanToSet);
-
-		assertSame(lifespanToSet, executionStatistics.getLifespan());
 	}
 
 	@Test
@@ -243,11 +233,6 @@ public class ExecutionStatisticsTest {
 		executionStatisticsWithDifferentPopulationSize.setPopulationSize(999);
 		assertFalse(base.equals(executionStatisticsWithDifferentPopulationSize));
 
-		ExecutionStatistics executionStatisticsWithDifferentLifespan = new ExecutionStatistics(baseStartDate,
-				baseStrategy);
-		executionStatisticsWithDifferentLifespan.setLifespan(50);
-		assertFalse(base.equals(executionStatisticsWithDifferentLifespan));
-
 		ExecutionStatistics executionStatisticsWithDifferentSurvivalRate = new ExecutionStatistics(baseStartDate,
 				baseStrategy);
 		executionStatisticsWithDifferentSurvivalRate.setSurvivalRate(1.0);
@@ -288,7 +273,6 @@ public class ExecutionStatisticsTest {
 	@SuppressWarnings("rawtypes")
 	private static GeneticAlgorithmStrategy createGeneticAlgorithmStrategy() {
 		Integer populationSizeToSet = 1000;
-		Integer lifespanToSet = 25;
 		Double survivalRateToSet = 0.9;
 		Double mutationRateToSet = 0.05;
 		Double crossoverRateToSet = 0.1;
@@ -298,7 +282,6 @@ public class ExecutionStatisticsTest {
 
 		GeneticAlgorithmStrategy strategy = new GeneticAlgorithmStrategy();
 		strategy.setPopulationSize(populationSizeToSet);
-		strategy.setLifespan(lifespanToSet);
 		strategy.setSurvivalRate(survivalRateToSet);
 		strategy.setMutationRate(mutationRateToSet);
 		strategy.setCrossoverRate(crossoverRateToSet);

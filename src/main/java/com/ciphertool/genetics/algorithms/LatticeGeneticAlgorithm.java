@@ -125,10 +125,6 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 			validationErrors.add("Parameter 'populationSize' must be greater than zero.");
 		}
 
-		if (strategy.getLifespan() == null) {
-			validationErrors.add("Parameter 'lifespan' cannot be null.");
-		}
-
 		if (strategy.getSurvivalRate() == null || strategy.getSurvivalRate() < 0) {
 			validationErrors.add("Parameter 'survivalRate' must be greater than zero.");
 		}
@@ -465,13 +461,6 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 		return mutations.get();
 	}
 
-	@Override
-	public int select() {
-		// Do nothing. We are testing a Genetic Algorithm which has no separate "Select" step.
-
-		return 0;
-	}
-
 	@SuppressWarnings("rawtypes")
 	public double calculateEntropy() {
 		if (!(this.population.getIndividuals().get(0) instanceof KeyedChromosome)) {
@@ -603,7 +592,6 @@ public class LatticeGeneticAlgorithm implements GeneticAlgorithm {
 	public void setStrategy(GeneticAlgorithmStrategy geneticAlgorithmStrategy) {
 		this.population.setGeneticStructure(geneticAlgorithmStrategy.getGeneticStructure());
 		this.population.setFitnessEvaluator(geneticAlgorithmStrategy.getFitnessEvaluator());
-		this.population.setLifespan(geneticAlgorithmStrategy.getLifespan());
 		this.population.setKnownSolutionFitnessEvaluator(geneticAlgorithmStrategy.getKnownSolutionFitnessEvaluator());
 		this.population.setCompareToKnownSolution(geneticAlgorithmStrategy.getCompareToKnownSolution());
 

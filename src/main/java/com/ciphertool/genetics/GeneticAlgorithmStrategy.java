@@ -30,7 +30,6 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 public class GeneticAlgorithmStrategy {
 	private Object				geneticStructure;
 	private Integer				populationSize;
-	private Integer				lifespan;
 	private Double				survivalRate;
 	private Double				mutationRate;
 	private Integer				maxMutationsPerIndividual;
@@ -85,14 +84,13 @@ public class GeneticAlgorithmStrategy {
 	 *            the useKnownSolutionFitnessEvaluator to set
 	 */
 	@SuppressWarnings("rawtypes")
-	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer lifespan,
-			Integer maxGenerations, Double survivalRate, Double mutationRate, Integer maxMutationsPerIndividual,
-			Double crossoverRate, FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
+	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer maxGenerations,
+			Double survivalRate, Double mutationRate, Integer maxMutationsPerIndividual, Double crossoverRate,
+			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
 			MutationAlgorithm mutationAlgorithm, SelectionAlgorithm selectionAlgorithm, Selector selector,
 			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
-		this.lifespan = lifespan;
 		this.maxGenerations = maxGenerations;
 		this.setSurvivalRate(survivalRate);
 
@@ -154,21 +152,6 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setPopulationSize(Integer populationSize) {
 		this.populationSize = populationSize;
-	}
-
-	/**
-	 * @return the lifespan
-	 */
-	public Integer getLifespan() {
-		return lifespan;
-	}
-
-	/**
-	 * @param lifespan
-	 *            the lifespan to set
-	 */
-	public void setLifespan(Integer lifespan) {
-		this.lifespan = lifespan;
 	}
 
 	/**

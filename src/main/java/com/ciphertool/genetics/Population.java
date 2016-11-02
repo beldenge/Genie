@@ -27,8 +27,6 @@ import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 public interface Population {
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException;
 
-	public int increaseAge() throws InterruptedException;
-
 	public void recoverFromBackup();
 
 	public void backupIndividuals();

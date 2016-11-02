@@ -48,7 +48,6 @@ public class LatticePopulation implements Population {
 	private Double					totalFitness						= 0.0;
 	private TaskExecutor			taskExecutor;
 	private ChromosomePrinter		chromosomePrinter;
-	private int						lifespan;
 	private FitnessEvaluator		knownSolutionFitnessEvaluator;
 	private static final boolean	COMPARE_TO_KNOWN_SOLUTION_DEFAULT	= false;
 	private Boolean					compareToKnownSolution				= COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
@@ -219,42 +218,6 @@ public class LatticePopulation implements Population {
 		}
 
 		return bestFitIndividual;
-	}
-
-	@Override
-	public int increaseAge() throws InterruptedException {
-		Chromosome individual = null;
-		int individualsRemoved = 0;
-
-		/*
-		 * We have to iterate backwards since the size will decrement each time an individual is removed.
-		 */
-		for (int x = latticeRows - 1; x >= 0; x--) {
-			for (int y = latticeColumns - 1; y >= 0; y--) {
-				if (stopRequested) {
-					throw new InterruptedException("Stop requested during age increase.");
-				}
-
-				individual = this.individuals[x][y];
-
-				/*
-				 * A value less than zero represents immortality, so always increase the age in that case. Otherwise,
-				 * only increase the age if this individual has more generations to live.
-				 */
-				if (this.lifespan < 0 || individual.getAge() < this.lifespan) {
-					individual.increaseAge();
-				} else {
-					/*
-					 * We have to remove by index in case there is more than one Chromosome that is equal, since more
-					 * than likely the unique key will not have been generated from database yet.
-					 */
-					this.removeIndividual(x, y);
-					individualsRemoved++;
-				}
-			}
-		}
-
-		return individualsRemoved;
 	}
 
 	/*
@@ -593,15 +556,6 @@ public class LatticePopulation implements Population {
 	@Required
 	public void setSelector(Selector selector) {
 		this.selector = selector;
-	}
-
-	/**
-	 * @param lifespan
-	 *            the lifespan to set
-	 */
-	@Required
-	public void setLifespan(int lifespan) {
-		this.lifespan = lifespan;
 	}
 
 	/**

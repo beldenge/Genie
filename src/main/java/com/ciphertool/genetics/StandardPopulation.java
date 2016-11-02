@@ -42,14 +42,12 @@ public class StandardPopulation implements Population {
 	private Breeder					breeder;
 	private List<Chromosome>		individuals							= new ArrayList<Chromosome>();
 	private List<Chromosome>		backup								= new ArrayList<Chromosome>();
-	private List<Chromosome>		ineligibleForReproduction			= new ArrayList<Chromosome>();
 	private FitnessEvaluator		fitnessEvaluator;
 	private FitnessComparator		fitnessComparator;
 	private Selector				selector;
 	private Double					totalFitness						= 0.0;
 	private TaskExecutor			taskExecutor;
 	private ChromosomePrinter		chromosomePrinter;
-	private int						lifespan;
 	private FitnessEvaluator		knownSolutionFitnessEvaluator;
 	private static final boolean	COMPARE_TO_KNOWN_SOLUTION_DEFAULT	= false;
 	private Boolean					compareToKnownSolution				= COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
@@ -222,40 +220,6 @@ public class StandardPopulation implements Population {
 		return bestFitIndividual;
 	}
 
-	@Override
-	public int increaseAge() throws InterruptedException {
-		Chromosome individual = null;
-		int individualsRemoved = 0;
-
-		/*
-		 * We have to iterate backwards since the size will decrement each time an individual is removed.
-		 */
-		for (int i = this.individuals.size() - 1; i >= 0; i--) {
-			if (stopRequested) {
-				throw new InterruptedException("Stop requested during age increase.");
-			}
-
-			individual = this.individuals.get(i);
-
-			/*
-			 * A value less than zero represents immortality, so always increase the age in that case. Otherwise, only
-			 * increase the age if this individual has more generations to live.
-			 */
-			if (this.lifespan < 0 || individual.getAge() < this.lifespan) {
-				individual.increaseAge();
-			} else {
-				/*
-				 * We have to remove by index in case there is more than one Chromosome that is equal, since more than
-				 * likely the unique key will not have been generated from database yet.
-				 */
-				this.removeIndividual(i);
-				individualsRemoved++;
-			}
-		}
-
-		return individualsRemoved;
-	}
-
 	/*
 	 * This method depends on the totalFitness and individuals' fitness being accurately maintained. Returns the index
 	 * of the Chromosome chosen.
@@ -343,40 +307,6 @@ public class StandardPopulation implements Population {
 		this.totalFitness += individual.getFitness();
 
 		return needsEvaluation;
-	}
-
-	/**
-	 * @param individual
-	 */
-	public void addIndividualAsIneligible(Chromosome individual) {
-		this.ineligibleForReproduction.add(individual);
-
-		individual.setPopulation(this);
-	}
-
-	/**
-	 * @param index
-	 */
-	public void makeIneligibleForReproduction(int index) {
-		if (index < 0 || index > this.individuals.size() - 1) {
-			log.error("Tried to make individual ineligible by invalid index " + index + " from population of size "
-					+ this.size() + ".  Returning.");
-
-			return;
-		}
-
-		this.ineligibleForReproduction.add(this.removeIndividual(index));
-	}
-
-	/**
-	 * Resets eligibility for all individuals which are currently ineligible for reproduction.
-	 */
-	public void resetEligibility() {
-		for (Chromosome ineligibleIndividual : this.ineligibleForReproduction) {
-			this.addIndividual(ineligibleIndividual);
-		}
-
-		this.ineligibleForReproduction.clear();
 	}
 
 	public int size() {
@@ -493,15 +423,6 @@ public class StandardPopulation implements Population {
 	@Required
 	public void setSelector(Selector selector) {
 		this.selector = selector;
-	}
-
-	/**
-	 * @param lifespan
-	 *            the lifespan to set
-	 */
-	@Required
-	public void setLifespan(int lifespan) {
-		this.lifespan = lifespan;
 	}
 
 	/**

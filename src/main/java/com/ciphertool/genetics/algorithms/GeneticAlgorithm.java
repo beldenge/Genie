@@ -23,7 +23,6 @@ import com.ciphertool.genetics.GeneticAlgorithmStrategy;
 import com.ciphertool.genetics.Population;
 
 public interface GeneticAlgorithm {
-
 	public void evolveAutonomously() throws InterruptedException;
 
 	public void initialize() throws InterruptedException;
@@ -31,8 +30,6 @@ public interface GeneticAlgorithm {
 	public void finish();
 
 	public void proceedWithNextGeneration() throws InterruptedException;
-
-	public int select();
 
 	public int crossover(int populationSizeBeforeReproduction) throws InterruptedException;
 

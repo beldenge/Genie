@@ -34,7 +34,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
@@ -158,20 +157,6 @@ public class PopulationTest {
 		Selector selectorFromObject = (Selector) ReflectionUtils.getField(selectorField, population);
 
 		assertSame(selector, selectorFromObject);
-	}
-
-	@Test
-	public void testSetLifespan() {
-		StandardPopulation population = new StandardPopulation();
-
-		int lifespanToSet = 25;
-		population.setLifespan(lifespanToSet);
-
-		Field lifespanField = ReflectionUtils.findField(StandardPopulation.class, "lifespan");
-		ReflectionUtils.makeAccessible(lifespanField);
-		int lifespanFromObject = (int) ReflectionUtils.getField(lifespanField, population);
-
-		assertSame(lifespanToSet, lifespanFromObject);
 	}
 
 	@Test
@@ -437,64 +422,6 @@ public class PopulationTest {
 	}
 
 	@Test
-	public void testIncreaseAge() throws InterruptedException {
-		StandardPopulation population = new StandardPopulation();
-		population.setLifespan(5);
-
-		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
-		chromosome1.setAge(0);
-		population.addIndividual(chromosome1);
-
-		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
-		chromosome2.setAge(50);
-		population.addIndividual(chromosome2);
-
-		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
-		chromosome3.setAge(5);
-		population.addIndividual(chromosome3);
-
-		MockKeyedChromosome chromosome4 = new MockKeyedChromosome();
-		chromosome4.setAge(4);
-		population.addIndividual(chromosome4);
-
-		population.increaseAge();
-
-		assertEquals(2, population.size());
-		assertEquals(1, chromosome1.getAge());
-		assertEquals(5, chromosome4.getAge());
-	}
-
-	@Test
-	public void testIncreaseAgeIndefinitely() throws InterruptedException {
-		StandardPopulation population = new StandardPopulation();
-		population.setLifespan(-1);
-
-		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
-		chromosome1.setAge(0);
-		population.addIndividual(chromosome1);
-
-		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
-		chromosome2.setAge(50);
-		population.addIndividual(chromosome2);
-
-		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
-		chromosome3.setAge(5);
-		population.addIndividual(chromosome3);
-
-		MockKeyedChromosome chromosome4 = new MockKeyedChromosome();
-		chromosome4.setAge(4);
-		population.addIndividual(chromosome4);
-
-		population.increaseAge();
-
-		assertEquals(4, population.size());
-		assertEquals(1, chromosome1.getAge());
-		assertEquals(51, chromosome2.getAge());
-		assertEquals(6, chromosome3.getAge());
-		assertEquals(5, chromosome4.getAge());
-	}
-
-	@Test
 	public void testSelectIndex() {
 		StandardPopulation population = new StandardPopulation();
 
@@ -614,153 +541,6 @@ public class PopulationTest {
 
 		assertEquals(new Double(0.0), population.getTotalFitness());
 		assertEquals(0, population.size());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testAddIndividualAsIneligible() {
-		StandardPopulation population = new StandardPopulation();
-
-		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
-		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-
-		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
-		population.setFitnessEvaluator(fitnessEvaluatorMock);
-
-		Double fitnessSum = 0.0;
-		assertEquals(fitnessSum, population.getTotalFitness());
-		assertEquals(0, population.size());
-
-		// Add a chromosome that needs evaluation
-		MockKeyedChromosome chromosomeEvaluationNeeded = new MockKeyedChromosome();
-		chromosomeEvaluationNeeded.setFitness(5.0);
-		chromosomeEvaluationNeeded.setEvaluationNeeded(true);
-		population.addIndividualAsIneligible(chromosomeEvaluationNeeded);
-
-		// Validate - this shouldn't affect the individuals List
-		assertEquals(new Double(0.0), population.getTotalFitness());
-		verifyZeroInteractions(fitnessEvaluatorMock);
-		assertEquals(0, population.size());
-
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
-		assertEquals(1, ineligibleForReproductionFromObject.size());
-		assertSame(chromosomeEvaluationNeeded, ineligibleForReproductionFromObject.get(0));
-
-		// Add a chromosome that doesn't need evaluation
-		MockKeyedChromosome chromosomeEvaluationNotNeeded = new MockKeyedChromosome();
-		chromosomeEvaluationNotNeeded.setFitness(5.0);
-		population.addIndividualAsIneligible(chromosomeEvaluationNotNeeded);
-
-		// Validate - this shouldn't affect the individuals List
-		assertEquals(new Double(0.0), population.getTotalFitness());
-		verifyZeroInteractions(fitnessEvaluatorMock);
-		assertEquals(0, population.size());
-
-		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
-		assertEquals(2, ineligibleForReproductionFromObject.size());
-		assertSame(chromosomeEvaluationNotNeeded, ineligibleForReproductionFromObject.get(1));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testMakeIneligibleForReproduction() {
-		StandardPopulation population = new StandardPopulation();
-
-		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
-		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-
-		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
-		chromosome1.setFitness(5.0);
-		population.addIndividual(chromosome1);
-		chromosome1.setEvaluationNeeded(true);
-
-		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
-		chromosome2.setFitness(5.0);
-		population.addIndividual(chromosome2);
-
-		Double fitnessSum = new Double(10.0);
-		assertEquals(fitnessSum, population.getTotalFitness());
-		assertEquals(2, population.size());
-
-		fitnessSum -= chromosome1.getFitness();
-		population.makeIneligibleForReproduction(0);
-
-		// Validate individuals List
-		assertEquals(fitnessSum, population.getTotalFitness());
-		assertEquals(1, population.size());
-		assertSame(chromosome2, population.getIndividuals().get(0));
-
-		// Validate ineligible List
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
-		assertEquals(1, ineligibleForReproductionFromObject.size());
-		assertSame(chromosome1, ineligibleForReproductionFromObject.get(0));
-
-		fitnessSum -= chromosome2.getFitness();
-		population.makeIneligibleForReproduction(0);
-
-		// Validate individuals List
-		assertEquals(fitnessSum, population.getTotalFitness());
-		assertEquals(0, population.size());
-
-		// Validate ineligible List
-		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
-		assertEquals(2, ineligibleForReproductionFromObject.size());
-		assertSame(chromosome2, ineligibleForReproductionFromObject.get(1));
-
-		// Try to remove an individual that doesn't exist
-		assertNull(population.removeIndividual(0));
-	}
-
-	@SuppressWarnings("unchecked")
-	@Test
-	public void testResetEligibility() {
-		StandardPopulation population = new StandardPopulation();
-
-		Field ineligibleForReproductionField = ReflectionUtils.findField(StandardPopulation.class, "ineligibleForReproduction");
-		ReflectionUtils.makeAccessible(ineligibleForReproductionField);
-
-		FitnessEvaluator fitnessEvaluatorMock = mock(FitnessEvaluator.class);
-		when(fitnessEvaluatorMock.evaluate(any(Chromosome.class))).thenReturn(DEFAULT_FITNESS_VALUE);
-		population.setFitnessEvaluator(fitnessEvaluatorMock);
-
-		Double fitnessSum = 0.0;
-		assertEquals(fitnessSum, population.getTotalFitness());
-		assertEquals(0, population.size());
-
-		// Add a chromosome that needs evaluation
-		MockKeyedChromosome chromosomeEvaluationNeeded = new MockKeyedChromosome();
-		chromosomeEvaluationNeeded.setFitness(5.0);
-		chromosomeEvaluationNeeded.setEvaluationNeeded(true);
-		population.addIndividualAsIneligible(chromosomeEvaluationNeeded);
-
-		// Add a chromosome that doesn't need evaluation
-		MockKeyedChromosome chromosomeEvaluationNotNeeded = new MockKeyedChromosome();
-		chromosomeEvaluationNotNeeded.setFitness(5.0);
-		population.addIndividualAsIneligible(chromosomeEvaluationNotNeeded);
-
-		List<Chromosome> ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
-
-		// Validate - this shouldn't affect the individuals List
-		assertEquals(new Double(0.0), population.getTotalFitness());
-		verifyZeroInteractions(fitnessEvaluatorMock);
-		assertEquals(0, population.size());
-
-		ineligibleForReproductionFromObject = (List<Chromosome>) ReflectionUtils.getField(ineligibleForReproductionField, population);
-		assertEquals(2, ineligibleForReproductionFromObject.size());
-		assertSame(chromosomeEvaluationNeeded, ineligibleForReproductionFromObject.get(0));
-		assertSame(chromosomeEvaluationNotNeeded, ineligibleForReproductionFromObject.get(1));
-
-		population.resetEligibility();
-
-		assertEquals(0, ineligibleForReproductionFromObject.size());
-
-		fitnessSum = chromosomeEvaluationNeeded.getFitness() + chromosomeEvaluationNotNeeded.getFitness();
-		assertEquals(fitnessSum, population.getTotalFitness());
-		verify(fitnessEvaluatorMock, times(1)).evaluate(same(chromosomeEvaluationNeeded));
-		assertEquals(2, population.size());
-		assertSame(chromosomeEvaluationNeeded, population.getIndividuals().get(0));
-		assertSame(chromosomeEvaluationNotNeeded, population.getIndividuals().get(1));
 	}
 
 	@Test

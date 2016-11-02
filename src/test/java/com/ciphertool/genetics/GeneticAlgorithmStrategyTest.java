@@ -47,7 +47,6 @@ public class GeneticAlgorithmStrategyTest {
 	public void testConstructorWithoutComparisonToKnownSolution() {
 		Object geneticStructureToSet = new Object();
 		Integer populationSizeToSet = new Integer(500);
-		Integer lifespanToSet = new Integer(10);
 		Integer maxGenerationsToSet = new Integer(1000);
 		Double survivalRateToSet = new Double(0.9);
 		Double mutationRateToSet = new Double(0.05);
@@ -61,13 +60,12 @@ public class GeneticAlgorithmStrategyTest {
 		Selector selectorToSet = new RouletteSelector();
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(geneticStructureToSet,
-				populationSizeToSet, lifespanToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
+				populationSizeToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
 				maxMutationsPerIndividualToSet, crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet,
 				mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, null, false);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
-		assertSame(lifespanToSet, geneticAlgorithmStrategy.getLifespan());
 		assertSame(maxGenerationsToSet, geneticAlgorithmStrategy.getMaxGenerations());
 		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
 		assertSame(mutationRateToSet, geneticAlgorithmStrategy.getMutationRate());
@@ -87,7 +85,6 @@ public class GeneticAlgorithmStrategyTest {
 	public void testConstructorWithComparisonToKnownSolution() {
 		Object geneticStructureToSet = new Object();
 		Integer populationSizeToSet = new Integer(500);
-		Integer lifespanToSet = new Integer(10);
 		Integer maxGenerationsToSet = new Integer(1000);
 		Double survivalRateToSet = new Double(0.9);
 		Double mutationRateToSet = new Double(0.05);
@@ -104,14 +101,13 @@ public class GeneticAlgorithmStrategyTest {
 		Boolean compareToKnownSolutionToSet = new Boolean(true);
 
 		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy(geneticStructureToSet,
-				populationSizeToSet, lifespanToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
+				populationSizeToSet, maxGenerationsToSet, survivalRateToSet, mutationRateToSet,
 				maxMutationsPerIndividualToSet, crossoverRateToSet, fitnessEvaluatorToSet, crossoverAlgorithmToSet,
 				mutationAlgorithmToSet, selectionAlgorithmToSet, selectorToSet, knownSolutionFitnessEvaluatorToSet,
 				compareToKnownSolutionToSet);
 
 		assertSame(geneticStructureToSet, geneticAlgorithmStrategy.getGeneticStructure());
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
-		assertSame(lifespanToSet, geneticAlgorithmStrategy.getLifespan());
 		assertSame(maxGenerationsToSet, geneticAlgorithmStrategy.getMaxGenerations());
 		assertSame(survivalRateToSet, geneticAlgorithmStrategy.getSurvivalRate());
 		assertSame(mutationRateToSet, geneticAlgorithmStrategy.getMutationRate());
@@ -142,15 +138,6 @@ public class GeneticAlgorithmStrategyTest {
 		geneticAlgorithmStrategy.setPopulationSize(populationSizeToSet);
 
 		assertSame(populationSizeToSet, geneticAlgorithmStrategy.getPopulationSize());
-	}
-
-	@Test
-	public void testSetLifespan() {
-		Integer lifespanToSet = new Integer(10);
-		GeneticAlgorithmStrategy geneticAlgorithmStrategy = new GeneticAlgorithmStrategy();
-		geneticAlgorithmStrategy.setLifespan(lifespanToSet);
-
-		assertSame(lifespanToSet, geneticAlgorithmStrategy.getLifespan());
 	}
 
 	@Test
