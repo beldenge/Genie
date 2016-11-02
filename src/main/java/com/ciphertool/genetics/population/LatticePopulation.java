@@ -544,7 +544,6 @@ public class LatticePopulation implements Population {
 	}
 
 	@Override
-	@Required
 	public void setSelector(Selector selector) {
 		this.selector = selector;
 	}
