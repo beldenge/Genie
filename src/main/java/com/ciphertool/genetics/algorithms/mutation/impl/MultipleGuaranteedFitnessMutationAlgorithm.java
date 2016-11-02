@@ -113,6 +113,9 @@ public class MultipleGuaranteedFitnessMutationAlgorithm implements UniformMutati
 					for (Object key : replaced.keySet()) {
 						chromosome.replaceGene(key, replaced.get(key));
 					}
+
+					// Make sure it doesn't get re-evaluated
+					chromosome.setFitness(originalFitness);
 				}
 			}
 		}

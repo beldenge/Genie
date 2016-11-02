@@ -118,6 +118,10 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 					for (Object key : replacedChildB.keySet()) {
 						childB.replaceGene(key, replacedChildB.get(key));
 					}
+
+					// Make sure they don't get re-evaluated
+					childA.setFitness(originalFitnessA);
+					childB.setFitness(originalFitnessB);
 				}
 			}
 		}
