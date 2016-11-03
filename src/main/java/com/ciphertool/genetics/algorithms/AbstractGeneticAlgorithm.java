@@ -27,6 +27,7 @@ import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
+import com.ciphertool.genetics.entities.statistics.PerformanceStatistics;
 import com.ciphertool.genetics.population.Population;
 
 public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
@@ -74,7 +75,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		generationStatistics.setEntropy(calculateEntropy());
 
 		long executionTime = System.currentTimeMillis() - start;
-		generationStatistics.setExecutionTime(executionTime);
+		generationStatistics.getPerformanceStatistics().setTotalMillis(executionTime);
 
 		log.info("Took " + executionTime + "ms to spawn initial population of size " + this.population.size());
 
@@ -133,10 +134,6 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 
 		if (strategy.getMaxMutationsPerIndividual() == null || strategy.getMaxMutationsPerIndividual() < 0) {
 			validationErrors.add("Parameter 'maxMutationsPerIndividual' must be greater than or equal to zero.");
-		}
-
-		if (strategy.getCrossoverRate() == null || strategy.getCrossoverRate() < 0) {
-			validationErrors.add("Parameter 'crossoverRate' must be greater than or equal to zero.");
 		}
 
 		if (strategy.getMaxGenerations() == null || strategy.getMaxGenerations() == 0) {
@@ -208,27 +205,34 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 
 		int populationSizeBeforeGeneration = this.population.size();
 
+		PerformanceStatistics performanceStats = new PerformanceStatistics();
+
+		List<Chromosome> moms = new ArrayList<Chromosome>();
+		List<Chromosome> dads = new ArrayList<Chromosome>();
+
+		long startSelection = System.currentTimeMillis();
+		select(populationSizeBeforeGeneration, moms, dads);
+		performanceStats.setSelectionMillis(System.currentTimeMillis() - startSelection);
+
 		long startCrossover = System.currentTimeMillis();
-		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
-		long crossoverTime = System.currentTimeMillis() - startCrossover;
+		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration, moms, dads));
+		performanceStats.setCrossoverMillis(System.currentTimeMillis() - startCrossover);
 
 		long startMutation = System.currentTimeMillis();
 		generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
-		long mutationTime = System.currentTimeMillis() - startMutation;
+		performanceStats.setMutationMillis(System.currentTimeMillis() - startMutation);
 
 		long startEvaluation = System.currentTimeMillis();
 		this.population.evaluateFitness(generationStatistics);
-		long evaluationTime = System.currentTimeMillis() - startEvaluation;
+		performanceStats.setEvaluationMillis(System.currentTimeMillis() - startEvaluation);
 
 		long startEntropyCalculation = System.currentTimeMillis();
 		generationStatistics.setEntropy(calculateEntropy());
-		long entropyTime = System.currentTimeMillis() - startEntropyCalculation;
+		performanceStats.setEntropyMillis(System.currentTimeMillis() - startEntropyCalculation);
 
-		long executionTime = (System.currentTimeMillis() - generationStart);
-		generationStatistics.setExecutionTime(executionTime);
+		performanceStats.setTotalMillis(System.currentTimeMillis() - generationStart);
+		generationStatistics.setPerformanceStatistics(performanceStats);
 
-		log.info("[crossoverTime=" + crossoverTime + ", mutationTime=" + mutationTime + ", evaluationTime="
-				+ evaluationTime + ", entropyTime=" + entropyTime + "]");
 		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
@@ -336,7 +340,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 				continue;
 			}
 
-			totalExecutionTime += generationStatistics.getExecutionTime();
+			totalExecutionTime += generationStatistics.getPerformanceStatistics().getTotalMillis();
 		}
 
 		long averageExecutionTime = 0;

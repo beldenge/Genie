@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,52 +57,29 @@ public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	}
 
 	@Override
-	public int crossover(int initialPopulationSize) throws InterruptedException {
+	public void select(int initialPopulationSize, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException {
 		StandardPopulation standardPopulation = (StandardPopulation) this.population;
-
-		if (this.population.size() < 2) {
-			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
-
-			return 0;
-		}
-
-		long pairsToCrossover = (initialPopulationSize - elitism) / this.crossoverAlgorithm.numberOfOffspring();
-
-		log.debug("Pairs to crossover: " + pairsToCrossover);
 
 		int momIndex = -1;
 		int dadIndex = -1;
+		Chromosome mom;
+		Chromosome dad;
 
-		List<Chromosome> moms = new ArrayList<Chromosome>();
-		List<Chromosome> dads = new ArrayList<Chromosome>();
+		long pairsToCrossover = (initialPopulationSize - elitism) / this.crossoverAlgorithm.numberOfOffspring();
 
-		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
-
-		/*
-		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit.
-		 */
 		for (int i = 0; i < Math.max(0, pairsToCrossover); i++) {
 			if (stopRequested) {
 				throw new InterruptedException("Stop requested during crossover.");
 			}
 
 			momIndex = standardPopulation.selectIndex();
-			// We remove it from the population temporarily to ensure we don't crossover an individual with itself
-			Chromosome mom = standardPopulation.removeIndividual(momIndex);
+			mom = this.population.getIndividuals().get(momIndex);
 
 			dadIndex = standardPopulation.selectIndex();
-			Chromosome dad = this.population.getIndividuals().get(dadIndex);
-			// Add it back to the population and re-sort for the next round of selections
-			standardPopulation.addIndividual(mom);
-			standardPopulation.sortIndividuals();
-
-			if (ThreadLocalRandom.current().nextDouble() > strategy.getCrossoverRate()) {
-				childrenToAdd.add(mom.clone());
-				childrenToAdd.add(dad.clone());
-
-				// Skipping crossover
-				continue;
-			}
+			// Ensure that dadIndex is different from momIndex
+			dadIndex += (dadIndex == momIndex) ? ((dadIndex == 0) ? 1 : -1) : 0;
+			dad = this.population.getIndividuals().get(dadIndex);
 
 			if (verifyAncestry && this.generationCount > this.generationsToKeep && mom.getAncestry() != null
 					&& dad.getAncestry() != null
@@ -119,15 +95,31 @@ public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 			moms.add(mom);
 			dads.add(dad);
 		}
+	}
+
+	@Override
+	public int crossover(int pairsToCrossover, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException {
+		StandardPopulation standardPopulation = (StandardPopulation) this.population;
+
+		if (this.population.size() < 2) {
+			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
+
+			return 0;
+		}
+
+		log.debug("Pairs to crossover: " + pairsToCrossover);
 
 		List<Chromosome> crossoverResults = doConcurrentCrossovers(moms, dads);
+		List<Chromosome> childrenToAdd = new ArrayList<Chromosome>();
+
 		if (crossoverResults != null && !crossoverResults.isEmpty()) {
 			childrenToAdd.addAll(crossoverResults);
 		}
 
-		if (childrenToAdd == null || (childrenToAdd.size() + elitism) < initialPopulationSize) {
+		if (childrenToAdd == null || (childrenToAdd.size() + elitism) < pairsToCrossover) {
 			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size())
-					+ " children produced from concurrent crossover execution.  Expected " + initialPopulationSize
+					+ " children produced from concurrent crossover execution.  Expected " + pairsToCrossover
 					+ " children.");
 
 			return ((null == childrenToAdd) ? 0 : childrenToAdd.size());
@@ -135,10 +127,12 @@ public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 
 		List<Chromosome> eliteIndividuals = new ArrayList<Chromosome>();
 
-		standardPopulation.sortIndividuals();
+		if (elitism > 0) {
+			standardPopulation.sortIndividuals();
 
-		for (int i = this.population.size() - 1; i >= this.population.size() - elitism; i--) {
-			eliteIndividuals.add(this.population.getIndividuals().get(i));
+			for (int i = this.population.size() - 1; i >= this.population.size() - elitism; i--) {
+				eliteIndividuals.add(this.population.getIndividuals().get(i));
+			}
 		}
 
 		this.population.clearIndividuals();
@@ -160,8 +154,6 @@ public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 
 			standardPopulation.addIndividual(child);
 		}
-
-		standardPopulation.sortIndividuals();
 
 		return (int) childrenToAdd.size();
 	}

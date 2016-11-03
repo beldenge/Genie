@@ -28,33 +28,35 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "generationStats")
 public class GenerationStatistics implements Serializable {
-	private static final long	serialVersionUID	= 5751129649317222013L;
+	private static final long		serialVersionUID	= 5751129649317222013L;
 
 	@Id
-	private ObjectId			id					= new ObjectId();
+	private ObjectId				id					= new ObjectId();
 
 	@DBRef
-	private ExecutionStatistics	executionStatistics;
+	private ExecutionStatistics		executionStatistics;
 
-	private int					generation;
+	private int						generation;
 
-	private long				executionTime;
+	private double					bestFitness;
 
-	private double				bestFitness;
+	private double					averageFitness;
 
-	private double				averageFitness;
+	private double					entropy;
 
-	private double				entropy;
+	private Double					knownSolutionProximity;
 
-	private Double				knownSolutionProximity;
+	private int						numberOfCrossovers;
 
-	private int					numberOfMutations;
+	private int						numberOfMutations;
 
-	private int					numberOfCrossovers;
+	private int						numberOfEvaluations;
 
-	private int					numberRandomlyGenerated;
+	private int						numberRandomlyGenerated;
 
-	private int					numberSelectedOut;
+	private int						numberSelectedOut;
+
+	private PerformanceStatistics	performanceStatistics;
 
 	/**
 	 * Default no-args constructor
@@ -108,21 +110,6 @@ public class GenerationStatistics implements Serializable {
 	 */
 	public void setGeneration(int generation) {
 		this.generation = generation;
-	}
-
-	/**
-	 * @return the executionTime
-	 */
-	public long getExecutionTime() {
-		return executionTime;
-	}
-
-	/**
-	 * @param executionTime
-	 *            the executionTime to set
-	 */
-	public void setExecutionTime(long executionTime) {
-		this.executionTime = executionTime;
 	}
 
 	/**
@@ -186,6 +173,21 @@ public class GenerationStatistics implements Serializable {
 	}
 
 	/**
+	 * @return the numberOfCrossovers
+	 */
+	protected int getNumberOfCrossovers() {
+		return numberOfCrossovers;
+	}
+
+	/**
+	 * @param numberOfCrossovers
+	 *            the numberOfCrossovers to set
+	 */
+	public void setNumberOfCrossovers(int numberOfCrossovers) {
+		this.numberOfCrossovers = numberOfCrossovers;
+	}
+
+	/**
 	 * @return the numberOfMutations
 	 */
 	protected int getNumberOfMutations() {
@@ -201,18 +203,18 @@ public class GenerationStatistics implements Serializable {
 	}
 
 	/**
-	 * @return the numberOfCrossovers
+	 * @return the numberOfEvaluations
 	 */
-	protected int getNumberOfCrossovers() {
-		return numberOfCrossovers;
+	public int getNumberOfEvaluations() {
+		return numberOfEvaluations;
 	}
 
 	/**
-	 * @param numberOfCrossovers
-	 *            the numberOfCrossovers to set
+	 * @param numberOfEvaluations
+	 *            the numberOfEvaluations to set
 	 */
-	public void setNumberOfCrossovers(int numberOfCrossovers) {
-		this.numberOfCrossovers = numberOfCrossovers;
+	public void setNumberOfEvaluations(int numberOfEvaluations) {
+		this.numberOfEvaluations = numberOfEvaluations;
 	}
 
 	/**
@@ -245,6 +247,25 @@ public class GenerationStatistics implements Serializable {
 		this.numberSelectedOut = numberSelectedOut;
 	}
 
+	/**
+	 * @return the performanceStatistics
+	 */
+	public PerformanceStatistics getPerformanceStatistics() {
+		if (performanceStatistics == null) {
+			this.performanceStatistics = new PerformanceStatistics();
+		}
+
+		return performanceStatistics;
+	}
+
+	/**
+	 * @param performanceStatistics
+	 *            the performanceStatistics to set
+	 */
+	public void setPerformanceStatistics(PerformanceStatistics performanceStatistics) {
+		this.performanceStatistics = performanceStatistics;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -257,12 +278,12 @@ public class GenerationStatistics implements Serializable {
 		temp = Double.doubleToLongBits(entropy);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		result = prime * result + ((executionStatistics == null) ? 0 : executionStatistics.hashCode());
-		result = prime * result + (int) (executionTime ^ (executionTime >>> 32));
 		result = prime * result + generation;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
 		result = prime * result + numberOfCrossovers;
 		result = prime * result + numberOfMutations;
+		result = prime * result + numberOfEvaluations;
 		result = prime * result + numberRandomlyGenerated;
 		result = prime * result + numberSelectedOut;
 		return result;
@@ -296,9 +317,6 @@ public class GenerationStatistics implements Serializable {
 		} else if (!executionStatistics.equals(other.executionStatistics)) {
 			return false;
 		}
-		if (executionTime != other.executionTime) {
-			return false;
-		}
 		if (generation != other.generation) {
 			return false;
 		}
@@ -322,6 +340,9 @@ public class GenerationStatistics implements Serializable {
 		if (numberOfMutations != other.numberOfMutations) {
 			return false;
 		}
+		if (numberOfEvaluations != other.numberOfEvaluations) {
+			return false;
+		}
 		if (numberRandomlyGenerated != other.numberRandomlyGenerated) {
 			return false;
 		}
@@ -336,10 +357,10 @@ public class GenerationStatistics implements Serializable {
 		String proximity = (this.knownSolutionProximity == null) ? "" : ", proximityToKnown="
 				+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
 
-		return "[generation=" + generation + ", executionTime=" + executionTime + ", averageFitness="
-				+ String.format("%1$,.2f", averageFitness) + ", bestFitness=" + String.format("%1$,.2f", bestFitness)
-				+ ", entropy=" + entropy + proximity + ", deaths=" + numberSelectedOut + ", crossovers="
-				+ numberOfCrossovers + ", mutations=" + numberOfMutations + ", newSpawns=" + numberRandomlyGenerated
-				+ "]";
+		return "[generation=" + generation + ", averageFitness=" + String.format("%1$,.2f", averageFitness)
+				+ ", bestFitness=" + String.format("%1$,.2f", bestFitness) + proximity + ", entropy="
+				+ String.format("%1$,.4f", entropy) + ", crossovers=" + numberOfCrossovers + ", evals="
+				+ numberOfEvaluations + ", mutations=" + numberOfMutations + ", deaths=" + numberSelectedOut
+				+ ", births=" + numberRandomlyGenerated + ", performance=" + performanceStatistics.toString() + "]";
 	}
 }

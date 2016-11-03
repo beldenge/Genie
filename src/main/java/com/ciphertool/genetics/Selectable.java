@@ -19,44 +19,6 @@
 
 package com.ciphertool.genetics;
 
-import com.ciphertool.genetics.entities.Chromosome;
-
-public class SpatialChromosomeWrapper {
-	private int			xPos;
-	private int			yPos;
-
-	private Chromosome	chromosome;
-
-	/**
-	 * @param xPos
-	 * @param yPos
-	 * @param chromosome
-	 */
-	public SpatialChromosomeWrapper(int xPos, int yPos, Chromosome chromosome) {
-		super();
-		this.xPos = xPos;
-		this.yPos = yPos;
-		this.chromosome = chromosome;
-	}
-
-	/**
-	 * @return the xPos
-	 */
-	public int getXPos() {
-		return xPos;
-	}
-
-	/**
-	 * @return the yPos
-	 */
-	public int getYPos() {
-		return yPos;
-	}
-
-	/**
-	 * @return the chromosome
-	 */
-	public Chromosome getChromosome() {
-		return chromosome;
-	}
+public interface Selectable {
+	public String getDisplayName();
 }

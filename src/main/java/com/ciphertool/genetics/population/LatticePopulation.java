@@ -33,9 +33,9 @@ import org.springframework.core.task.TaskExecutor;
 
 import com.ciphertool.genetics.Breeder;
 import com.ciphertool.genetics.ChromosomePrinter;
-import com.ciphertool.genetics.SpatialChromosomeWrapper;
 import com.ciphertool.genetics.algorithms.selection.modes.Selector;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.SpatialChromosome;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
@@ -43,8 +43,8 @@ import com.ciphertool.genetics.fitness.FitnessEvaluator;
 public class LatticePopulation implements Population {
 	private Logger					log									= LoggerFactory.getLogger(getClass());
 	private Breeder					breeder;
-	private Chromosome[][]			individuals;
-	private Chromosome[][]			backup;
+	private SpatialChromosome[][]	individuals;
+	private SpatialChromosome[][]	backup;
 	private FitnessEvaluator		fitnessEvaluator;
 	private FitnessComparator		fitnessComparator;
 	private Selector				selector;
@@ -64,7 +64,7 @@ public class LatticePopulation implements Population {
 	/**
 	 * A concurrent task for adding a brand new Chromosome to the population.
 	 */
-	protected class GeneratorTask implements Callable<SpatialChromosomeWrapper> {
+	protected class GeneratorTask implements Callable<SpatialChromosome> {
 		private int	xPos;
 		private int	yPos;
 
@@ -74,28 +74,32 @@ public class LatticePopulation implements Population {
 		}
 
 		@Override
-		public SpatialChromosomeWrapper call() throws Exception {
-			return new SpatialChromosomeWrapper(xPos, yPos, breeder.breed());
+		public SpatialChromosome call() throws Exception {
+			SpatialChromosome chromosome = (SpatialChromosome) breeder.breed();
+			chromosome.setXPos(xPos);
+			chromosome.setYPos(yPos);
+
+			return chromosome;
 		}
 	}
 
 	public int breed() {
-		individuals = new Chromosome[latticeRows][latticeColumns];
+		individuals = new SpatialChromosome[latticeRows][latticeColumns];
 
-		List<FutureTask<SpatialChromosomeWrapper>> futureTasks = new ArrayList<FutureTask<SpatialChromosomeWrapper>>();
-		FutureTask<SpatialChromosomeWrapper> futureTask = null;
+		List<FutureTask<SpatialChromosome>> futureTasks = new ArrayList<FutureTask<SpatialChromosome>>();
+		FutureTask<SpatialChromosome> futureTask = null;
 
 		int individualsAdded = 0;
 		for (int x = 0; x < latticeRows; x++) {
 			for (int y = 0; y < latticeColumns; y++) {
-				futureTask = new FutureTask<SpatialChromosomeWrapper>(new GeneratorTask(x, y));
+				futureTask = new FutureTask<SpatialChromosome>(new GeneratorTask(x, y));
 				futureTasks.add(futureTask);
 
 				this.taskExecutor.execute(futureTask);
 			}
 		}
 
-		for (FutureTask<SpatialChromosomeWrapper> future : futureTasks) {
+		for (FutureTask<SpatialChromosome> future : futureTasks) {
 			if (stopRequested) {
 				return individualsAdded;
 			}
@@ -122,7 +126,6 @@ public class LatticePopulation implements Population {
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
 	protected class EvaluatorTask implements Callable<Void> {
-
 		private Chromosome chromosome;
 
 		public EvaluatorTask(Chromosome chromosome) {
@@ -280,8 +283,8 @@ public class LatticePopulation implements Population {
 		return nearbyIndividuals.get(index);
 	}
 
-	public List<Chromosome> selectIndices(int row, int column) {
-		List<Chromosome> selectedIndividuals = new ArrayList<Chromosome>();
+	public List<SpatialChromosome> selectIndices(int row, int column) {
+		List<SpatialChromosome> selectedIndividuals = new ArrayList<SpatialChromosome>();
 		List<Chromosome> nearbyIndividuals = new ArrayList<Chromosome>();
 
 		// immediately above
@@ -331,13 +334,13 @@ public class LatticePopulation implements Population {
 
 		int index = this.selector.getNextIndex(nearbyIndividuals, subsetFitness);
 
-		selectedIndividuals.add(nearbyIndividuals.get(index));
+		selectedIndividuals.add((SpatialChromosome) nearbyIndividuals.get(index));
 
 		subsetFitness -= nearbyIndividuals.get(index).getFitness();
 		nearbyIndividuals.remove(index);
 
 		index = this.selector.getNextIndex(nearbyIndividuals, subsetFitness);
-		selectedIndividuals.add(nearbyIndividuals.get(index));
+		selectedIndividuals.add((SpatialChromosome) nearbyIndividuals.get(index));
 
 		return selectedIndividuals;
 	}
@@ -390,7 +393,7 @@ public class LatticePopulation implements Population {
 
 	@Override
 	public void backupIndividuals() {
-		this.backup = new Chromosome[latticeRows][latticeColumns];
+		this.backup = new SpatialChromosome[latticeRows][latticeColumns];
 
 		for (int x = 0; x < latticeRows; x++) {
 			for (int y = 0; y < latticeColumns; y++) {
@@ -401,15 +404,15 @@ public class LatticePopulation implements Population {
 
 	@Override
 	public void clearIndividuals() {
-		this.individuals = new Chromosome[latticeRows][latticeColumns];
+		this.individuals = new SpatialChromosome[latticeRows][latticeColumns];
 
 		this.totalFitness = 0.0;
 	}
 
-	public void addAllIndividuals(Chromosome[][] individuals) {
+	public void addAllIndividuals(SpatialChromosome[][] individuals) {
 		for (int x = 0; x < latticeRows; x++) {
 			for (int y = 0; y < latticeColumns; y++) {
-				addIndividual(new SpatialChromosomeWrapper(x, y, individuals[x][y]));
+				addIndividual(individuals[x][y]);
 			}
 		}
 	}
@@ -417,24 +420,14 @@ public class LatticePopulation implements Population {
 	/**
 	 * @param individual
 	 */
-	public boolean addIndividual(SpatialChromosomeWrapper wrappedIndividual) {
-		Chromosome individual = wrappedIndividual.getChromosome();
-
-		this.individuals[wrappedIndividual.getXPos()][wrappedIndividual.getYPos()] = individual;
+	public boolean addIndividual(SpatialChromosome individual) {
+		this.individuals[individual.getXPos()][individual.getYPos()] = individual;
 
 		individual.setPopulation(this);
 
-		/*
-		 * Only evaluate this individual if it hasn't been evaluated yet by some other process.
-		 */
-		boolean needsEvaluation = individual.isEvaluationNeeded();
-		if (needsEvaluation) {
-			individual.setFitness(fitnessEvaluator.evaluate(individual));
-		}
-
 		this.totalFitness += individual.getFitness();
 
-		return needsEvaluation;
+		return individual.isEvaluationNeeded();
 	}
 
 	@Override

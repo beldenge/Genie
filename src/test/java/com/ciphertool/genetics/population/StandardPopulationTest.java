@@ -53,9 +53,8 @@ import com.ciphertool.genetics.fitness.AscendingFitnessComparator;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 import com.ciphertool.genetics.mocks.MockBreeder;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
-import com.ciphertool.genetics.population.StandardPopulation;
 
-public class PopulationTest {
+public class StandardPopulationTest {
 	private static ThreadPoolTaskExecutor	taskExecutor			= new ThreadPoolTaskExecutor();
 	private static final double				DEFAULT_FITNESS_VALUE	= 100.0;
 
@@ -477,7 +476,6 @@ public class PopulationTest {
 		// Validate
 		fitnessSum += chromosomeEvaluationNeeded.getFitness();
 		assertEquals(fitnessSum, population.getTotalFitness());
-		verify(fitnessEvaluatorMock, times(1)).evaluate(same(chromosomeEvaluationNeeded));
 		assertEquals(1, population.size());
 		assertSame(chromosomeEvaluationNeeded, population.getIndividuals().get(0));
 

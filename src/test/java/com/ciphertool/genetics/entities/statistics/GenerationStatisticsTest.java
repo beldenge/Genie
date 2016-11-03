@@ -62,15 +62,6 @@ public class GenerationStatisticsTest {
 	}
 
 	@Test
-	public void testSetExecutionTime() {
-		long executionTimeToSet = 999;
-		GenerationStatistics generationStatistics = new GenerationStatistics();
-		generationStatistics.setExecutionTime(executionTimeToSet);
-
-		assertEquals(executionTimeToSet, generationStatistics.getExecutionTime());
-	}
-
-	@Test
 	public void testSetBestFitness() {
 		double bestFitnessToSet = 99.9;
 		GenerationStatistics generationStatistics = new GenerationStatistics();
@@ -144,7 +135,6 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(executionStatisticsIdField, baseExecutionStatistics, new ObjectId());
 
 		int baseGeneration = 1;
-		long baseExecutionTime = 999;
 		double baseBestFitness = 99.9;
 		double baseAverageFitness = 49.9;
 		Double baseKnownSolutionProximity = 9.9;
@@ -154,7 +144,6 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, base, baseId);
 		base.setExecutionStatistics(baseExecutionStatistics);
 		base.setGeneration(baseGeneration);
-		base.setExecutionTime(baseExecutionTime);
 		base.setBestFitness(baseBestFitness);
 		base.setAverageFitness(baseAverageFitness);
 		base.setKnownSolutionProximity(baseKnownSolutionProximity);
@@ -163,7 +152,6 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsEqualToBase, baseId);
 		generationStatisticsEqualToBase.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsEqualToBase.setGeneration(baseGeneration);
-		generationStatisticsEqualToBase.setExecutionTime(baseExecutionTime);
 		generationStatisticsEqualToBase.setBestFitness(baseBestFitness);
 		generationStatisticsEqualToBase.setAverageFitness(baseAverageFitness);
 		generationStatisticsEqualToBase.setKnownSolutionProximity(baseKnownSolutionProximity);
@@ -173,7 +161,6 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentId, new ObjectId());
 		generationStatisticsWithDifferentId.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentId.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentId.setExecutionTime(baseExecutionTime);
 		generationStatisticsWithDifferentId.setBestFitness(baseBestFitness);
 		generationStatisticsWithDifferentId.setAverageFitness(baseAverageFitness);
 		generationStatisticsWithDifferentId.setKnownSolutionProximity(baseKnownSolutionProximity);
@@ -184,7 +171,6 @@ public class GenerationStatisticsTest {
 		ExecutionStatistics differentExecutionStatistics = new ExecutionStatistics();
 		generationStatisticsWithDifferentExecutionStatistics.setExecutionStatistics(differentExecutionStatistics);
 		generationStatisticsWithDifferentExecutionStatistics.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentExecutionStatistics.setExecutionTime(baseExecutionTime);
 		generationStatisticsWithDifferentExecutionStatistics.setBestFitness(baseBestFitness);
 		generationStatisticsWithDifferentExecutionStatistics.setAverageFitness(baseAverageFitness);
 		generationStatisticsWithDifferentExecutionStatistics.setKnownSolutionProximity(baseKnownSolutionProximity);
@@ -194,27 +180,15 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentGeneration, baseId);
 		generationStatisticsWithDifferentGeneration.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentGeneration.setGeneration(2);
-		generationStatisticsWithDifferentGeneration.setExecutionTime(baseExecutionTime);
 		generationStatisticsWithDifferentGeneration.setBestFitness(baseBestFitness);
 		generationStatisticsWithDifferentGeneration.setAverageFitness(baseAverageFitness);
 		generationStatisticsWithDifferentGeneration.setKnownSolutionProximity(baseKnownSolutionProximity);
 		assertFalse(base.equals(generationStatisticsWithDifferentGeneration));
 
-		GenerationStatistics generationStatisticsWithDifferentExecutionTime = new GenerationStatistics();
-		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentExecutionTime, baseId);
-		generationStatisticsWithDifferentExecutionTime.setExecutionStatistics(baseExecutionStatistics);
-		generationStatisticsWithDifferentExecutionTime.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentExecutionTime.setExecutionTime(111);
-		generationStatisticsWithDifferentExecutionTime.setBestFitness(baseBestFitness);
-		generationStatisticsWithDifferentExecutionTime.setAverageFitness(baseAverageFitness);
-		generationStatisticsWithDifferentExecutionTime.setKnownSolutionProximity(baseKnownSolutionProximity);
-		assertFalse(base.equals(generationStatisticsWithDifferentExecutionTime));
-
 		GenerationStatistics generationStatisticsWithDifferentBestFitness = new GenerationStatistics();
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentBestFitness, baseId);
 		generationStatisticsWithDifferentBestFitness.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentBestFitness.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentBestFitness.setExecutionTime(baseExecutionTime);
 		generationStatisticsWithDifferentBestFitness.setBestFitness(199.9);
 		generationStatisticsWithDifferentBestFitness.setAverageFitness(baseAverageFitness);
 		generationStatisticsWithDifferentBestFitness.setKnownSolutionProximity(baseKnownSolutionProximity);
@@ -224,7 +198,6 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentAverageFitness, baseId);
 		generationStatisticsWithDifferentAverageFitness.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentAverageFitness.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentAverageFitness.setExecutionTime(baseExecutionTime);
 		generationStatisticsWithDifferentAverageFitness.setBestFitness(baseBestFitness);
 		generationStatisticsWithDifferentAverageFitness.setAverageFitness(149.9);
 		generationStatisticsWithDifferentAverageFitness.setKnownSolutionProximity(baseKnownSolutionProximity);
@@ -234,7 +207,6 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentKnownSolutionProximity, baseId);
 		generationStatisticsWithDifferentKnownSolutionProximity.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentKnownSolutionProximity.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentKnownSolutionProximity.setExecutionTime(baseExecutionTime);
 		generationStatisticsWithDifferentKnownSolutionProximity.setBestFitness(baseBestFitness);
 		generationStatisticsWithDifferentKnownSolutionProximity.setAverageFitness(baseAverageFitness);
 		generationStatisticsWithDifferentKnownSolutionProximity.setKnownSolutionProximity(109.9);

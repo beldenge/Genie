@@ -19,8 +19,8 @@
 
 package com.ciphertool.genetics.algorithms.mutation;
 
+import com.ciphertool.genetics.Selectable;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Selectable;
 
 public interface MutationAlgorithm<T extends Chromosome> extends Selectable {
 	/**

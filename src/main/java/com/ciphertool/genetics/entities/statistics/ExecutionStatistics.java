@@ -47,8 +47,6 @@ public class ExecutionStatistics implements Serializable {
 
 	private Double						mutationRate;
 
-	private Double						crossoverRate;
-
 	private String						crossoverAlgorithm;
 
 	private String						fitnessEvaluator;
@@ -73,7 +71,6 @@ public class ExecutionStatistics implements Serializable {
 
 		this.populationSize = strategy.getPopulationSize();
 		this.mutationRate = strategy.getMutationRate();
-		this.crossoverRate = strategy.getCrossoverRate();
 		this.crossoverAlgorithm = (strategy.getCrossoverAlgorithm() != null) ? strategy.getCrossoverAlgorithm().getClass().getSimpleName() : null;
 		this.fitnessEvaluator = (strategy.getFitnessEvaluator() != null) ? strategy.getFitnessEvaluator().getClass().getSimpleName() : null;
 		this.mutationAlgorithm = (strategy.getMutationAlgorithm() != null) ? strategy.getMutationAlgorithm().getClass().getSimpleName() : null;
@@ -144,21 +141,6 @@ public class ExecutionStatistics implements Serializable {
 	 */
 	public void setMutationRate(Double mutationRate) {
 		this.mutationRate = mutationRate;
-	}
-
-	/**
-	 * @return the crossoverRate
-	 */
-	public Double getCrossoverRate() {
-		return crossoverRate;
-	}
-
-	/**
-	 * @param crossoverRate
-	 *            the crossoverRate to set
-	 */
-	public void setCrossoverRate(Double crossoverRate) {
-		this.crossoverRate = crossoverRate;
 	}
 
 	/**
@@ -234,7 +216,6 @@ public class ExecutionStatistics implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((crossoverAlgorithm == null) ? 0 : crossoverAlgorithm.hashCode());
-		result = prime * result + ((crossoverRate == null) ? 0 : crossoverRate.hashCode());
 		result = prime * result + ((endDateTime == null) ? 0 : endDateTime.hashCode());
 		result = prime * result + ((fitnessEvaluator == null) ? 0 : fitnessEvaluator.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -262,13 +243,6 @@ public class ExecutionStatistics implements Serializable {
 				return false;
 			}
 		} else if (!crossoverAlgorithm.equals(other.crossoverAlgorithm)) {
-			return false;
-		}
-		if (crossoverRate == null) {
-			if (other.crossoverRate != null) {
-				return false;
-			}
-		} else if (!crossoverRate.equals(other.crossoverRate)) {
 			return false;
 		}
 		if (endDateTime == null) {
@@ -326,8 +300,8 @@ public class ExecutionStatistics implements Serializable {
 	@Override
 	public String toString() {
 		return "ExecutionStatistics [id=" + id + ", startDateTime=" + startDateTime + ", endDateTime=" + endDateTime
-				+ ", populationSize=" + populationSize + ", mutationRate=" + mutationRate + ", crossoverRate="
-				+ crossoverRate + ", crossoverAlgorithm=" + crossoverAlgorithm + ", fitnessEvaluator="
-				+ fitnessEvaluator + ", mutationAlgorithm=" + mutationAlgorithm + "]";
+				+ ", populationSize=" + populationSize + ", mutationRate=" + mutationRate + ", crossoverAlgorithm="
+				+ crossoverAlgorithm + ", fitnessEvaluator=" + fitnessEvaluator + ", mutationAlgorithm="
+				+ mutationAlgorithm + "]";
 	}
 }

@@ -18,7 +18,7 @@
  */
 package com.ciphertool.genetics.algorithms.selection;
 
-import com.ciphertool.genetics.entities.Selectable;
+import com.ciphertool.genetics.Selectable;
 import com.ciphertool.genetics.population.StandardPopulation;
 
 public interface SelectionAlgorithm extends Selectable {

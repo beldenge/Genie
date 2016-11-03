@@ -19,7 +19,10 @@
 
 package com.ciphertool.genetics.algorithms;
 
+import java.util.List;
+
 import com.ciphertool.genetics.GeneticAlgorithmStrategy;
+import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.population.Population;
 
 public interface GeneticAlgorithm {
@@ -31,7 +34,11 @@ public interface GeneticAlgorithm {
 
 	public void proceedWithNextGeneration() throws InterruptedException;
 
-	public int crossover(int populationSizeBeforeReproduction) throws InterruptedException;
+	public void select(int initialPopulationSize, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException;
+
+	public int crossover(int pairsToCrossover, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException;
 
 	public int mutate(int populationSizeBeforeReproduction) throws InterruptedException;
 

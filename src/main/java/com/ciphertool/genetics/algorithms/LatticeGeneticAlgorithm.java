@@ -24,13 +24,12 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ciphertool.genetics.SpatialChromosomeWrapper;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.SpatialChromosome;
 import com.ciphertool.genetics.population.LatticePopulation;
 
 public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
@@ -39,59 +38,36 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 	/**
 	 * A concurrent task for performing a crossover of two parent Chromosomes, producing one child Chromosome.
 	 */
-	private class CrossoverTask implements Callable<List<SpatialChromosomeWrapper>> {
-		private int			xPos;
-		private int			yPos;
+	private class CrossoverTask implements Callable<List<SpatialChromosome>> {
 		private Chromosome	mom;
 		private Chromosome	dad;
 
-		public CrossoverTask(Chromosome mom, Chromosome dad, int xPos, int yPos) {
+		public CrossoverTask(SpatialChromosome mom, SpatialChromosome dad) {
 			this.mom = mom;
 			this.dad = dad;
-			this.xPos = xPos;
-			this.yPos = yPos;
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
-		public List<SpatialChromosomeWrapper> call() throws Exception {
-			List<Chromosome> children = crossoverAlgorithm.crossover(mom, dad);
-
-			List<SpatialChromosomeWrapper> wrappedChildren = new ArrayList<SpatialChromosomeWrapper>();
-			for (Chromosome child : children) {
-				wrappedChildren.add(new SpatialChromosomeWrapper(xPos, yPos, child));
-			}
-
-			return wrappedChildren;
+		public List<SpatialChromosome> call() throws Exception {
+			return crossoverAlgorithm.crossover(mom, dad);
 		}
 	}
 
 	@Override
-	public int crossover(int initialPopulationSize) throws InterruptedException {
+	public void select(int initialPopulationSize, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException {
 		LatticePopulation latticePopulation = (LatticePopulation) this.population;
+		SpatialChromosome mom = null;
+		SpatialChromosome dad = null;
+		List<SpatialChromosome> parents = null;
 
-		if (this.population.size() < 2) {
-			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
-
-			return 0;
-		}
-
-		log.debug("Pairs to crossover: " + initialPopulationSize);
-
-		List<SpatialChromosomeWrapper> childrenToAdd = new ArrayList<SpatialChromosomeWrapper>();
-
-		/*
-		 * We first remove all the parent Chromosomes since the children are guaranteed to be at least as fit.
-		 */
-		Chromosome mom = null;
-		Chromosome dad = null;
-		List<Chromosome> parents = null;
-		List<FutureTask<List<SpatialChromosomeWrapper>>> futureTasks = new ArrayList<FutureTask<List<SpatialChromosomeWrapper>>>();
 		for (int x = 0; x < latticePopulation.getLatticeRows(); x++) {
 			for (int y = 0; y < latticePopulation.getLatticeColumns(); y++) {
 				if (stopRequested) {
 					throw new InterruptedException("Stop requested during crossover.");
 				}
+
 				parents = latticePopulation.selectIndices(x, y);
 
 				if (parents == null || parents.isEmpty() || parents.size() < 2) {
@@ -99,15 +75,12 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 				}
 
 				mom = parents.get(0);
+				mom.setXPos(x);
+				mom.setYPos(y);
+
 				dad = parents.get(1);
-
-				if (ThreadLocalRandom.current().nextDouble() > strategy.getCrossoverRate()) {
-					childrenToAdd.add(new SpatialChromosomeWrapper(x, y,
-							latticePopulation.getIndividualsAsArray()[x][y].clone()));
-
-					// Skipping crossover
-					continue;
-				}
+				dad.setXPos(x);
+				dad.setYPos(y);
 
 				if (mom == dad) {
 					/*
@@ -129,18 +102,35 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 					continue;
 				}
 
-				futureTasks.add(new FutureTask<List<SpatialChromosomeWrapper>>(new CrossoverTask(mom, dad, x, y)));
+				moms.add(mom);
+				dads.add(dad);
 			}
 		}
+	}
 
-		List<SpatialChromosomeWrapper> crossoverResults = doConcurrentCrossovers(futureTasks);
+	@Override
+	public int crossover(int pairsToCrossover, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException {
+		LatticePopulation latticePopulation = (LatticePopulation) this.population;
+
+		if (this.population.size() < 2) {
+			log.info("Unable to perform crossover because there is only 1 individual in the population. Returning.");
+
+			return 0;
+		}
+
+		log.debug("Pairs to crossover: " + pairsToCrossover);
+
+		List<SpatialChromosome> childrenToAdd = new ArrayList<SpatialChromosome>();
+
+		List<SpatialChromosome> crossoverResults = doConcurrentCrossovers(moms, dads);
 		if (crossoverResults != null && !crossoverResults.isEmpty()) {
 			childrenToAdd.addAll(crossoverResults);
 		}
 
-		if (childrenToAdd == null || childrenToAdd.size() < initialPopulationSize) {
+		if (childrenToAdd == null || childrenToAdd.size() < pairsToCrossover) {
 			log.error(((null == childrenToAdd) ? "No" : childrenToAdd.size())
-					+ " children produced from concurrent crossover execution.  Expected " + initialPopulationSize
+					+ " children produced from concurrent crossover execution.  Expected " + pairsToCrossover
 					+ " children.");
 
 			return ((null == childrenToAdd) ? 0 : childrenToAdd.size());
@@ -148,7 +138,7 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 
 		this.population.clearIndividuals();
 
-		for (SpatialChromosomeWrapper child : childrenToAdd) {
+		for (SpatialChromosome child : childrenToAdd) {
 			if (stopRequested) {
 				throw new InterruptedException(
 						"Stop requested while adding individuals back to the population after crossover");
@@ -160,19 +150,36 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 		return (int) childrenToAdd.size();
 	}
 
-	private List<SpatialChromosomeWrapper> doConcurrentCrossovers(List<FutureTask<List<SpatialChromosomeWrapper>>> futureTasks)
+	private List<SpatialChromosome> doConcurrentCrossovers(List<Chromosome> moms, List<Chromosome> dads)
 			throws InterruptedException {
+		if (moms.size() != dads.size()) {
+			throw new IllegalStateException(
+					"Attempted to perform crossover on the population, but there are not an equal number of moms and dads.  Something is wrong.  Moms: "
+							+ moms.size() + ", Dads:  " + dads.size());
+		}
+
+		List<FutureTask<List<SpatialChromosome>>> futureTasks = new ArrayList<FutureTask<List<SpatialChromosome>>>();
+		FutureTask<List<SpatialChromosome>> futureTask = null;
+
+		SpatialChromosome mom = null;
+		SpatialChromosome dad = null;
+
 		/*
 		 * Execute each crossover concurrently. Parents should produce two children, but this is not necessarily always
 		 * guaranteed.
 		 */
-		for (FutureTask<List<SpatialChromosomeWrapper>> futureTask : futureTasks) {
+		for (int i = 0; i < moms.size(); i++) {
+			mom = (SpatialChromosome) moms.get(i);
+			dad = (SpatialChromosome) dads.get(i);
+
+			futureTask = new FutureTask<List<SpatialChromosome>>(new CrossoverTask(mom, dad));
+			futureTasks.add(futureTask);
 			this.taskExecutor.execute(futureTask);
 		}
 
-		List<SpatialChromosomeWrapper> childrenToAdd = new ArrayList<SpatialChromosomeWrapper>();
+		List<SpatialChromosome> childrenToAdd = new ArrayList<SpatialChromosome>();
 		// Add the result of each FutureTask to the population since it represents a new child Chromosome.
-		for (FutureTask<List<SpatialChromosomeWrapper>> future : futureTasks) {
+		for (FutureTask<List<SpatialChromosome>> future : futureTasks) {
 			if (stopRequested) {
 				throw new InterruptedException("Stop requested during concurrent crossovers");
 			}

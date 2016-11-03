@@ -111,7 +111,6 @@ public class StandardPopulation implements Population {
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
 	protected class EvaluatorTask implements Callable<Void> {
-
 		private Chromosome chromosome;
 
 		public EvaluatorTask(Chromosome chromosome) {
@@ -130,7 +129,6 @@ public class StandardPopulation implements Population {
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
 	protected class KnownSolutionEvaluatorTask implements Callable<Void> {
-
 		private Chromosome chromosome;
 
 		public KnownSolutionEvaluatorTask(Chromosome chromosome) {
@@ -151,7 +149,7 @@ public class StandardPopulation implements Population {
 	 * @throws InterruptedException
 	 *             if stop is requested
 	 */
-	protected void doConcurrentFitnessEvaluations() throws InterruptedException {
+	protected int doConcurrentFitnessEvaluations() throws InterruptedException {
 		List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
 		FutureTask<Void> futureTask = null;
 
@@ -168,10 +166,6 @@ public class StandardPopulation implements Population {
 			}
 		}
 
-		if (log.isDebugEnabled()) {
-			log.debug("Evaluations carried out: " + evaluationCount);
-		}
-
 		for (FutureTask<Void> future : futureTasks) {
 			if (stopRequested) {
 				throw new InterruptedException("Stop requested during concurrent fitness evaluations.");
@@ -185,11 +179,13 @@ public class StandardPopulation implements Population {
 				log.error("Caught ExecutionException while waiting for EvaluatorTask ", ee);
 			}
 		}
+
+		return evaluationCount;
 	}
 
 	@Override
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException {
-		this.doConcurrentFitnessEvaluations();
+		generationStatistics.setNumberOfEvaluations(this.doConcurrentFitnessEvaluations());
 
 		this.totalFitness = 0.0;
 
@@ -298,17 +294,9 @@ public class StandardPopulation implements Population {
 
 		individual.setPopulation(this);
 
-		/*
-		 * Only evaluate this individual if it hasn't been evaluated yet by some other process.
-		 */
-		boolean needsEvaluation = individual.isEvaluationNeeded();
-		if (needsEvaluation) {
-			individual.setFitness(fitnessEvaluator.evaluate(individual));
-		}
-
 		this.totalFitness += individual.getFitness();
 
-		return needsEvaluation;
+		return individual.isEvaluationNeeded();
 	}
 
 	public int size() {
@@ -325,7 +313,6 @@ public class StandardPopulation implements Population {
 	 */
 	@Override
 	public void printAscending() {
-
 		if (knownSolutionFitnessEvaluator != null && compareToKnownSolution) {
 			List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
 			FutureTask<Void> futureTask = null;

@@ -31,7 +31,6 @@ public class GeneticAlgorithmStrategy {
 	private Integer				populationSize;
 	private Double				mutationRate;
 	private Integer				maxMutationsPerIndividual;
-	private Double				crossoverRate;
 	private Integer				maxGenerations;
 	@SuppressWarnings("rawtypes")
 	private CrossoverAlgorithm	crossoverAlgorithm;
@@ -61,8 +60,6 @@ public class GeneticAlgorithmStrategy {
 	 *            the mutationRate to set
 	 * @param maxMutationsPerIndividual
 	 *            the maxMutationsPerIndividual to set
-	 * @param crossoverRate
-	 *            the crossoverRate to set
 	 * @param fitnessEvaluator
 	 *            the fitnessEvaluator to set
 	 * @param crossoverAlgorithm
@@ -78,18 +75,15 @@ public class GeneticAlgorithmStrategy {
 	 */
 	@SuppressWarnings("rawtypes")
 	public GeneticAlgorithmStrategy(Object geneticStructure, Integer populationSize, Integer maxGenerations,
-			Double mutationRate, Integer maxMutationsPerIndividual, Double crossoverRate,
-			FitnessEvaluator fitnessEvaluator, CrossoverAlgorithm crossoverAlgorithm,
-			MutationAlgorithm mutationAlgorithm, Selector selector, FitnessEvaluator knownSolutionFitnessEvaluator,
-			Boolean compareToKnownSolution) {
+			Double mutationRate, Integer maxMutationsPerIndividual, FitnessEvaluator fitnessEvaluator,
+			CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Selector selector,
+			FitnessEvaluator knownSolutionFitnessEvaluator, Boolean compareToKnownSolution) {
 		this.geneticStructure = geneticStructure;
 		this.populationSize = populationSize;
 		this.maxGenerations = maxGenerations;
 
 		this.setMutationRate(mutationRate);
 		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
-
-		this.setCrossoverRate(crossoverRate);
 
 		this.fitnessEvaluator = fitnessEvaluator;
 		this.fitnessEvaluator.setGeneticStructure(geneticStructure);
@@ -178,26 +172,6 @@ public class GeneticAlgorithmStrategy {
 	 */
 	public void setMaxMutationsPerIndividual(Integer maxMutationsPerIndividual) {
 		this.maxMutationsPerIndividual = maxMutationsPerIndividual;
-	}
-
-	/**
-	 * @return the crossoverRate
-	 */
-	public Double getCrossoverRate() {
-		return crossoverRate;
-	}
-
-	/**
-	 * @param crossoverRate
-	 *            the crossoverRate to set
-	 */
-	public void setCrossoverRate(Double crossoverRate) {
-		if (crossoverRate == null || crossoverRate < 0.0 || crossoverRate > 1.0) {
-			throw new IllegalArgumentException("Tried to set a crossoverRate of " + crossoverRate
-					+ ", but GeneicAlgorithmStrategy requires a crossoverRate between 0.0 and 1.0 inclusive.");
-		}
-
-		this.crossoverRate = crossoverRate;
 	}
 
 	/**

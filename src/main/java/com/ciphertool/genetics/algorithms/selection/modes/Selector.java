@@ -20,8 +20,8 @@ package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.util.List;
 
+import com.ciphertool.genetics.Selectable;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Selectable;
 
 /**
  * This class serves as the mode of selecting a fit individual from the population. It is essentially a helper class

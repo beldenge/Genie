@@ -19,8 +19,8 @@
 
 package com.ciphertool.genetics.fitness;
 
+import com.ciphertool.genetics.Selectable;
 import com.ciphertool.genetics.entities.Chromosome;
-import com.ciphertool.genetics.entities.Selectable;
 
 public interface FitnessEvaluator extends Selectable {
 	public Double evaluate(Chromosome chromosome);

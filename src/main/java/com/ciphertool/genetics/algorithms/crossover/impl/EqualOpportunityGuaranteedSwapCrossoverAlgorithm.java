@@ -52,8 +52,11 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 
 		// The Chromosome could be null if it's identical to one of its parents
 		for (KeyedChromosome<Object> child : children) {
-			child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
-					parentB.getAncestry(), maxGenerations));
+			if (maxGenerations > 0) {
+				child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
+						parentB.getAncestry(), maxGenerations));
+			}
+
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
