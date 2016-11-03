@@ -26,6 +26,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
+import com.ciphertool.genetics.entities.Ancestry;
 import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.util.Coin;
@@ -44,8 +45,12 @@ public class EqualOpportunityGeneCrossoverAlgorithm implements CrossoverAlgorith
 		// The Chromosome could be null if it's identical to one of its parents
 		if (child != null) {
 			children.add(child);
-			// child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
-			// parentB.getAncestry(), maxGenerations));
+
+			if (maxGenerations > 0) {
+				child.setAncestry(new Ancestry(parentA.getId(), parentB.getId(), parentA.getAncestry(),
+						parentB.getAncestry(), maxGenerations));
+			}
+
 			parentA.increaseNumberOfChildren();
 			parentB.increaseNumberOfChildren();
 		}
