@@ -33,6 +33,12 @@ public interface Selector extends Selectable {
 
 	/**
 	 * @param individuals
+	 *            the individuals to index
+	 */
+	public void reIndex(List<Chromosome> individuals);
+
+	/**
+	 * @param individuals
 	 *            the List of individuals to select from
 	 * @param totalFitness
 	 *            the total fitness of the population of individuals

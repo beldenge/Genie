@@ -56,34 +56,6 @@ public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 		}
 	}
 
-	protected class SelectionResult {
-		private Chromosome	mom;
-		private Chromosome	dad;
-
-		/**
-		 * @param mom
-		 * @param dad
-		 */
-		public SelectionResult(Chromosome mom, Chromosome dad) {
-			this.mom = mom;
-			this.dad = dad;
-		}
-
-		/**
-		 * @return the mom
-		 */
-		public Chromosome getMom() {
-			return mom;
-		}
-
-		/**
-		 * @return the dad
-		 */
-		public Chromosome getDad() {
-			return dad;
-		}
-	}
-
 	protected class SelectionTask implements Callable<SelectionResult> {
 		public SelectionTask() {
 		}

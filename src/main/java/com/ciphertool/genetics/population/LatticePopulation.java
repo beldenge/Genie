@@ -483,6 +483,11 @@ public class LatticePopulation implements Population {
 		}
 	}
 
+	@Override
+	public void reIndexSelector() {
+		// Nothing to do
+	}
+
 	/**
 	 * @return the totalFitness
 	 */

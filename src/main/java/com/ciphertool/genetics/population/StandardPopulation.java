@@ -343,6 +343,11 @@ public class StandardPopulation implements Population {
 		}
 	}
 
+	@Override
+	public void reIndexSelector() {
+		this.selector.reIndex(this.individuals);
+	}
+
 	/**
 	 * @return the totalFitness
 	 */

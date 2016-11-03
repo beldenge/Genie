@@ -45,6 +45,8 @@ public interface Population {
 
 	public void requestStop();
 
+	public void reIndexSelector();
+
 	/**
 	 * @param geneticStructure
 	 *            the geneticStructure to set

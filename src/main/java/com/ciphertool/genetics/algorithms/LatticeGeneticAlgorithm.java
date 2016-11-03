@@ -54,20 +54,23 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 		}
 	}
 
-	@Override
-	public void select(int initialPopulationSize, List<Chromosome> moms, List<Chromosome> dads)
-			throws InterruptedException {
-		LatticePopulation latticePopulation = (LatticePopulation) this.population;
-		SpatialChromosome mom = null;
-		SpatialChromosome dad = null;
-		List<SpatialChromosome> parents = null;
+	protected class SelectionTask implements Callable<SelectionResult> {
+		int	x;
+		int	y;
 
-		for (int x = 0; x < latticePopulation.getLatticeRows(); x++) {
-			for (int y = 0; y < latticePopulation.getLatticeColumns(); y++) {
-				if (stopRequested) {
-					throw new InterruptedException("Stop requested during crossover.");
-				}
+		public SelectionTask(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
 
+		@Override
+		public SelectionResult call() throws Exception {
+			LatticePopulation latticePopulation = (LatticePopulation) population;
+			SpatialChromosome mom = null;
+			SpatialChromosome dad = null;
+			List<SpatialChromosome> parents = null;
+
+			do {
 				parents = latticePopulation.selectIndices(x, y);
 
 				if (parents == null || parents.isEmpty() || parents.size() < 2) {
@@ -81,29 +84,53 @@ public class LatticeGeneticAlgorithm extends AbstractGeneticAlgorithm {
 				dad = parents.get(1);
 				dad.setXPos(x);
 				dad.setYPos(y);
+			}
+			/*
+			 * The idea is to make sure that individuals which share too much ancestry (i.e. immediate family members)
+			 * or not enough ancestry (i.e. different species) cannot reproduce.
+			 */
+			while (mom == dad || (verifyAncestry && generationCount > generationsToKeep && mom.getAncestry() != null
+					&& dad.getAncestry() != null
+					&& !mom.getAncestry().sharesLineageWith(dad.getAncestry(), generationsToSkip)));
 
-				if (mom == dad) {
-					/*
-					 * There is no point in crossing over identical parents, because the result would essentially be
-					 * duplicating that parent in the population
-					 */
-					y--;
-					continue;
-				}
+			return new SelectionResult(mom, dad);
+		}
+	}
 
-				if (verifyAncestry && this.generationCount > this.generationsToKeep && mom.getAncestry() != null
-						&& dad.getAncestry() != null
-						&& !mom.getAncestry().sharesLineageWith(dad.getAncestry(), generationsToSkip)) {
-					/*
-					 * The idea is to make sure that individuals which share too much ancestry (i.e. immediate family
-					 * members) or not enough ancestry (i.e. different species) cannot reproduce.
-					 */
-					y--;
-					continue;
-				}
+	@Override
+	public void select(int initialPopulationSize, List<Chromosome> moms, List<Chromosome> dads)
+			throws InterruptedException {
+		LatticePopulation latticePopulation = (LatticePopulation) this.population;
 
-				moms.add(mom);
-				dads.add(dad);
+		List<FutureTask<SelectionResult>> futureTasks = new ArrayList<FutureTask<SelectionResult>>();
+		FutureTask<SelectionResult> futureTask = null;
+
+		/*
+		 * Execute each selection concurrently. Each should produce two children, but this is not necessarily always
+		 * guaranteed.
+		 */
+		for (int x = 0; x < latticePopulation.getLatticeRows(); x++) {
+			for (int y = 0; y < latticePopulation.getLatticeColumns(); y++) {
+				futureTask = new FutureTask<SelectionResult>(new SelectionTask(x, y));
+				futureTasks.add(futureTask);
+				this.taskExecutor.execute(futureTask);
+			}
+		}
+
+		// Add the result of each FutureTask to the Lists of Chromosomes selected for subsequent crossover
+		for (FutureTask<SelectionResult> future : futureTasks) {
+			if (stopRequested) {
+				throw new InterruptedException("Stop requested during concurrent selections");
+			}
+
+			try {
+				SelectionResult result = future.get();
+				moms.add(result.getMom());
+				dads.add(result.getDad());
+			} catch (InterruptedException ie) {
+				log.error("Caught InterruptedException while waiting for SelectionTask ", ie);
+			} catch (ExecutionException ee) {
+				log.error("Caught ExecutionException while waiting for SelectionTask ", ee);
 			}
 		}
 	}

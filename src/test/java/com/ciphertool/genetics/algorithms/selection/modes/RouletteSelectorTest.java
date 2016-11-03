@@ -38,6 +38,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.springframework.util.ReflectionUtils;
 
+import com.ciphertool.genetics.algorithms.selection.BinaryRouletteNode;
+import com.ciphertool.genetics.algorithms.selection.BinaryRouletteTree;
 import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
@@ -62,6 +64,13 @@ public class RouletteSelectorTest {
 
 	@Test
 	public void testGetNextIndex() {
+		BinaryRouletteTree binaryRouletteTree = new BinaryRouletteTree();
+		binaryRouletteTree.insert(new BinaryRouletteNode(0, 7.0));
+
+		Field rouletteWheelField = ReflectionUtils.findField(RouletteSelector.class, "rouletteWheel");
+		ReflectionUtils.makeAccessible(rouletteWheelField);
+		ReflectionUtils.setField(rouletteWheelField, rouletteSelector, binaryRouletteTree);
+
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
 		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();

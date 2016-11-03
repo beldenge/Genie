@@ -50,6 +50,36 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 	protected GenerationStatisticsDao	generationStatisticsDao;
 	protected TaskExecutor				taskExecutor;
 
+	protected class SelectionResult {
+		private Chromosome	mom;
+		private Chromosome	dad;
+
+		/**
+		 * @param mom
+		 *            the mom Chromosome to set
+		 * @param dad
+		 *            the dad Chromosome to set
+		 */
+		public SelectionResult(Chromosome mom, Chromosome dad) {
+			this.mom = mom;
+			this.dad = dad;
+		}
+
+		/**
+		 * @return the mom Chromosome
+		 */
+		public Chromosome getMom() {
+			return mom;
+		}
+
+		/**
+		 * @return the dad Chromosome
+		 */
+		public Chromosome getDad() {
+			return dad;
+		}
+	}
+
 	@PostConstruct
 	public void verifyParameters() {
 		if (verifyAncestry && (generationsToSkip == null || generationsToKeep == null)) {
@@ -211,6 +241,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		List<Chromosome> dads = new ArrayList<Chromosome>();
 
 		long startSelection = System.currentTimeMillis();
+		this.population.reIndexSelector();
 		select(populationSizeBeforeGeneration, moms, dads);
 		performanceStats.setSelectionMillis(System.currentTimeMillis() - startSelection);
 

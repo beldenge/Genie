@@ -352,6 +352,7 @@ public class StandardGeneticAlgorithmTest {
 		verify(populationMock, times(100)).addIndividual(any(Chromosome.class));
 		verify(populationMock, times(1)).sortIndividuals();
 		verify(populationMock, times(1)).clearIndividuals();
+		verify(populationMock, times(1)).reIndexSelector();
 		verifyNoMoreInteractions(populationMock);
 
 		verify(mutationAlgorithmMock, times(100)).mutateChromosome(any(Chromosome.class));

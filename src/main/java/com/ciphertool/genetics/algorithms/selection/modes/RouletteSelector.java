@@ -18,16 +18,69 @@
  */
 package com.ciphertool.genetics.algorithms.selection.modes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ciphertool.genetics.algorithms.selection.BinaryRouletteNode;
+import com.ciphertool.genetics.algorithms.selection.BinaryRouletteTree;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class RouletteSelector implements Selector {
-	private Logger log = LoggerFactory.getLogger(getClass());
+	private Logger				log	= LoggerFactory.getLogger(getClass());
+
+	private BinaryRouletteTree	rouletteWheel;
+
+	@Override
+	public synchronized void reIndex(List<Chromosome> individuals) {
+		this.rouletteWheel = new BinaryRouletteTree();
+
+		List<BinaryRouletteNode> nodes = new ArrayList<BinaryRouletteNode>();
+
+		double totalFitness = 0.0;
+
+		for (int i = 0; i < individuals.size(); i++) {
+			if (individuals.get(i) == null || individuals.get(i).getFitness() == 0.0) {
+				continue;
+			}
+
+			if (individuals.get(i).getFitness() == null) {
+				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
+						+ individuals.get(i));
+
+				continue;
+			}
+
+			totalFitness += individuals.get(i).getFitness();
+
+			nodes.add(new BinaryRouletteNode(i, totalFitness));
+		}
+
+		if (totalFitness > 0.0) {
+			addToTreeBalanced(nodes);
+		}
+	}
+
+	protected void addToTreeBalanced(List<BinaryRouletteNode> nodes) {
+		int half = nodes.size() / 2;
+
+		this.rouletteWheel.insert(nodes.get(half));
+
+		if (nodes.size() == 1) {
+			return;
+		}
+
+		addToTreeBalanced(nodes.subList(0, half));
+
+		if (nodes.size() == 2) {
+			return;
+		}
+
+		addToTreeBalanced(nodes.subList(half + 1, nodes.size()));
+	}
 
 	@Override
 	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
@@ -43,38 +96,16 @@ public class RouletteSelector implements Selector {
 			return -1;
 		}
 
-		double randomIndex = ThreadLocalRandom.current().nextDouble() * totalFitness;
-
-		int winningIndex = -1;
-		Chromosome nextIndividual = null;
-
 		if (totalFitness == 0.0) {
 			// If all the individuals have zero fitness, then pick one at random
 			return ThreadLocalRandom.current().nextInt(0, individuals.size());
 		}
 
-		for (int i = 0; i < individuals.size(); i++) {
-			nextIndividual = individuals.get(i);
-			if (nextIndividual.getFitness() == null) {
-				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
-						+ nextIndividual);
+		double randomIndex = ThreadLocalRandom.current().nextDouble() * totalFitness;
 
-				continue;
-			}
+		BinaryRouletteNode winner = this.rouletteWheel.find(randomIndex);
 
-			randomIndex -= nextIndividual.getFitness();
-
-			/*
-			 * If we have subtracted everything from randomIndex, then the ball has stopped rolling.
-			 */
-			if (randomIndex <= 0) {
-				winningIndex = i;
-
-				break;
-			}
-		}
-
-		return winningIndex;
+		return winner.getIndex();
 	}
 
 	@Override
