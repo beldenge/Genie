@@ -23,6 +23,7 @@ import com.ciphertool.genetics.algorithms.mutation.UniformMutationAlgorithm;
 import com.ciphertool.genetics.dao.ExecutionStatisticsDao;
 import com.ciphertool.genetics.dao.GenerationStatisticsDao;
 import com.ciphertool.genetics.entities.Chromosome;
+import com.ciphertool.genetics.entities.Gene;
 import com.ciphertool.genetics.entities.KeyedChromosome;
 import com.ciphertool.genetics.entities.statistics.ExecutionStatistics;
 import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
@@ -209,37 +210,31 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 
 		long startCrossover = System.currentTimeMillis();
 		generationStatistics.setNumberOfCrossovers(crossover(populationSizeBeforeGeneration));
-		if (log.isDebugEnabled()) {
-			log.debug("Crossover took " + (System.currentTimeMillis() - startCrossover) + "ms.");
-		}
+		long crossoverTime = System.currentTimeMillis() - startCrossover;
 
 		long startMutation = System.currentTimeMillis();
 		generationStatistics.setNumberOfMutations(mutate(populationSizeBeforeGeneration));
-		if (log.isDebugEnabled()) {
-			log.debug("Mutation took " + (System.currentTimeMillis() - startMutation) + "ms.");
-		}
+		long mutationTime = System.currentTimeMillis() - startMutation;
 
 		long startEvaluation = System.currentTimeMillis();
 		this.population.evaluateFitness(generationStatistics);
-		if (log.isDebugEnabled()) {
-			log.debug("Evaluation took " + (System.currentTimeMillis() - startEvaluation) + "ms.");
-		}
+		long evaluationTime = System.currentTimeMillis() - startEvaluation;
 
 		long startEntropyCalculation = System.currentTimeMillis();
 		generationStatistics.setEntropy(calculateEntropy());
-		if (log.isDebugEnabled()) {
-			log.debug("Entropy calculation took " + (System.currentTimeMillis() - startEntropyCalculation) + "ms.");
-		}
+		long entropyTime = System.currentTimeMillis() - startEntropyCalculation;
 
 		long executionTime = (System.currentTimeMillis() - generationStart);
 		generationStatistics.setExecutionTime(executionTime);
 
+		log.info("[crossoverTime=" + crossoverTime + ", mutationTime=" + mutationTime + ", evaluationTime="
+				+ evaluationTime + ", entropyTime=" + entropyTime + "]");
 		log.info(generationStatistics.toString());
 
 		this.executionStatistics.addGenerationStatistics(generationStatistics);
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public double calculateEntropy() {
 		if (!(this.population.getIndividuals().get(0) instanceof KeyedChromosome)) {
 			throw new UnsupportedOperationException(
@@ -248,20 +243,23 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 
 		Map<Object, Map<Object, Integer>> symbolCounts = new HashMap<Object, Map<Object, Integer>>();
 
+		Object geneKey;
 		// Count occurrences of each Gene value
 		for (Chromosome chromosome : this.population.getIndividuals()) {
-			for (Object key : ((KeyedChromosome) chromosome).getGenes().keySet()) {
-				if (!symbolCounts.containsKey(key)) {
-					symbolCounts.put(key, new HashMap<Object, Integer>());
+			for (Map.Entry<Object, Gene> entry : ((KeyedChromosome<Object>) chromosome).getGenes().entrySet()) {
+				geneKey = entry.getKey();
+
+				if (!symbolCounts.containsKey(geneKey)) {
+					symbolCounts.put(geneKey, new HashMap<Object, Integer>());
 				}
 
-				Object geneValue = ((KeyedChromosome) chromosome).getGenes().get(key);
+				Object geneValue = ((KeyedChromosome) chromosome).getGenes().get(geneKey);
 
-				if (!symbolCounts.get(key).containsKey(geneValue)) {
-					symbolCounts.get(key).put(geneValue, 0);
+				if (!symbolCounts.get(geneKey).containsKey(geneValue)) {
+					symbolCounts.get(geneKey).put(geneValue, 0);
 				}
 
-				symbolCounts.get(key).put(geneValue, symbolCounts.get(key).get(geneValue) + 1);
+				symbolCounts.get(geneKey).put(geneValue, symbolCounts.get(geneKey).get(geneValue) + 1);
 			}
 		}
 
@@ -269,30 +267,44 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 
 		double populationSize = (double) this.population.size();
 
+		Object symbolCountsKey;
+		Object geneValue;
+
 		// Calculate probability of each Gene value
-		for (Object key : symbolCounts.keySet()) {
-			for (Object geneValue : symbolCounts.get(key).keySet()) {
-				if (!symbolProbabilities.containsKey(key)) {
-					symbolProbabilities.put(key, new HashMap<Object, Double>());
+		for (Map.Entry<Object, Map<Object, Integer>> entry : symbolCounts.entrySet()) {
+			symbolCountsKey = entry.getKey();
+
+			for (Map.Entry<Object, Integer> entryInner : symbolCounts.get(symbolCountsKey).entrySet()) {
+				geneValue = entryInner.getKey();
+
+				if (!symbolProbabilities.containsKey(symbolCountsKey)) {
+					symbolProbabilities.put(symbolCountsKey, new HashMap<Object, Double>());
 				}
 
-				symbolProbabilities.get(key).put(geneValue, ((double) symbolCounts.get(key).get(geneValue)
+				symbolProbabilities.get(symbolCountsKey).put(geneValue, ((double) symbolCounts.get(symbolCountsKey).get(geneValue)
 						/ populationSize));
 			}
 		}
 
-		int base = symbolCounts.keySet().size();
+		int base = symbolCounts.size();
 
 		double totalEntropy = 0.0;
 		double entropyForSymbol;
 		double probability = 0.0;
 
+		Object symbolProbabilitiesKey;
+		Object independentGeneValue;
+
 		// Calculate the entropy of each Gene independently, and add it to the total entropy value
-		for (Object key : symbolProbabilities.keySet()) {
+		for (Map.Entry<Object, Map<Object, Double>> entry : symbolProbabilities.entrySet()) {
+			symbolProbabilitiesKey = entry.getKey();
+
 			entropyForSymbol = 0.0;
 
-			for (Object geneValue : symbolProbabilities.get(key).keySet()) {
-				probability = symbolProbabilities.get(key).get(geneValue);
+			for (Map.Entry<Object, Double> entryInner : symbolProbabilities.get(symbolProbabilitiesKey).entrySet()) {
+				independentGeneValue = entryInner.getKey();
+
+				probability = symbolProbabilities.get(symbolProbabilitiesKey).get(independentGeneValue);
 				entropyForSymbol += (probability * logBase(probability, base));
 			}
 
@@ -300,7 +312,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		}
 
 		// return the average entropy among the symbols
-		return totalEntropy / (double) symbolProbabilities.keySet().size();
+		return totalEntropy / (double) symbolProbabilities.size();
 	}
 
 	private static double logBase(double num, int base) {
