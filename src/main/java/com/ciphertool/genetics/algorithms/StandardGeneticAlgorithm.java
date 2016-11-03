@@ -56,44 +56,100 @@ public class StandardGeneticAlgorithm extends AbstractGeneticAlgorithm {
 		}
 	}
 
+	protected class SelectionResult {
+		private Chromosome	mom;
+		private Chromosome	dad;
+
+		/**
+		 * @param mom
+		 * @param dad
+		 */
+		public SelectionResult(Chromosome mom, Chromosome dad) {
+			this.mom = mom;
+			this.dad = dad;
+		}
+
+		/**
+		 * @return the mom
+		 */
+		public Chromosome getMom() {
+			return mom;
+		}
+
+		/**
+		 * @return the dad
+		 */
+		public Chromosome getDad() {
+			return dad;
+		}
+	}
+
+	protected class SelectionTask implements Callable<SelectionResult> {
+		public SelectionTask() {
+		}
+
+		@Override
+		public SelectionResult call() throws Exception {
+			StandardPopulation standardPopulation = (StandardPopulation) population;
+			int momIndex;
+			int dadIndex;
+			Chromosome mom;
+			Chromosome dad;
+
+			do {
+				momIndex = standardPopulation.selectIndex();
+				mom = standardPopulation.getIndividuals().get(momIndex);
+
+				dadIndex = standardPopulation.selectIndex();
+				// Ensure that dadIndex is different from momIndex
+				dadIndex += (dadIndex == momIndex) ? ((dadIndex == 0) ? 1 : -1) : 0;
+				dad = standardPopulation.getIndividuals().get(dadIndex);
+			}
+			/*
+			 * The idea is to make sure that individuals which share too much ancestry (i.e. immediate family members)
+			 * or not enough ancestry (i.e. different species) cannot reproduce.
+			 */
+			while (verifyAncestry && generationCount > generationsToKeep && mom.getAncestry() != null
+					&& dad.getAncestry() != null
+					&& !mom.getAncestry().sharesLineageWith(dad.getAncestry(), generationsToSkip));
+
+			return new SelectionResult(mom, dad);
+		}
+	}
+
 	@Override
 	public void select(int initialPopulationSize, List<Chromosome> moms, List<Chromosome> dads)
 			throws InterruptedException {
-		StandardPopulation standardPopulation = (StandardPopulation) this.population;
-
-		int momIndex = -1;
-		int dadIndex = -1;
-		Chromosome mom;
-		Chromosome dad;
-
 		long pairsToCrossover = (initialPopulationSize - elitism) / this.crossoverAlgorithm.numberOfOffspring();
 
+		List<FutureTask<SelectionResult>> futureTasks = new ArrayList<FutureTask<SelectionResult>>();
+		FutureTask<SelectionResult> futureTask = null;
+
+		/*
+		 * Execute each selection concurrently. Each should produce two children, but this is not necessarily always
+		 * guaranteed.
+		 */
 		for (int i = 0; i < Math.max(0, pairsToCrossover); i++) {
+			futureTask = new FutureTask<SelectionResult>(new SelectionTask());
+			futureTasks.add(futureTask);
+			this.taskExecutor.execute(futureTask);
+		}
+
+		// Add the result of each FutureTask to the Lists of Chromosomes selected for subsequent crossover
+		for (FutureTask<SelectionResult> future : futureTasks) {
 			if (stopRequested) {
-				throw new InterruptedException("Stop requested during crossover.");
+				throw new InterruptedException("Stop requested during concurrent selections");
 			}
 
-			momIndex = standardPopulation.selectIndex();
-			mom = this.population.getIndividuals().get(momIndex);
-
-			dadIndex = standardPopulation.selectIndex();
-			// Ensure that dadIndex is different from momIndex
-			dadIndex += (dadIndex == momIndex) ? ((dadIndex == 0) ? 1 : -1) : 0;
-			dad = this.population.getIndividuals().get(dadIndex);
-
-			if (verifyAncestry && this.generationCount > this.generationsToKeep && mom.getAncestry() != null
-					&& dad.getAncestry() != null
-					&& !mom.getAncestry().sharesLineageWith(dad.getAncestry(), generationsToSkip)) {
-				/*
-				 * The idea is to make sure that individuals which share too much ancestry (i.e. immediate family
-				 * members) or not enough ancestry (i.e. different species) cannot reproduce.
-				 */
-				i--;
-				continue;
+			try {
+				SelectionResult result = future.get();
+				moms.add(result.getMom());
+				dads.add(result.getDad());
+			} catch (InterruptedException ie) {
+				log.error("Caught InterruptedException while waiting for SelectionTask ", ie);
+			} catch (ExecutionException ee) {
+				log.error("Caught ExecutionException while waiting for SelectionTask ", ee);
 			}
-
-			moms.add(mom);
-			dads.add(dad);
 		}
 	}
 
