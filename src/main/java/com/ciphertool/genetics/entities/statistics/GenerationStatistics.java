@@ -357,8 +357,8 @@ public class GenerationStatistics implements Serializable {
 		String proximity = (this.knownSolutionProximity == null) ? "" : ", proximityToKnown="
 				+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
 
-		return "[generation=" + generation + ", averageFitness=" + String.format("%1$,.2f", averageFitness)
-				+ ", bestFitness=" + String.format("%1$,.2f", bestFitness) + proximity + ", entropy="
+		return "[generation=" + generation + ", averageFitness=" + String.format("%1$,.4f", averageFitness)
+				+ ", bestFitness=" + String.format("%1$,.4f", bestFitness) + proximity + ", entropy="
 				+ String.format("%1$,.4f", entropy) + ", crossovers=" + numberOfCrossovers + ", evals="
 				+ numberOfEvaluations + ", mutations=" + numberOfMutations + ", deaths=" + numberSelectedOut
 				+ ", births=" + numberRandomlyGenerated + ", performance=" + performanceStatistics.toString() + "]";

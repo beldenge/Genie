@@ -221,9 +221,9 @@ public class StandardGeneticAlgorithmTest {
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).breed();
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
-		verify(populationMock, times(2)).size();
+		verify(populationMock, times(1)).size();
 		verify(populationMock, times(1)).setStopRequested(false);
-		verify(populationMock, times(2)).getIndividuals();
+		verify(populationMock, times(1)).calculateEntropy();
 		verifyNoMoreInteractions(populationMock);
 	}
 
@@ -345,14 +345,15 @@ public class StandardGeneticAlgorithmTest {
 
 		verify(populationMock, times(1)).backupIndividuals();
 		verify(populationMock, times(200)).selectIndex();
-		verify(populationMock, times(302)).getIndividuals();
-		verify(populationMock, times(5)).size();
+		verify(populationMock, times(300)).getIndividuals();
+		verify(populationMock, times(4)).size();
 		verify(populationMock, never()).breed();
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
 		verify(populationMock, times(100)).addIndividual(any(Chromosome.class));
 		verify(populationMock, times(1)).sortIndividuals();
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).reIndexSelector();
+		verify(populationMock, times(1)).calculateEntropy();
 		verifyNoMoreInteractions(populationMock);
 
 		verify(mutationAlgorithmMock, times(100)).mutateChromosome(any(Chromosome.class));
@@ -690,8 +691,8 @@ public class StandardGeneticAlgorithmTest {
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).breed();
 		verify(populationMock, times(1)).evaluateFitness(any(GenerationStatistics.class));
-		verify(populationMock, times(2)).size();
-		verify(populationMock, times(2)).getIndividuals();
+		verify(populationMock, times(1)).size();
+		verify(populationMock, times(1)).calculateEntropy();
 		verifyNoMoreInteractions(populationMock);
 	}
 
