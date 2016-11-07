@@ -319,7 +319,7 @@ public class StandardPopulation implements Population {
 		int size = this.individuals.size();
 
 		for (int i = size - maxToPrint; i < size; i++) {
-			log.info("Chromosome " + i + ": " + chromosomePrinter.print(this.individuals.get(i)));
+			log.info("Chromosome " + (i + 1) + ": " + chromosomePrinter.print(this.individuals.get(i)));
 		}
 	}
 

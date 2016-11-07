@@ -480,7 +480,7 @@ public class LatticePopulation implements Population {
 		int size = sortedIndividuals.size();
 
 		for (int i = size - maxToPrint; i < size; i++) {
-			log.info("Chromosome " + i + ": " + chromosomePrinter.print(sortedIndividuals.get(i)));
+			log.info("Chromosome " + (i + 1) + ": " + chromosomePrinter.print(sortedIndividuals.get(i)));
 		}
 	}
 
