@@ -55,6 +55,7 @@ public class StandardPopulation implements Population {
 	private Boolean					compareToKnownSolution				= COMPARE_TO_KNOWN_SOLUTION_DEFAULT;
 	private boolean					stopRequested;
 	private int						targetSize;
+	private int						maxToPrint;
 
 	public StandardPopulation() {
 	}
@@ -313,33 +314,12 @@ public class StandardPopulation implements Population {
 	 */
 	@Override
 	public void printAscending() {
-		if (knownSolutionFitnessEvaluator != null && compareToKnownSolution) {
-			List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
-			FutureTask<Void> futureTask = null;
-
-			for (Chromosome individual : individuals) {
-				futureTask = new FutureTask<Void>(new KnownSolutionEvaluatorTask(individual));
-				futureTasks.add(futureTask);
-				this.taskExecutor.execute(futureTask);
-			}
-
-			for (FutureTask<Void> future : futureTasks) {
-				try {
-					future.get();
-				} catch (InterruptedException ie) {
-					log.error("Caught InterruptedException while waiting for EvaluatorTask ", ie);
-				} catch (ExecutionException ee) {
-					log.error("Caught ExecutionException while waiting for EvaluatorTask ", ee);
-				}
-			}
-		}
-
 		this.sortIndividuals();
 
-		int fitnessIndex = this.size();
-		for (Chromosome individual : this.individuals) {
-			log.info("Chromosome " + fitnessIndex + ": " + chromosomePrinter.print(individual));
-			fitnessIndex--;
+		int size = this.individuals.size();
+
+		for (int i = size - maxToPrint; i < size; i++) {
+			log.info("Chromosome " + i + ": " + chromosomePrinter.print(this.individuals.get(i)));
 		}
 	}
 
@@ -428,5 +408,14 @@ public class StandardPopulation implements Population {
 	@Override
 	public void setTargetSize(int targetSize) {
 		this.targetSize = targetSize;
+	}
+
+	/**
+	 * @param maxToPrint
+	 *            the maxToPrint to set
+	 */
+	@Required
+	public void setMaxToPrint(int maxToPrint) {
+		this.maxToPrint = maxToPrint;
 	}
 }

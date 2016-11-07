@@ -57,6 +57,7 @@ public class LatticePopulation implements Population {
 	private boolean					stopRequested;
 	private int						latticeRows;
 	private int						latticeColumns;
+	private int						maxToPrint;
 
 	public LatticePopulation() {
 	}
@@ -476,10 +477,10 @@ public class LatticePopulation implements Population {
 	public void printAscending() {
 		List<Chromosome> sortedIndividuals = this.getSortedIndividuals();
 
-		int fitnessIndex = this.size();
-		for (Chromosome individual : sortedIndividuals) {
-			log.info("Chromosome " + fitnessIndex + ": " + chromosomePrinter.print(individual));
-			fitnessIndex--;
+		int size = sortedIndividuals.size();
+
+		for (int i = size - maxToPrint; i < size; i++) {
+			log.info("Chromosome " + i + ": " + chromosomePrinter.print(sortedIndividuals.get(i)));
 		}
 	}
 
@@ -590,5 +591,14 @@ public class LatticePopulation implements Population {
 
 		this.latticeColumns = sqrt;
 		this.latticeRows = sqrt;
+	}
+
+	/**
+	 * @param maxToPrint
+	 *            the maxToPrint to set
+	 */
+	@Required
+	public void setMaxToPrint(int maxToPrint) {
+		this.maxToPrint = maxToPrint;
 	}
 }
