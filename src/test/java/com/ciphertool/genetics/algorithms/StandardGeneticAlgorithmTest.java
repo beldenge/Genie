@@ -232,6 +232,7 @@ public class StandardGeneticAlgorithmTest {
 		Date beforeFinish = new Date();
 
 		StandardGeneticAlgorithm standardGeneticAlgorithm = new StandardGeneticAlgorithm();
+		standardGeneticAlgorithm.setPersistStatistics(true);
 
 		ExecutionStatisticsDao executionStatisticsDaoToSet = mock(ExecutionStatisticsDao.class);
 		standardGeneticAlgorithm.setExecutionStatisticsDao(executionStatisticsDaoToSet);

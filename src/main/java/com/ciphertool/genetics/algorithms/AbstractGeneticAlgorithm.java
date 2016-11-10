@@ -45,6 +45,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 	protected ExecutionStatisticsDao	executionStatisticsDao;
 	protected GenerationStatisticsDao	generationStatisticsDao;
 	protected TaskExecutor				taskExecutor;
+	protected boolean					persistStatistics;
 
 	protected class SelectionResult {
 		private Chromosome	mom;
@@ -310,7 +311,9 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 
 		this.executionStatistics.setEndDateTime(new Date());
 
-		persistStatistics();
+		if (this.persistStatistics) {
+			persistStatistics();
+		}
 
 		// This needs to be reset to null in case the algorithm is re-run
 		this.executionStatistics = null;
@@ -432,5 +435,14 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 	@Required
 	public void setGenerationStatisticsDao(GenerationStatisticsDao generationStatisticsDao) {
 		this.generationStatisticsDao = generationStatisticsDao;
+	}
+
+	/**
+	 * @param persistStatistics
+	 *            the persistStatistics to set
+	 */
+	@Required
+	public void setPersistStatistics(boolean persistStatistics) {
+		this.persistStatistics = persistStatistics;
 	}
 }
