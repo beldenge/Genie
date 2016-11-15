@@ -152,7 +152,7 @@ public interface Population {
 
 		double totalEntropy = 0.0;
 
-		// Calculate the entropy of each Gene independently, and add it to the total entropy value
+		// Calculate the Shannon entropy of each Gene independently, and add it to the total entropy value
 		for (Map.Entry<Object, Map<Object, Double>> entry : symbolProbabilities.entrySet()) {
 			for (Map.Entry<Object, Double> entryInner : entry.getValue().entrySet()) {
 				totalEntropy += (entryInner.getValue() * logBase(entryInner.getValue(), base));
@@ -165,6 +165,7 @@ public interface Population {
 		return totalEntropy / (double) symbolProbabilities.size();
 	}
 
+	// Use the change of base formula to calculate the logarithm with an arbitrary base
 	static double logBase(double num, int base) {
 		return (Math.log(num) / Math.log(base));
 	}
