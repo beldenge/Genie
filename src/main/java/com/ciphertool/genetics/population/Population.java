@@ -108,12 +108,15 @@ public interface Population {
 
 		Object geneKey;
 		Object geneValue;
+		Integer currentCount;
+		Map<Object, Integer> symbolCountMap;
+
 		// Count occurrences of each Gene value
 		for (Chromosome chromosome : this.getIndividuals()) {
 			for (Map.Entry<Object, Gene> entry : ((KeyedChromosome<Object>) chromosome).getGenes().entrySet()) {
 				geneKey = entry.getKey();
 
-				Map<Object, Integer> symbolCountMap = symbolCounts.get(geneKey);
+				symbolCountMap = symbolCounts.get(geneKey);
 
 				if (symbolCountMap == null) {
 					symbolCounts.put(geneKey, new HashMap<Object, Integer>());
@@ -122,12 +125,9 @@ public interface Population {
 				}
 
 				geneValue = entry.getValue();
+				currentCount = symbolCountMap.get(geneValue);
 
-				if (!symbolCountMap.containsKey(geneValue)) {
-					symbolCountMap.put(geneValue, 0);
-				}
-
-				symbolCountMap.put(geneValue, symbolCountMap.get(geneValue) + 1);
+				symbolCountMap.put(geneValue, (currentCount != null) ? (currentCount + 1) : 1);
 			}
 		}
 
@@ -135,44 +135,31 @@ public interface Population {
 
 		double populationSize = (double) this.size();
 
-		Object symbolCountsKey;
-		Object geneCountKey;
 		Map<Object, Double> probabilityMap;
 
 		// Calculate probability of each Gene value
 		for (Map.Entry<Object, Map<Object, Integer>> entry : symbolCounts.entrySet()) {
-			symbolCountsKey = entry.getKey();
+			probabilityMap = new HashMap<Object, Double>();
+
+			symbolProbabilities.put(entry.getKey(), probabilityMap);
 
 			for (Map.Entry<Object, Integer> entryInner : entry.getValue().entrySet()) {
-				geneCountKey = entryInner.getKey();
-
-				probabilityMap = symbolProbabilities.get(symbolCountsKey);
-
-				if (probabilityMap == null) {
-					symbolProbabilities.put(symbolCountsKey, new HashMap<Object, Double>());
-
-					probabilityMap = symbolProbabilities.get(symbolCountsKey);
-				}
-
-				probabilityMap.put(geneCountKey, ((double) entryInner.getValue() / (double) populationSize));
+				probabilityMap.put(entryInner.getKey(), ((double) entryInner.getValue() / (double) populationSize));
 			}
 		}
 
 		int base = symbolCounts.size();
 
 		double totalEntropy = 0.0;
-		double entropyForSymbol;
 
 		// Calculate the entropy of each Gene independently, and add it to the total entropy value
 		for (Map.Entry<Object, Map<Object, Double>> entry : symbolProbabilities.entrySet()) {
-			entropyForSymbol = 0.0;
-
 			for (Map.Entry<Object, Double> entryInner : entry.getValue().entrySet()) {
-				entropyForSymbol += (entryInner.getValue() * logBase(entryInner.getValue(), base));
+				totalEntropy += (entryInner.getValue() * logBase(entryInner.getValue(), base));
 			}
-
-			totalEntropy += (-1.0 * entropyForSymbol);
 		}
+
+		totalEntropy *= -1.0;
 
 		// return the average entropy among the symbols
 		return totalEntropy / (double) symbolProbabilities.size();
