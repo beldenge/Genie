@@ -52,6 +52,8 @@ public class GenerationStatistics implements Serializable {
 
 	private int						numberOfEvaluations;
 
+	private int						numberOfMajorEvaluations;
+
 	private int						numberRandomlyGenerated;
 
 	private int						numberSelectedOut;
@@ -218,6 +220,21 @@ public class GenerationStatistics implements Serializable {
 	}
 
 	/**
+	 * @return the numberOfMajorEvaluations
+	 */
+	public int getNumberOfMajorEvaluations() {
+		return numberOfMajorEvaluations;
+	}
+
+	/**
+	 * @param numberOfMajorEvaluations
+	 *            the numberOfMajorEvaluations to set
+	 */
+	public void setNumberOfMajorEvaluations(int numberOfMajorEvaluations) {
+		this.numberOfMajorEvaluations = numberOfMajorEvaluations;
+	}
+
+	/**
 	 * @return the numberRandomlyGenerated
 	 */
 	protected int getNumberRandomlyGenerated() {
@@ -343,6 +360,9 @@ public class GenerationStatistics implements Serializable {
 		if (numberOfEvaluations != other.numberOfEvaluations) {
 			return false;
 		}
+		if (numberOfMajorEvaluations != other.numberOfMajorEvaluations) {
+			return false;
+		}
 		if (numberRandomlyGenerated != other.numberRandomlyGenerated) {
 			return false;
 		}
@@ -360,7 +380,8 @@ public class GenerationStatistics implements Serializable {
 		return "[generation=" + generation + ", averageFitness=" + String.format("%1$,.4f", averageFitness)
 				+ ", bestFitness=" + String.format("%1$,.4f", bestFitness) + proximity + ", entropy="
 				+ String.format("%1$,.4f", entropy) + ", crossovers=" + numberOfCrossovers + ", evals="
-				+ numberOfEvaluations + ", mutations=" + numberOfMutations + ", deaths=" + numberSelectedOut
-				+ ", births=" + numberRandomlyGenerated + ", performance=" + performanceStatistics.toString() + "]";
+				+ numberOfEvaluations + ", majorEvals=" + numberOfMajorEvaluations + ", mutations=" + numberOfMutations
+				+ ", deaths=" + numberSelectedOut + ", births=" + numberRandomlyGenerated + ", performance="
+				+ performanceStatistics.toString() + "]";
 	}
 }

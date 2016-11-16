@@ -26,6 +26,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.eq;
@@ -330,6 +331,8 @@ public class StandardGeneticAlgorithmTest {
 		ReflectionUtils.makeAccessible(executionStatisticsField);
 		ReflectionUtils.setField(executionStatisticsField, standardGeneticAlgorithm, executionStatistics);
 
+		standardGeneticAlgorithm.setMajorEvaluationStepSize(1);
+
 		assertEquals(0, executionStatistics.getGenerationStatisticsList().size());
 
 		standardGeneticAlgorithm.proceedWithNextGeneration();
@@ -355,6 +358,7 @@ public class StandardGeneticAlgorithmTest {
 		verify(populationMock, times(1)).clearIndividuals();
 		verify(populationMock, times(1)).reIndexSelector();
 		verify(populationMock, times(1)).calculateEntropy();
+		verify(populationMock, times(1)).performMajorEvaluation(any(GenerationStatistics.class), anyDouble());
 		verifyNoMoreInteractions(populationMock);
 
 		verify(mutationAlgorithmMock, times(100)).mutateChromosome(any(Chromosome.class));

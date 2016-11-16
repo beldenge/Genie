@@ -29,6 +29,7 @@ public class PerformanceStatistics implements Serializable {
 	private long				crossoverMillis;
 	private long				mutationMillis;
 	private long				evaluationMillis;
+	private long				majorEvaluationMillis;
 	private long				entropyMillis;
 
 	/**
@@ -113,6 +114,21 @@ public class PerformanceStatistics implements Serializable {
 	}
 
 	/**
+	 * @return the majorEvaluationMillis
+	 */
+	public long getMajorEvaluationMillis() {
+		return majorEvaluationMillis;
+	}
+
+	/**
+	 * @param majorEvaluationMillis
+	 *            the majorEvaluationMillis to set
+	 */
+	public void setMajorEvaluationMillis(long majorEvaluationMillis) {
+		this.majorEvaluationMillis = majorEvaluationMillis;
+	}
+
+	/**
 	 * @return the entropyMillis
 	 */
 	public long getEntropyMillis() {
@@ -130,7 +146,7 @@ public class PerformanceStatistics implements Serializable {
 	@Override
 	public String toString() {
 		return "[total=" + totalMillis + "ms, selection=" + selectionMillis + "ms, crossover=" + crossoverMillis
-				+ "ms, mutation=" + mutationMillis + "ms, evaluation=" + evaluationMillis + "ms, entropy="
-				+ entropyMillis + "ms]";
+				+ "ms, mutation=" + mutationMillis + "ms, evaluation=" + evaluationMillis + "ms, major="
+				+ majorEvaluationMillis + "ms, entropy=" + entropyMillis + "ms]";
 	}
 }

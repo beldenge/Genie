@@ -27,25 +27,27 @@ import com.ciphertool.genetics.entities.statistics.PerformanceStatistics;
 import com.ciphertool.genetics.population.Population;
 
 public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
-	protected Logger					log				= LoggerFactory.getLogger(getClass());
+	protected Logger					log					= LoggerFactory.getLogger(getClass());
 
 	protected Population				population;
 	protected GeneticAlgorithmStrategy	strategy;
-	protected boolean					stopRequested;
-	protected int						generationCount	= 0;
+	protected Boolean					stopRequested		= false;
+	protected Integer					generationCount		= 0;
 	protected Integer					generationsToSkip;
 	protected Integer					generationsToKeep;
-	protected boolean					verifyAncestry;
+	protected Boolean					verifyAncestry		= false;
 	protected ExecutionStatistics		executionStatistics;
 	@SuppressWarnings("rawtypes")
 	protected MutationAlgorithm			mutationAlgorithm;
-	protected AtomicInteger				mutations		= new AtomicInteger(0);
+	protected AtomicInteger				mutations			= new AtomicInteger(0);
 	@SuppressWarnings("rawtypes")
 	protected CrossoverAlgorithm		crossoverAlgorithm;
 	protected ExecutionStatisticsDao	executionStatisticsDao;
 	protected GenerationStatisticsDao	generationStatisticsDao;
 	protected TaskExecutor				taskExecutor;
-	protected boolean					persistStatistics;
+	protected Boolean					persistStatistics	= false;
+	protected Double					majorEvaluationPercentage;
+	protected Integer					majorEvaluationStepSize;
 
 	protected class SelectionResult {
 		private Chromosome	mom;
@@ -266,6 +268,12 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.evaluateFitness(generationStatistics);
 		performanceStats.setEvaluationMillis(System.currentTimeMillis() - startEvaluation);
 
+		if (majorEvaluationStepSize > 0 && (this.generationCount % majorEvaluationStepSize) == 0) {
+			long startMajorEvaluation = System.currentTimeMillis();
+			this.population.performMajorEvaluation(generationStatistics, majorEvaluationPercentage);
+			performanceStats.setMajorEvaluationMillis(System.currentTimeMillis() - startMajorEvaluation);
+		}
+
 		performanceStats.setTotalMillis(System.currentTimeMillis() - generationStart);
 		generationStatistics.setPerformanceStatistics(performanceStats);
 
@@ -390,6 +398,24 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 	 */
 	public void setGenerationsToKeep(int generationsToKeep) {
 		this.generationsToKeep = generationsToKeep;
+	}
+
+	/**
+	 * @param majorEvaluationPercentage
+	 *            the majorEvaluationPercentage to set
+	 */
+	@Required
+	public void setMajorEvaluationPercentage(Double majorEvaluationPercentage) {
+		this.majorEvaluationPercentage = majorEvaluationPercentage;
+	}
+
+	/**
+	 * @param majorEvaluationStepSize
+	 *            the majorEvaluationStepSize to set
+	 */
+	@Required
+	public void setMajorEvaluationStepSize(Integer majorEvaluationStepSize) {
+		this.majorEvaluationStepSize = majorEvaluationStepSize;
 	}
 
 	/**

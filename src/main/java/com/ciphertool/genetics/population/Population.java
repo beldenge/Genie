@@ -31,7 +31,26 @@ import com.ciphertool.genetics.entities.statistics.GenerationStatistics;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public interface Population {
+	/**
+	 * @param generationStatistics
+	 *            the GenerationStatistics
+	 * @return the best fit Chromosome
+	 * @throws InterruptedException
+	 *             if there's an error during concurrent evaluations
+	 */
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException;
+
+	/**
+	 * @param generationStatistics
+	 *            the GenerationStatistics
+	 * @param percentageToEvaluate
+	 *            the percentage of the population to evaluate
+	 * @return the best fit Chromosome
+	 * @throws InterruptedException
+	 *             if there's an error during concurrent evaluations
+	 */
+	public Chromosome performMajorEvaluation(GenerationStatistics generationStatistics, Double percentageToEvaluate)
+			throws InterruptedException;
 
 	public int breed();
 
@@ -62,6 +81,12 @@ public interface Population {
 	 *            the fitnessEvaluator to set
 	 */
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator);
+
+	/**
+	 * @param majorFitnessEvaluator
+	 *            the majorFitnessEvaluator to set
+	 */
+	public void setMajorFitnessEvaluator(FitnessEvaluator majorFitnessEvaluator);
 
 	/**
 	 * This is NOT required. We will not always know the solution. In fact, that should be the rare case.

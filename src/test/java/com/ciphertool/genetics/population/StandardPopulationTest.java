@@ -56,7 +56,7 @@ import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class StandardPopulationTest {
 	private static ThreadPoolTaskExecutor	taskExecutor			= new ThreadPoolTaskExecutor();
-	private static final double				DEFAULT_FITNESS_VALUE	= 100.0;
+	private static final double				DEFAULT_FITNESS_VALUE	= 1.0;
 
 	@BeforeClass
 	public static void setUp() {
@@ -74,6 +74,9 @@ public class StandardPopulationTest {
 
 		MockBreeder mockBreeder = new MockBreeder();
 		population.setBreeder(mockBreeder);
+
+		FitnessEvaluator majorFitnessEvaluatorMock = mock(FitnessEvaluator.class);
+		population.setMajorFitnessEvaluator(majorFitnessEvaluatorMock);
 
 		Object geneticStructure = new Object();
 		population.setGeneticStructure(geneticStructure);
@@ -252,12 +255,13 @@ public class StandardPopulationTest {
 		Double fitnessToReturn = new Double(101.0);
 		when(mockEvaluator.evaluate(same(chromosomeToEvaluate))).thenReturn(fitnessToReturn);
 
-		StandardPopulation.EvaluatorTask evaluatorTask = population.new EvaluatorTask(chromosomeToEvaluate);
+		StandardPopulation.EvaluationTask evaluationTask = population.new EvaluationTask(chromosomeToEvaluate,
+				mock(FitnessEvaluator.class));
 		population.setFitnessEvaluator(mockEvaluator);
 
 		Void fitnessReturned = null;
 		try {
-			fitnessReturned = evaluatorTask.call();
+			fitnessReturned = evaluationTask.call();
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -297,7 +301,7 @@ public class StandardPopulationTest {
 		assertFalse(chromosomeEvaluationNotNeeded1.isEvaluationNeeded());
 		assertFalse(chromosomeEvaluationNotNeeded2.isEvaluationNeeded());
 
-		population.doConcurrentFitnessEvaluations();
+		population.doConcurrentFitnessEvaluations(fitnessEvaluatorMock, -1, false);
 
 		for (Chromosome individual : population.getIndividuals()) {
 			assertFalse(individual.isEvaluationNeeded());
@@ -351,10 +355,10 @@ public class StandardPopulationTest {
 		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 
 		/*
-		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0 x 2) + 5.0 + 100.1, since two
-		 * individuals are re-evaluated
+		 * The fitnessEvaluatorMock always returns 1.0, so the total is (1.0 x 2) + 5.0 + 100.1, since two individuals
+		 * are re-evaluated
 		 */
-		Double expectedTotalFitness = new Double(305.1);
+		Double expectedTotalFitness = new Double(107.1);
 
 		assertEquals(expectedTotalFitness, population.getTotalFitness());
 		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(
@@ -411,16 +415,16 @@ public class StandardPopulationTest {
 		verify(fitnessEvaluatorMock, times(2)).evaluate(any(Chromosome.class));
 
 		/*
-		 * The fitnessEvaluatorMock always returns 100.0, so the total is (100.0 x 2) + 5.0 + 100.1, since two
+		 * The fitnessEvaluatorMock always returns 1.0, so the total is (1.0 x 2) + 5.0 + 100.1, since two
 		 * individuals are re-evaluated
 		 */
-		Double expectedTotalFitness = new Double(305.1);
+		Double expectedTotalFitness = new Double(107.1);
 
 		assertEquals(expectedTotalFitness, population.getTotalFitness());
 		assertEquals(new Double(expectedTotalFitness / population.size()), new Double(
 				generationStatistics.getAverageFitness()));
 		assertEquals(new Double(100.1), new Double(generationStatistics.getBestFitness()));
-		assertEquals(new Double(DEFAULT_FITNESS_VALUE), generationStatistics.getKnownSolutionProximity());
+		assertEquals(new Double(100.0), generationStatistics.getKnownSolutionProximity());
 	}
 
 	@Test

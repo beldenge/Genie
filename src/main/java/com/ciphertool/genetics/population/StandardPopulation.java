@@ -45,6 +45,7 @@ public class StandardPopulation implements Population {
 	private List<Chromosome>		individuals							= new ArrayList<Chromosome>();
 	private List<Chromosome>		backup								= new ArrayList<Chromosome>();
 	private FitnessEvaluator		fitnessEvaluator;
+	private FitnessEvaluator		majorFitnessEvaluator;
 	private FitnessComparator		fitnessComparator;
 	private Selector				selector;
 	private Double					totalFitness						= 0.0;
@@ -111,34 +112,18 @@ public class StandardPopulation implements Population {
 	/**
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
-	protected class EvaluatorTask implements Callable<Void> {
-		private Chromosome chromosome;
+	protected class EvaluationTask implements Callable<Void> {
+		private Chromosome			chromosome;
+		private FitnessEvaluator	fitnessEvaluator;
 
-		public EvaluatorTask(Chromosome chromosome) {
+		public EvaluationTask(Chromosome chromosome, FitnessEvaluator fitnessEvaluator) {
 			this.chromosome = chromosome;
+			this.fitnessEvaluator = fitnessEvaluator;
 		}
 
 		@Override
 		public Void call() throws Exception {
-			this.chromosome.setFitness(fitnessEvaluator.evaluate(this.chromosome));
-
-			return null;
-		}
-	}
-
-	/**
-	 * A concurrent task for evaluating the fitness of a Chromosome.
-	 */
-	protected class KnownSolutionEvaluatorTask implements Callable<Void> {
-		private Chromosome chromosome;
-
-		public KnownSolutionEvaluatorTask(Chromosome chromosome) {
-			this.chromosome = chromosome;
-		}
-
-		@Override
-		public Void call() throws Exception {
-			knownSolutionFitnessEvaluator.evaluate(this.chromosome);
+			this.chromosome.setFitness(this.fitnessEvaluator.evaluate(this.chromosome));
 
 			return null;
 		}
@@ -150,18 +135,25 @@ public class StandardPopulation implements Population {
 	 * @throws InterruptedException
 	 *             if stop is requested
 	 */
-	protected int doConcurrentFitnessEvaluations() throws InterruptedException {
+	protected int doConcurrentFitnessEvaluations(FitnessEvaluator fitnessEvaluator, Integer top, Boolean force)
+			throws InterruptedException {
 		List<FutureTask<Void>> futureTasks = new ArrayList<FutureTask<Void>>();
 		FutureTask<Void> futureTask = null;
 
 		int evaluationCount = 0;
-		for (Chromosome individual : individuals) {
+
+		int stop = (top == null || top <= 0) ? 0 : (this.individuals.size() - top);
+		Chromosome individual;
+
+		for (int i = this.individuals.size() - 1; i >= stop; i--) {
+			individual = this.individuals.get(i);
+
 			/*
 			 * Only evaluate individuals that have changed since the last evaluation.
 			 */
-			if (individual.isEvaluationNeeded()) {
+			if (individual.isEvaluationNeeded() || (force != null && force)) {
 				evaluationCount++;
-				futureTask = new FutureTask<Void>(new EvaluatorTask(individual));
+				futureTask = new FutureTask<Void>(new EvaluationTask(individual, fitnessEvaluator));
 				futureTasks.add(futureTask);
 				this.taskExecutor.execute(futureTask);
 			}
@@ -175,9 +167,9 @@ public class StandardPopulation implements Population {
 			try {
 				future.get();
 			} catch (InterruptedException ie) {
-				log.error("Caught InterruptedException while waiting for EvaluatorTask ", ie);
+				log.error("Caught InterruptedException while waiting for EvaluationTask ", ie);
 			} catch (ExecutionException ee) {
-				log.error("Caught ExecutionException while waiting for EvaluatorTask ", ee);
+				log.error("Caught ExecutionException while waiting for EvaluationTask ", ee);
 			}
 		}
 
@@ -186,8 +178,24 @@ public class StandardPopulation implements Population {
 
 	@Override
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException {
-		generationStatistics.setNumberOfEvaluations(this.doConcurrentFitnessEvaluations());
+		generationStatistics.setNumberOfEvaluations(this.doConcurrentFitnessEvaluations(this.fitnessEvaluator, -1, false));
 
+		return updateFitness(generationStatistics);
+	}
+
+	@Override
+	public Chromosome performMajorEvaluation(GenerationStatistics generationStatistics, Double percentageToEvaluate)
+			throws InterruptedException {
+		this.sortIndividuals();
+
+		int top = Math.round((int) (this.size() * percentageToEvaluate));
+
+		generationStatistics.setNumberOfMajorEvaluations(this.doConcurrentFitnessEvaluations(this.majorFitnessEvaluator, top, true));
+
+		return updateFitness(generationStatistics);
+	}
+
+	protected Chromosome updateFitness(GenerationStatistics generationStatistics) {
 		this.totalFitness = 0.0;
 
 		Chromosome bestFitIndividual = null;
@@ -212,7 +220,8 @@ public class StandardPopulation implements Population {
 				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
-				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone));
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone)
+						* 100.0);
 			}
 		}
 
@@ -348,6 +357,8 @@ public class StandardPopulation implements Population {
 	@Override
 	public void setGeneticStructure(Object obj) {
 		this.breeder.setGeneticStructure(obj);
+
+		this.majorFitnessEvaluator.setGeneticStructure(obj);
 	}
 
 	/**
@@ -361,6 +372,11 @@ public class StandardPopulation implements Population {
 	@Override
 	public void setFitnessEvaluator(FitnessEvaluator fitnessEvaluator) {
 		this.fitnessEvaluator = fitnessEvaluator;
+	}
+
+	@Override
+	public void setMajorFitnessEvaluator(FitnessEvaluator majorFitnessEvaluator) {
+		this.majorFitnessEvaluator = majorFitnessEvaluator;
 	}
 
 	/**

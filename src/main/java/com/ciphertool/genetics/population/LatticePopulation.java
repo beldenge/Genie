@@ -126,10 +126,10 @@ public class LatticePopulation implements Population {
 	/**
 	 * A concurrent task for evaluating the fitness of a Chromosome.
 	 */
-	protected class EvaluatorTask implements Callable<Void> {
+	protected class EvaluationTask implements Callable<Void> {
 		private Chromosome chromosome;
 
-		public EvaluatorTask(Chromosome chromosome) {
+		public EvaluationTask(Chromosome chromosome) {
 			this.chromosome = chromosome;
 		}
 
@@ -161,7 +161,7 @@ public class LatticePopulation implements Population {
 				 */
 				if (individual.isEvaluationNeeded()) {
 					evaluationCount++;
-					futureTask = new FutureTask<Void>(new EvaluatorTask(individual));
+					futureTask = new FutureTask<Void>(new EvaluationTask(individual));
 					futureTasks.add(futureTask);
 					this.taskExecutor.execute(futureTask);
 				}
@@ -220,7 +220,8 @@ public class LatticePopulation implements Population {
 				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
-				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone));
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone)
+						* 100.0);
 			}
 		}
 
@@ -600,5 +601,16 @@ public class LatticePopulation implements Population {
 	@Required
 	public void setMaxToPrint(int maxToPrint) {
 		this.maxToPrint = maxToPrint;
+	}
+
+	@Override
+	public Chromosome performMajorEvaluation(GenerationStatistics generationStatistics, Double percentageToEvaluate)
+			throws InterruptedException {
+		throw new UnsupportedOperationException("Method not yet implemented");
+	}
+
+	@Override
+	public void setMajorFitnessEvaluator(FitnessEvaluator majorFitnessEvaluator) {
+		// Nothing to do
 	}
 }
