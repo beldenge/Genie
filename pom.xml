@@ -38,7 +38,7 @@ You should have received a copy of the GNU General Public License along with Gen
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>aspectj-maven-plugin</artifactId>
-				<version>1.8</version>
+				<version>1.9</version>
 				<executions>
 					<execution>
 						<goals>
@@ -73,7 +73,7 @@ You should have received a copy of the GNU General Public License along with Gen
 											aspectj-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.8,)
+											[1.9,)
 										</versionRange>
 										<goals>
 											<goal>compile</goal>
@@ -126,7 +126,7 @@ You should have received a copy of the GNU General Public License along with Gen
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.8.9</version>
+			<version>1.8.10</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
