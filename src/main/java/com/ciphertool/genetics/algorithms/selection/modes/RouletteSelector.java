@@ -18,6 +18,7 @@
  */
 package com.ciphertool.genetics.algorithms.selection.modes;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,9 +31,9 @@ import com.ciphertool.genetics.algorithms.selection.BinaryRouletteTree;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public class RouletteSelector implements Selector {
-	private Logger				log	= LoggerFactory.getLogger(getClass());
+	private Logger log = LoggerFactory.getLogger(getClass());
 
-	private BinaryRouletteTree	rouletteWheel;
+	private BinaryRouletteTree rouletteWheel;
 
 	@Override
 	public synchronized void reIndex(List<Chromosome> individuals) {
@@ -40,7 +41,7 @@ public class RouletteSelector implements Selector {
 
 		List<BinaryRouletteNode> nodes = new ArrayList<BinaryRouletteNode>();
 
-		double totalFitness = 0.0;
+		BigDecimal totalFitness = BigDecimal.ZERO;
 
 		for (int i = 0; i < individuals.size(); i++) {
 			if (individuals.get(i) == null || individuals.get(i).getFitness() == 0.0) {
@@ -48,18 +49,19 @@ public class RouletteSelector implements Selector {
 			}
 
 			if (individuals.get(i).getFitness() == null) {
-				log.warn("Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
-						+ individuals.get(i));
+				log.warn(
+						"Attempted to spin roulette wheel but an individual was found with a null fitness value.  Please make a call to evaluateFitness() before attempting to spin the roulette wheel. "
+								+ individuals.get(i));
 
 				continue;
 			}
 
-			totalFitness += individuals.get(i).getFitness();
+			totalFitness = totalFitness.add(BigDecimal.valueOf(individuals.get(i).getFitness()));
 
 			nodes.add(new BinaryRouletteNode(i, totalFitness));
 		}
 
-		if (totalFitness > 0.0) {
+		if (totalFitness.compareTo(BigDecimal.ZERO) > 0) {
 			addToTreeBalanced(nodes);
 		}
 	}
@@ -101,7 +103,7 @@ public class RouletteSelector implements Selector {
 			return ThreadLocalRandom.current().nextInt(0, individuals.size());
 		}
 
-		double randomIndex = ThreadLocalRandom.current().nextDouble() * totalFitness;
+		BigDecimal randomIndex = BigDecimal.valueOf(ThreadLocalRandom.current().nextDouble() * totalFitness);
 
 		BinaryRouletteNode winner = this.rouletteWheel.find(randomIndex);
 

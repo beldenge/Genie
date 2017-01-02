@@ -1,10 +1,12 @@
 package com.ciphertool.genetics.algorithms.selection;
 
+import java.math.BigDecimal;
+
 public class BinaryRouletteNode {
-	private double				value;
-	private int					index;
-	private BinaryRouletteNode	lessThan;
-	private BinaryRouletteNode	greaterThan;
+	private BigDecimal value;
+	private int index;
+	private BinaryRouletteNode lessThan;
+	private BinaryRouletteNode greaterThan;
 
 	/**
 	 * @param index
@@ -13,7 +15,7 @@ public class BinaryRouletteNode {
 	 * @param value
 	 *            the value to set
 	 */
-	public BinaryRouletteNode(int index, double value) {
+	public BinaryRouletteNode(int index, BigDecimal value) {
 		this.index = index;
 		this.value = value;
 	}
@@ -21,7 +23,7 @@ public class BinaryRouletteNode {
 	/**
 	 * @return the value
 	 */
-	public double getValue() {
+	public BigDecimal getValue() {
 		return value;
 	}
 

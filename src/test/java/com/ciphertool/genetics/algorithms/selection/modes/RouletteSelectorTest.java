@@ -29,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +45,8 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class RouletteSelectorTest {
-	private static RouletteSelector	rouletteSelector;
-	private static Logger			logMock;
+	private static RouletteSelector rouletteSelector;
+	private static Logger logMock;
 
 	@BeforeClass
 	public static void setUp() {
@@ -65,7 +66,7 @@ public class RouletteSelectorTest {
 	@Test
 	public void testGetNextIndex() {
 		BinaryRouletteTree binaryRouletteTree = new BinaryRouletteTree();
-		binaryRouletteTree.insert(new BinaryRouletteNode(0, 7.0));
+		binaryRouletteTree.insert(new BinaryRouletteNode(0, BigDecimal.valueOf(7.0)));
 
 		Field rouletteWheelField = ReflectionUtils.findField(RouletteSelector.class, "rouletteWheel");
 		ReflectionUtils.makeAccessible(rouletteWheelField);

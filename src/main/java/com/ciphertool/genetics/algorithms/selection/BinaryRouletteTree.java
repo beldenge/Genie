@@ -1,5 +1,7 @@
 package com.ciphertool.genetics.algorithms.selection;
 
+import java.math.BigDecimal;
+
 public class BinaryRouletteTree {
 	private BinaryRouletteNode root;
 
@@ -17,7 +19,7 @@ public class BinaryRouletteTree {
 	}
 
 	protected void insertNode(BinaryRouletteNode parent, BinaryRouletteNode toInsert) {
-		if (toInsert.getValue() < parent.getValue()) {
+		if (toInsert.getValue().compareTo(parent.getValue()) < 0) {
 			if (parent.getLessThan() == null) {
 				parent.setLessThan(toInsert);
 
@@ -38,17 +40,18 @@ public class BinaryRouletteTree {
 		insertNode(parent.getGreaterThan(), toInsert);
 	}
 
-	public BinaryRouletteNode find(double value) {
+	public BinaryRouletteNode find(BigDecimal value) {
 		return findNode(this.root, value, null);
 	}
 
-	protected BinaryRouletteNode findNode(BinaryRouletteNode current, double value, BinaryRouletteNode closestSoFar) {
-		if (value <= current.getValue()) {
+	protected BinaryRouletteNode findNode(BinaryRouletteNode current, BigDecimal value,
+			BinaryRouletteNode closestSoFar) {
+		if (value.compareTo(current.getValue()) <= 0) {
 			if (current.getLessThan() == null) {
 				return current;
 			}
 
-			if (value > current.getLessThan().getValue()) {
+			if (value.compareTo(current.getLessThan().getValue()) > 0) {
 				closestSoFar = current;
 			}
 
