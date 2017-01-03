@@ -45,8 +45,8 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
 
 public class RouletteSelectorTest {
-	private static RouletteSelector rouletteSelector;
-	private static Logger logMock;
+	private static RouletteSelector	rouletteSelector;
+	private static Logger			logMock;
 
 	@BeforeClass
 	public static void setUp() {

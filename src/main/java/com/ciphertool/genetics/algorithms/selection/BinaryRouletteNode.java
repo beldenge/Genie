@@ -3,10 +3,10 @@ package com.ciphertool.genetics.algorithms.selection;
 import java.math.BigDecimal;
 
 public class BinaryRouletteNode {
-	private BigDecimal value;
-	private int index;
-	private BinaryRouletteNode lessThan;
-	private BinaryRouletteNode greaterThan;
+	private BigDecimal			value;
+	private int					index;
+	private BinaryRouletteNode	lessThan;
+	private BinaryRouletteNode	greaterThan;
 
 	/**
 	 * @param index

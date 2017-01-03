@@ -44,8 +44,7 @@ public class BinaryRouletteTree {
 		return findNode(this.root, value, null);
 	}
 
-	protected BinaryRouletteNode findNode(BinaryRouletteNode current, BigDecimal value,
-			BinaryRouletteNode closestSoFar) {
+	protected BinaryRouletteNode findNode(BinaryRouletteNode current, BigDecimal value, BinaryRouletteNode closestSoFar) {
 		if (value.compareTo(current.getValue()) <= 0) {
 			if (current.getLessThan() == null) {
 				return current;
