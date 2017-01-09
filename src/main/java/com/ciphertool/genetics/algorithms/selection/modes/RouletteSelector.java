@@ -19,6 +19,8 @@
 package com.ciphertool.genetics.algorithms.selection.modes;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -55,7 +57,8 @@ public class RouletteSelector implements Selector {
 				continue;
 			}
 
-			totalFitness = totalFitness.add(BigDecimal.valueOf(individuals.get(i).getFitness()));
+			totalFitness = totalFitness.add(BigDecimal.valueOf(individuals.get(i).getFitness()), new MathContext(10,
+					RoundingMode.HALF_UP));
 
 			nodes.add(new BinaryRouletteNode(i, totalFitness));
 		}
