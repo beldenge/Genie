@@ -132,7 +132,7 @@ You should have received a copy of the GNU General Public License along with Gen
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>4.3.3.RELEASE</version>
+			<version>4.3.5.RELEASE</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -144,7 +144,7 @@ You should have received a copy of the GNU General Public License along with Gen
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>4.3.3.RELEASE</version>
+			<version>4.3.5.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
