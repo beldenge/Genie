@@ -27,6 +27,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.ciphertool.genetics.MathConstants;
+
 @Document(collection = "generationStats")
 public class GenerationStatistics implements Serializable {
 	private static final long		serialVersionUID	= 5751129649317222013L;
@@ -388,8 +390,9 @@ public class GenerationStatistics implements Serializable {
 		String proximity = (this.knownSolutionProximity == null) ? "" : ", proximityToKnown="
 				+ String.format("%1$,.2f", this.knownSolutionProximity) + "%";
 
-		return "[generation=" + generation + ", averageFitness=" + String.format("%1$,.4f", averageFitness)
-				+ ", bestFitness=" + String.format("%1$,.4f", bestFitness) + proximity + ", entropy="
+		return "[generation=" + generation + (averageFitness == null ? "" : ", averageFitness="
+				+ averageFitness.round(MathConstants.PREC_10_HALF_UP)) + (bestFitness == null ? "" : ", bestFitness="
+						+ bestFitness.round(MathConstants.PREC_10_HALF_UP)) + proximity + ", entropy="
 				+ String.format("%1$,.4f", entropy) + ", crossovers=" + numberOfCrossovers + ", evals="
 				+ numberOfEvaluations + ", majorEvals=" + numberOfMajorEvaluations + ", mutations=" + numberOfMutations
 				+ ", deaths=" + numberSelectedOut + ", births=" + numberRandomlyGenerated + ", performance="
