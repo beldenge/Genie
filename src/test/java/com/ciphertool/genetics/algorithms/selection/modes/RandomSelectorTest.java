@@ -29,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,16 +66,16 @@ public class RandomSelectorTest {
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
 		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
-		chromosome1.setFitness(2.0);
+		chromosome1.setFitness(BigDecimal.valueOf(2.0));
 		individuals.add(chromosome1);
 
-		Double bestFitness = 3.0;
+		BigDecimal bestFitness = BigDecimal.valueOf(3.0);
 		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(bestFitness);
 		individuals.add(chromosome2);
 
 		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
-		chromosome3.setFitness(1.0);
+		chromosome3.setFitness(BigDecimal.valueOf(1.0));
 		individuals.add(chromosome3);
 
 		int selectedIndex = randomSelector.getNextIndex(individuals, null);
@@ -85,7 +86,7 @@ public class RandomSelectorTest {
 
 	@Test
 	public void testGetNextIndexWithNullPopulation() {
-		int selectedIndex = randomSelector.getNextIndex(null, 6.0);
+		int selectedIndex = randomSelector.getNextIndex(null, BigDecimal.valueOf(6.0));
 
 		assertEquals(-1, selectedIndex);
 		verify(logMock, times(1)).warn(anyString());
@@ -93,7 +94,7 @@ public class RandomSelectorTest {
 
 	@Test
 	public void testGetNextIndexWithEmptyPopulation() {
-		int selectedIndex = randomSelector.getNextIndex(new ArrayList<Chromosome>(), 6.0);
+		int selectedIndex = randomSelector.getNextIndex(new ArrayList<Chromosome>(), BigDecimal.valueOf(6.0));
 
 		assertEquals(-1, selectedIndex);
 		verify(logMock, times(1)).warn(anyString());

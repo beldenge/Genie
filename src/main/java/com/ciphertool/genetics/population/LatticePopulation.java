@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.population;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,7 @@ public class LatticePopulation implements Population {
 	private FitnessEvaluator		fitnessEvaluator;
 	private FitnessComparator		fitnessComparator;
 	private Selector				selector;
-	private Double					totalFitness						= 0.0;
+	private BigDecimal				totalFitness						= BigDecimal.ZERO;
 	private TaskExecutor			taskExecutor;
 	private ChromosomePrinter		chromosomePrinter;
 	private FitnessEvaluator		knownSolutionFitnessEvaluator;
@@ -191,7 +192,7 @@ public class LatticePopulation implements Population {
 	public Chromosome evaluateFitness(GenerationStatistics generationStatistics) throws InterruptedException {
 		this.doConcurrentFitnessEvaluations();
 
-		this.totalFitness = 0.0;
+		this.totalFitness = BigDecimal.ZERO;
 
 		Chromosome bestFitIndividual = null;
 		Chromosome individual = null;
@@ -200,15 +201,16 @@ public class LatticePopulation implements Population {
 			for (int y = 0; y < latticeColumns; y++) {
 				individual = this.individuals[x][y];
 
-				this.totalFitness += individual.getFitness();
+				this.totalFitness = this.totalFitness.add(individual.getFitness());
 
-				if (bestFitIndividual == null || individual.getFitness() > bestFitIndividual.getFitness()) {
+				if (bestFitIndividual == null
+						|| individual.getFitness().compareTo(bestFitIndividual.getFitness()) > 0) {
 					bestFitIndividual = individual;
 				}
 			}
 		}
 
-		Double averageFitness = Double.valueOf(this.totalFitness) / Double.valueOf(latticeRows * latticeColumns);
+		BigDecimal averageFitness = this.totalFitness.divide(BigDecimal.valueOf(latticeRows * latticeColumns));
 
 		if (generationStatistics != null) {
 			generationStatistics.setAverageFitness(averageFitness);
@@ -220,8 +222,7 @@ public class LatticePopulation implements Population {
 				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
-				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone)
-						* 100.0);
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone).multiply(BigDecimal.valueOf(100.0)));
 			}
 		}
 
@@ -275,9 +276,9 @@ public class LatticePopulation implements Population {
 			nearbyIndividuals.add(this.individuals[row - 1][column - 1]);
 		}
 
-		Double subsetFitness = 0.0;
+		BigDecimal subsetFitness = BigDecimal.ZERO;
 		for (Chromosome individual : nearbyIndividuals) {
-			subsetFitness += individual.getFitness();
+			subsetFitness = subsetFitness.add(individual.getFitness());
 		}
 
 		int index = this.selector.getNextIndex(nearbyIndividuals, subsetFitness);
@@ -329,16 +330,16 @@ public class LatticePopulation implements Population {
 			nearbyIndividuals.add(this.individuals[row - 1][column - 1]);
 		}
 
-		Double subsetFitness = 0.0;
+		BigDecimal subsetFitness = BigDecimal.ZERO;
 		for (Chromosome individual : nearbyIndividuals) {
-			subsetFitness += individual.getFitness();
+			subsetFitness = subsetFitness.add(individual.getFitness());
 		}
 
 		int index = this.selector.getNextIndex(nearbyIndividuals, subsetFitness);
 
 		selectedIndividuals.add((SpatialChromosome) nearbyIndividuals.get(index));
 
-		subsetFitness -= nearbyIndividuals.get(index).getFitness();
+		subsetFitness = subsetFitness.subtract(nearbyIndividuals.get(index).getFitness());
 		nearbyIndividuals.remove(index);
 
 		index = this.selector.getNextIndex(nearbyIndividuals, subsetFitness);
@@ -375,7 +376,7 @@ public class LatticePopulation implements Population {
 			return null;
 		}
 
-		this.totalFitness -= this.individuals[row][column].getFitness();
+		this.totalFitness = this.totalFitness.subtract(this.individuals[row][column].getFitness());
 
 		return this.individuals[row][column] = null;
 	}
@@ -408,7 +409,7 @@ public class LatticePopulation implements Population {
 	public void clearIndividuals() {
 		this.individuals = new SpatialChromosome[latticeRows][latticeColumns];
 
-		this.totalFitness = 0.0;
+		this.totalFitness = BigDecimal.ZERO;
 	}
 
 	public void addAllIndividuals(SpatialChromosome[][] individuals) {
@@ -427,7 +428,7 @@ public class LatticePopulation implements Population {
 
 		individual.setPopulation(this);
 
-		this.totalFitness += individual.getFitness();
+		this.totalFitness = this.totalFitness.add(individual.getFitness());
 
 		return individual.isEvaluationNeeded();
 	}
@@ -493,8 +494,8 @@ public class LatticePopulation implements Population {
 	/**
 	 * @return the totalFitness
 	 */
-	public Double getTotalFitness() {
-		return totalFitness;
+	public BigDecimal getTotalFitness() {
+		return this.totalFitness;
 	}
 
 	@Override

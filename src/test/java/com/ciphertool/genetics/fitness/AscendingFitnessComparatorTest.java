@@ -21,6 +21,8 @@ package com.ciphertool.genetics.fitness;
 
 import static org.junit.Assert.assertEquals;
 
+import java.math.BigDecimal;
+
 import org.junit.Test;
 
 import com.ciphertool.genetics.mocks.MockKeyedChromosome;
@@ -29,10 +31,10 @@ public class AscendingFitnessComparatorTest {
 	@Test
 	public void testCompare() {
 		MockKeyedChromosome higherFitness = new MockKeyedChromosome();
-		higherFitness.setFitness(2.0);
+		higherFitness.setFitness(BigDecimal.valueOf(2.0));
 
 		MockKeyedChromosome lowerFitness = new MockKeyedChromosome();
-		lowerFitness.setFitness(1.0);
+		lowerFitness.setFitness(BigDecimal.valueOf(1.0));
 
 		AscendingFitnessComparator ascendingFitnessComparator = new AscendingFitnessComparator();
 
@@ -46,10 +48,10 @@ public class AscendingFitnessComparatorTest {
 	@Test
 	public void testCompareEqual() {
 		MockKeyedChromosome mockA = new MockKeyedChromosome();
-		mockA.setFitness(3.0);
+		mockA.setFitness(BigDecimal.valueOf(3.0));
 
 		MockKeyedChromosome mockB = new MockKeyedChromosome();
-		mockB.setFitness(3.0);
+		mockB.setFitness(BigDecimal.valueOf(3.0));
 
 		AscendingFitnessComparator ascendingFitnessComparator = new AscendingFitnessComparator();
 		int result = ascendingFitnessComparator.compare(mockA, mockB);

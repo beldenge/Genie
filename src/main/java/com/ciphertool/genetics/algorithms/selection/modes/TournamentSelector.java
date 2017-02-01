@@ -18,6 +18,7 @@
  */
 package com.ciphertool.genetics.algorithms.selection.modes;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -41,7 +42,7 @@ public class TournamentSelector implements Selector {
 	}
 
 	@Override
-	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
+	public int getNextIndex(List<Chromosome> individuals, BigDecimal totalFitness) {
 		if (individuals == null || individuals.isEmpty()) {
 			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
 

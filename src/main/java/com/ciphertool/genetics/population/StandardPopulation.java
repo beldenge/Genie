@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.population;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,7 @@ public class StandardPopulation implements Population {
 	private FitnessEvaluator		majorFitnessEvaluator;
 	private FitnessComparator		fitnessComparator;
 	private Selector				selector;
-	private Double					totalFitness						= 0.0;
+	private BigDecimal				totalFitness						= BigDecimal.ZERO;
 	private TaskExecutor			taskExecutor;
 	private ChromosomePrinter		chromosomePrinter;
 	private FitnessEvaluator		knownSolutionFitnessEvaluator;
@@ -196,19 +197,19 @@ public class StandardPopulation implements Population {
 	}
 
 	protected Chromosome updateFitness(GenerationStatistics generationStatistics) {
-		this.totalFitness = 0.0;
+		this.totalFitness = BigDecimal.ZERO;
 
 		Chromosome bestFitIndividual = null;
 
 		for (Chromosome individual : individuals) {
-			this.totalFitness += individual.getFitness();
+			this.totalFitness = this.totalFitness.add(individual.getFitness());
 
-			if (bestFitIndividual == null || individual.getFitness() > bestFitIndividual.getFitness()) {
+			if (bestFitIndividual == null || individual.getFitness().compareTo(bestFitIndividual.getFitness()) > 0) {
 				bestFitIndividual = individual;
 			}
 		}
 
-		Double averageFitness = Double.valueOf(this.totalFitness) / Double.valueOf(individuals.size());
+		BigDecimal averageFitness = this.totalFitness.divide(BigDecimal.valueOf(individuals.size()));
 
 		if (generationStatistics != null) {
 			generationStatistics.setAverageFitness(averageFitness);
@@ -220,8 +221,7 @@ public class StandardPopulation implements Population {
 				 * the Chromosome, and we want it to do that in all other cases.
 				 */
 				Chromosome bestFitClone = bestFitIndividual.clone();
-				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone)
-						* 100.0);
+				generationStatistics.setKnownSolutionProximity(this.knownSolutionFitnessEvaluator.evaluate(bestFitClone).multiply(BigDecimal.valueOf(100.0)));
 			}
 		}
 
@@ -258,7 +258,7 @@ public class StandardPopulation implements Population {
 			return null;
 		}
 
-		this.totalFitness -= this.individuals.get(indexToRemove).getFitness();
+		this.totalFitness = this.totalFitness.subtract(this.individuals.get(indexToRemove).getFitness());
 
 		return this.individuals.remove(indexToRemove);
 	}
@@ -287,7 +287,7 @@ public class StandardPopulation implements Population {
 	public void clearIndividuals() {
 		this.individuals.clear();
 
-		this.totalFitness = 0.0;
+		this.totalFitness = BigDecimal.ZERO;
 	}
 
 	public void addAllIndividuals(List<Chromosome> individuals) {
@@ -304,7 +304,7 @@ public class StandardPopulation implements Population {
 
 		individual.setPopulation(this);
 
-		this.totalFitness += individual.getFitness();
+		this.totalFitness = this.totalFitness.add(individual.getFitness() == null ? BigDecimal.ZERO : individual.getFitness());
 
 		return individual.isEvaluationNeeded();
 	}
@@ -340,7 +340,7 @@ public class StandardPopulation implements Population {
 	/**
 	 * @return the totalFitness
 	 */
-	public Double getTotalFitness() {
+	public BigDecimal getTotalFitness() {
 		return totalFitness;
 	}
 

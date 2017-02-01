@@ -24,14 +24,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.springframework.util.ReflectionUtils;
 
 public class GenerationStatisticsTest {
-	private static final double TOLERANCE = 0.00001;
-
 	@Test
 	public void testConstructor() {
 		ExecutionStatistics executionStatisticsToSet = new ExecutionStatistics();
@@ -63,25 +62,25 @@ public class GenerationStatisticsTest {
 
 	@Test
 	public void testSetBestFitness() {
-		double bestFitnessToSet = 99.9;
+		BigDecimal bestFitnessToSet = BigDecimal.valueOf(99.9);
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 		generationStatistics.setBestFitness(bestFitnessToSet);
 
-		assertEquals(bestFitnessToSet, generationStatistics.getBestFitness(), TOLERANCE);
+		assertEquals(bestFitnessToSet, generationStatistics.getBestFitness());
 	}
 
 	@Test
 	public void testSetAverageFitness() {
-		double averageFitnessToSet = 49.9;
+		BigDecimal averageFitnessToSet = BigDecimal.valueOf(49.9);
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 		generationStatistics.setAverageFitness(averageFitnessToSet);
 
-		assertEquals(averageFitnessToSet, generationStatistics.getAverageFitness(), TOLERANCE);
+		assertEquals(averageFitnessToSet, generationStatistics.getAverageFitness());
 	}
 
 	@Test
 	public void testSetKnownSolutionProximity() {
-		Double knownSolutionProximityToSet = 9.9;
+		BigDecimal knownSolutionProximityToSet = BigDecimal.valueOf(9.9);
 		GenerationStatistics generationStatistics = new GenerationStatistics();
 		generationStatistics.setKnownSolutionProximity(knownSolutionProximityToSet);
 
@@ -135,9 +134,9 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(executionStatisticsIdField, baseExecutionStatistics, new ObjectId());
 
 		int baseGeneration = 1;
-		double baseBestFitness = 99.9;
-		double baseAverageFitness = 49.9;
-		Double baseKnownSolutionProximity = 9.9;
+		BigDecimal baseBestFitness = BigDecimal.valueOf(99.9);
+		BigDecimal baseAverageFitness = BigDecimal.valueOf(49.9);
+		BigDecimal baseKnownSolutionProximity = BigDecimal.valueOf(9.9);
 
 		ObjectId baseId = new ObjectId("1234567890abcdef12345678");
 		GenerationStatistics base = new GenerationStatistics();
@@ -189,7 +188,7 @@ public class GenerationStatisticsTest {
 		ReflectionUtils.setField(generationStatisticsIdField, generationStatisticsWithDifferentBestFitness, baseId);
 		generationStatisticsWithDifferentBestFitness.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentBestFitness.setGeneration(baseGeneration);
-		generationStatisticsWithDifferentBestFitness.setBestFitness(199.9);
+		generationStatisticsWithDifferentBestFitness.setBestFitness(BigDecimal.valueOf(199.9));
 		generationStatisticsWithDifferentBestFitness.setAverageFitness(baseAverageFitness);
 		generationStatisticsWithDifferentBestFitness.setKnownSolutionProximity(baseKnownSolutionProximity);
 		assertFalse(base.equals(generationStatisticsWithDifferentBestFitness));
@@ -199,7 +198,7 @@ public class GenerationStatisticsTest {
 		generationStatisticsWithDifferentAverageFitness.setExecutionStatistics(baseExecutionStatistics);
 		generationStatisticsWithDifferentAverageFitness.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentAverageFitness.setBestFitness(baseBestFitness);
-		generationStatisticsWithDifferentAverageFitness.setAverageFitness(149.9);
+		generationStatisticsWithDifferentAverageFitness.setAverageFitness(BigDecimal.valueOf(149.9));
 		generationStatisticsWithDifferentAverageFitness.setKnownSolutionProximity(baseKnownSolutionProximity);
 		assertFalse(base.equals(generationStatisticsWithDifferentAverageFitness));
 
@@ -209,7 +208,7 @@ public class GenerationStatisticsTest {
 		generationStatisticsWithDifferentKnownSolutionProximity.setGeneration(baseGeneration);
 		generationStatisticsWithDifferentKnownSolutionProximity.setBestFitness(baseBestFitness);
 		generationStatisticsWithDifferentKnownSolutionProximity.setAverageFitness(baseAverageFitness);
-		generationStatisticsWithDifferentKnownSolutionProximity.setKnownSolutionProximity(109.9);
+		generationStatisticsWithDifferentKnownSolutionProximity.setKnownSolutionProximity(BigDecimal.valueOf(109.9));
 		assertFalse(base.equals(generationStatisticsWithDifferentKnownSolutionProximity));
 
 		GenerationStatistics generationStatisticsWithNullPropertiesA = new GenerationStatistics();

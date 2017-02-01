@@ -75,19 +75,19 @@ public class RouletteSelectorTest {
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
 		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
-		chromosome1.setFitness(2.0);
+		chromosome1.setFitness(BigDecimal.valueOf(2.0));
 		individuals.add(chromosome1);
 
-		Double bestFitness = 3.0;
+		BigDecimal bestFitness = BigDecimal.valueOf(3.0);
 		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(bestFitness);
 		individuals.add(chromosome2);
 
 		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
-		chromosome3.setFitness(1.0);
+		chromosome3.setFitness(BigDecimal.valueOf(1.0));
 		individuals.add(chromosome3);
 
-		int selectedIndex = rouletteSelector.getNextIndex(individuals, 6.0);
+		int selectedIndex = rouletteSelector.getNextIndex(individuals, BigDecimal.valueOf(6.0));
 
 		assertTrue(selectedIndex > -1);
 		verifyZeroInteractions(logMock);
@@ -95,7 +95,7 @@ public class RouletteSelectorTest {
 
 	@Test
 	public void testGetNextIndexWithNullPopulation() {
-		int selectedIndex = rouletteSelector.getNextIndex(null, 6.0);
+		int selectedIndex = rouletteSelector.getNextIndex(null, BigDecimal.valueOf(6.0));
 
 		assertEquals(-1, selectedIndex);
 		verify(logMock, times(1)).warn(anyString());
@@ -103,7 +103,7 @@ public class RouletteSelectorTest {
 
 	@Test
 	public void testGetNextIndexWithEmptyPopulation() {
-		int selectedIndex = rouletteSelector.getNextIndex(new ArrayList<Chromosome>(), 6.0);
+		int selectedIndex = rouletteSelector.getNextIndex(new ArrayList<Chromosome>(), BigDecimal.valueOf(6.0));
 
 		assertEquals(-1, selectedIndex);
 		verify(logMock, times(1)).warn(anyString());
@@ -114,16 +114,16 @@ public class RouletteSelectorTest {
 		List<Chromosome> individuals = new ArrayList<Chromosome>();
 
 		MockKeyedChromosome chromosome1 = new MockKeyedChromosome();
-		chromosome1.setFitness(2.0);
+		chromosome1.setFitness(BigDecimal.valueOf(2.0));
 		individuals.add(chromosome1);
 
-		Double bestFitness = 3.0;
+		BigDecimal bestFitness = BigDecimal.valueOf(3.0);
 		MockKeyedChromosome chromosome2 = new MockKeyedChromosome();
 		chromosome2.setFitness(bestFitness);
 		individuals.add(chromosome2);
 
 		MockKeyedChromosome chromosome3 = new MockKeyedChromosome();
-		chromosome3.setFitness(1.0);
+		chromosome3.setFitness(BigDecimal.valueOf(1.0));
 		individuals.add(chromosome3);
 
 		int selectedIndex = rouletteSelector.getNextIndex(individuals, null);

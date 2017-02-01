@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.population;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +124,7 @@ public interface Population {
 	public void setSelector(Selector selector);
 
 	@SuppressWarnings({ "unchecked" })
-	default double calculateEntropy() {
+	default BigDecimal calculateEntropy() {
 		if (!(this.getIndividuals().get(0) instanceof KeyedChromosome)) {
 			throw new UnsupportedOperationException(
 					"Calculation of entropy is currently only supported for KeyedChromosome types.");
@@ -187,7 +188,7 @@ public interface Population {
 		totalEntropy *= -1.0;
 
 		// return the average entropy among the symbols
-		return totalEntropy / (double) symbolProbabilities.size();
+		return BigDecimal.valueOf(totalEntropy / (double) symbolProbabilities.size());
 	}
 
 	// Use the change of base formula to calculate the logarithm with an arbitrary base

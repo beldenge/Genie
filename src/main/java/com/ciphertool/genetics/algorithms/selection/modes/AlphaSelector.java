@@ -18,6 +18,7 @@
  */
 package com.ciphertool.genetics.algorithms.selection.modes;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class AlphaSelector implements Selector {
 	}
 
 	@Override
-	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
+	public int getNextIndex(List<Chromosome> individuals, BigDecimal totalFitness) {
 		if (individuals == null || individuals.isEmpty()) {
 			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
 
@@ -48,7 +49,7 @@ public class AlphaSelector implements Selector {
 		for (int i = 0; i < individuals.size(); i++) {
 			currentIndividual = individuals.get(i);
 
-			if (bestFitIndex == null || currentIndividual.getFitness() > bestFitIndividual.getFitness()) {
+			if (bestFitIndex == null || currentIndividual.getFitness().compareTo(bestFitIndividual.getFitness()) > 0) {
 				bestFitIndividual = currentIndividual;
 				bestFitIndex = i;
 			}

@@ -1,5 +1,6 @@
 package com.ciphertool.genetics.algorithms;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -100,7 +101,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		this.population.breed();
 
 		long startEntropyCalculation = System.currentTimeMillis();
-		double entropy = this.population.calculateEntropy();
+		BigDecimal entropy = this.population.calculateEntropy();
 		generationStatistics.setEntropy(entropy);
 		generationStatistics.getPerformanceStatistics().setEntropyMillis(System.currentTimeMillis()
 				- startEntropyCalculation);
@@ -260,7 +261,7 @@ public abstract class AbstractGeneticAlgorithm implements GeneticAlgorithm {
 		performanceStats.setMutationMillis(System.currentTimeMillis() - startMutation);
 
 		long startEntropyCalculation = System.currentTimeMillis();
-		double entropy = this.population.calculateEntropy();
+		BigDecimal entropy = this.population.calculateEntropy();
 		generationStatistics.setEntropy(entropy);
 		performanceStats.setEntropyMillis(System.currentTimeMillis() - startEntropyCalculation);
 

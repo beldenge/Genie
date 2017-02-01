@@ -25,9 +25,9 @@ public class DescendingFitnessComparator implements FitnessComparator {
 
 	@Override
 	public int compare(Chromosome c1, Chromosome c2) {
-		if (c1.getFitness() < c2.getFitness()) {
+		if (c1.getFitness().compareTo(c2.getFitness()) < 0) {
 			return 1;
-		} else if (c1.getFitness() > c2.getFitness()) {
+		} else if (c1.getFitness().compareTo(c2.getFitness()) > 0) {
 			return -1;
 		}
 

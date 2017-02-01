@@ -26,6 +26,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+
 import org.junit.Test;
 
 import com.ciphertool.genetics.algorithms.crossover.CrossoverAlgorithm;
@@ -38,7 +40,7 @@ import com.ciphertool.genetics.entities.Chromosome;
 import com.ciphertool.genetics.fitness.FitnessEvaluator;
 
 public class GeneticAlgorithmStrategyTest {
-	private static final double DEFAULT_FITNESS_VALUE = 100.0;
+	private static final BigDecimal DEFAULT_FITNESS_VALUE = BigDecimal.valueOf(100.0);
 
 	@SuppressWarnings("rawtypes")
 	@Test

@@ -46,7 +46,7 @@ public class RouletteSelector implements Selector {
 		BigDecimal totalFitness = BigDecimal.ZERO;
 
 		for (int i = 0; i < individuals.size(); i++) {
-			if (individuals.get(i) == null || individuals.get(i).getFitness() == 0.0) {
+			if (individuals.get(i) == null || individuals.get(i).getFitness().compareTo(BigDecimal.ZERO) == 0) {
 				continue;
 			}
 
@@ -57,8 +57,7 @@ public class RouletteSelector implements Selector {
 				continue;
 			}
 
-			totalFitness = totalFitness.add(BigDecimal.valueOf(individuals.get(i).getFitness()), new MathContext(10,
-					RoundingMode.HALF_UP));
+			totalFitness = totalFitness.add(individuals.get(i).getFitness(), new MathContext(10, RoundingMode.HALF_UP));
 
 			nodes.add(new BinaryRouletteNode(i, totalFitness));
 		}
@@ -87,7 +86,7 @@ public class RouletteSelector implements Selector {
 	}
 
 	@Override
-	public int getNextIndex(List<Chromosome> individuals, Double totalFitness) {
+	public int getNextIndex(List<Chromosome> individuals, BigDecimal totalFitness) {
 		if (individuals == null || individuals.isEmpty()) {
 			log.warn("Attempted to select an individual from a null or empty population.  Unable to continue.");
 
@@ -100,12 +99,12 @@ public class RouletteSelector implements Selector {
 			return -1;
 		}
 
-		if (totalFitness == 0.0) {
+		if (totalFitness.compareTo(BigDecimal.ZERO) == 0) {
 			// If all the individuals have zero fitness, then pick one at random
 			return ThreadLocalRandom.current().nextInt(0, individuals.size());
 		}
 
-		BigDecimal randomIndex = BigDecimal.valueOf(ThreadLocalRandom.current().nextDouble() * totalFitness);
+		BigDecimal randomIndex = BigDecimal.valueOf(ThreadLocalRandom.current().nextDouble()).multiply(totalFitness);
 
 		BinaryRouletteNode winner = this.rouletteWheel.find(randomIndex);
 

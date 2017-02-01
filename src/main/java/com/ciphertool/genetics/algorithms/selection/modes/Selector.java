@@ -18,6 +18,7 @@
  */
 package com.ciphertool.genetics.algorithms.selection.modes;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.ciphertool.genetics.Selectable;
@@ -44,5 +45,5 @@ public interface Selector extends Selectable {
 	 *            the total fitness of the population of individuals
 	 * @return the indice of the chosen individual within the population
 	 */
-	public int getNextIndex(List<Chromosome> individuals, Double totalFitness);
+	public int getNextIndex(List<Chromosome> individuals, BigDecimal totalFitness);
 }

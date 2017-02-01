@@ -20,6 +20,7 @@
 package com.ciphertool.genetics.entities.statistics;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -38,13 +39,13 @@ public class GenerationStatistics implements Serializable {
 
 	private int						generation;
 
-	private double					bestFitness;
+	private BigDecimal				bestFitness;
 
-	private double					averageFitness;
+	private BigDecimal				averageFitness;
 
-	private double					entropy;
+	private BigDecimal				entropy;
 
-	private Double					knownSolutionProximity;
+	private BigDecimal				knownSolutionProximity;
 
 	private int						numberOfCrossovers;
 
@@ -117,7 +118,7 @@ public class GenerationStatistics implements Serializable {
 	/**
 	 * @return the bestFitness
 	 */
-	public double getBestFitness() {
+	public BigDecimal getBestFitness() {
 		return bestFitness;
 	}
 
@@ -125,14 +126,14 @@ public class GenerationStatistics implements Serializable {
 	 * @param bestFitness
 	 *            the bestFitness to set
 	 */
-	public void setBestFitness(double bestFitness) {
+	public void setBestFitness(BigDecimal bestFitness) {
 		this.bestFitness = bestFitness;
 	}
 
 	/**
 	 * @return the averageFitness
 	 */
-	public double getAverageFitness() {
+	public BigDecimal getAverageFitness() {
 		return averageFitness;
 	}
 
@@ -140,14 +141,14 @@ public class GenerationStatistics implements Serializable {
 	 * @param averageFitness
 	 *            the averageFitness to set
 	 */
-	public void setAverageFitness(double averageFitness) {
+	public void setAverageFitness(BigDecimal averageFitness) {
 		this.averageFitness = averageFitness;
 	}
 
 	/**
 	 * @return the entropy
 	 */
-	public double getEntropy() {
+	public BigDecimal getEntropy() {
 		return entropy;
 	}
 
@@ -155,14 +156,14 @@ public class GenerationStatistics implements Serializable {
 	 * @param entropy
 	 *            the entropy to set
 	 */
-	public void setEntropy(double entropy) {
+	public void setEntropy(BigDecimal entropy) {
 		this.entropy = entropy;
 	}
 
 	/**
 	 * @return the knownSolutionProximity
 	 */
-	public Double getKnownSolutionProximity() {
+	public BigDecimal getKnownSolutionProximity() {
 		return knownSolutionProximity;
 	}
 
@@ -170,7 +171,7 @@ public class GenerationStatistics implements Serializable {
 	 * @param knownSolutionProximity
 	 *            the knownSolutionProximity to set
 	 */
-	public void setKnownSolutionProximity(Double knownSolutionProximity) {
+	public void setKnownSolutionProximity(BigDecimal knownSolutionProximity) {
 		this.knownSolutionProximity = knownSolutionProximity;
 	}
 
@@ -287,22 +288,20 @@ public class GenerationStatistics implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		long temp;
-		temp = Double.doubleToLongBits(averageFitness);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(bestFitness);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = Double.doubleToLongBits(entropy);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((averageFitness == null) ? 0 : averageFitness.hashCode());
+		result = prime * result + ((bestFitness == null) ? 0 : bestFitness.hashCode());
+		result = prime * result + ((entropy == null) ? 0 : entropy.hashCode());
 		result = prime * result + ((executionStatistics == null) ? 0 : executionStatistics.hashCode());
 		result = prime * result + generation;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((knownSolutionProximity == null) ? 0 : knownSolutionProximity.hashCode());
 		result = prime * result + numberOfCrossovers;
-		result = prime * result + numberOfMutations;
 		result = prime * result + numberOfEvaluations;
+		result = prime * result + numberOfMajorEvaluations;
+		result = prime * result + numberOfMutations;
 		result = prime * result + numberRandomlyGenerated;
 		result = prime * result + numberSelectedOut;
+		result = prime * result + ((performanceStatistics == null) ? 0 : performanceStatistics.hashCode());
 		return result;
 	}
 
@@ -318,13 +317,25 @@ public class GenerationStatistics implements Serializable {
 			return false;
 		}
 		GenerationStatistics other = (GenerationStatistics) obj;
-		if (Double.doubleToLongBits(averageFitness) != Double.doubleToLongBits(other.averageFitness)) {
+		if (averageFitness == null) {
+			if (other.averageFitness != null) {
+				return false;
+			}
+		} else if (!averageFitness.equals(other.averageFitness)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(bestFitness) != Double.doubleToLongBits(other.bestFitness)) {
+		if (bestFitness == null) {
+			if (other.bestFitness != null) {
+				return false;
+			}
+		} else if (!bestFitness.equals(other.bestFitness)) {
 			return false;
 		}
-		if (Double.doubleToLongBits(entropy) != Double.doubleToLongBits(other.entropy)) {
+		if (entropy == null) {
+			if (other.entropy != null) {
+				return false;
+			}
+		} else if (!entropy.equals(other.entropy)) {
 			return false;
 		}
 		if (executionStatistics == null) {
@@ -354,13 +365,13 @@ public class GenerationStatistics implements Serializable {
 		if (numberOfCrossovers != other.numberOfCrossovers) {
 			return false;
 		}
-		if (numberOfMutations != other.numberOfMutations) {
-			return false;
-		}
 		if (numberOfEvaluations != other.numberOfEvaluations) {
 			return false;
 		}
 		if (numberOfMajorEvaluations != other.numberOfMajorEvaluations) {
+			return false;
+		}
+		if (numberOfMutations != other.numberOfMutations) {
 			return false;
 		}
 		if (numberRandomlyGenerated != other.numberRandomlyGenerated) {

@@ -19,11 +19,13 @@
 
 package com.ciphertool.genetics.fitness;
 
+import java.math.BigDecimal;
+
 import com.ciphertool.genetics.Selectable;
 import com.ciphertool.genetics.entities.Chromosome;
 
 public interface FitnessEvaluator extends Selectable {
-	public Double evaluate(Chromosome chromosome);
+	public BigDecimal evaluate(Chromosome chromosome);
 
 	/**
 	 * The source structure against which this genetic algorithm should evaluate chromosomes.

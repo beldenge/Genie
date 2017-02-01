@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.mocks;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import com.ciphertool.genetics.population.Population;
 
 public class MockKeyedChromosome implements KeyedChromosome<Object> {
 	private boolean				needsEvaluation;
-	private Double				fitness				= 0.0;
+	private BigDecimal			fitness				= BigDecimal.ZERO;
 	private Map<Object, Gene>	genes				= new HashMap<Object, Gene>();
 	private Integer				targetSize			= 0;
 	private int					age					= 0;
@@ -44,13 +45,13 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 	}
 
 	@Override
-	public Double getFitness() {
+	public BigDecimal getFitness() {
 		return this.fitness;
 	}
 
 	@Override
 	@Clean
-	public void setFitness(Double fitness) {
+	public void setFitness(BigDecimal fitness) {
 		this.fitness = fitness;
 	}
 
@@ -148,7 +149,7 @@ public class MockKeyedChromosome implements KeyedChromosome<Object> {
 		 * Since we are copying over the fitness value, we don't need to reset the evaluationNeeded flag because the
 		 * cloned default is correct.
 		 */
-		copyChromosome.setFitness(this.fitness.doubleValue());
+		copyChromosome.setFitness(this.fitness);
 
 		/*
 		 * We don't need to clone the solutionSetId or cipherId as even though they are objects, they should remain

@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.algorithms.crossover.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,8 +71,8 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 		KeyedChromosome<Object> childB = (KeyedChromosome<Object>) parentB.clone();
 		Map<Object, Gene> replacedChildA = new HashMap<Object, Gene>();
 		Map<Object, Gene> replacedChildB = new HashMap<Object, Gene>();
-		double originalFitnessA = parentA.getFitness();
-		double originalFitnessB = parentB.getFitness();
+		BigDecimal originalFitnessA = parentA.getFitness();
+		BigDecimal originalFitnessB = parentB.getFitness();
 		Gene originalGeneChildA;
 		Gene originalGeneChildB;
 		Gene replacementChildA;
@@ -104,10 +105,10 @@ public class EqualOpportunityGuaranteedSwapCrossoverAlgorithm implements
 			}
 
 			if (crossedOver) {
-				double fitnessChildA = fitnessEvaluator.evaluate(childA);
-				double fitnessChildB = fitnessEvaluator.evaluate(childB);
+				BigDecimal fitnessChildA = fitnessEvaluator.evaluate(childA);
+				BigDecimal fitnessChildB = fitnessEvaluator.evaluate(childB);
 
-				if (fitnessChildA > originalFitnessA && fitnessChildB > originalFitnessB) {
+				if (fitnessChildA.compareTo(originalFitnessA) > 0 && fitnessChildB.compareTo(originalFitnessB) > 0) {
 					childA.setFitness(fitnessChildA);
 					childB.setFitness(fitnessChildB);
 

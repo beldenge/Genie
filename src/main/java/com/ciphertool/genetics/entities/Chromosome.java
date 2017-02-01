@@ -19,6 +19,8 @@
 
 package com.ciphertool.genetics.entities;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.annotation.Transient;
 
 import com.ciphertool.genetics.population.Population;
@@ -29,12 +31,12 @@ public interface Chromosome extends Cloneable {
 	/**
 	 * @return
 	 */
-	public Double getFitness();
+	public BigDecimal getFitness();
 
 	/**
 	 * @param fitness
 	 */
-	public void setFitness(Double fitness);
+	public void setFitness(BigDecimal fitness);
 
 	/**
 	 * @return the age of this individual Chromosome

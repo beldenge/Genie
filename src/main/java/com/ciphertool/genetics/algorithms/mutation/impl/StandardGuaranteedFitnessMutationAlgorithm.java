@@ -19,6 +19,7 @@
 
 package com.ciphertool.genetics.algorithms.mutation.impl;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -55,7 +56,7 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 
 		Set<Object> keys = chromosome.getGenes().keySet();
 		Map<Object, Gene> replaced = new HashMap<Object, Gene>();
-		double originalFitness = chromosome.getFitness();
+		BigDecimal originalFitness = chromosome.getFitness();
 		Gene originalGene;
 		Gene replacement;
 
@@ -84,10 +85,10 @@ public class StandardGuaranteedFitnessMutationAlgorithm implements UniformMutati
 			}
 
 			if (mutated) {
-				double fitness = fitnessEvaluator.evaluate(chromosome);
+				BigDecimal fitness = fitnessEvaluator.evaluate(chromosome);
 
 				// Test if the replacement is better, otherwise continue looping
-				if (fitness > originalFitness) {
+				if (fitness.compareTo(originalFitness) > 0) {
 					chromosome.setFitness(fitness);
 
 					break;
